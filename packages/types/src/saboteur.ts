@@ -97,7 +97,7 @@ export interface GoldDistributionStep {
 export interface GoldDistributionPublic {
   order: string[];               // playerIds, winning placer first, counter-clockwise
   currentPickerId: string | null;
-  availableCards: number[];      // nugget values still on offer
+  availableCardCount: number;    // cards are face-down: values stay server-side until picked
   steps: GoldDistributionStep[];
 }
 
@@ -152,7 +152,7 @@ export interface PassTurnPayload {
 }
 
 export interface ChooseGoldPayload {
-  cardValue: number;             // 1, 2, or 3
+  cardIndex: number;             // index into the face-down cards on offer
 }
 
 export interface ActionRejected {

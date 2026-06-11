@@ -165,7 +165,7 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
     applyEngineCall(io, socket, ctx.room, chooseGold(
       ctx.room.gameState,
       ctx.auth.playerId,
-      Number(payload?.cardValue),
+      Number(payload?.cardIndex),
     ));
   });
 

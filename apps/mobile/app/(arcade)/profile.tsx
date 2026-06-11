@@ -24,9 +24,9 @@ export default function ProfileScreen() {
   return (
     <View className="flex-1 bg-arcade-bg px-6 pt-16">
       <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '900', letterSpacing: 4, ...neonText(ARCADE.purple, 12) }}>
-        PLAYER ONE
+        PICK A NAME
       </Text>
-      <Text className="mb-8 mt-1 text-center text-xs text-arcade-muted">
+      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 12, marginTop: 4, marginBottom: 32 }}>
         your name follows you into every game
       </Text>
 
@@ -50,16 +50,7 @@ export default function ProfileScreen() {
         </View>
       </Animated.View>
 
-      <Animated.View
-        entering={FadeInUp.delay(150).springify().damping(16)}
-        className="mt-10 rounded-2xl border border-arcade-border bg-arcade-surface p-5"
-      >
-        <Text className="text-sm font-bold text-arcade-text">About zuychin-arcade</Text>
-        <Text className="mt-2 text-xs leading-5 text-arcade-muted">
-          A private game hub for friends. No accounts, no sign-up — just a name and a room
-          code. Game results land on the high-score board. More cabinets coming soon.
-        </Text>
-      </Animated.View>
+
     </View>
   );
 }

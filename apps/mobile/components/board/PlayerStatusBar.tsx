@@ -40,13 +40,13 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
         >
           {p.isCurrentTurn && <GlowPulse color={ARCADE.cyan} borderRadius={10} borderWidth={1.5} />}
           {selectable && <GlowPulse color={ARCADE.red} borderRadius={10} borderWidth={1.5} />}
-          <Text numberOfLines={1} className="text-xs font-semibold text-arcade-text">
+          <Text numberOfLines={1} style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.text, fontSize: 12, fontWeight: '600' }}>
             {p.playerId === myPlayerId ? '⭐ ' : ''}
             {p.displayName}
           </Text>
           <View className="mt-1 flex-row items-center gap-1.5">
-            <Text className="text-[10px] text-arcade-muted">🃏{p.handSize}</Text>
-            <Text className="text-[10px]" style={{ color: '#F5C518' }}>
+            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 10 }}>🃏{p.handSize}</Text>
+            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: '#F5C518', fontSize: 10 }}>
               🪙{p.goldCollected}
             </Text>
           </View>

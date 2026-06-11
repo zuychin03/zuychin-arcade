@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { MIN_PLAYERS } from '@zuychin-arcade/types';
@@ -7,6 +7,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { getSocket } from '../../hooks/useSocket';
 import { kickPlayer } from '../../lib/api';
 import { clearAuth } from '../../lib/storage';
+import { showDialog } from '../../lib/dialog';
 import { RoomCodeDisplay } from '../../components/lobby/RoomCodeDisplay';
 import { PlayerList } from '../../components/lobby/PlayerList';
 import { NeonButton } from '../../components/ui/NeonButton';
@@ -39,12 +40,15 @@ export default function LobbyScreen() {
   const onKick = (targetId: string) => {
     if (!room || !token) return;
     const target = room.players.find((p) => p.playerId === targetId);
-    Alert.alert('Kick player', `Remove ${target?.displayName} from the room?`, [
-      { text: 'Cancel', style: 'cancel' },
+    showDialog('Kick player', `Remove ${target?.displayName} from the room?`, [
+      { text: 'CANCEL', style: 'cancel' },
       {
-        text: 'Kick',
+        text: 'KICK',
         style: 'destructive',
-        onPress: () => void kickPlayer(room.roomCode, token, targetId).catch(() => undefined),
+        onPress: () =>
+          void kickPlayer(room.roomCode, token, targetId).catch((err: unknown) =>
+            showDialog('Could not kick', err instanceof Error ? err.message : 'Unknown error'),
+          ),
       },
     ]);
   };
@@ -52,7 +56,7 @@ export default function LobbyScreen() {
   if (!room) {
     return (
       <View className="flex-1 items-center justify-center bg-arcade-bg">
-        <Text className="text-arcade-muted">Connecting…</Text>
+        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted }}>Connecting…</Text>
       </View>
     );
   }
@@ -81,7 +85,7 @@ export default function LobbyScreen() {
           />
         ) : (
           <View className="items-center rounded-2xl border border-arcade-border bg-arcade-surface py-4">
-            <Text className="text-arcade-muted">Waiting for host to start…</Text>
+            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted }}>Waiting for host to start…</Text>
           </View>
         )}
         <NeonButton label="LEAVE ROOM" color={ARCADE.red} variant="ghost" onPress={onLeave} />

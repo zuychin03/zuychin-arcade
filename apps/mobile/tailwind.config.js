@@ -12,7 +12,9 @@ module.exports = {
         arcade: {
           bg: '#0B0716',        // near-black violet
           surface: '#161028',   // panel background
+          surfaceTranslucent: 'rgba(22, 16, 40, 0.7)', // glassmorphism surface
           panel: '#1F1838',     // raised panel
+          panelTranslucent: 'rgba(31, 24, 56, 0.7)', // glassmorphism panel
           border: '#2E2452',    // subtle borders
           pink: '#FF2E88',      // neon pink/red
           red: '#FF3355',       // neon red

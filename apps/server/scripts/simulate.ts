@@ -124,7 +124,7 @@ function playGame(playerCount: number): SaboteurServerState {
   assert(state.deck.length === 67 - playerCount * getHandSize(playerCount), 'deck size after deal');
   const ratio = ROLE_TABLE[playerCount];
   const sabs = [...state.players.values()].filter((p) => p.role === 'saboteur').length;
-  assert(sabs >= ratio.saboteurs - 1 && sabs <= ratio.saboteurs, `saboteur count ${sabs} within ratio`);
+  assert(sabs === ratio.saboteurs, `saboteur count ${sabs} matches ratio`);
   assert(state.board.length === 1 && state.board[0].card.subtype === 'start', 'start card placed');
   assert(state.goals.filter((g) => g.isGold).length === 1, 'exactly one gold goal');
   for (const p of state.players.values()) {
@@ -140,7 +140,7 @@ function playGame(playerCount: number): SaboteurServerState {
       if (!isGoldDistributionComplete(state)) {
         const dist = state.goldDistribution!;
         const picker = dist.order[dist.currentIndex];
-        const r = chooseGold(state, picker, rand(dist.availableCards));
+        const r = chooseGold(state, picker, Math.floor(Math.random() * dist.availableCards.length));
         assert(r.ok, 'legal gold pick rejected');
       } else {
         advanceRound(state);   // handler does this after a pause in production

@@ -103,11 +103,12 @@ export function initGame(
 function setupRound(state: SaboteurServerState, round: number, starterIndex: number): void {
   const n = state.turnOrder.length;
 
-  // Roles: deal playerCount cards from a deck of playerCount + 1, one set
-  // aside unseen — so the saboteur count can come up one short.
+  // Roles: exactly ROLE_TABLE[n].saboteurs saboteurs each round, the rest
+  // miners. (The tabletop "deal n of n+1 role cards" variant can produce a
+  // round with zero saboteurs, which plays badly in a digital game.)
   const ratio = ROLE_TABLE[n];
   const roleDeck = shuffle<Role>([
-    ...Array<Role>(ratio.miners).fill('miner'),
+    ...Array<Role>(n - ratio.saboteurs).fill('miner'),
     ...Array<Role>(ratio.saboteurs).fill('saboteur'),
   ]);
 
@@ -385,7 +386,7 @@ export function passTurn(state: SaboteurServerState, playerId: string, discardCa
   return OK;
 }
 
-export function chooseGold(state: SaboteurServerState, playerId: string, cardValue: number): EngineResult {
+export function chooseGold(state: SaboteurServerState, playerId: string, cardIndex: number): EngineResult {
   if (state.status !== 'round_end' || !state.goldDistribution) {
     return fail('Gold is not being distributed right now');
   }
@@ -393,10 +394,11 @@ export function chooseGold(state: SaboteurServerState, playerId: string, cardVal
   const picker = dist.order[dist.currentIndex];
   if (picker !== playerId) return fail('It is not your turn to pick gold');
 
-  const idx = dist.availableCards.indexOf(cardValue);
-  if (idx === -1) return fail('That nugget card is not available');
+  if (!Number.isInteger(cardIndex) || cardIndex < 0 || cardIndex >= dist.availableCards.length) {
+    return fail('That nugget card is not available');
+  }
 
-  dist.availableCards.splice(idx, 1);
+  const [cardValue] = dist.availableCards.splice(cardIndex, 1);
   dist.assignments.set(playerId, cardValue);
   state.players.get(playerId)!.goldCollected += cardValue;
   dist.currentIndex += 1;

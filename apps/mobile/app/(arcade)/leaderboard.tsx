@@ -33,7 +33,7 @@ export default function LeaderboardScreen() {
       <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '900', letterSpacing: 4, ...neonText(ARCADE.cyan, 12) }}>
         HIGH SCORES
       </Text>
-      <Text className="mb-4 mt-1 text-center text-xs text-arcade-muted">
+      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 12, marginTop: 4, marginBottom: 16 }}>
         all-time nuggets across every game
       </Text>
       <FlatList
@@ -45,7 +45,7 @@ export default function LeaderboardScreen() {
         contentContainerStyle={{ padding: 16, paddingTop: 4 }}
         ListEmptyComponent={
           loaded ? (
-            <Text className="mt-10 text-center text-arcade-muted">
+            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', marginTop: 40, lineHeight: 20 }}>
               No games recorded yet.{'\n'}Finish a game to flash your name in neon!
             </Text>
           ) : null

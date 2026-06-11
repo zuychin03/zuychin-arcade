@@ -35,6 +35,12 @@ export function useSocket(): void {
       router.replace('/');
     });
     socket.on('connect', () => socket.emit('request_state'));
+    socket.on('server_error', () => {
+      // Room or player no longer exists server-side — session is unrecoverable
+      void clearAuth();
+      store().clearAll();
+      router.replace('/');
+    });
     socket.on('connect_error', (err) => {
       if (err.message === 'INVALID_TOKEN') {
         void clearAuth();

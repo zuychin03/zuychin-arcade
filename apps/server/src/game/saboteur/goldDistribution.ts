@@ -40,8 +40,7 @@ export function initGoldDistribution(
 
 /**
  * Saboteurs win: each saboteur receives nuggets per the reward table
- * (1 saboteur → 4, 2–3 → 3 each, 4 → 2 each). If no saboteur card was dealt
- * (small-game edge case), nobody scores.
+ * (1 saboteur → 4, 2–3 → 3 each, 4 → 2 each).
  */
 export function applySaboteurRewards(players: Map<string, PlayerGameState>): void {
   const saboteurs = [...players.values()].filter((p) => p.role === 'saboteur');

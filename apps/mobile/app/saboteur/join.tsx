@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Alert, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useGameStore } from '../../store/useGameStore';
 import { getRoom, joinRoom } from '../../lib/api';
 import { loadDisplayName, saveAuth } from '../../lib/storage';
+import { showDialog } from '../../lib/dialog';
 import { NeonButton } from '../../components/ui/NeonButton';
 import { ARCADE } from '../../constants/theme';
 
@@ -32,7 +33,7 @@ export default function JoinScreen() {
 
   const onJoin = async () => {
     const roomCode = code.trim().toUpperCase();
-    if (!roomCode) return Alert.alert('Enter a room code');
+    if (!roomCode) return showDialog('Enter a room code');
     setBusy(true);
     try {
       const displayName = (await loadDisplayName()) ?? 'Player';
@@ -43,7 +44,7 @@ export default function JoinScreen() {
       useGameStore.getState().setRoom(res.room);
       router.replace('/saboteur/lobby');
     } catch (err) {
-      Alert.alert('Could not join', err instanceof Error ? err.message : 'Unknown error');
+      showDialog('Could not join', err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setBusy(false);
     }
@@ -52,7 +53,7 @@ export default function JoinScreen() {
   return (
     <View className="flex-1 bg-arcade-bg px-8 pt-10">
       <Animated.View entering={FadeInDown.duration(400)}>
-        <Text className="mb-2 text-xs font-bold tracking-widest text-arcade-muted">ROOM CODE</Text>
+        <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>ROOM CODE</Text>
         <TextInput
           className="rounded-2xl border-2 border-arcade-blue bg-arcade-surface px-4 py-4 text-center text-3xl font-black tracking-widest text-arcade-cyan"
           style={{ boxShadow: `0 0 12px ${ARCADE.blue}44` }}
@@ -67,8 +68,8 @@ export default function JoinScreen() {
 
       {needsPassword && (
         <Animated.View entering={FadeInUp.springify().damping(16)}>
-          <Text className="mb-2 mt-5 text-xs font-bold tracking-widest text-arcade-muted">
-            🔒 PASSWORD
+          <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginTop: 20, marginBottom: 8 }}>
+            ROOM PASSWORD (OPTIONAL)
           </Text>
           <TextInput
             className="rounded-2xl border border-arcade-border bg-arcade-surface px-5 py-4 text-base text-arcade-text"

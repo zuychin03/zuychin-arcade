@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import type { SaboteurPublicState } from '@zuychin-arcade/types';
-import { ARCADE, neonText } from '../../constants/theme';
+import { ARCADE, OVERLAY_FILL, neonText } from '../../constants/theme';
 
 interface Props {
   state: SaboteurPublicState;
@@ -18,7 +18,7 @@ export function RoundEndOverlay({ state }: Props) {
   return (
     <Animated.View
       entering={FadeIn.duration(300)}
-      className="absolute inset-0 z-40 items-center justify-center bg-black/95 px-6"
+      style={[OVERLAY_FILL, { zIndex: 40, paddingHorizontal: 24 }]}
     >
       <Animated.Text entering={ZoomIn.delay(100).springify().damping(10)} style={{ fontSize: 64 }}>
         {minersWon ? '💰' : '😈'}
@@ -29,11 +29,11 @@ export function RoundEndOverlay({ state }: Props) {
       >
         {minersWon ? 'MINERS WIN!' : 'SABOTEURS WIN!'}
       </Animated.Text>
-      <Text className="mb-5 text-arcade-muted">Round {state.round} of 3</Text>
+      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, marginBottom: 20 }}>Round {state.round} of 3</Text>
 
       <Animated.View
         entering={FadeInUp.delay(350).springify().damping(16)}
-        className="w-full rounded-2xl border border-arcade-border bg-arcade-surface p-4"
+        style={{ width: '100%', borderRadius: 16, borderWidth: 1, borderColor: ARCADE.border, backgroundColor: ARCADE.surface, padding: 16 }}
       >
         {state.revealedRoles?.map((r, i) => {
           const gold = state.players.find((p) => p.playerId === r.playerId)?.goldCollected ?? 0;
@@ -41,11 +41,11 @@ export function RoundEndOverlay({ state }: Props) {
             <Animated.View
               key={r.playerId}
               entering={FadeInUp.delay(450 + i * 80)}
-              className="flex-row items-center justify-between py-1.5"
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 6 }}
             >
-              <Text className="text-base text-arcade-text">
+              <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: 16, color: ARCADE.text }}>
                 {r.role === 'saboteur' ? '😈' : '⛏️'} {r.displayName}
-                <Text style={{ color: r.role === 'saboteur' ? ARCADE.red : ARCADE.muted, fontSize: 11 }}>
+                <Text style={{ fontFamily: 'SpaceMono_400Regular', color: r.role === 'saboteur' ? ARCADE.red : ARCADE.muted, fontSize: 11 }}>
                   {'  '}{r.role}
                 </Text>
               </Text>
@@ -57,11 +57,11 @@ export function RoundEndOverlay({ state }: Props) {
 
       <Animated.View entering={FadeIn.delay(700)}>
         {pickerName ? (
-          <Text className="mt-5 text-center" style={neonText('#F5C518', 8)}>
+          <Text style={{ fontFamily: 'SpaceMono_400Regular', textAlign: 'center', marginTop: 20, ...neonText('#F5C518', 8) }}>
             Waiting for {pickerName} to pick a gold card…
           </Text>
         ) : (
-          <Text className="mt-5 text-arcade-muted">
+          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, marginTop: 20 }}>
             {state.round < 3 ? 'Next round starting soon…' : 'Tallying final scores…'}
           </Text>
         )}

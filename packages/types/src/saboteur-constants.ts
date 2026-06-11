@@ -6,9 +6,10 @@
 //   https://en.doc.boardgamearena.com/Gamehelpsaboteur
 //   https://zatu.com/how-to-play-saboteur/ (redirect of board-game.co.uk/how-to-play-saboteur)
 //
-// Note: role cards dealt = playerCount + 1 (one card is set aside unseen each
-// round), so the actual number of saboteurs in play can be one fewer than the
-// table value — including zero saboteurs in small games.
+// Note: the tabletop game deals playerCount of playerCount + 1 role cards
+// (one set aside unseen), so saboteurs can come up one short. This app
+// instead guarantees exactly `saboteurs` saboteurs per round; the `miners`
+// column is the physical card count and is informational only.
 
 export const ROLE_TABLE: Record<number, { miners: number; saboteurs: number }> = {
   3:  { miners: 3, saboteurs: 1 },

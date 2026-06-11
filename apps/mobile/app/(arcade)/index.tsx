@@ -44,19 +44,24 @@ export default function ArcadeHub() {
       className="flex-1 bg-arcade-bg"
       contentContainerStyle={{ padding: 20, paddingTop: 64, gap: 14 }}
     >
-      {/* Neon marquee header */}
-      <Animated.View entering={FadeIn.duration(600)} className="mb-2 items-center">
-        <Text style={{ fontSize: 13, letterSpacing: 6, ...neonText(ARCADE.cyan, 10) }}>
-          ▚▚▚▚▚▚▚▚▚▚▚▚
+      <Animated.View entering={FadeIn.duration(600)} className="mb-6">
+        <Text style={{ 
+          fontSize: 32, 
+          fontFamily: 'Outfit_800ExtraBold', 
+          letterSpacing: 2,
+          ...neonText(ARCADE.pink, 12),
+          color: ARCADE.text 
+        }}>
+          READY TO PLAY?
         </Text>
-        <Text style={{ fontSize: 34, fontWeight: '900', letterSpacing: 2, marginTop: 6, ...neonText(ARCADE.pink, 16) }}>
-          ZUYCHIN
-        </Text>
-        <Text style={{ fontSize: 22, fontWeight: '800', letterSpacing: 10, marginTop: -2, ...neonText(ARCADE.purple, 14) }}>
-          ARCADE
-        </Text>
-        <Text style={{ fontSize: 13, letterSpacing: 6, marginTop: 6, ...neonText(ARCADE.blue, 10) }}>
-          ▞▞▞▞▞▞▞▞▞▞▞▞
+        <Text style={{ 
+          fontSize: 14, 
+          fontFamily: 'SpaceMono_400Regular', 
+          color: ARCADE.cyan, 
+          marginTop: 4, 
+          letterSpacing: 0.5 
+        }}>
+          Choose a gamespace to start playing 👾
         </Text>
       </Animated.View>
 
@@ -82,7 +87,7 @@ export default function ArcadeHub() {
               <Text style={{ fontWeight: '800', ...neonText(ARCADE.cyan, 8) }}>
                 {room.status === 'in_game' ? 'Game in progress' : 'Back to lobby'}
               </Text>
-              <Text style={{ color: ARCADE.muted, fontSize: 12, marginTop: 2 }}>
+              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12, marginTop: 2 }}>
                 Room {roomCode} · tap to rejoin
               </Text>
             </View>
@@ -95,7 +100,7 @@ export default function ArcadeHub() {
         style={{
           color: ARCADE.muted,
           fontSize: 12,
-          fontWeight: '700',
+          fontFamily: 'SpaceMono_700Bold',
           letterSpacing: 3,
           marginTop: 8,
         }}
@@ -115,7 +120,7 @@ export default function ArcadeHub() {
         index={1}
         title="COMING SOON"
         emoji="🎲"
-        subtitle="The next cabinet is being wired up…"
+        subtitle="The next gamespace is being wired up…"
         accent={ARCADE.purple}
         locked
       />
@@ -123,7 +128,7 @@ export default function ArcadeHub() {
         index={2}
         title="COMING SOON"
         emoji="🃏"
-        subtitle="Insert coin to dream about it"
+        subtitle="The next gamespace is being wired up…"
         accent={ARCADE.blue}
         locked
       />

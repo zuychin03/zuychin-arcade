@@ -42,7 +42,7 @@ export function toPublicState(state: SaboteurServerState): SaboteurPublicState {
             state.goldDistribution.currentIndex < state.goldDistribution.order.length
               ? state.goldDistribution.order[state.goldDistribution.currentIndex]
               : null,
-          availableCards: state.goldDistribution.availableCards,
+          availableCardCount: state.goldDistribution.availableCards.length,
           steps: state.goldDistribution.order.map((pid) => ({
             playerId: pid,
             chosenCard: state.goldDistribution!.assignments.get(pid) ?? null,
