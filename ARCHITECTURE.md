@@ -273,6 +273,17 @@ adherence, gold totals, termination). It exercises the engine through the
 same exported functions the socket handlers call. **Run it after any engine
 or constants change** — it is the project's primary regression net.
 
+### Socket smoke test (`scripts/smoke-e2e.ts`)
+
+`pnpm --filter @zuychin-arcade/server exec tsx scripts/smoke-e2e.ts` drives a
+real running server (default `http://localhost:3002`, override with
+`SMOKE_PORT`) end-to-end over HTTP + Socket.IO: creates a 3-player room, joins,
+starts the game, asserts exactly one saboteur, plays six discard+draw+pass
+turns, then simulates a browser refresh (fresh socket, same JWT,
+`request_state`) and asserts the full state is restored. Start a server first
+— the script does not boot one. Run it after changes to the socket handlers,
+auth, or room store.
+
 ---
 
 ## Mobile app (`apps/mobile`)
@@ -284,24 +295,29 @@ Expo SDK 56, React Native 0.85, React 19. Managed workflow — no `android/`
 
 ```
 app/
-├── _layout.tsx          root Stack; mounts useSocket() once; global dark theme
-├── (tabs)/              the arcade hub (bottom tabs)
-│   ├── _layout.tsx      Tabs: Arcade 🕹️ / Ranks 🏆 / Profile 👾
-│   ├── index.tsx        game hub — tiles linking into game route groups
+├── _layout.tsx          root Stack; mounts useSocket() once; rehydrates auth
+│                        from AsyncStorage before any route renders; mounts
+│                        the global <ArcadeDialogHost /> on top of the Stack
+├── (arcade)/            the arcade hub — responsive chrome
+│   ├── _layout.tsx      ≥768px: persistent Sidebar; below: MobileHeader +
+│   │                    slide-in MobileDrawer (components/navigation/), over
+│   │                    an AnimatedBackground
+│   ├── index.tsx        game hub — session-resume banner + game tiles
 │   ├── leaderboard.tsx  fetches GET /leaderboard via the server
-│   └── profile.tsx      display name, session info
+│   ├── profile.tsx      display name, session info
+│   └── about.tsx        about the arcade
 └── saboteur/            the Saboteur game — own Stack, loaded only when entered
     ├── _layout.tsx      Stack with game-specific header styling
     ├── index.tsx        landing: name entry + create room (+optional password)
     ├── join.tsx         join by room code
     ├── lobby.tsx        player list, host controls (kick, start)
-    └── game.tsx         the board, hand, overlays — the big screen (~300 lines)
+    └── game.tsx         the board, hand, overlays — the big screen (~350 lines)
 ```
 
 The hub/game split is the **template for future games**: each game lives in
 its own route group under `app/<game>/` and is only mounted when the player
-selects it from the Arcade tab. Game-agnostic chrome (tabs, leaderboard,
-profile) stays in `(tabs)/`.
+selects it from the hub. Game-agnostic chrome (navigation, leaderboard,
+profile) stays in `(arcade)/`.
 
 ### State management
 
@@ -315,7 +331,18 @@ game logic in the store — it is a passive mirror of server emissions.
 Session persistence is AsyncStorage (`lib/storage.ts`): the auth bundle under
 `za:auth` plus the last display name under `za:displayName`.
 `lib/tokenUtils.ts` decodes the JWT client-side purely to check `exp` —
-expired sessions are discarded instead of restored.
+expired sessions are discarded instead of restored. The **root layout**
+rehydrates this bundle into the store before any route renders, so a web
+refresh landing directly on `/saboteur/game` reconnects instead of hanging.
+
+### Dialogs (`lib/dialog.ts` + `components/ui/ArcadeDialog.tsx`)
+
+React Native's `Alert.alert` is a **no-op on react-native-web**, so all
+confirms and error popups go through `showDialog(title, message?, buttons?)`
+— a tiny zustand store rendered by `<ArcadeDialogHost />`, which is mounted
+once in the root layout above the navigator. It mirrors the `Alert` button
+contract (`default` / `cancel` / `destructive`), supports 1–n buttons, and
+tapping the backdrop acts as cancel. Never import `Alert` in app code.
 
 ### Networking
 
@@ -323,7 +350,7 @@ Two channels, mirroring the server:
 
 - **REST** (`lib/api.ts`): thin typed `fetch` wrapper over
   create/join/getRoom/kick/leaderboard. Error bodies' `message` fields are
-  surfaced as `Error`s for alert dialogs. Base URL: `EXPO_PUBLIC_SERVER_URL`
+  surfaced as `Error`s for `showDialog` popups. Base URL: `EXPO_PUBLIC_SERVER_URL`
   (`constants/config.ts`, default `http://localhost:3001` — must be the
   machine's LAN IP for on-device testing).
 - **Socket.IO** (`hooks/useSocket.ts`): a module-level singleton socket,
@@ -331,8 +358,8 @@ Two channels, mirroring the server:
   the store has a token (websocket transport, 10 reconnection attempts) and
   tears down when the token clears. Handlers just write server emissions into
   the store; on (re)`connect` it emits `request_state` to resync, and on
-  `INVALID_TOKEN` or `player_kicked` it clears storage + store and routes
-  home. Screens send moves via `getSocket()?.emit('place_card', …)` and
+  `INVALID_TOKEN`, `server_error` (room no longer exists) or `player_kicked`
+  it clears storage + store and routes home. Screens send moves via `getSocket()?.emit('place_card', …)` and
   render whatever state arrives — there is no optimistic update; the
   round-trip is fast enough and keeps clients trivially consistent.
 
@@ -356,12 +383,17 @@ Two palettes defined in `tailwind.config.js` and mirrored as hex constants in
 - `mine.*` — Saboteur's in-game board palette (gold/stone/tunnel) tinted to
   sit on the arcade background.
 
-`neonText()` / `neonBox()` in `theme.ts` produce the glow effects;
-`components/ui/` holds the reusable primitives (`NeonButton`, `GlowPulse`,
-`ScalePressable`, `GameTile`). NativeWind v4 with `darkMode: 'class'` (the
-app is always dark; the class strategy avoids NativeWind's media-query
-crash). Components are grouped by domain: `board/`, `cards/`, `lobby/`,
-`overlays/` (role reveal, gold pick, round end, game over), `ui/`.
+`neonText()` / `neonBox()` in `theme.ts` produce the glow effects, and
+`OVERLAY_FILL` is the shared full-screen-centered backdrop style — overlays
+use it as an explicit style prop because **NativeWind classNames are
+unreliable on reanimated `Animated.View`s** (positioning classes can be
+silently dropped). `components/ui/` holds the reusable primitives
+(`NeonButton`, `GlowPulse`, `ScalePressable`, `GameTile`, `ArcadeDialog`,
+`AnimatedBackground`). NativeWind v4 with `darkMode: 'class'` (the app is
+always dark; the class strategy avoids NativeWind's media-query crash).
+Components are grouped by domain: `board/`, `cards/`, `lobby/`, `overlays/`
+(role reveal, gold pick, round end, game over), `navigation/` (hub sidebar,
+mobile header/drawer), `ui/`.
 
 ---
 
@@ -386,9 +418,11 @@ clients re-render.
 roles/nuggets → timer fires `advanceRound()` → next round's `game_state`
 (or game over: room `finished`, results persisted, `winnerIds` set).
 
-**Reconnect / resume.** App restart loads auth from AsyncStorage (if the JWT
-isn't expired) → socket reconnects with the same token → `request_state`
-pulls the full current snapshot. Players are never removed on disconnect, only
+**Reconnect / resume.** App restart (or a web page refresh on any route) →
+the root layout loads auth from AsyncStorage (if the JWT isn't expired) →
+socket reconnects with the same token → `request_state` pulls the full
+current snapshot. If the room is gone server-side, `server_error` clears the
+session and routes home. Players are never removed on disconnect, only
 marked `isConnected: false`; the game does not pause for absent players —
 their turn waits.
 
