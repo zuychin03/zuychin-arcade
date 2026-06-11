@@ -1,4 +1,9 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
+import { ScalePressable } from '../ui/ScalePressable';
+import { ARCADE, neonText } from '../../constants/theme';
+
+const GOLD = '#F5C518';
 
 interface Props {
   availableCards: number[];
@@ -7,24 +12,41 @@ interface Props {
 
 export function GoldPickOverlay({ availableCards, onPick }: Props) {
   return (
-    <View className="absolute inset-0 z-50 items-center justify-center bg-black/95 px-6">
-      <Text className="text-2xl font-bold text-mine-gold">Pick your gold!</Text>
-      <Text className="mb-6 mt-1 text-center text-mine-stone">
+    <Animated.View
+      entering={FadeIn.duration(250)}
+      className="absolute inset-0 z-50 items-center justify-center bg-black/95 px-6"
+    >
+      <Text style={{ fontSize: 26, fontWeight: '900', letterSpacing: 2, ...neonText(GOLD, 16) }}>
+        PICK YOUR GOLD!
+      </Text>
+      <Text className="mb-7 mt-2 text-center text-arcade-muted">
         Take one nugget card — the rest pass on to the next miner.
       </Text>
       <View className="flex-row flex-wrap justify-center gap-3">
         {availableCards.map((value, i) => (
-          <Pressable
-            key={`${value}-${i}`}
-            className="h-32 w-24 items-center justify-center rounded-xl border-2 border-mine-gold bg-mine-surface active:bg-mine-tunnel"
-            onPress={() => onPick(value)}
-          >
-            <Text style={{ fontSize: 32 }}>🪙</Text>
-            <Text className="mt-2 text-3xl font-extrabold text-mine-gold">{value}</Text>
-            <Text className="text-xs text-mine-stone">nugget{value > 1 ? 's' : ''}</Text>
-          </Pressable>
+          <Animated.View key={`${value}-${i}`} entering={ZoomIn.delay(150 + i * 110).springify().damping(11)}>
+            <ScalePressable
+              onPress={() => onPick(value)}
+              scaleTo={0.9}
+              style={{
+                height: 132,
+                width: 96,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 16,
+                borderWidth: 2,
+                borderColor: GOLD,
+                backgroundColor: ARCADE.surface,
+                boxShadow: `0 0 14px ${GOLD}55`,
+              }}
+            >
+              <Text style={{ fontSize: 34 }}>🪙</Text>
+              <Text style={{ fontSize: 32, fontWeight: '900', marginTop: 6, ...neonText(GOLD, 10) }}>{value}</Text>
+              <Text className="text-xs text-arcade-muted">nugget{value > 1 ? 's' : ''}</Text>
+            </ScalePressable>
+          </Animated.View>
         ))}
       </View>
-    </View>
+    </Animated.View>
   );
 }

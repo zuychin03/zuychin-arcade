@@ -1,5 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
+import Animated, { FadeInLeft } from 'react-native-reanimated';
 import type { Player } from '@zuychin-arcade/types';
+import { ARCADE } from '../../constants/theme';
 
 interface Props {
   players: Player[];
@@ -10,26 +12,31 @@ interface Props {
 
 export function PlayerList({ players, maxPlayers, canKick, onKick }: Props) {
   return (
-    <View className="rounded-xl bg-mine-surface p-4">
-      <Text className="mb-2 text-base font-semibold text-white">
-        Players ({players.length}/{maxPlayers})
+    <View className="rounded-2xl border border-arcade-border bg-arcade-surface p-4">
+      <Text className="mb-2 text-xs font-bold tracking-widest text-arcade-muted">
+        PLAYERS ({players.length}/{maxPlayers})
       </Text>
-      {players.map((p) => (
-        <View key={p.playerId} className="flex-row items-center justify-between py-1.5">
-          <Text className={`text-base ${p.isConnected ? 'text-white' : 'text-mine-stone'}`}>
-            {p.isHost ? '👑 ' : p.isConnected ? '● ' : '○ '}
+      {players.map((p, i) => (
+        <Animated.View
+          key={p.playerId}
+          entering={FadeInLeft.delay(i * 60).springify().damping(18)}
+          className="flex-row items-center justify-between py-2"
+        >
+          <Text className={`text-base ${p.isConnected ? 'text-arcade-text' : 'text-arcade-muted'}`}>
+            {p.isHost ? '👑 ' : p.isConnected ? '🟢 ' : '⚪ '}
             {p.displayName}
-            {!p.isConnected ? ' (disconnected)' : ''}
+            {!p.isConnected ? ' (offline)' : ''}
           </Text>
           {canKick && !p.isHost && (
             <Pressable
-              className="rounded-md bg-mine-danger/80 px-2.5 py-1"
+              className="rounded-lg px-2.5 py-1"
+              style={{ borderWidth: 1, borderColor: ARCADE.red }}
               onPress={() => onKick(p.playerId)}
             >
-              <Text className="font-bold text-white">✕</Text>
+              <Text style={{ color: ARCADE.red, fontWeight: '800' }}>✕</Text>
             </Pressable>
           )}
-        </View>
+        </Animated.View>
       ))}
     </View>
   );

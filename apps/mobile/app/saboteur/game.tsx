@@ -1,19 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import type { BoardPosition, PathCard, Tool } from '@zuychin-arcade/types';
-import { useGameStore } from '../store/useGameStore';
-import { getSocket } from '../hooks/useSocket';
-import { clearAuth } from '../lib/storage';
-import { validPlacements } from '../lib/placement';
-import { GameBoard } from '../components/board/GameBoard';
-import { PlayerStatusBar } from '../components/board/PlayerStatusBar';
-import { PathCardView } from '../components/cards/PathCardView';
-import { ActionCardView } from '../components/cards/ActionCardView';
-import { RoleRevealOverlay } from '../components/overlays/RoleRevealOverlay';
-import { RoundEndOverlay } from '../components/overlays/RoundEndOverlay';
-import { GoldPickOverlay } from '../components/overlays/GoldPickOverlay';
-import { GameOverOverlay } from '../components/overlays/GameOverOverlay';
+import { useGameStore } from '../../store/useGameStore';
+import { getSocket } from '../../hooks/useSocket';
+import { clearAuth } from '../../lib/storage';
+import { validPlacements } from '../../lib/placement';
+import { GameBoard } from '../../components/board/GameBoard';
+import { PlayerStatusBar } from '../../components/board/PlayerStatusBar';
+import { PathCardView } from '../../components/cards/PathCardView';
+import { ActionCardView } from '../../components/cards/ActionCardView';
+import { HandCard } from '../../components/cards/HandCard';
+import { ScalePressable } from '../../components/ui/ScalePressable';
+import { RoleRevealOverlay } from '../../components/overlays/RoleRevealOverlay';
+import { RoundEndOverlay } from '../../components/overlays/RoundEndOverlay';
+import { GoldPickOverlay } from '../../components/overlays/GoldPickOverlay';
+import { GameOverOverlay } from '../../components/overlays/GameOverOverlay';
+import { ARCADE, neonText } from '../../constants/theme';
 
 export default function GameScreen() {
   const publicState = useGameStore((s) => s.publicState);
@@ -98,8 +102,8 @@ export default function GameScreen() {
 
   if (!publicState || !privateState) {
     return (
-      <View className="flex-1 items-center justify-center bg-mine-bg">
-        <Text className="text-mine-stone">Loading game…</Text>
+      <View className="flex-1 items-center justify-center bg-arcade-bg">
+        <Text className="text-arcade-muted">Loading game…</Text>
       </View>
     );
   }
@@ -160,6 +164,7 @@ export default function GameScreen() {
     getSocket()?.disconnect();
     void clearAuth();
     useGameStore.getState().clearAll();
+    router.dismissAll();
     router.replace('/');
   };
 
@@ -168,18 +173,22 @@ export default function GameScreen() {
     publicState.goldDistribution?.currentPickerId === playerId;
 
   return (
-    <View className="flex-1 bg-mine-bg pt-12">
+    <View className="flex-1 bg-arcade-bg pt-12">
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 pb-2">
-        <Text className="font-bold text-mine-gold">Round {publicState.round}/3</Text>
-        <Text className="text-xs text-mine-stone">
-          Deck {publicState.deckSize} · Discard {publicState.discardSize}
+        <Text style={{ fontWeight: '900', letterSpacing: 1, ...neonText(ARCADE.cyan, 8) }}>
+          ROUND {publicState.round}/3
+        </Text>
+        <Text className="text-xs text-arcade-muted">
+          🂠 {publicState.deckSize} · 🗑 {publicState.discardSize}
         </Text>
         <Pressable onPress={() => setShowRole(true)}>
           <Text
-            className={`text-xs font-bold ${
-              privateState.role === 'saboteur' ? 'text-mine-danger' : 'text-mine-gold'
-            }`}
+            style={{
+              fontSize: 12,
+              fontWeight: '800',
+              ...neonText(privateState.role === 'saboteur' ? ARCADE.red : '#F5C518', 8),
+            }}
           >
             {privateState.role === 'saboteur' ? '😈 SABOTEUR' : '⛏️ MINER'}
           </Text>
@@ -200,9 +209,13 @@ export default function GameScreen() {
       {/* Zone B: player status */}
       <View className="flex-[15] justify-center">
         {needsPlayerTarget && (
-          <Text className="pb-1 text-center text-xs text-mine-danger">
-            Tap a player to target with “{selectedCard?.type === 'action' ? selectedCard.subtype.replace(/_/g, ' ') : ''}”
-          </Text>
+          <Animated.Text
+            entering={FadeIn}
+            className="pb-1 text-center text-xs"
+            style={neonText(ARCADE.red, 6)}
+          >
+            Tap a player to target
+          </Animated.Text>
         )}
         <PlayerStatusBar
           players={publicState.players}
@@ -213,60 +226,79 @@ export default function GameScreen() {
       </View>
 
       {/* Zone C: hand */}
-      <View className="flex-[30] border-t border-mine-surface px-2 pt-1">
+      <View className="flex-[30] px-2 pt-1">
         <View className="flex-row items-center justify-between px-2">
-          <Text className="text-xs text-mine-stone">
+          <Text className="text-xs text-arcade-muted">
             {isMyTurn ? '🟢 Your turn' : `Waiting for ${
               publicState.players.find((p) => p.isCurrentTurn)?.displayName ?? '…'
             }`}
           </Text>
           <View className="flex-row gap-2">
             {selectedCard?.type === 'path' && (
-              <Pressable
-                className="rounded-md bg-mine-tunnel px-3 py-1"
+              <ScalePressable
                 onPress={() => useGameStore.getState().toggleRotated()}
+                style={{
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: ARCADE.purple,
+                  paddingHorizontal: 12,
+                  paddingVertical: 5,
+                }}
               >
-                <Text className="text-xs font-bold text-white">↻ Rotate</Text>
-              </Pressable>
+                <Text style={{ color: ARCADE.purple, fontSize: 12, fontWeight: '800' }}>↻ ROTATE</Text>
+              </ScalePressable>
             )}
-            <Pressable
-              className={`rounded-md px-3 py-1 ${isMyTurn ? 'bg-mine-stone/60' : 'bg-mine-stone/20'}`}
-              disabled={!isMyTurn}
+            <ScalePressable
               onPress={onPass}
+              disabled={!isMyTurn}
+              style={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: isMyTurn ? ARCADE.blue : ARCADE.border,
+                paddingHorizontal: 12,
+                paddingVertical: 5,
+                opacity: isMyTurn ? 1 : 0.4,
+              }}
             >
-              <Text className="text-xs font-bold text-white">Pass</Text>
-            </Pressable>
+              <Text style={{ color: isMyTurn ? ARCADE.blue : ARCADE.muted, fontSize: 12, fontWeight: '800' }}>
+                PASS
+              </Text>
+            </ScalePressable>
           </View>
         </View>
-        <ScrollView horizontal contentContainerStyle={{ gap: 8, padding: 8, alignItems: 'center' }}>
+        <ScrollView horizontal contentContainerStyle={{ gap: 6, padding: 8, alignItems: 'center' }}>
           {privateState.hand.map((card) => {
             const selected = card.id === selectedCardId;
             return (
-              <Pressable
+              <HandCard
                 key={card.id}
+                selected={selected}
                 onPress={() => useGameStore.getState().setSelectedCard(selected ? null : card.id)}
-                className={selected ? 'rounded-lg border-2 border-mine-gold p-0.5' : 'p-1'}
               >
                 {card.type === 'path' ? (
                   <PathCardView card={card} rotated={selected && rotated} size={64} />
                 ) : (
                   <ActionCardView card={card} size={56} />
                 )}
-              </Pressable>
+              </HandCard>
             );
           })}
           {privateState.hand.length === 0 && (
-            <Text className="px-4 text-mine-stone">No cards left this round</Text>
+            <Text className="px-4 text-arcade-muted">No cards left this round</Text>
           )}
         </ScrollView>
       </View>
 
       {/* Map peek toast */}
       {peekMessage && (
-        <View className="absolute left-8 right-8 top-24 z-40 items-center rounded-xl bg-black/90 p-4">
-          <Text className="text-lg font-bold text-mine-gold">{peekMessage}</Text>
-          <Text className="mt-1 text-xs text-mine-stone">(only you saw this)</Text>
-        </View>
+        <Animated.View
+          entering={SlideInUp.springify().damping(16)}
+          className="absolute left-8 right-8 top-24 z-40 items-center rounded-2xl border border-arcade-border bg-black/95 p-4"
+          style={{ boxShadow: `0 0 16px ${ARCADE.purple}66` }}
+        >
+          <Text style={{ fontSize: 17, fontWeight: '800', ...neonText('#F5C518', 10) }}>{peekMessage}</Text>
+          <Text className="mt-1 text-xs text-arcade-muted">(only you saw this)</Text>
+        </Animated.View>
       )}
 
       {/* Overlays */}

@@ -1,5 +1,7 @@
-import { Pressable, Share, Text, View } from 'react-native';
+import { Share, Text, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { ScalePressable } from '../ui/ScalePressable';
+import { ARCADE, neonText } from '../../constants/theme';
 
 interface Props {
   roomCode: string;
@@ -8,25 +10,42 @@ interface Props {
 
 export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
   return (
-    <View className="items-center rounded-xl bg-mine-surface p-4">
-      <Text className="text-sm text-mine-stone">Room code</Text>
-      <Text className="my-1 text-4xl font-bold tracking-widest text-mine-gold">{roomCode}</Text>
-      {hasPassword && <Text className="text-xs text-mine-stone">🔒 password protected</Text>}
-      <View className="mt-3 flex-row gap-3">
-        <Pressable
-          className="rounded-lg bg-mine-tunnel px-4 py-2"
+    <View
+      className="items-center rounded-2xl border border-arcade-border bg-arcade-surface p-5"
+      style={{ boxShadow: `0 0 16px ${ARCADE.cyan}33` }}
+    >
+      <Text className="text-xs font-bold tracking-widest text-arcade-muted">ROOM CODE</Text>
+      <Text style={{ fontSize: 38, fontWeight: '900', letterSpacing: 6, marginVertical: 4, ...neonText(ARCADE.cyan, 16) }}>
+        {roomCode}
+      </Text>
+      {hasPassword && <Text className="text-xs text-arcade-muted">🔒 password protected</Text>}
+      <View className="mt-4 flex-row gap-3">
+        <ScalePressable
           onPress={() => void Clipboard.setStringAsync(roomCode)}
+          style={{
+            borderRadius: 12,
+            borderWidth: 1.5,
+            borderColor: ARCADE.purple,
+            paddingHorizontal: 18,
+            paddingVertical: 10,
+          }}
         >
-          <Text className="font-semibold text-white">Copy code</Text>
-        </Pressable>
-        <Pressable
-          className="rounded-lg bg-mine-gold px-4 py-2"
+          <Text style={{ color: ARCADE.purple, fontWeight: '700' }}>Copy</Text>
+        </ScalePressable>
+        <ScalePressable
           onPress={() =>
             void Share.share({ message: `Join my Saboteur game on zuychin-arcade! Room code: ${roomCode}` })
           }
+          style={{
+            borderRadius: 12,
+            backgroundColor: ARCADE.cyan,
+            paddingHorizontal: 18,
+            paddingVertical: 10,
+            boxShadow: `0 0 10px ${ARCADE.cyan}66`,
+          }}
         >
-          <Text className="font-semibold text-mine-bg">Share</Text>
-        </Pressable>
+          <Text style={{ color: ARCADE.bg, fontWeight: '800' }}>Share</Text>
+        </ScalePressable>
       </View>
     </View>
   );
