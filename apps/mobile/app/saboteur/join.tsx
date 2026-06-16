@@ -53,10 +53,10 @@ export default function JoinScreen() {
   return (
     <View className="flex-1 bg-arcade-bg px-8 pt-10">
       <Animated.View entering={FadeInDown.duration(400)}>
-        <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>ROOM CODE</Text>
+        <Text style={{ fontFamily: 'Outfit_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>ROOM CODE</Text>
         <TextInput
           className="rounded-2xl border-2 border-arcade-blue bg-arcade-surface px-4 py-4 text-center text-3xl font-black tracking-widest text-arcade-cyan"
-          style={{ boxShadow: `0 0 12px ${ARCADE.blue}44` }}
+          style={{ fontFamily: 'Outfit_800ExtraBold', boxShadow: `0 0 12px ${ARCADE.blue}44` }}
           placeholder="GOLD-42"
           placeholderTextColor={ARCADE.border}
           autoCapitalize="characters"
@@ -68,11 +68,12 @@ export default function JoinScreen() {
 
       {needsPassword && (
         <Animated.View entering={FadeInUp.springify().damping(16)}>
-          <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginTop: 20, marginBottom: 8 }}>
+          <Text style={{ fontFamily: 'Outfit_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginTop: 20, marginBottom: 8 }}>
             ROOM PASSWORD (OPTIONAL)
           </Text>
           <TextInput
             className="rounded-2xl border border-arcade-border bg-arcade-surface px-5 py-4 text-base text-arcade-text"
+            style={{ fontFamily: 'Outfit_700Bold' }}
             placeholder="room password"
             placeholderTextColor={ARCADE.muted}
             value={password}

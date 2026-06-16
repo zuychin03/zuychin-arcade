@@ -76,8 +76,8 @@ export function validatePlacement(
   blockedPositions: BoardPosition[],
 ): ValidationResult {
   const { row, col } = position;
-  if (row < 0 || row >= BOARD.rows || col < 0 || col >= BOARD.cols) {
-    return { valid: false, reason: 'Position is outside the board' };
+  if (row < 0 || row > 8 || col < 2 || col > 6) {
+    return { valid: false, reason: 'Position is outside the 5x9 board boundaries' };
   }
 
   const cells = boardMap(board);
@@ -153,6 +153,7 @@ export function hasAnyLegalPlacement(
   }
   for (const k of candidates) {
     const [row, col] = k.split(',').map(Number);
+    if (row < 0 || row > 8 || col < 2 || col > 6) continue;
     for (const card of hand) {
       for (const rotated of [false, true]) {
         const c = { ...card, edges: rotateEdges(card.edges, rotated) };

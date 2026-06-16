@@ -52,7 +52,7 @@ export default function SaboteurLanding() {
       {/* Hero */}
       <Animated.View entering={FadeInDown.duration(500)} className="items-center py-4">
         <Text style={{ fontSize: 64 }}>⛏️</Text>
-        <Text style={{ fontSize: 28, fontWeight: '900', letterSpacing: 3, marginTop: 6, ...neonText(ARCADE.pink, 14) }}>
+        <Text style={{ fontSize: 28, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 3, marginTop: 6, ...neonText(ARCADE.pink, 14) }}>
           SABOTEUR
         </Text>
         <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 14, lineHeight: 20, marginTop: 8 }}>
@@ -70,9 +70,10 @@ export default function SaboteurLanding() {
 
       {/* Name */}
       <Animated.View entering={FadeInUp.delay(120).springify().damping(16)}>
-        <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>YOUR NAME</Text>
+        <Text style={{ fontFamily: 'Outfit_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>YOUR NAME</Text>
         <TextInput
           className="rounded-2xl border border-arcade-border bg-arcade-surface px-5 py-4 text-base font-bold text-arcade-text"
+          style={{ fontFamily: 'Outfit_700Bold' }}
           placeholder="e.g. Danny"
           placeholderTextColor={ARCADE.muted}
           maxLength={20}
@@ -85,11 +86,12 @@ export default function SaboteurLanding() {
       <Animated.View entering={FadeInUp.delay(200).springify().damping(16)} style={{ gap: 12 }}>
         {showCreate && (
           <View>
-            <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>
+            <Text style={{ fontFamily: 'Outfit_700Bold', color: ARCADE.muted, fontSize: 12, letterSpacing: 2, marginBottom: 8 }}>
               ROOM PASSWORD (OPTIONAL)
             </Text>
             <TextInput
               className="rounded-2xl border border-arcade-border bg-arcade-surface px-5 py-4 text-base text-arcade-text"
+              style={{ fontFamily: 'Outfit_700Bold' }}
               placeholder="leave empty for an open room"
               placeholderTextColor={ARCADE.muted}
               value={password}

@@ -33,8 +33,8 @@ export function NeonButton({ label, onPress, color = ARCADE.pink, variant = 'sol
     >
       <Text
         style={{
+          fontFamily: 'Outfit_800ExtraBold',
           fontSize: 16,
-          fontWeight: '800',
           letterSpacing: 1,
           color: solid ? ARCADE.bg : color,
         }}

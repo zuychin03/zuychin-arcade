@@ -45,23 +45,23 @@ export default function ArcadeHub() {
       contentContainerStyle={{ padding: 20, paddingTop: 64, gap: 14 }}
     >
       <Animated.View entering={FadeIn.duration(600)} className="mb-6">
-        <Text style={{ 
-          fontSize: 32, 
-          fontFamily: 'Outfit_800ExtraBold', 
+        <Text style={{
+          fontSize: 32,
+          fontFamily: 'Outfit_800ExtraBold',
           letterSpacing: 2,
           ...neonText(ARCADE.pink, 12),
-          color: ARCADE.text 
+          color: ARCADE.text
         }}>
           READY TO PLAY?
         </Text>
-        <Text style={{ 
-          fontSize: 14, 
-          fontFamily: 'SpaceMono_400Regular', 
-          color: ARCADE.cyan, 
-          marginTop: 4, 
-          letterSpacing: 0.5 
+        <Text style={{
+          fontSize: 14,
+          fontFamily: 'SpaceMono_400Regular',
+          color: ARCADE.cyan,
+          marginTop: 4,
+          letterSpacing: 0.5
         }}>
-          Choose a gamespace to start playing 👾
+          Choose a gamespace to start playing
         </Text>
       </Animated.View>
 
@@ -84,7 +84,7 @@ export default function ArcadeHub() {
           >
             <Text style={{ fontSize: 26 }}>⏯️</Text>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontWeight: '800', ...neonText(ARCADE.cyan, 8) }}>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', ...neonText(ARCADE.cyan, 8) }}>
                 {room.status === 'in_game' ? 'Game in progress' : 'Back to lobby'}
               </Text>
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12, marginTop: 2 }}>
@@ -100,7 +100,7 @@ export default function ArcadeHub() {
         style={{
           color: ARCADE.muted,
           fontSize: 12,
-          fontFamily: 'SpaceMono_700Bold',
+          fontFamily: 'Outfit_700Bold',
           letterSpacing: 3,
           marginTop: 8,
         }}

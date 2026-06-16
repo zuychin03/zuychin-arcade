@@ -49,7 +49,7 @@ export function GameTile({ title, emoji, subtitle, accent, locked, index, onPres
           <Text style={{ fontSize: 32 }}>{locked ? '🔒' : emoji}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={locked ? { color: ARCADE.muted, fontSize: 18, fontWeight: '800' } : { fontSize: 18, fontWeight: '800', ...neonText(accent, 8) }}>
+          <Text style={locked ? { color: ARCADE.muted, fontSize: 18, fontFamily: 'Outfit_800ExtraBold' } : { fontSize: 18, fontFamily: 'Outfit_800ExtraBold', ...neonText(accent, 8) }}>
             {title}
           </Text>
           <Text style={{ color: ARCADE.muted, marginTop: 3, fontSize: 13, fontFamily: 'SpaceMono_400Regular', letterSpacing: 0.5 }}>{subtitle}</Text>

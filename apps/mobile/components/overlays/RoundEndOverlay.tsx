@@ -25,7 +25,7 @@ export function RoundEndOverlay({ state }: Props) {
       </Animated.Text>
       <Animated.Text
         entering={ZoomIn.delay(200).springify().damping(12)}
-        style={{ fontSize: 32, fontWeight: '900', letterSpacing: 3, marginVertical: 8, ...neonText(accent, 18) }}
+        style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 32, letterSpacing: 3, marginVertical: 8, ...neonText(accent, 18) }}
       >
         {minersWon ? 'MINERS WIN!' : 'SABOTEURS WIN!'}
       </Animated.Text>

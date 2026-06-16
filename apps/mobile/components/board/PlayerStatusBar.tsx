@@ -20,49 +20,117 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
   return (
     <ScrollView
       horizontal
-      className="grow-0 border-y border-arcade-border bg-arcade-surface"
-      contentContainerStyle={{ padding: 6, gap: 6 }}
+      className="grow-0 border-y border-arcade-border/50 bg-[#0B0716]/80"
+      contentContainerStyle={{ padding: 8, gap: 8 }}
+      showsHorizontalScrollIndicator={false}
     >
-      {players.map((p) => (
-        <Pressable
-          key={p.playerId}
-          disabled={!selectable}
-          onPress={() => onSelect(p.playerId)}
-          style={{
-            minWidth: 88,
-            borderRadius: 10,
-            paddingHorizontal: 8,
-            paddingVertical: 6,
-            backgroundColor: p.isCurrentTurn ? ARCADE.panel : ARCADE.bg,
-            borderWidth: 1,
-            borderColor: p.isCurrentTurn ? ARCADE.cyan : ARCADE.border,
-          }}
-        >
-          {p.isCurrentTurn && <GlowPulse color={ARCADE.cyan} borderRadius={10} borderWidth={1.5} />}
-          {selectable && <GlowPulse color={ARCADE.red} borderRadius={10} borderWidth={1.5} />}
-          <Text numberOfLines={1} style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.text, fontSize: 12, fontWeight: '600' }}>
-            {p.playerId === myPlayerId ? '⭐ ' : ''}
-            {p.displayName}
-          </Text>
-          <View className="mt-1 flex-row items-center gap-1.5">
-            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 10 }}>🃏{p.handSize}</Text>
-            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: '#F5C518', fontSize: 10 }}>
-              🪙{p.goldCollected}
+      {players.map((p) => {
+        const hasBrokenTools = p.brokenTools.length > 0;
+        
+        let cardBorderColor: string = ARCADE.border;
+        let cardBg = 'rgba(22, 16, 40, 0.6)';
+        
+        if (p.isCurrentTurn) {
+          cardBorderColor = ARCADE.cyan;
+          cardBg = 'rgba(31, 24, 56, 0.85)';
+        } else if (hasBrokenTools) {
+          cardBorderColor = 'rgba(255, 51, 85, 0.4)';
+          cardBg = 'rgba(40, 16, 28, 0.5)';
+        }
+
+        return (
+          <Pressable
+            key={p.playerId}
+            disabled={!selectable}
+            onPress={() => onSelect(p.playerId)}
+            style={{
+              minWidth: 100,
+              borderRadius: 14,
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+              backgroundColor: cardBg,
+              borderWidth: 1.5,
+              borderColor: cardBorderColor,
+            }}
+          >
+            {p.isCurrentTurn && <GlowPulse color={ARCADE.cyan} borderRadius={14} borderWidth={1.5} />}
+            {selectable && <GlowPulse color={ARCADE.pink} borderRadius={14} borderWidth={1.5} />}
+            
+            {/* Player Name */}
+            <Text
+              numberOfLines={1}
+              style={{
+                fontFamily: 'SpaceMono_700Bold',
+                color: p.isCurrentTurn ? ARCADE.cyan : ARCADE.text,
+                fontSize: 12,
+                fontWeight: '800',
+              }}
+            >
+              {p.playerId === myPlayerId ? '⭐ ' : ''}
+              {p.displayName}
             </Text>
-          </View>
-          <View className="mt-0.5 flex-row gap-1">
-            {TOOLS.map(({ tool, icon }) => {
-              const broken = p.brokenTools.includes(tool);
-              return (
-                <Text key={tool} style={{ opacity: broken ? 1 : 0.4, fontSize: 11 }}>
-                  {icon}
-                  {broken ? '🚫' : ''}
+
+            {/* Hand & Gold indicators */}
+            <View className="mt-1.5 flex-row items-center gap-2">
+              <View className="flex-row items-center gap-1 rounded bg-[#2E2452]/40 px-1 py-0.5 border border-arcade-border/30">
+                <Text style={{ fontSize: 10 }}>🂠</Text>
+                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 10 }}>
+                  {p.handSize}
                 </Text>
-              );
-            })}
-          </View>
-        </Pressable>
-      ))}
+              </View>
+              <View className="flex-row items-center gap-1 rounded bg-[#2D1A00]/40 px-1 py-0.5 border border-[#F5C518]/20">
+                <Text style={{ fontSize: 10 }}>🪙</Text>
+                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: '#F5C518', fontSize: 10 }}>
+                  {p.goldCollected}
+                </Text>
+              </View>
+            </View>
+
+            {/* Tools badges */}
+            <View className="mt-2 flex-row gap-1.5">
+              {TOOLS.map(({ tool, icon }) => {
+                const broken = p.brokenTools.includes(tool);
+                return (
+                  <View
+                    key={tool}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 10,
+                      backgroundColor: broken ? 'rgba(255, 51, 85, 0.2)' : 'rgba(22, 16, 40, 0.4)',
+                      borderWidth: 1,
+                      borderColor: broken ? ARCADE.red : 'rgba(142, 134, 179, 0.3)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text style={{ fontSize: 11, opacity: broken ? 0.6 : 0.8 }}>
+                      {icon}
+                    </Text>
+                    {broken && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: -2,
+                          right: -2,
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: ARCADE.red,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Text style={{ fontSize: 5, color: '#FFF', fontWeight: '900' }}>✕</Text>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          </Pressable>
+        );
+      })}
     </ScrollView>
   );
 }

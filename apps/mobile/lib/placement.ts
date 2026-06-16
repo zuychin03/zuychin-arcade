@@ -61,7 +61,7 @@ export function validPlacements(
   for (const pc of board) {
     for (const { dr, dc } of NEIGHBOURS) {
       const pos = { row: pc.position.row + dr, col: pc.position.col + dc };
-      if (pos.row < 0 || pos.row >= BOARD.rows || pos.col < 0 || pos.col >= BOARD.cols) continue;
+      if (pos.row < 0 || pos.row > 8 || pos.col < 2 || pos.col > 6) continue;
       const k = key(pos);
       if (!cells.has(k) && !blocked.has(k)) candidates.add(k);
     }

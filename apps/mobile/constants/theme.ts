@@ -41,8 +41,13 @@ export const OVERLAY_FILL = {
   backgroundColor: 'rgba(0, 0, 0, 0.95)',
 } as const;
 
+import { Platform } from 'react-native';
+
 /** Neon glow for text — pass into a <Text style={...}> */
 export function neonText(color: string, radius = 12) {
+  if (Platform.OS === 'web') {
+    return { color, textShadow: `0px 0px ${radius}px ${color}` };
+  }
   return { color, textShadowColor: color, textShadowRadius: radius, textShadowOffset: { width: 0, height: 0 } };
 }
 

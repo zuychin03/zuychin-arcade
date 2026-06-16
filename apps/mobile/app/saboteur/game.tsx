@@ -207,7 +207,7 @@ export default function GameScreen() {
     <View className="flex-1 bg-arcade-bg pt-12">
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 pb-2">
-        <Text style={{ fontWeight: '900', letterSpacing: 1, ...neonText(ARCADE.cyan, 8) }}>
+        <Text style={{ fontFamily: 'Outfit_800ExtraBold', letterSpacing: 1, ...neonText(ARCADE.cyan, 8) }}>
           ROUND {publicState.round}/3
         </Text>
         <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12 }}>
@@ -216,8 +216,8 @@ export default function GameScreen() {
         <Pressable onPress={() => setShowRole(true)}>
           <Text
             style={{
+              fontFamily: 'Outfit_800ExtraBold',
               fontSize: 12,
-              fontWeight: '800',
               ...neonText(privateState.role === 'saboteur' ? ARCADE.red : '#F5C518', 8),
             }}
           >
@@ -242,7 +242,7 @@ export default function GameScreen() {
         {needsPlayerTarget && (
           <Animated.Text
             entering={FadeIn}
-            style={{ paddingBottom: 4, textAlign: 'center', fontSize: 12, ...neonText(ARCADE.red, 6) }}
+            style={{ fontFamily: 'Outfit_700Bold', paddingBottom: 4, textAlign: 'center', fontSize: 12, ...neonText(ARCADE.red, 6) }}
           >
             Tap a player to target
           </Animated.Text>
@@ -268,35 +268,39 @@ export default function GameScreen() {
               <ScalePressable
                 onPress={() => useGameStore.getState().toggleRotated()}
                 style={{
-                  borderRadius: 8,
-                  borderWidth: 1,
+                  borderRadius: 12,
+                  borderWidth: 1.5,
                   borderColor: ARCADE.purple,
-                  paddingHorizontal: 12,
-                  paddingVertical: 5,
+                  backgroundColor: 'rgba(168, 85, 247, 0.15)',
+                  paddingHorizontal: 14,
+                  paddingVertical: 7,
+                  boxShadow: `0 0 8px ${ARCADE.purple}44`,
                 }}
               >
-                <Text style={{ color: ARCADE.purple, fontSize: 12, fontWeight: '800' }}>↻ ROTATE</Text>
+                <Text style={{ color: ARCADE.purple, fontFamily: 'Outfit_800ExtraBold', fontSize: 12, letterSpacing: 0.5 }}>↻ ROTATE</Text>
               </ScalePressable>
             )}
             <ScalePressable
               onPress={onPass}
               disabled={!isMyTurn}
               style={{
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: isMyTurn ? ARCADE.blue : ARCADE.border,
-                paddingHorizontal: 12,
-                paddingVertical: 5,
-                opacity: isMyTurn ? 1 : 0.4,
+                borderRadius: 12,
+                borderWidth: 1.5,
+                borderColor: isMyTurn ? ARCADE.pink : ARCADE.border,
+                backgroundColor: isMyTurn ? 'rgba(255, 46, 136, 0.15)' : 'rgba(22, 16, 40, 0.4)',
+                paddingHorizontal: 14,
+                paddingVertical: 7,
+                opacity: isMyTurn ? 1 : 0.5,
+                boxShadow: isMyTurn ? `0 0 8px ${ARCADE.pink}44` : undefined,
               }}
             >
-              <Text style={{ color: isMyTurn ? ARCADE.blue : ARCADE.muted, fontSize: 12, fontWeight: '800' }}>
+              <Text style={{ color: isMyTurn ? ARCADE.pink : ARCADE.muted, fontFamily: 'Outfit_800ExtraBold', fontSize: 12, letterSpacing: 0.5 }}>
                 PASS
               </Text>
             </ScalePressable>
           </View>
         </View>
-        <ScrollView horizontal contentContainerStyle={{ gap: 6, padding: 8, alignItems: 'center' }}>
+        <ScrollView horizontal contentContainerStyle={{ gap: 8, padding: 8, alignItems: 'center' }}>
           {privateState.hand.map((card) => {
             const selected = card.id === selectedCardId;
             return (
@@ -306,9 +310,9 @@ export default function GameScreen() {
                 onPress={() => useGameStore.getState().setSelectedCard(selected ? null : card.id)}
               >
                 {card.type === 'path' ? (
-                  <PathCardView card={card} rotated={selected && rotated} size={64} />
+                  <PathCardView card={card} rotated={selected && rotated} width={56} height={84} />
                 ) : (
-                  <ActionCardView card={card} size={56} />
+                  <ActionCardView card={card} width={56} height={84} />
                 )}
               </HandCard>
             );
@@ -338,7 +342,7 @@ export default function GameScreen() {
             boxShadow: `0 0 16px ${ARCADE.purple}66`,
           }}
         >
-          <Text style={{ fontSize: 17, fontWeight: '800', ...neonText('#F5C518', 10) }}>{peekMessage}</Text>
+          <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 17, ...neonText('#F5C518', 10) }}>{peekMessage}</Text>
           <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12, marginTop: 4 }}>(only you saw this)</Text>
         </Animated.View>
       )}

@@ -16,7 +16,7 @@ export function GoldPickOverlay({ cardCount, onPick }: Props) {
       entering={FadeIn.duration(250)}
       style={[OVERLAY_FILL, { zIndex: 50, paddingHorizontal: 24 }]}
     >
-      <Text style={{ fontSize: 26, fontWeight: '900', letterSpacing: 2, ...neonText(GOLD, 16) }}>
+      <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 26, letterSpacing: 2, ...neonText(GOLD, 16) }}>
         PICK YOUR GOLD!
       </Text>
       <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', marginTop: 8, marginBottom: 28, paddingHorizontal: 24, lineHeight: 20 }}>

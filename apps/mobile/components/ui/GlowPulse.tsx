@@ -29,7 +29,7 @@ export function GlowPulse({ color, borderRadius = 6, borderWidth = 2 }: Props) {
       pointerEvents="none"
       style={[
         StyleSheet.absoluteFill,
-        { borderColor: color, borderWidth, borderRadius, boxShadow: `0 0 10px ${color}` },
+        { borderColor: color, borderWidth, borderRadius, boxShadow: `0 0 10px ${color}`, pointerEvents: 'none' },
         animated,
       ]}
     />

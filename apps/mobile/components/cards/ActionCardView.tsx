@@ -1,35 +1,117 @@
 import { Text, View } from 'react-native';
 import type { ActionCard, ActionSubtype } from '@zuychin-arcade/types';
+import { ARCADE, neonBox } from '../../constants/theme';
 
-const LABELS: Record<ActionSubtype, { icon: string; label: string; color: string }> = {
-  sabotage_lantern: { icon: '🔦💥', label: 'Break lamp', color: '#DC2626' },
-  sabotage_cart: { icon: '🛒💥', label: 'Break cart', color: '#DC2626' },
-  sabotage_pickaxe: { icon: '⛏️💥', label: 'Break pick', color: '#DC2626' },
-  repair_lantern: { icon: '🔦✨', label: 'Fix lamp', color: '#16A34A' },
-  repair_cart: { icon: '🛒✨', label: 'Fix cart', color: '#16A34A' },
-  repair_pickaxe: { icon: '⛏️✨', label: 'Fix pick', color: '#16A34A' },
-  repair_lantern_cart: { icon: '🔦🛒', label: 'Fix lamp/cart', color: '#16A34A' },
-  repair_lantern_pickaxe: { icon: '🔦⛏️', label: 'Fix lamp/pick', color: '#16A34A' },
-  repair_cart_pickaxe: { icon: '🛒⛏️', label: 'Fix cart/pick', color: '#16A34A' },
-  map: { icon: '🗺️', label: 'Map', color: '#F5C518' },
-  rockfall: { icon: '🪨💥', label: 'Rockfall', color: '#6B7280' },
+const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icon: string; color: string }> = {
+  sabotage_lantern: { title: 'SABOTAGE', label: 'Break Lamp', icon: '🔦', color: ARCADE.red },
+  sabotage_cart: { title: 'SABOTAGE', label: 'Break Cart', icon: '🛒', color: ARCADE.red },
+  sabotage_pickaxe: { title: 'SABOTAGE', label: 'Break Pick', icon: '⛏️', color: ARCADE.red },
+  repair_lantern: { title: 'REPAIR', label: 'Fix Lamp', icon: '🔦', color: '#16A34A' },
+  repair_cart: { title: 'REPAIR', label: 'Fix Cart', icon: '🛒', color: '#16A34A' },
+  repair_pickaxe: { title: 'REPAIR', label: 'Fix Pick', icon: '⛏️', color: '#16A34A' },
+  repair_lantern_cart: { title: 'REPAIR', label: 'Lamp/Cart', icon: '🔦🛒', color: '#16A34A' },
+  repair_lantern_pickaxe: { title: 'REPAIR', label: 'Lamp/Pick', icon: '🔦⛏️', color: '#16A34A' },
+  repair_cart_pickaxe: { title: 'REPAIR', label: 'Cart/Pick', icon: '🛒⛏️', color: '#16A34A' },
+  map: { title: 'INTEL', label: 'Map Goal', icon: '🗺️', color: '#F5C518' },
+  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icon: '🪨', color: '#6B7280' },
 };
 
 interface Props {
   card: ActionCard;
-  size?: number;
+  width?: number;
+  height?: number;
 }
 
-export function ActionCardView({ card, size = 64 }: Props) {
-  const def = LABELS[card.subtype];
+export function ActionCardView({ card, width = 56, height = 84 }: Props) {
+  const data = CARD_DATA[card.subtype];
+  const isSabotage = card.subtype.startsWith('sabotage_');
+  const minDim = Math.min(width, height);
+
   return (
     <View
-      style={{ width: size, height: size * 1.4, borderColor: def.color }}
-      className="items-center justify-center rounded-md border-2 bg-mine-surface p-1"
+      style={{
+        width,
+        height,
+        backgroundColor: '#130E1F',
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: data.color,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 4,
+        ...neonBox(data.color, 6),
+      }}
     >
-      <Text style={{ fontSize: size * 0.3 }}>{def.icon}</Text>
-      <Text style={{ color: def.color, fontSize: size * 0.16 }} className="mt-1 text-center font-bold">
-        {def.label}
+      {/* Category header */}
+      <Text
+        style={{
+          fontSize: minDim * 0.15,
+          fontWeight: '900',
+          color: data.color,
+          letterSpacing: 0.5,
+          textAlign: 'center',
+          marginTop: 2,
+        }}
+      >
+        {data.title}
+      </Text>
+
+      {/* Main icon with glowing indicator */}
+      <View
+        style={{
+          width: minDim * 0.55,
+          height: minDim * 0.55,
+          borderRadius: 99,
+          backgroundColor: `${data.color}15`,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderWidth: 1,
+          borderColor: `${data.color}40`,
+        }}
+      >
+        <Text style={{ fontSize: minDim * 0.3 }}>{data.icon}</Text>
+        {isSabotage && (
+          <Text
+            style={{
+              position: 'absolute',
+              right: -2,
+              bottom: -2,
+              fontSize: minDim * 0.2,
+              color: ARCADE.red,
+              fontWeight: 'bold',
+            }}
+          >
+            💥
+          </Text>
+        )}
+        {card.subtype.startsWith('repair_') && (
+          <Text
+            style={{
+              position: 'absolute',
+              right: -2,
+              bottom: -2,
+              fontSize: minDim * 0.2,
+              color: '#16A34A',
+              fontWeight: 'bold',
+            }}
+          >
+            ✨
+          </Text>
+        )}
+      </View>
+
+      {/* Title description */}
+      <Text
+        numberOfLines={1}
+        style={{
+          color: '#EDEAFB',
+          fontSize: minDim * 0.14,
+          fontWeight: '800',
+          textAlign: 'center',
+          marginBottom: 4,
+        }}
+      >
+        {data.label}
       </Text>
     </View>
   );

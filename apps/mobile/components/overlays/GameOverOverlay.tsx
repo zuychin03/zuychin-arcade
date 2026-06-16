@@ -27,7 +27,7 @@ export function GameOverOverlay({ state, isHost, onPlayAgain, onLeave }: Props) 
       </Animated.Text>
       <Animated.Text
         entering={ZoomIn.delay(150).springify().damping(12)}
-        style={{ fontSize: 34, fontWeight: '900', letterSpacing: 4, marginVertical: 8, ...neonText(ARCADE.pink, 18) }}
+        style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 34, letterSpacing: 4, marginVertical: 8, ...neonText(ARCADE.pink, 18) }}
       >
         GAME OVER
       </Animated.Text>

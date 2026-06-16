@@ -60,7 +60,7 @@ export function ArcadeDialogHost() {
           boxShadow: `0 0 24px ${ARCADE.purple}44`,
         }}
       >
-        <Text style={{ fontSize: 17, fontWeight: '800', letterSpacing: 1, textAlign: 'center', ...neonText(ARCADE.cyan, 8) }}>
+        <Text style={{ fontSize: 17, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 1, textAlign: 'center', ...neonText(ARCADE.cyan, 8) }}>
           {dialog.title}
         </Text>
         {dialog.message ? (
@@ -85,7 +85,7 @@ export function ArcadeDialogHost() {
                   backgroundColor: button.style === 'cancel' ? 'transparent' : `${color}22`,
                 }}
               >
-                <Text style={{ fontSize: 14, fontWeight: '800', letterSpacing: 1, color }}>{button.text}</Text>
+                <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 14, letterSpacing: 1, color }}>{button.text}</Text>
               </ScalePressable>
             );
           })}

@@ -14,8 +14,8 @@ export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
       className="items-center rounded-2xl border border-arcade-border bg-arcade-surface p-5"
       style={{ boxShadow: `0 0 16px ${ARCADE.cyan}33` }}
     >
-      <Text className="text-xs font-bold tracking-widest text-arcade-muted">ROOM CODE</Text>
-      <Text style={{ fontSize: 38, fontWeight: '900', letterSpacing: 6, marginVertical: 4, ...neonText(ARCADE.cyan, 16) }}>
+      <Text style={{ fontFamily: 'Outfit_700Bold', fontSize: 11, letterSpacing: 2, color: ARCADE.muted }}>ROOM CODE</Text>
+      <Text style={{ fontSize: 38, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 6, marginVertical: 4, ...neonText(ARCADE.cyan, 16) }}>
         {roomCode}
       </Text>
       {hasPassword && <Text className="text-xs text-arcade-muted">🔒 password protected</Text>}
@@ -30,7 +30,7 @@ export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
             paddingVertical: 10,
           }}
         >
-          <Text style={{ color: ARCADE.purple, fontWeight: '700' }}>Copy</Text>
+          <Text style={{ color: ARCADE.purple, fontFamily: 'Outfit_700Bold', fontSize: 13 }}>Copy</Text>
         </ScalePressable>
         <ScalePressable
           onPress={() =>
@@ -44,7 +44,7 @@ export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
             boxShadow: `0 0 10px ${ARCADE.cyan}66`,
           }}
         >
-          <Text style={{ color: ARCADE.bg, fontWeight: '800' }}>Share</Text>
+          <Text style={{ color: ARCADE.bg, fontFamily: 'Outfit_700Bold', fontSize: 13 }}>Share</Text>
         </ScalePressable>
       </View>
     </View>

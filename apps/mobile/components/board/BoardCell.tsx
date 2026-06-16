@@ -10,34 +10,36 @@ interface Props {
   goal: GoalStatus | null;
   isValidTarget: boolean;     // highlighted placement spot for the selected card
   isActionTarget: boolean;    // highlighted target for rockfall / map
-  size: number;
+  width: number;
+  height: number;
   onPress: () => void;
 }
 
-export function BoardCell({ placed, goal, isValidTarget, isActionTarget, size, onPress }: Props) {
-  const inner = size - 2;
+export function BoardCell({ placed, goal, isValidTarget, isActionTarget, width, height, onPress }: Props) {
+  const innerW = width - 2;
+  const innerH = height - 2;
   return (
-    <Pressable onPress={onPress} style={{ width: size, height: size, padding: 1 }}>
+    <Pressable onPress={onPress} style={{ width, height, padding: 1 }}>
       {placed ? (
-        <View style={{ width: inner, height: inner }}>
-          <PathCardView card={placed.card} size={inner} />
-          {isActionTarget && <GlowPulse color={ARCADE.red} borderRadius={3} />}
+        <View style={{ width: innerW, height: innerH }}>
+          <PathCardView card={placed.card} width={innerW} height={innerH} />
+          {isActionTarget && <GlowPulse color={ARCADE.red} borderRadius={6} />}
         </View>
       ) : goal && !goal.revealed ? (
-        <View style={{ width: inner, height: inner }}>
-          <CardBack size={inner} label="❓" />
-          {isActionTarget && <GlowPulse color={ARCADE.cyan} borderRadius={3} />}
+        <View style={{ width: innerW, height: innerH }}>
+          <CardBack width={innerW} height={innerH} label="❓" />
+          {isActionTarget && <GlowPulse color={ARCADE.cyan} borderRadius={6} />}
         </View>
       ) : (
         <View
-          style={{ width: inner, height: inner }}
+          style={{ width: innerW, height: innerH }}
           className={
             isValidTarget
-              ? 'rounded-sm bg-arcade-cyan/15'
-              : 'rounded-sm border border-arcade-border/40'
+              ? 'rounded-md bg-arcade-cyan/15'
+              : 'rounded-md border border-arcade-border/30 bg-[#0B0716]/30'
           }
         >
-          {isValidTarget && <GlowPulse color={ARCADE.cyan} borderRadius={3} />}
+          {isValidTarget && <GlowPulse color={ARCADE.cyan} borderRadius={6} />}
         </View>
       )}
     </Pressable>
