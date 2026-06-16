@@ -26,6 +26,9 @@ importers:
       '@expo-google-fonts/outfit':
         specifier: ^0.4.3
         version: 0.4.3
+      '@expo-google-fonts/space-mono':
+        specifier: ^0.4.2
+        version: 0.4.2
       '@react-native-async-storage/async-storage':
         specifier: 2.2.0
         version: 2.2.0(react-native@0.85.3(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.2.17)(react@19.2.3))
@@ -860,6 +863,9 @@ packages:
 
   '@expo-google-fonts/outfit@0.4.3':
     resolution: {integrity: sha512-2uQmDVJencWLllxds6SG92E+SjxyZfvg7eZKZ5XLHggmm5AuUyQK7lzMAFOUzT6kheq2kJ7BAiubMdjKT32fJg==}
+
+  '@expo-google-fonts/space-mono@0.4.2':
+    resolution: {integrity: sha512-soYY/qcKcnY7xjIhuMAVzJYxSdJ3Z8TjrtFHOB5SK7/4MEMGpoaw+CAVyvXnA3fsO7J7waIW+/5Z0Y0i/CfSeg==}
 
   '@expo/cli@56.1.14':
     resolution: {integrity: sha512-rSH3ygjEPipEYG6dgiJ116J8KqCQ/BYKcwQDipStSh4IFWJ10RZaYP4u5B74jxfeIWjWrOeqvwB6NZfQBjaQ4Q==}
@@ -4789,6 +4795,8 @@ snapshots:
 
   '@expo-google-fonts/outfit@0.4.3': {}
 
+  '@expo-google-fonts/space-mono@0.4.2': {}
+
   '@expo/cli@56.1.14(6tgayjoovz6uv4qga5dvs6ergy)':
     dependencies:
       '@expo/code-signing-certificates': 0.0.6
@@ -5609,9 +5617,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 
