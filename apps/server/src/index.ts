@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 import { registerRoomRoutes } from './routes/room.js';
 import { registerSocketHandlers } from './socket/handlers.js';
 
-const app = Fastify({ logger: true });
+const app = Fastify({ logger: true, ignoreDuplicateSlashes: true });
 await app.register(cors, { origin: '*' });
 
 // Health check endpoint for Render / UptimeRobot
