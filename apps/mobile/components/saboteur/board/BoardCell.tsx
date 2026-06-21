@@ -2,8 +2,8 @@ import { Pressable, View } from 'react-native';
 import type { GoalStatus, PlacedCard } from '@zuychin-arcade/types';
 import { PathCardView } from '../cards/PathCardView';
 import { CardBack } from '../cards/CardBack';
-import { GlowPulse } from '../ui/GlowPulse';
-import { ARCADE } from '../../constants/theme';
+import { GlowPulse } from '../../ui/GlowPulse';
+import { ARCADE } from '../../../constants/theme';
 
 interface Props {
   placed: PlacedCard | null;

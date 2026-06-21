@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import type { PathCard, PathCardEdges } from '@zuychin-arcade/types';
-import { rotateEdges } from '../../lib/placement';
-import { ARCADE, MINE, neonBox } from '../../constants/theme';
+import { rotateEdges } from '../../../lib/placement';
+import { ARCADE, MINE, neonBox } from '../../../constants/theme';
 
 const PATH_BG = '#4D3119'; // Rich dark earth brown for tunnel floor
 const BEAM_COLOR = '#8E5225'; // Warm timber brown for shaft support beams

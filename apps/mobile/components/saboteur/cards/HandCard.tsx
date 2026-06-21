@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { ARCADE } from '../../constants/theme';
+import { ARCADE } from '../../../constants/theme';
 
 interface Props {
   selected: boolean;

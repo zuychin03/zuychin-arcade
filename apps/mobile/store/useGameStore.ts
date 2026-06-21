@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import type {
   SaboteurPublicState,
   SaboteurPrivateState,
+  CoupPublicState,
+  CoupPrivateState,
   RoomPublicState,
 } from '@zuychin-arcade/types';
 
@@ -22,9 +24,13 @@ interface GameStore {
   // Room
   room: RoomPublicState | null;
 
-  // Game
+  // Saboteur game state
   publicState: SaboteurPublicState | null;
   privateState: SaboteurPrivateState | null;
+
+  // Coup game state
+  coupPublic: CoupPublicState | null;
+  coupPrivate: CoupPrivateState | null;
 
   // Selected card (for plays)
   selectedCardId: string | null;
@@ -35,6 +41,8 @@ interface GameStore {
   setRoom: (room: RoomPublicState) => void;
   setPublicState: (state: SaboteurPublicState) => void;
   setPrivateState: (state: SaboteurPrivateState) => void;
+  setCoupPublic: (state: CoupPublicState) => void;
+  setCoupPrivate: (state: CoupPrivateState) => void;
   setSelectedCard: (cardId: string | null) => void;
   toggleRotated: () => void;
   clearAll: () => void;
@@ -48,6 +56,8 @@ export const useGameStore = create<GameStore>((set) => ({
   room: null,
   publicState: null,
   privateState: null,
+  coupPublic: null,
+  coupPrivate: null,
   selectedCardId: null,
   rotated: false,
 
@@ -55,6 +65,8 @@ export const useGameStore = create<GameStore>((set) => ({
   setRoom: (room) => set({ room }),
   setPublicState: (publicState) => set({ publicState }),
   setPrivateState: (privateState) => set({ privateState }),
+  setCoupPublic: (coupPublic) => set({ coupPublic }),
+  setCoupPrivate: (coupPrivate) => set({ coupPrivate }),
   setSelectedCard: (selectedCardId) => set({ selectedCardId, rotated: false }),
   toggleRotated: () => set((s) => ({ rotated: !s.rotated })),
   clearAll: () =>
@@ -66,6 +78,8 @@ export const useGameStore = create<GameStore>((set) => ({
       room: null,
       publicState: null,
       privateState: null,
+      coupPublic: null,
+      coupPrivate: null,
       selectedCardId: null,
       rotated: false,
     }),

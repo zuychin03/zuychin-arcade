@@ -1,10 +1,13 @@
-import { ROUNDS_PER_GAME } from '@zuychin-arcade/types';
 import { supabase } from './supabase.js';
 
-// Call this at the end of round 3 once gold is fully distributed
+// Persist a finished game. Game-agnostic: `score` carries whatever the game
+// ranks by (Saboteur nuggets; Coup uses 0 — it ranks by wins). `gameName`
+// drives the per-game leaderboard filter.
 export async function saveGameResult(params: {
+  gameName: string;
   roomCode: string;
-  players: Array<{ playerId: string; displayName: string; totalNuggets: number; won: boolean }>;
+  roundsPlayed?: number;
+  players: Array<{ playerId: string; displayName: string; score: number; won: boolean }>;
 }): Promise<void> {
   if (!supabase) return;
   try {
@@ -12,7 +15,8 @@ export async function saveGameResult(params: {
       .from('game_sessions')
       .insert({
         room_code: params.roomCode,
-        rounds_played: ROUNDS_PER_GAME,
+        game_name: params.gameName,
+        rounds_played: params.roundsPlayed ?? 1,
         player_count: params.players.length,
       })
       .select('id')
@@ -28,7 +32,7 @@ export async function saveGameResult(params: {
         session_id: session.id,
         player_id: p.playerId,
         display_name: p.displayName,
-        total_nuggets: p.totalNuggets,
+        total_nuggets: p.score,
         won: p.won,
       })),
     );

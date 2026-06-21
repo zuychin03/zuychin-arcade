@@ -6,8 +6,8 @@ import type {
   PlaceCardPayload,
   PlayActionPayload,
 } from '@zuychin-arcade/types';
-import { MIN_PLAYERS } from '@zuychin-arcade/types';
-import { getRoomPublicState, roomStore, type ServerRoom } from '../store/RoomStore.js';
+import { MIN_PLAYERS, ROUNDS_PER_GAME } from '@zuychin-arcade/types';
+import { getRoomPublicState, roomStore, type ServerRoom } from '../../store/RoomStore.js';
 import {
   advanceRound,
   chooseGold,
@@ -17,18 +17,25 @@ import {
   placeCard,
   playAction,
   type EngineResult,
-} from '../game/saboteur/engine.js';
-import { toPrivateState, toPublicState } from '../game/saboteur/publicState.js';
-import { saveGameResult } from '../lib/saveGameResult.js';
+  type SaboteurServerState,
+} from './engine.js';
+import { toPrivateState, toPublicState } from './publicState.js';
+import { saveGameResult } from '../../lib/saveGameResult.js';
 
 const ROUND_END_PAUSE_MS = 12_000;
 
+/** Narrow a room's tagged game union to the Saboteur engine state. */
+function saboteurState(room: ServerRoom): SaboteurServerState | null {
+  return room.game?.id === 'saboteur' ? room.game.state : null;
+}
+
 export function emitGameState(io: Server, room: ServerRoom): void {
-  if (!room.gameState) return;
-  io.to(room.roomCode).emit('game_state', toPublicState(room.gameState));
+  const state = saboteurState(room);
+  if (!state) return;
+  io.to(room.roomCode).emit('game_state', toPublicState(state));
   for (const player of room.players.values()) {
     if (!player.socketId) continue;
-    const priv = toPrivateState(room.gameState, player.playerId);
+    const priv = toPrivateState(state, player.playerId);
     if (priv) io.to(player.socketId).emit('private_state', priv);
   }
 }
@@ -59,10 +66,10 @@ function applyEngineCall(io: Server, socket: Socket, room: ServerRoom, result: E
  * clients can show the round-end overlay.
  */
 function handleRoundTransition(io: Server, room: ServerRoom): void {
-  const state = room.gameState;
+  const state = saboteurState(room);
   if (!state) return;
 
-  if (state.status === 'round_end' && !room.nextRoundTimer && isGoldDistributionComplete(state)) {
+  if (state.status === 'round_end' && !room.timer && isGoldDistributionComplete(state)) {
     io.to(room.roomCode).emit(
       'role_reveal',
       [...state.players.values()].map((p) => ({
@@ -71,17 +78,19 @@ function handleRoundTransition(io: Server, room: ServerRoom): void {
         role: p.role,
       })),
     );
-    room.nextRoundTimer = setTimeout(() => {
-      room.nextRoundTimer = null;
+    room.timer = setTimeout(() => {
+      room.timer = null;
       advanceRound(state);
       if (state.status === 'game_over') {
         room.status = 'finished';
         void saveGameResult({
+          gameName: 'saboteur',
           roomCode: room.roomCode,
+          roundsPlayed: ROUNDS_PER_GAME,
           players: [...state.players.values()].map((p) => ({
             playerId: p.playerId,
             displayName: p.displayName,
-            totalNuggets: p.goldCollected,
+            score: p.goldCollected,
             won: state.winnerIds?.includes(p.playerId) ?? false,
           })),
         });
@@ -92,7 +101,7 @@ function handleRoundTransition(io: Server, room: ServerRoom): void {
   }
 }
 
-export function registerGameHandlers(io: Server, socket: Socket): void {
+export function registerSaboteurHandlers(io: Server, socket: Socket): void {
   socket.on('start_game', () => {
     const ctx = getAuthedRoom(socket);
     if (!ctx) return;
@@ -101,17 +110,20 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
     if (room.hostPlayerId !== auth.playerId) {
       return socket.emit('action_rejected', { reason: 'Only the host can start the game' });
     }
-    if (room.status === 'in_game' && room.gameState?.status !== 'game_over') {
+    if (room.status === 'in_game' && saboteurState(room)?.status !== 'game_over') {
       return socket.emit('action_rejected', { reason: 'Game already in progress' });
     }
     if (room.players.size < MIN_PLAYERS) {
       return socket.emit('action_rejected', { reason: `Need at least ${MIN_PLAYERS} players` });
     }
 
-    room.gameState = initGame(
-      room.roomCode,
-      [...room.players.values()].map((p) => ({ playerId: p.playerId, displayName: p.displayName })),
-    );
+    room.game = {
+      id: 'saboteur',
+      state: initGame(
+        room.roomCode,
+        [...room.players.values()].map((p) => ({ playerId: p.playerId, displayName: p.displayName })),
+      ),
+    };
     room.status = 'in_game';
     roomStore.touch(room);
     io.to(room.roomCode).emit('room_updated', getRoomPublicState(room));
@@ -120,12 +132,13 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
 
   socket.on('place_card', (payload: PlaceCardPayload) => {
     const ctx = getAuthedRoom(socket);
-    if (!ctx?.room.gameState) return;
+    const state = ctx && saboteurState(ctx.room);
+    if (!ctx || !state) return;
     if (!payload?.cardId || !payload.position) {
       return socket.emit('action_rejected', { reason: 'Invalid payload' });
     }
     applyEngineCall(io, socket, ctx.room, placeCard(
-      ctx.room.gameState,
+      state,
       ctx.auth.playerId,
       payload.cardId,
       payload.position,
@@ -135,12 +148,13 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
 
   socket.on('play_action', (payload: PlayActionPayload) => {
     const ctx = getAuthedRoom(socket);
-    if (!ctx?.room.gameState) return;
+    const state = ctx && saboteurState(ctx.room);
+    if (!ctx || !state) return;
     if (!payload?.cardId) {
       return socket.emit('action_rejected', { reason: 'Invalid payload' });
     }
     applyEngineCall(io, socket, ctx.room, playAction(
-      ctx.room.gameState,
+      state,
       ctx.auth.playerId,
       payload.cardId,
       payload.targetPlayerId,
@@ -151,9 +165,10 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
 
   socket.on('pass_turn', (payload: PassTurnPayload) => {
     const ctx = getAuthedRoom(socket);
-    if (!ctx?.room.gameState) return;
+    const state = ctx && saboteurState(ctx.room);
+    if (!ctx || !state) return;
     applyEngineCall(io, socket, ctx.room, passTurn(
-      ctx.room.gameState,
+      state,
       ctx.auth.playerId,
       payload?.discardCardId,
     ));
@@ -161,9 +176,10 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
 
   socket.on('choose_gold', (payload: ChooseGoldPayload) => {
     const ctx = getAuthedRoom(socket);
-    if (!ctx?.room.gameState) return;
+    const state = ctx && saboteurState(ctx.room);
+    if (!ctx || !state) return;
     applyEngineCall(io, socket, ctx.room, chooseGold(
-      ctx.room.gameState,
+      state,
       ctx.auth.playerId,
       Number(payload?.cardIndex),
     ));
@@ -173,9 +189,10 @@ export function registerGameHandlers(io: Server, socket: Socket): void {
     const ctx = getAuthedRoom(socket);
     if (!ctx) return;
     socket.emit('room_updated', getRoomPublicState(ctx.room));
-    if (ctx.room.gameState) {
-      socket.emit('game_state', toPublicState(ctx.room.gameState));
-      const priv = toPrivateState(ctx.room.gameState, ctx.auth.playerId);
+    const state = saboteurState(ctx.room);
+    if (state) {
+      socket.emit('game_state', toPublicState(state));
+      const priv = toPrivateState(state, ctx.auth.playerId);
       if (priv) socket.emit('private_state', priv);
     }
   });

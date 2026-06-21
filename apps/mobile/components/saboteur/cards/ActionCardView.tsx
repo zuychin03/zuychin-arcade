@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 import type { ActionCard, ActionSubtype } from '@zuychin-arcade/types';
-import { ARCADE, neonBox } from '../../constants/theme';
+import { ARCADE, neonBox } from '../../../constants/theme';
 
 const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icon: string; color: string }> = {
   sabotage_lantern: { title: 'SABOTAGE', label: 'Break Lamp', icon: '🔦', color: ARCADE.red },

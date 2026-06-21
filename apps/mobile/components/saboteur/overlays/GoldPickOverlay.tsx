@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
-import { ScalePressable } from '../ui/ScalePressable';
-import { ARCADE, OVERLAY_FILL, neonText } from '../../constants/theme';
+import { ScalePressable } from '../../ui/ScalePressable';
+import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
 
 const GOLD = '#F5C518';
 

@@ -8,7 +8,10 @@
     "build": "tsup",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "simulate": "tsx scripts/simulate.ts"
+    "simulate:saboteur": "tsx scripts/saboteur/simulate.ts",
+    "simulate:coup": "tsx scripts/coup/simulate.ts",
+    "smoke:saboteur": "tsx scripts/saboteur/smoke.ts",
+    "smoke:coup": "tsx scripts/coup/smoke.ts"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.0",

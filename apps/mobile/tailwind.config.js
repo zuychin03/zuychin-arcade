@@ -34,6 +34,20 @@ module.exports = {
           danger: '#FF3355',    // saboteur neon red
           tunnel: '#92400E',    // tunnel path brown
         },
+        // In-game Coup palette — a royal court of crimson, gold and purple
+        coup: {
+          bg: '#140A12',        // dark wine
+          surface: '#241221',   // panel background
+          panel: '#311828',     // raised panel
+          border: '#4A2238',    // subtle borders
+          crimson: '#E23A5E',   // coup red
+          gold: '#F4C04E',      // coin gold
+          purple: '#A855F7',    // royal purple
+          blue: '#4F8EF7',      // duke blue
+          green: '#34D399',     // allow / confirm
+          muted: '#B79AAE',     // muted rose text
+          text: '#F6E9F0',      // near-white
+        },
       },
     },
   },

@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { ARCADE, neonBox, neonText } from '../../constants/theme';
+import { ARCADE, neonBox, neonText } from '../../../constants/theme';
 
 interface Props {
   width?: number;

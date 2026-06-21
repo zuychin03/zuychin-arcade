@@ -1,9 +1,8 @@
 import { randomUUID } from 'crypto';
 import type { FastifyInstance } from 'fastify';
 import type { Server } from 'socket.io';
-import type { JoinRoomResponse, LeaderboardRow } from '@zuychin-arcade/types';
-import { MAX_PLAYERS } from '@zuychin-arcade/types';
-import { getRoomPublicState, roomStore } from '../store/RoomStore.js';
+import type { GameId, JoinRoomResponse, LeaderboardRow, RoomConfig } from '@zuychin-arcade/types';
+import { getRoomPublicState, roomMaxPlayers, roomStore } from '../store/RoomStore.js';
 import { signToken, verifyToken } from '../utils/jwt.js';
 import { supabase } from '../lib/supabase.js';
 
@@ -17,15 +16,24 @@ function validateDisplayName(name: unknown): string | null {
 
 export function registerRoomRoutes(app: FastifyInstance, io: Server): void {
   app.post('/rooms/create', async (req, reply) => {
-    const body = (req.body ?? {}) as { displayName?: string; password?: string };
+    const body = (req.body ?? {}) as {
+      displayName?: string;
+      password?: string;
+      gameId?: string;
+      coupVariant?: string;
+    };
     const displayName = validateDisplayName(body.displayName);
     if (!displayName) {
       return reply.code(400).send({ message: 'Display name must be 1–20 letters, numbers or spaces' });
     }
     const password = typeof body.password === 'string' && body.password.length > 0 ? body.password : null;
 
+    const gameId: GameId = body.gameId === 'coup' ? 'coup' : 'saboteur';
+    // Phase 1 ships base Coup only; the Reformation toggle arrives in Phase 2.
+    const config: RoomConfig = gameId === 'coup' ? { coupVariant: 'base' } : {};
+
     const playerId = randomUUID();
-    const room = roomStore.create(playerId, password);
+    const room = roomStore.create(playerId, password, gameId, config);
     room.players.set(playerId, {
       playerId,
       displayName,
@@ -62,7 +70,7 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server): void {
     if (room.status !== 'lobby') {
       return reply.code(409).send({ message: 'Game already in progress' });
     }
-    if (room.players.size >= MAX_PLAYERS) {
+    if (room.players.size >= roomMaxPlayers(room.gameId, room.config)) {
       return reply.code(409).send({ message: 'Room is full' });
     }
     const nameTaken = [...room.players.values()].some(
@@ -134,9 +142,21 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server): void {
     return { ok: true };
   });
 
-  app.get('/leaderboard', async (): Promise<LeaderboardRow[]> => {
+  app.get('/leaderboard', async (req): Promise<LeaderboardRow[]> => {
     if (!supabase) return [];
-    const { data, error } = await supabase.from('leaderboard').select('*').limit(50);
+    const game = (req.query as { game?: string })?.game;
+    // Per-game board when ?game= is set (Coup ranks by wins); else the
+    // all-games board.
+    const query =
+      typeof game === 'string' && game.length > 0
+        ? supabase
+            .from('leaderboard_by_game')
+            .select('display_name,games_played,total_nuggets,wins')
+            .eq('game_name', game)
+            .order('wins', { ascending: false })
+            .limit(50)
+        : supabase.from('leaderboard').select('*').limit(50);
+    const { data, error } = await query;
     if (error) {
       console.error('[supabase] leaderboard query failed', error);
       return [];

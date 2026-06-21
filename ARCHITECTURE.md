@@ -132,7 +132,7 @@ A `Map<roomCode, ServerRoom>` singleton. `ServerRoom` holds the password
 Note that join/create happen over REST *before* any socket exists — the
 socket connection is step two, authenticated by the token from step one.
 
-### Socket layer (`socket/handlers.ts`, `socket/gameHandlers.ts`)
+### Socket layer (`socket/handlers.ts` + per-game `game/<name>/socketHandlers.ts`)
 
 **Connection middleware** verifies the JWT and stashes the payload on
 `socket.data.auth`; invalid/missing tokens are refused with an
@@ -168,7 +168,7 @@ on any failure):
 | `server_error` | one socket | `{ message }` — room/player vanished (e.g. server restarted) |
 
 **The state-emission pattern** is the heart of the visibility model
-(`emitGameState` in `gameHandlers.ts`): after every successful engine call,
+(`emitGameState` in `game/saboteur/socketHandlers.ts`): after every successful engine call,
 broadcast `toPublicState(state)` to the room, then loop over connected
 players and send each their own `toPrivateState(state, playerId)`. The
 projections in `game/saboteur/publicState.ts` are the **only** code that
@@ -264,18 +264,18 @@ public exposure). `leaderboard` is a SQL view grouping by `display_name`;
 the mobile app never talks to Supabase directly — it goes through the
 server's `GET /leaderboard`.
 
-### Simulation test (`scripts/simulate.ts`)
+### Simulation test (`scripts/saboteur/simulate.ts`)
 
-`pnpm --filter @zuychin-arcade/server simulate` plays 240 full games (30 per
+`pnpm --filter @zuychin-arcade/server simulate:saboteur` plays 240 full games (30 per
 player count, 3–10) choosing uniformly among legal moves, asserting invariants
 throughout (legal placements only, conserved card counts, role table
 adherence, gold totals, termination). It exercises the engine through the
 same exported functions the socket handlers call. **Run it after any engine
 or constants change** — it is the project's primary regression net.
 
-### Socket smoke test (`scripts/smoke-e2e.ts`)
+### Socket smoke test (`scripts/saboteur/smoke.ts`)
 
-`pnpm --filter @zuychin-arcade/server exec tsx scripts/smoke-e2e.ts` drives a
+`pnpm --filter @zuychin-arcade/server smoke:saboteur` drives a
 real running server (default `http://localhost:3002`, override with
 `SMOKE_PORT`) end-to-end over HTTP + Socket.IO: creates a 3-player room, joins,
 starts the game, asserts exactly one saboteur, plays six discard+draw+pass

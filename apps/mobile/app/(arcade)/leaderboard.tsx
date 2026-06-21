@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, Text, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import type { LeaderboardRow } from '@zuychin-arcade/types';
+import type { GameId, LeaderboardRow } from '@zuychin-arcade/types';
 import { getLeaderboard } from '../../lib/api';
 import { ARCADE, neonText } from '../../constants/theme';
 
 const RANK_COLORS = [ARCADE.pink, ARCADE.purple, ARCADE.blue];
 
+const TABS: Array<{ id: GameId; label: string; unit: string }> = [
+  { id: 'saboteur', label: '⛏️ Saboteur', unit: '🪙' },
+  { id: 'coup', label: '🎭 Coup', unit: '🏆' },
+];
+
 export default function LeaderboardScreen() {
+  const [game, setGame] = useState<GameId>('saboteur');
   const [rows, setRows] = useState<LeaderboardRow[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -15,27 +21,55 @@ export default function LeaderboardScreen() {
   const load = useCallback(async () => {
     setRefreshing(true);
     try {
-      setRows(await getLeaderboard());
+      setRows(await getLeaderboard(game));
     } catch {
       // server offline — show empty state
     } finally {
       setRefreshing(false);
       setLoaded(true);
     }
-  }, []);
+  }, [game]);
 
   useEffect(() => {
     void load();
   }, [load]);
+
+  const isCoup = game === 'coup';
 
   return (
     <View className="flex-1 bg-arcade-bg pt-16">
       <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '900', letterSpacing: 4, ...neonText(ARCADE.cyan, 12) }}>
         HIGH SCORES
       </Text>
-      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 12, marginTop: 4, marginBottom: 16 }}>
-        all-time nuggets across every game
+      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 12, marginTop: 4, marginBottom: 12 }}>
+        {isCoup ? 'all-time Coup wins' : 'all-time Saboteur nuggets'}
       </Text>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 14 }}>
+        {TABS.map((t) => {
+          const active = t.id === game;
+          return (
+            <Pressable
+              key={t.id}
+              onPress={() => setGame(t.id)}
+              style={{
+                borderRadius: 999,
+                borderWidth: 1.5,
+                borderColor: active ? ARCADE.cyan : ARCADE.border,
+                backgroundColor: active ? ARCADE.surface : 'transparent',
+                paddingHorizontal: 16,
+                paddingVertical: 7,
+                boxShadow: active ? `0 0 10px ${ARCADE.cyan}55` : undefined,
+              }}
+            >
+              <Text style={{ fontFamily: 'Outfit_700Bold', color: active ? ARCADE.cyan : ARCADE.muted, fontSize: 13 }}>
+                {t.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
       <FlatList
         data={rows}
         keyExtractor={(r) => r.display_name}
@@ -74,9 +108,11 @@ export default function LeaderboardScreen() {
               <Text style={{ flex: 1, color: ARCADE.text, fontWeight: '600' }}>{item.display_name}</Text>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={{ color: ARCADE.muted, fontSize: 11 }}>
-                  {item.games_played} games · {item.wins} wins
+                  {item.games_played} games{isCoup ? '' : ` · ${item.wins} wins`}
                 </Text>
-                <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>🪙 {item.total_nuggets}</Text>
+                <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>
+                  {isCoup ? `🏆 ${item.wins}` : `🪙 ${item.total_nuggets}`}
+                </Text>
               </View>
             </Animated.View>
           );

@@ -53,6 +53,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="(arcade)" />
         <Stack.Screen name="saboteur" />
+        <Stack.Screen name="coup" />
       </Stack>
       <ArcadeDialogHost />
     </View>

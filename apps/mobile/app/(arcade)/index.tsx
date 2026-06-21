@@ -69,7 +69,10 @@ export default function ArcadeHub() {
       {hasSession && (
         <Animated.View entering={FadeInDown.springify().damping(16)}>
           <ScalePressable
-            onPress={() => router.push(room.status === 'in_game' ? '/saboteur/game' : '/saboteur/lobby')}
+            onPress={() => {
+              const base = room.gameId === 'coup' ? '/coup' : '/saboteur';
+              router.push(`${base}/${room.status === 'in_game' ? 'game' : 'lobby'}`);
+            }}
             style={{
               borderRadius: 16,
               borderWidth: 1.5,
@@ -118,11 +121,11 @@ export default function ArcadeHub() {
       />
       <GameTile
         index={1}
-        title="COMING SOON"
-        emoji="🎲"
-        subtitle="The next gamespace is being wired up…"
+        title="COUP"
+        emoji="🎭"
+        subtitle="2–6 players · bluff, challenge & deduce · last influence standing wins"
         accent={ARCADE.purple}
-        locked
+        onPress={() => router.push('/coup')}
       />
       <GameTile
         index={2}

@@ -26,9 +26,16 @@ export function useSocket(): void {
     socketInstance = socket;
 
     const store = useGameStore.getState;
+    // game_state / private_state are shared channels; route to the right game's
+    // store slice by the room's gameId (room_updated always arrives first), with
+    // a payload-shape fallback ('variant' is Coup-only).
+    const isCoup = (state: unknown): boolean =>
+      store().room?.gameId === 'coup' || (!!state && typeof state === 'object' && 'variant' in state);
     socket.on('room_updated', (room) => store().setRoom(room));
-    socket.on('game_state', (state) => store().setPublicState(state));
-    socket.on('private_state', (state) => store().setPrivateState(state));
+    socket.on('game_state', (state) => (isCoup(state) ? store().setCoupPublic(state) : store().setPublicState(state)));
+    socket.on('private_state', (state) =>
+      isCoup(state) ? store().setCoupPrivate(state) : store().setPrivateState(state),
+    );
     socket.on('player_kicked', () => {
       void clearAuth();
       store().clearAll();

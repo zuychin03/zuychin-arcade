@@ -8,16 +8,16 @@ import { getSocket } from '../../hooks/useSocket';
 import { clearAuth } from '../../lib/storage';
 import { showDialog } from '../../lib/dialog';
 import { validPlacements } from '../../lib/placement';
-import { GameBoard } from '../../components/board/GameBoard';
-import { PlayerStatusBar } from '../../components/board/PlayerStatusBar';
-import { PathCardView } from '../../components/cards/PathCardView';
-import { ActionCardView } from '../../components/cards/ActionCardView';
-import { HandCard } from '../../components/cards/HandCard';
+import { GameBoard } from '../../components/saboteur/board/GameBoard';
+import { PlayerStatusBar } from '../../components/saboteur/board/PlayerStatusBar';
+import { PathCardView } from '../../components/saboteur/cards/PathCardView';
+import { ActionCardView } from '../../components/saboteur/cards/ActionCardView';
+import { HandCard } from '../../components/saboteur/cards/HandCard';
 import { ScalePressable } from '../../components/ui/ScalePressable';
-import { RoleRevealOverlay } from '../../components/overlays/RoleRevealOverlay';
-import { RoundEndOverlay } from '../../components/overlays/RoundEndOverlay';
-import { GoldPickOverlay } from '../../components/overlays/GoldPickOverlay';
-import { GameOverOverlay } from '../../components/overlays/GameOverOverlay';
+import { RoleRevealOverlay } from '../../components/saboteur/overlays/RoleRevealOverlay';
+import { RoundEndOverlay } from '../../components/saboteur/overlays/RoundEndOverlay';
+import { GoldPickOverlay } from '../../components/saboteur/overlays/GoldPickOverlay';
+import { GameOverOverlay } from '../../components/saboteur/overlays/GameOverOverlay';
 import { ARCADE, neonText } from '../../constants/theme';
 
 export default function GameScreen() {

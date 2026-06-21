@@ -2,7 +2,8 @@ import type { Server, Socket } from 'socket.io';
 import type { JwtPayload } from '@zuychin-arcade/types';
 import { verifyToken } from '../utils/jwt.js';
 import { getRoomPublicState, roomStore } from '../store/RoomStore.js';
-import { registerGameHandlers } from './gameHandlers.js';
+import { registerSaboteurHandlers } from '../game/saboteur/socketHandlers.js';
+import { registerCoupHandlers } from '../game/coup/socketHandlers.js';
 
 export function registerSocketHandlers(io: Server): void {
   io.use((socket, next) => {
@@ -35,7 +36,9 @@ export function registerSocketHandlers(io: Server): void {
     roomStore.touch(room);
     io.to(roomCode).emit('room_updated', getRoomPublicState(room));
 
-    registerGameHandlers(io, socket);
+    // Dispatch to the game bound to this room (each game namespaces its events).
+    if (room.gameId === 'coup') registerCoupHandlers(io, socket);
+    else registerSaboteurHandlers(io, socket);
 
     socket.on('disconnect', () => {
       const r = roomStore.get(roomCode);

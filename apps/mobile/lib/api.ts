@@ -1,5 +1,5 @@
 import { SERVER_URL } from '../constants/config';
-import type { JoinRoomResponse, LeaderboardRow, RoomPublicState } from '@zuychin-arcade/types';
+import type { GameId, JoinRoomResponse, LeaderboardRow, RoomPublicState } from '@zuychin-arcade/types';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${SERVER_URL}${path}`, init);
@@ -16,11 +16,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export function createRoom(displayName: string, password?: string): Promise<JoinRoomResponse> {
+export function createRoom(
+  displayName: string,
+  password?: string,
+  gameId: GameId = 'saboteur',
+): Promise<JoinRoomResponse> {
   return request('/rooms/create', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ displayName, password: password || undefined }),
+    body: JSON.stringify({ displayName, password: password || undefined, gameId }),
   });
 }
 
@@ -48,6 +52,6 @@ export function kickPlayer(roomCode: string, token: string, targetPlayerId: stri
   });
 }
 
-export function getLeaderboard(): Promise<LeaderboardRow[]> {
-  return request('/leaderboard');
+export function getLeaderboard(game?: GameId): Promise<LeaderboardRow[]> {
+  return request(`/leaderboard${game ? `?game=${encodeURIComponent(game)}` : ''}`);
 }

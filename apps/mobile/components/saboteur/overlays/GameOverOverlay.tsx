@@ -1,8 +1,8 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import type { SaboteurPublicState } from '@zuychin-arcade/types';
-import { NeonButton } from '../ui/NeonButton';
-import { ARCADE, OVERLAY_FILL, neonText } from '../../constants/theme';
+import { NeonButton } from '../../ui/NeonButton';
+import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
 
 const GOLD = '#F5C518';
 

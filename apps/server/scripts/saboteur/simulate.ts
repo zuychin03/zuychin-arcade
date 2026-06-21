@@ -1,7 +1,7 @@
 /**
  * Engine smoke test: plays full 3-round games with random legal moves for
  * every player count (3–10) and asserts core invariants. Run with:
- *   pnpm --filter @zuychin-arcade/server simulate
+ *   pnpm --filter @zuychin-arcade/server simulate:saboteur
  */
 import type { BoardPosition, PathCard, Tool } from '@zuychin-arcade/types';
 import { BOARD, ROLE_TABLE, getHandSize } from '@zuychin-arcade/types';
@@ -14,8 +14,8 @@ import {
   placeCard,
   playAction,
   type SaboteurServerState,
-} from '../src/game/saboteur/engine.js';
-import { boardMap, rotateEdges, validatePlacement } from '../src/game/saboteur/boardValidator.js';
+} from '../../src/game/saboteur/engine.js';
+import { boardMap, rotateEdges, validatePlacement } from '../../src/game/saboteur/boardValidator.js';
 
 let assertions = 0;
 function assert(cond: boolean, msg: string): void {

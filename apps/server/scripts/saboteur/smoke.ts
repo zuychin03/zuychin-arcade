@@ -4,7 +4,7 @@
 // (path placement if a legal one exists, otherwise pass+discard).
 //
 //   PORT=3002 pnpm --filter @zuychin-arcade/server exec tsx src/index.ts
-//   pnpm --filter @zuychin-arcade/server exec tsx scripts/smoke-e2e.ts
+//   pnpm --filter @zuychin-arcade/server exec tsx scripts/saboteur/smoke.ts
 
 import { io as connect, type Socket } from 'socket.io-client';
 import type {

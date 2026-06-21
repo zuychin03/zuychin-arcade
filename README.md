@@ -28,17 +28,15 @@ zuychin-arcade/
 │   │   ├── src/
 │   │   │   ├── index.ts              entry point — Fastify + Socket.IO bootstrap
 │   │   │   ├── routes/room.ts        REST endpoints (create/join/kick/leaderboard)
-│   │   │   ├── socket/               socket auth middleware + in-game event handlers
+│   │   │   ├── socket/handlers.ts    socket auth middleware + per-game dispatch
 │   │   │   ├── store/RoomStore.ts    in-memory room registry
-│   │   │   ├── game/saboteur/        pure game engine (no IO)
+│   │   │   ├── game/<game>/          per game: pure engine + socketHandlers.ts (saboteur, coup)
 │   │   │   ├── lib/                  Supabase client + result persistence
 │   │   │   └── utils/                JWT signing, room-code generator
-│   │   └── scripts/
-│   │       ├── simulate.ts           engine simulation test (240 random games)
-│   │       └── smoke-e2e.ts          socket-level e2e test against a running server
+│   │   └── scripts/<game>/           per game: simulate.ts (engine) + smoke.ts (socket e2e)
 │   └── mobile/           Expo app (web browser, Expo Go, or sideloaded APK)
-│       ├── app/                      expo-router routes: (arcade) hub + saboteur/ game
-│       ├── components/               board, cards, lobby, overlays, navigation, ui
+│       ├── app/                      expo-router routes: (arcade) hub + per-game groups (saboteur, coup)
+│       ├── components/               per-game (saboteur/, coup/) + shared (ui, lobby, navigation)
 │       ├── store/useGameStore.ts     single zustand store (auth + room + game state)
 │       ├── hooks/useSocket.ts        Socket.IO connection lifecycle
 │       └── lib/                      REST client, dialogs, placement preview, storage
@@ -106,19 +104,22 @@ cp apps/mobile/.env.example apps/mobile/.env
 | `pnpm build` | all builds (server bundles to `apps/server/dist/` via tsup) |
 | `pnpm typecheck` | `tsc --noEmit` in every workspace |
 | `pnpm --filter @zuychin-arcade/server dev` | server only, watch mode |
-| `pnpm --filter @zuychin-arcade/server simulate` | engine simulation test (see below) |
+| `pnpm --filter @zuychin-arcade/server simulate:saboteur` | Saboteur engine simulation test (see below) |
+| `pnpm --filter @zuychin-arcade/server simulate:coup` | Coup engine simulation (1,250 random games, 2–6 players) |
 | `pnpm --filter @zuychin-arcade/server build && pnpm --filter @zuychin-arcade/server start` | production build + run |
 | `cd apps/mobile && npx expo start` | Metro dev server / Expo Go |
 | `cd apps/mobile && npx expo export --platform android` | bundle health check (catches Metro/import errors without a device) |
 
 ## Testing & verification
 
-There is no unit-test framework; the project is verified by two scripts:
+There is no unit-test framework; each game has two scripts under
+`scripts/<game>/` — an engine `simulate` and a socket `smoke`, exposed as
+`simulate:<game>` / `smoke:<game>`:
 
 **Engine simulation** — pure game logic, no server needed:
 
 ```bash
-pnpm --filter @zuychin-arcade/server simulate
+pnpm --filter @zuychin-arcade/server simulate:saboteur
 ```
 
 This plays 240 full 3-round games (30 per player count, 3–10 players) with
@@ -132,15 +133,22 @@ in `packages/types`.
 
 ```bash
 PORT=3002 pnpm --filter @zuychin-arcade/server dev   # terminal 1
-pnpm --filter @zuychin-arcade/server exec tsx scripts/smoke-e2e.ts
+pnpm --filter @zuychin-arcade/server smoke:saboteur  # terminal 2
 ```
 
 It creates a 3-player room, starts a game, verifies role counts, plays six
 turns, and simulates a browser-refresh reconnect. Run it after changes to the
 socket handlers, auth, or room store.
 
-For the mobile app, `npx expo export --platform android` is the cheapest
-"does it still bundle" check before testing on a device.
+**Coup** has parallel scripts: `simulate:coup` (pure engine — drives the
+challenge/block phase machine with random legal inputs across 2–6 players,
+asserting coin/card conservation, monotonic influence loss, no deadlocks, and a
+single winner) and `smoke:coup` (full stack — create a Coup room, start, Income
++ Tax through the challenge window, reconnect). Run both after any change under
+`apps/server/src/game/coup/` or the Coup socket handlers.
+
+For the mobile app, `npx expo export --platform android` (or `--platform web`)
+is the cheapest "does it still bundle" check before testing on a device.
 
 ## Deployment (all free tier — not yet done)
 

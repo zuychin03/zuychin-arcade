@@ -1,7 +1,7 @@
 import { Text } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import type { Role } from '@zuychin-arcade/types';
-import { ARCADE, OVERLAY_FILL, neonText } from '../../constants/theme';
+import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
 
 interface Props {
   role: Role;

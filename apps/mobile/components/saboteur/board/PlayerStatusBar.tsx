@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import type { PublicPlayerState, Tool } from '@zuychin-arcade/types';
-import { GlowPulse } from '../ui/GlowPulse';
-import { ARCADE } from '../../constants/theme';
+import { GlowPulse } from '../../ui/GlowPulse';
+import { ARCADE } from '../../../constants/theme';
 
 const TOOLS: Array<{ tool: Tool; icon: string }> = [
   { tool: 'lantern', icon: '🔦' },
