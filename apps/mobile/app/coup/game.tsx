@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupActionType, CoupCharacter } from '@zuychin-arcade/types';
 import { ACTION_META, charactersForVariant } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
@@ -13,18 +14,36 @@ import { GameLog } from '../../components/coup/GameLog';
 import { Countdown } from '../../components/coup/Countdown';
 import { ReferenceSheet } from '../../components/coup/ReferenceSheet';
 import { NeonButton } from '../../components/ui/NeonButton';
+import { Coin } from '../../components/ui/Coin';
 import { COUP, OVERLAY_FILL, neonText } from '../../constants/theme';
 
-const ACTION_LABELS: Record<string, { label: string; emoji: string; hint: string }> = {
-  income: { label: 'Income', emoji: '🪙', hint: '+1' },
-  foreign_aid: { label: 'Foreign Aid', emoji: '💰', hint: '+2 · Duke blocks' },
-  tax: { label: 'Tax', emoji: '👑', hint: 'Duke · +3' },
-  steal: { label: 'Steal', emoji: '⚓', hint: 'Captain · take 2' },
-  exchange: { label: 'Exchange', emoji: '🤝', hint: 'Ambassador' },
-  assassinate: { label: 'Assassinate', emoji: '🗡️', hint: 'Assassin · -3' },
-  coup: { label: 'Coup', emoji: '💥', hint: '-7 · unstoppable' },
+const ACTION_LABELS: Record<CoupActionType, { label: string; hint: string }> = {
+  income: { label: 'Income', hint: '+1 coin' },
+  foreign_aid: { label: 'Foreign Aid', hint: '+2 coins (Duke blocks)' },
+  tax: { label: 'Tax', hint: 'Duke · +3 coins' },
+  steal: { label: 'Steal', hint: 'Captain · take 2 coins' },
+  exchange: { label: 'Exchange', hint: 'Ambassador · swap 2' },
+  assassinate: { label: 'Assassinate', hint: 'Assassin · pay 3' },
+  coup: { label: 'Coup', hint: 'pay 7 · target loses 1 card' },
+  convert: { label: 'Convert', hint: 'pay 1 (self) / 2 (other)' },
+  embezzle: { label: 'Embezzle', hint: 'no Duke · take Reserve' },
+  inquisitor_exchange: { label: 'Exchange', hint: 'Inquisitor · swap 1' },
+  inquisitor_examine: { label: 'Examine', hint: 'Inquisitor · inspect card' },
 };
-const BASE_ACTIONS: CoupActionType[] = ['income', 'foreign_aid', 'tax', 'steal', 'exchange', 'assassinate', 'coup'];
+
+const ACTION_ICONS: Record<CoupActionType, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  income: 'cash-multiple',
+  foreign_aid: 'bank-transfer-in',
+  tax: 'crown',
+  steal: 'anchor',
+  exchange: 'handshake',
+  assassinate: 'sword',
+  coup: 'flash-alert',
+  convert: 'swap-horizontal',
+  embezzle: 'bank-minus',
+  inquisitor_exchange: 'handshake',
+  inquisitor_examine: 'magnify',
+};
 
 const emit = (event: string, payload: unknown) => getSocket()?.emit(event, payload);
 
@@ -36,13 +55,38 @@ export default function CoupGameScreen() {
   const [targeting, setTargeting] = useState<CoupActionType | null>(null);
   const [keepSel, setKeepSel] = useState<number[]>([]);
   const [showRef, setShowRef] = useState(false);
+  const [activeReactions, setActiveReactions] = useState<Record<string, string>>({});
+  const [showTaunts, setShowTaunts] = useState(false);
 
   const phase = pub?.pending.phase;
-  // reset transient UI when the situation changes
+
+  // Reset transient UI when the turn/phase situation changes
   useEffect(() => {
     setTargeting(null);
     setKeepSel([]);
   }, [phase, pub?.currentTurnPlayerId]);
+
+  // Listen to transient reactions broadcast from server
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    const onReaction = ({ playerId, reaction }: { playerId: string; reaction: string }) => {
+      setActiveReactions((prev) => ({ ...prev, [playerId]: reaction }));
+      setTimeout(() => {
+        setActiveReactions((prev) => {
+          const next = { ...prev };
+          delete next[playerId];
+          return next;
+        });
+      }, 3000);
+    };
+
+    socket.on('reaction_received', onReaction);
+    return () => {
+      socket.off('reaction_received', onReaction);
+    };
+  }, []);
 
   if (!pub || !priv || !myId) {
     return (
@@ -85,8 +129,27 @@ export default function CoupGameScreen() {
         return `${nameOf(pending.losingPlayerId)} loses an influence (${pending.loseReason?.replace(/_/g, ' ')})`;
       case 'awaiting_exchange':
         return `${actor} is exchanging cards with the court…`;
+      case 'awaiting_examine':
+        return `${actor} is examining target card…`;
       default:
         return '';
+    }
+  };
+
+  const getPhaseIcon = (): keyof typeof MaterialCommunityIcons.glyphMap => {
+    switch (pending.phase) {
+      case 'awaiting_action_challenge':
+      case 'awaiting_block_challenge':
+        return 'alert-decagram-outline';
+      case 'awaiting_block':
+        return 'shield-alert-outline';
+      case 'awaiting_lose_influence':
+        return 'skull-outline';
+      case 'awaiting_exchange':
+      case 'awaiting_examine':
+        return 'cards-outline';
+      default:
+        return 'timer-sand';
     }
   };
 
@@ -112,6 +175,8 @@ export default function CoupGameScreen() {
   const gameOver = pending.phase === 'game_over' || pub.status === 'game_over';
   const iAmHost = pub.players[0]?.playerId === myId; // turn order starts with the host
 
+  const actionGroup = getActionsForVariant(pub.variant);
+
   return (
     <View className="flex-1 bg-coup-bg">
       <ScrollView contentContainerStyle={{ padding: 16, paddingTop: 52, gap: 12, paddingBottom: 36 }}>
@@ -120,25 +185,30 @@ export default function CoupGameScreen() {
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>🎭 COUP</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             {pub.variant === 'reformation' && (
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.gold, fontSize: 12 }}>🏦 {pub.treasuryReserve}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <MaterialCommunityIcons name="bank" size={14} color={COUP.gold} />
+                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.gold, fontSize: 13 }}>{pub.treasuryReserve}</Text>
+              </View>
             )}
-            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12 }}>🂠 {pub.deckSize}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <MaterialCommunityIcons name="cards-playing-outline" size={14} color={COUP.muted} />
+              <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.muted, fontSize: 13 }}>{pub.deckSize}</Text>
+            </View>
             <Pressable
               onPress={() => setShowRef(true)}
-              hitSlop={8}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: 4,
+                gap: 5,
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: COUP.border,
                 backgroundColor: COUP.panel,
                 paddingHorizontal: 9,
-                paddingVertical: 4,
+                paddingVertical: 5,
               }}
             >
-              <Text style={{ fontSize: 12 }}>📖</Text>
+              <MaterialCommunityIcons name="book-open-variant" size={11} color={COUP.muted} />
               <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 11 }}>Rules</Text>
             </Pressable>
           </View>
@@ -160,7 +230,10 @@ export default function CoupGameScreen() {
             boxShadow: `0 0 12px ${bannerAccent}2E`,
           }}
         >
-          <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14, textAlign: 'center' }}>{describe()}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
+            <MaterialCommunityIcons name={getPhaseIcon()} size={16} color={bannerAccent} />
+            <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14 }}>{describe()}</Text>
+          </View>
           {pending.deadline != null && <Countdown deadline={pending.deadline} />}
         </Animated.View>
 
@@ -175,6 +248,7 @@ export default function CoupGameScreen() {
                 isMe={p.playerId === myId}
                 selectable={selectable}
                 waiting={pending.waitingOn.includes(p.playerId)}
+                reaction={activeReactions[p.playerId]}
                 onSelect={
                   selectable
                     ? () => {
@@ -189,21 +263,68 @@ export default function CoupGameScreen() {
         </View>
 
         {/* your influence */}
-        <View>
+        <View style={{ marginTop: 4 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 10, letterSpacing: 2 }}>
+            <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 10, letterSpacing: 2 }}>
               YOUR INFLUENCE
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <Text style={{ fontSize: 13 }}>🪙</Text>
-              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 15 }}>{myCoins}</Text>
-            </View>
+            <Coin amount={myCoins} size="md" showText />
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
             {priv.influences.map((inf, i) => (
               <CharacterCard key={i} character={inf.character} lost={inf.revealed} size="md" />
             ))}
           </View>
+        </View>
+
+        {/* Collapsible Taunts Reaction Tray */}
+        <View style={{ marginVertical: 4 }}>
+          <Pressable
+            onPress={() => setShowTaunts(!showTaunts)}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: showTaunts ? 8 : 2,
+              paddingVertical: 4,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <MaterialCommunityIcons name="bullhorn-outline" size={13} color={COUP.muted} />
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 10, letterSpacing: 1.5 }}>
+                TAUNT ENEMIES
+              </Text>
+            </View>
+            <MaterialCommunityIcons name={showTaunts ? 'chevron-up' : 'chevron-down'} size={14} color={COUP.muted} />
+          </Pressable>
+
+          {showTaunts && (
+            <Animated.View entering={FadeIn.duration(200)}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, paddingRight: 10 }}>
+                {getTauntsForVariant(pub.variant).map((taunt) => (
+                  <Pressable
+                    key={taunt.text}
+                    onPress={() => getSocket()?.emit('player_reaction', { reaction: taunt.text })}
+                    style={{
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: `${taunt.color}66`,
+                      backgroundColor: `${taunt.color}14`,
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 4,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                    }}
+                  >
+                    <MaterialCommunityIcons name={taunt.icon} size={11} color={taunt.color} />
+                    <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 11 }}>{taunt.label}</Text>
+                  </Pressable>
+                ))}
+              </ScrollView>
+            </Animated.View>
+          )}
         </View>
 
         <GameLog log={pub.log} />
@@ -217,36 +338,81 @@ export default function CoupGameScreen() {
         >
           {/* my turn */}
           {isMyTurn && targeting == null && (
-            <>
-              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, letterSpacing: 1 }}>
-                YOUR TURN{mustCoup ? ' · 10+ coins — you must Coup' : ''}
+            <ScrollView style={{ maxHeight: 220 }} showsVerticalScrollIndicator={false}>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, letterSpacing: 1, marginBottom: 8 }}>
+                YOUR TURN {mustCoup ? ' · 10+ coins — you must Coup' : ''}
               </Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {BASE_ACTIONS.map((a) => {
-                  const meta = ACTION_META[a];
-                  const info = ACTION_LABELS[a];
-                  const disabled =
-                    (mustCoup && a !== 'coup') ||
-                    myCoins < meta.cost ||
-                    (a === 'assassinate' && myCoins < 3) ||
-                    (a === 'coup' && myCoins < 7);
-                  return (
-                    <View key={a} style={{ width: '48%' }}>
-                      <NeonButton
-                        label={`${info.emoji} ${info.label}`}
-                        color={a === 'coup' || a === 'assassinate' ? COUP.crimson : a === 'tax' || a === 'exchange' ? COUP.purple : COUP.blue}
-                        variant="outline"
-                        disabled={disabled}
-                        onPress={() => (meta.needsTarget ? setTargeting(a) : act(a))}
-                      />
-                      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 9, textAlign: 'center', marginTop: 2 }}>
-                        {info.hint}
-                      </Text>
+              
+              <View style={{ gap: 12 }}>
+                {/* 1. General Actions */}
+                <View style={{ gap: 6 }}>
+                  <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.muted, fontSize: 9, letterSpacing: 1 }}>
+                    GENERAL ACTIONS (NO CLAIM)
+                  </Text>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                    {actionGroup.general.map((a) => renderActionButton(a, myCoins, mustCoup, act, setTargeting))}
+                  </View>
+                </View>
+
+                {/* 2. Character Claims */}
+                <View style={{ gap: 6 }}>
+                  <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.muted, fontSize: 9, letterSpacing: 1 }}>
+                    CHARACTER CLAIMS (CHALLENGEABLE)
+                  </Text>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                    {actionGroup.character.map((a) => renderActionButton(a, myCoins, mustCoup, act, setTargeting))}
+                  </View>
+                </View>
+
+                {/* 3. Reformation Faction (If active) */}
+                {pub.variant === 'reformation' && (
+                  <View style={{ gap: 6 }}>
+                    <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.muted, fontSize: 9, letterSpacing: 1 }}>
+                      FACTION ACTIONS (REFORMATION)
+                    </Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                      {actionGroup.reformation.map((a) => {
+                        if (a === 'convert') {
+                          const disabledSelf = mustCoup || myCoins < 1;
+                          const disabledOther = mustCoup || myCoins < 2;
+                          return (
+                            <View key="convert-split" style={{ flexDirection: 'row', width: '100%', gap: 6 }}>
+                              <View style={{ flex: 1 }}>
+                                <NeonButton
+                                  label="Convert Self"
+                                  color={COUP.gold}
+                                  variant="outline"
+                                  disabled={disabledSelf}
+                                  icon={<MaterialCommunityIcons name="swap-horizontal" size={13} color={COUP.gold} />}
+                                  onPress={() => act('convert', myId)}
+                                />
+                                <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 9, textAlign: 'center', marginTop: 2 }}>
+                                  Cost: 1 coin
+                                </Text>
+                              </View>
+                              <View style={{ flex: 1 }}>
+                                <NeonButton
+                                  label="Convert Other"
+                                  color={COUP.gold}
+                                  variant="outline"
+                                  disabled={disabledOther}
+                                  icon={<MaterialCommunityIcons name="swap-horizontal" size={13} color={COUP.gold} />}
+                                  onPress={() => setTargeting('convert')}
+                                />
+                                <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 9, textAlign: 'center', marginTop: 2 }}>
+                                  Cost: 2 coins
+                                </Text>
+                              </View>
+                            </View>
+                          );
+                        }
+                        return renderActionButton(a, myCoins, mustCoup, act, setTargeting);
+                      })}
                     </View>
-                  );
-                })}
+                  </View>
+                )}
               </View>
-            </>
+            </ScrollView>
           )}
 
           {/* my turn — selecting a target */}
@@ -263,10 +429,21 @@ export default function CoupGameScreen() {
           {waitingOnMe && pending.phase === 'awaiting_action_challenge' && (
             <View style={{ flexDirection: 'row', gap: 10 }}>
               <View style={{ flex: 1 }}>
-                <NeonButton label="🚩 CHALLENGE" color={COUP.crimson} onPress={() => respond('challenge')} />
+                <NeonButton
+                  label="CHALLENGE"
+                  color={COUP.crimson}
+                  icon={<MaterialCommunityIcons name="flag-outline" size={16} color={COUP.text} />}
+                  onPress={() => respond('challenge')}
+                />
               </View>
               <View style={{ flex: 1 }}>
-                <NeonButton label="✓ ALLOW" color={COUP.green} variant="outline" onPress={() => respond('pass')} />
+                <NeonButton
+                  label="ALLOW"
+                  color={COUP.green}
+                  variant="outline"
+                  icon={<MaterialCommunityIcons name="check" size={16} color={COUP.green} />}
+                  onPress={() => respond('pass')}
+                />
               </View>
             </View>
           )}
@@ -277,11 +454,22 @@ export default function CoupGameScreen() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
                 {blockChars.map((c) => (
                   <View key={c} style={{ flexGrow: 1, minWidth: '46%' }}>
-                    <NeonButton label={`🛡️ BLOCK (${c})`} color={COUP.purple} onPress={() => respond('block', c)} />
+                    <NeonButton
+                      label={`BLOCK (${c})`}
+                      color={COUP.purple}
+                      icon={<MaterialCommunityIcons name="shield-outline" size={15} color={COUP.text} />}
+                      onPress={() => respond('block', c)}
+                    />
                   </View>
                 ))}
               </View>
-              <NeonButton label="✓ ALLOW" color={COUP.green} variant="outline" onPress={() => respond('pass')} />
+              <NeonButton
+                label="ALLOW"
+                color={COUP.green}
+                variant="outline"
+                icon={<MaterialCommunityIcons name="check" size={15} color={COUP.green} />}
+                onPress={() => respond('pass')}
+              />
             </View>
           )}
 
@@ -289,10 +477,21 @@ export default function CoupGameScreen() {
           {waitingOnMe && pending.phase === 'awaiting_block_challenge' && (
             <View style={{ flexDirection: 'row', gap: 10 }}>
               <View style={{ flex: 1 }}>
-                <NeonButton label="🚩 CHALLENGE BLOCK" color={COUP.crimson} onPress={() => respond('challenge')} />
+                <NeonButton
+                  label="CHALLENGE BLOCK"
+                  color={COUP.crimson}
+                  icon={<MaterialCommunityIcons name="flag-outline" size={16} color={COUP.text} />}
+                  onPress={() => respond('challenge')}
+                />
               </View>
               <View style={{ flex: 1 }}>
-                <NeonButton label="✓ ALLOW" color={COUP.green} variant="outline" onPress={() => respond('pass')} />
+                <NeonButton
+                  label="ALLOW"
+                  color={COUP.green}
+                  variant="outline"
+                  icon={<MaterialCommunityIcons name="check" size={16} color={COUP.green} />}
+                  onPress={() => respond('pass')}
+                />
               </View>
             </View>
           )}
@@ -300,7 +499,9 @@ export default function CoupGameScreen() {
           {/* lose influence */}
           {waitingOnMe && pending.phase === 'awaiting_lose_influence' && (
             <>
-              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.crimson, fontSize: 13 }}>Choose an influence to lose</Text>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.crimson, fontSize: 13, marginBottom: 4 }}>
+                Choose an influence to lose
+              </Text>
               <View style={{ flexDirection: 'row', gap: 10 }}>
                 {myFaceDown.map((c, i) => (
                   <CharacterCard key={i} character={c} size="md" onPress={() => emit('coup:lose_influence', { character: c })} />
@@ -312,10 +513,10 @@ export default function CoupGameScreen() {
           {/* exchange */}
           {waitingOnMe && pending.phase === 'awaiting_exchange' && priv.exchange && (
             <>
-              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13 }}>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, marginBottom: 4 }}>
                 Keep {priv.exchange.keepCount} — tap to choose
               </Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 8 }}>
                 {priv.exchange.pool.map((c, i) => (
                   <CharacterCard
                     key={i}
@@ -338,8 +539,40 @@ export default function CoupGameScreen() {
                 label={`CONFIRM (${keepSel.length}/${priv.exchange.keepCount})`}
                 color={COUP.gold}
                 disabled={keepSel.length !== priv.exchange.keepCount}
+                icon={<MaterialCommunityIcons name="checkbox-marked-circle-outline" size={15} color={COUP.gold} />}
                 onPress={() => emit('coup:exchange', { keep: keepSel.map((i) => priv.exchange!.pool[i]) })}
               />
+            </>
+          )}
+
+          {/* Inquisitor Examine Overlay */}
+          {waitingOnMe && pending.phase === 'awaiting_examine' && priv.examine && (
+            <>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, marginBottom: 4 }}>
+                EXAMINED CARD (Target: {priv.examine.targetName})
+              </Text>
+              <View style={{ alignItems: 'center', marginVertical: 12 }}>
+                <CharacterCard character={priv.examine.character} size="lg" />
+              </View>
+              <View style={{ flexDirection: 'row', gap: 10 }}>
+                <View style={{ flex: 1 }}>
+                  <NeonButton
+                    label="RETURN CARD"
+                    color={COUP.green}
+                    variant="outline"
+                    icon={<MaterialCommunityIcons name="check" size={15} color={COUP.green} />}
+                    onPress={() => emit('coup:examine', { forceSwap: false })}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <NeonButton
+                    label="FORCE SWAP"
+                    color={COUP.crimson}
+                    icon={<MaterialCommunityIcons name="swap-horizontal" size={15} color={COUP.text} />}
+                    onPress={() => emit('coup:examine', { forceSwap: true })}
+                  />
+                </View>
+              </View>
             </>
           )}
 
@@ -369,4 +602,74 @@ export default function CoupGameScreen() {
       <ReferenceSheet visible={showRef} variant={pub.variant} onClose={() => setShowRef(false)} />
     </View>
   );
+}
+
+function getActionsForVariant(variant: 'base' | 'reformation') {
+  const general: CoupActionType[] = ['income', 'foreign_aid', 'coup'];
+  const character: CoupActionType[] =
+    variant === 'base'
+      ? ['tax', 'assassinate', 'steal', 'exchange']
+      : ['tax', 'assassinate', 'steal', 'inquisitor_exchange', 'inquisitor_examine'];
+  const reformation: CoupActionType[] = variant === 'reformation' ? ['convert', 'embezzle'] : [];
+
+  return { general, character, reformation };
+}
+
+function renderActionButton(
+  a: CoupActionType,
+  myCoins: number,
+  mustCoup: boolean,
+  act: (action: CoupActionType, target?: string) => void,
+  setTargeting: (action: CoupActionType | null) => void,
+) {
+  const meta = ACTION_META[a];
+  const info = ACTION_LABELS[a];
+  const disabled =
+    (mustCoup && a !== 'coup') ||
+    myCoins < meta.cost ||
+    (a === 'assassinate' && myCoins < 3) ||
+    (a === 'coup' && myCoins < 7);
+
+  const isDanger = a === 'coup' || a === 'assassinate';
+  const isSpecial = a === 'tax' || a === 'exchange' || a === 'inquisitor_exchange' || a === 'inquisitor_examine';
+  const buttonColor = isDanger ? COUP.crimson : isSpecial ? COUP.purple : COUP.blue;
+
+  return (
+    <View key={a} style={{ width: '48%', flexGrow: 1 }}>
+      <NeonButton
+        label={info.label}
+        color={buttonColor}
+        variant="outline"
+        disabled={disabled}
+        icon={<MaterialCommunityIcons name={ACTION_ICONS[a]} size={14} color={disabled ? `${buttonColor}50` : buttonColor} />}
+        onPress={() => (meta.needsTarget ? setTargeting(a) : act(a))}
+      />
+      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 9, textAlign: 'center', marginTop: 2 }}>
+        {info.hint}
+      </Text>
+    </View>
+  );
+}
+
+function getTauntsForVariant(variant: 'base' | 'reformation') {
+  const basic = [
+    { label: 'I am Duke!', text: 'I have a Duke!', icon: 'crown' as const, color: '#A855F7' },
+    { label: 'I am Assassin!', text: 'I have Assassin!', icon: 'sword' as const, color: '#C2410C' },
+    { label: 'I am Captain!', text: 'I have Captain!', icon: 'anchor' as const, color: '#4F8EF7' },
+  ];
+
+  const middle =
+    variant === 'base'
+      ? { label: 'I am Ambassador!', text: 'I have Ambassador!', icon: 'handshake' as const, color: '#34D399' }
+      : { label: 'I am Inquisitor!', text: 'I have Inquisitor!', icon: 'magnify' as const, color: '#F4C04E' };
+
+  const rest = [
+    { label: 'I am Contessa!', text: 'I have Contessa!', icon: 'shield-crown' as const, color: '#E23A5E' },
+    { label: 'Doubt it!', text: 'Doubt it!', icon: 'flag-outline' as const, color: '#E23A5E' },
+    { label: 'Allow!', text: 'Allowing', icon: 'check' as const, color: '#34D399' },
+    { label: 'Block!', text: 'Blocking', icon: 'shield-outline' as const, color: '#A855F7' },
+    { label: 'Nice play!', text: 'Nice play!', icon: 'thumb-up-outline' as const, color: '#F4C04E' },
+  ];
+
+  return [...basic, middle, ...rest];
 }

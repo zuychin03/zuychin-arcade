@@ -1,17 +1,18 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { BlurView } from 'expo-blur';
-import { ARCADE } from '../../constants/theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { ARCADE } from '../../constants/theme';
 
 type NavItemProps = {
-  emoji: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   label: string;
   route: string;
   isActive: boolean;
 };
 
-function NavItem({ emoji, label, route, isActive }: NavItemProps) {
+function NavItem({ icon, label, route, isActive }: NavItemProps) {
   const router = useRouter();
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -28,7 +29,12 @@ function NavItem({ emoji, label, route, isActive }: NavItemProps) {
   return (
     <Pressable onPress={() => router.push(route as any)}>
       <Animated.View style={[styles.navItem, animatedStyle]}>
-        <Text style={styles.navEmoji}>{emoji}</Text>
+        <MaterialCommunityIcons
+          name={icon}
+          size={20}
+          color={isActive ? ARCADE.pink : ARCADE.muted}
+          style={{ marginRight: 16 }}
+        />
         <Animated.Text style={[styles.navLabel, textStyle]}>{label}</Animated.Text>
       </Animated.View>
     </Pressable>
@@ -41,7 +47,16 @@ export default function Sidebar() {
   return (
     <BlurView intensity={20} tint="dark" style={styles.sidebar}>
       <View style={styles.logoContainer}>
-        <Text style={styles.logoEmoji}>🕹️</Text>
+        <MaterialCommunityIcons
+          name="gamepad-variant"
+          size={32}
+          color={ARCADE.pink}
+          style={{
+            textShadowColor: 'rgba(255, 46, 136, 0.4)',
+            textShadowRadius: 8,
+            textShadowOffset: { width: 0, height: 0 },
+          }}
+        />
         <View>
           <Text style={styles.logoText}>ZUYCHIN</Text>
           <Text style={styles.logoSub}>ARCADE</Text>
@@ -49,10 +64,10 @@ export default function Sidebar() {
       </View>
 
       <View style={styles.navContainer}>
-        <NavItem emoji="🕹️" label="Hub" route="/" isActive={pathname === '/'} />
-        <NavItem emoji="🏆" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} />
-        <NavItem emoji="👾" label="Profile" route="/profile" isActive={pathname === '/profile'} />
-        <NavItem emoji="ℹ️" label="About" route="/about" isActive={pathname === '/about'} />
+        <NavItem icon="controller-classic" label="Hub" route="/" isActive={pathname === '/'} />
+        <NavItem icon="trophy-outline" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} />
+        <NavItem icon="account-circle-outline" label="Profile" route="/profile" isActive={pathname === '/profile'} />
+        <NavItem icon="information-outline" label="About" route="/about" isActive={pathname === '/about'} />
       </View>
     </BlurView>
   );
@@ -73,9 +88,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginBottom: 40,
     gap: 12,
-  },
-  logoEmoji: {
-    fontSize: 36,
   },
   logoText: {
     color: ARCADE.text,
@@ -100,10 +112,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 20,
     marginBottom: 8,
-  },
-  navEmoji: {
-    fontSize: 24,
-    marginRight: 16,
   },
   navLabel: {
     fontSize: 18,

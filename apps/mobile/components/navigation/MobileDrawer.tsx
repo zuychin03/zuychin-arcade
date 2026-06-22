@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { Easing, SlideInLeft, SlideOutLeft, FadeIn, FadeOut } from 'react-native-reanimated';
 import { ARCADE } from '../../constants/theme';
 
@@ -9,18 +10,23 @@ type Props = {
 };
 
 type NavItemProps = {
-  emoji: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   label: string;
   route: string;
   isActive: boolean;
   onPress: () => void;
 };
 
-function NavItem({ emoji, label, route, isActive, onPress }: NavItemProps) {
+function NavItem({ icon, label, route, isActive, onPress }: NavItemProps) {
   return (
     <Pressable onPress={onPress}>
       <View style={[styles.navItem, isActive && styles.navItemActive]}>
-        <Text style={styles.navEmoji}>{emoji}</Text>
+        <MaterialCommunityIcons
+          name={icon}
+          size={20}
+          color={isActive ? ARCADE.pink : ARCADE.muted}
+          style={{ marginRight: 16 }}
+        />
         <Text style={[styles.navLabel, isActive ? styles.navLabelActive : styles.navLabelInactive]}>{label}</Text>
       </View>
     </Pressable>
@@ -50,7 +56,16 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
         style={[styles.drawer, { height }]}
       >
         <View style={styles.logoContainer}>
-          <Text style={styles.logoEmoji}>🕹️</Text>
+          <MaterialCommunityIcons
+            name="gamepad-variant"
+            size={32}
+            color={ARCADE.pink}
+            style={{
+              textShadowColor: 'rgba(255, 46, 136, 0.4)',
+              textShadowRadius: 8,
+              textShadowOffset: { width: 0, height: 0 },
+            }}
+          />
           <View>
             <Text style={styles.logoText}>ZUYCHIN</Text>
             <Text style={styles.logoSub}>ARCADE</Text>
@@ -58,10 +73,10 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
         </View>
 
         <View style={styles.navContainer}>
-          <NavItem emoji="🕹️" label="Hub" route="/" isActive={pathname === '/'} onPress={() => { router.push('/'); onClose(); }} />
-          <NavItem emoji="🏆" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} onPress={() => { router.push('/leaderboard'); onClose(); }} />
-          <NavItem emoji="👾" label="Profile" route="/profile" isActive={pathname === '/profile'} onPress={() => { router.push('/profile'); onClose(); }} />
-          <NavItem emoji="ℹ️" label="About" route="/about" isActive={pathname === '/about'} onPress={() => { router.push('/about'); onClose(); }} />
+          <NavItem icon="controller-classic" label="Hub" route="/" isActive={pathname === '/'} onPress={() => { router.push('/'); onClose(); }} />
+          <NavItem icon="trophy-outline" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} onPress={() => { router.push('/leaderboard'); onClose(); }} />
+          <NavItem icon="account-circle-outline" label="Profile" route="/profile" isActive={pathname === '/profile'} onPress={() => { router.push('/profile'); onClose(); }} />
+          <NavItem icon="information-outline" label="About" route="/about" isActive={pathname === '/about'} onPress={() => { router.push('/about'); onClose(); }} />
         </View>
       </Animated.View>
     </View>
@@ -85,9 +100,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginBottom: 40,
     gap: 12,
-  },
-  logoEmoji: {
-    fontSize: 36,
   },
   logoText: {
     color: ARCADE.text,
@@ -117,10 +129,6 @@ const styles = StyleSheet.create({
     backgroundColor: ARCADE.surfaceTranslucent,
     borderLeftWidth: 4,
     borderLeftColor: ARCADE.pink,
-  },
-  navEmoji: {
-    fontSize: 24,
-    marginRight: 16,
   },
   navLabel: {
     fontSize: 18,

@@ -40,6 +40,10 @@ export function registerSocketHandlers(io: Server): void {
     if (room.gameId === 'coup') registerCoupHandlers(io, socket);
     else registerSaboteurHandlers(io, socket);
 
+    socket.on('player_reaction', (payload: { reaction: string }) => {
+      io.to(roomCode).emit('reaction_received', { playerId, reaction: payload.reaction });
+    });
+
     socket.on('disconnect', () => {
       const r = roomStore.get(roomCode);
       if (!r) return;

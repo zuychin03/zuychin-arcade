@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { BoardPosition, PathCard, Tool } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
 import { getSocket } from '../../hooks/useSocket';
@@ -13,11 +14,11 @@ import { PlayerStatusBar } from '../../components/saboteur/board/PlayerStatusBar
 import { PathCardView } from '../../components/saboteur/cards/PathCardView';
 import { ActionCardView } from '../../components/saboteur/cards/ActionCardView';
 import { HandCard } from '../../components/saboteur/cards/HandCard';
-import { ScalePressable } from '../../components/ui/ScalePressable';
 import { RoleRevealOverlay } from '../../components/saboteur/overlays/RoleRevealOverlay';
 import { RoundEndOverlay } from '../../components/saboteur/overlays/RoundEndOverlay';
 import { GoldPickOverlay } from '../../components/saboteur/overlays/GoldPickOverlay';
 import { GameOverOverlay } from '../../components/saboteur/overlays/GameOverOverlay';
+import { NeonButton } from '../../components/ui/NeonButton';
 import { ARCADE, neonText } from '../../constants/theme';
 
 export default function GameScreen() {
@@ -31,15 +32,12 @@ export default function GameScreen() {
   const [showRole, setShowRole] = useState(false);
   const [peekMessage, setPeekMessage] = useState<string | null>(null);
   const lastRoundRef = useRef(0);
-  // null until first server sync — a reload/rejoin mid-game must not replay
-  // toasts for peeks that already happened
   const lastPeekCountRef = useRef<number | null>(null);
 
   const isHost = room?.players.find((p) => p.playerId === playerId)?.isHost ?? false;
   const isMyTurn = publicState?.currentTurnPlayerId === playerId;
   const selectedCard = privateState?.hand.find((c) => c.id === selectedCardId) ?? null;
 
-  // Surface rejected moves from the server
   useEffect(() => {
     const socket = getSocket();
     if (!socket) return;
@@ -50,7 +48,6 @@ export default function GameScreen() {
     };
   }, []);
 
-  // Role reveal for 3.5s at each round start
   useEffect(() => {
     if (!publicState || !privateState) return;
     if (publicState.status === 'playing' && publicState.round !== lastRoundRef.current) {
@@ -62,31 +59,28 @@ export default function GameScreen() {
     }
   }, [publicState, privateState]);
 
-  // Map peek toast when a new goal has been seen
   useEffect(() => {
     const peeks = privateState?.peekedGoals;
     if (!peeks) return;
     if (lastPeekCountRef.current === null) {
-      // First state after (re)load — record history without toasting it.
       lastPeekCountRef.current = peeks.length;
       return;
     }
     if (peeks.length > lastPeekCountRef.current) {
       lastPeekCountRef.current = peeks.length;
       const last = peeks[peeks.length - 1];
-      setPeekMessage(last.isGold ? '💰 That goal is the GOLD!' : '🪨 Just worthless stone…');
+      setPeekMessage(last.isGold ? '💎 That goal is the GOLD!' : '🪨 Just worthless stone…');
       const t = setTimeout(() => setPeekMessage(null), 3500);
       return () => clearTimeout(t);
     }
     lastPeekCountRef.current = peeks.length;
   }, [privateState?.peekedGoals]);
 
-  // Gold cards are picked face-down — reveal the value once the server assigns it
   const myGoldPickValue =
     publicState?.goldDistribution?.steps.find((s) => s.playerId === playerId)?.chosenCard ?? null;
   useEffect(() => {
     if (myGoldPickValue !== null) {
-      showDialog('Gold collected!', `You drew ${myGoldPickValue} nugget${myGoldPickValue === 1 ? '' : 's'} 🪙`);
+      showDialog('Gold collected!', `You drew a nugget card worth ${myGoldPickValue} gold! 🪙`);
     }
   }, [myGoldPickValue]);
 
@@ -95,7 +89,6 @@ export default function GameScreen() {
     [publicState],
   );
 
-  // Board highlights for the selected card
   const validTargets = useMemo(() => {
     if (!publicState || !selectedCard || selectedCard.type !== 'path' || !isMyTurn) return new Set<string>();
     return validPlacements(publicState.board, unrevealedGoals, selectedCard as PathCard, rotated);
@@ -206,14 +199,31 @@ export default function GameScreen() {
   return (
     <View className="flex-1 bg-arcade-bg pt-12">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 pb-2">
+      <View className="flex-row items-center justify-between px-4 pb-3">
         <Text style={{ fontFamily: 'Outfit_800ExtraBold', letterSpacing: 1, ...neonText(ARCADE.cyan, 8) }}>
           ROUND {publicState.round}/3
         </Text>
-        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12 }}>
-          🂠 {publicState.deckSize} · 🗑 {publicState.discardSize}
-        </Text>
-        <Pressable onPress={() => setShowRole(true)}>
+        
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialCommunityIcons name="cards-playing-outline" size={13} color={ARCADE.muted} />
+            <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12 }}>{publicState.deckSize}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialCommunityIcons name="delete-outline" size={13} color={ARCADE.muted} />
+            <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 12 }}>{publicState.discardSize}</Text>
+          </View>
+        </View>
+
+        <Pressable
+          onPress={() => setShowRole(true)}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}
+        >
+          <MaterialCommunityIcons
+            name={privateState.role === 'saboteur' ? 'emoticon-devil-outline' : 'pickaxe'}
+            size={13}
+            color={privateState.role === 'saboteur' ? ARCADE.red : '#F5C518'}
+          />
           <Text
             style={{
               fontFamily: 'Outfit_800ExtraBold',
@@ -221,7 +231,7 @@ export default function GameScreen() {
               ...neonText(privateState.role === 'saboteur' ? ARCADE.red : '#F5C518', 8),
             }}
           >
-            {privateState.role === 'saboteur' ? '😈 SABOTEUR' : '⛏️ MINER'}
+            {privateState.role === 'saboteur' ? 'SABOTEUR' : 'MINER'}
           </Text>
         </Pressable>
       </View>
@@ -263,41 +273,24 @@ export default function GameScreen() {
               publicState.players.find((p) => p.isCurrentTurn)?.displayName ?? '…'
             }`}
           </Text>
-          <View className="flex-row gap-2">
+          <View style={{ flexDirection: 'row', gap: 6 }}>
             {selectedCard?.type === 'path' && (
-              <ScalePressable
+              <NeonButton
+                label="ROTATE"
+                color={ARCADE.purple}
+                variant="outline"
+                icon={<MaterialCommunityIcons name="sync" size={14} color={ARCADE.purple} />}
                 onPress={() => useGameStore.getState().toggleRotated()}
-                style={{
-                  borderRadius: 12,
-                  borderWidth: 1.5,
-                  borderColor: ARCADE.purple,
-                  backgroundColor: 'rgba(168, 85, 247, 0.15)',
-                  paddingHorizontal: 14,
-                  paddingVertical: 7,
-                  boxShadow: `0 0 8px ${ARCADE.purple}44`,
-                }}
-              >
-                <Text style={{ color: ARCADE.purple, fontFamily: 'Outfit_800ExtraBold', fontSize: 12, letterSpacing: 0.5 }}>↻ ROTATE</Text>
-              </ScalePressable>
+              />
             )}
-            <ScalePressable
-              onPress={onPass}
+            <NeonButton
+              label="PASS"
+              color={ARCADE.pink}
+              variant={isMyTurn ? 'solid' : 'outline'}
               disabled={!isMyTurn}
-              style={{
-                borderRadius: 12,
-                borderWidth: 1.5,
-                borderColor: isMyTurn ? ARCADE.pink : ARCADE.border,
-                backgroundColor: isMyTurn ? 'rgba(255, 46, 136, 0.15)' : 'rgba(22, 16, 40, 0.4)',
-                paddingHorizontal: 14,
-                paddingVertical: 7,
-                opacity: isMyTurn ? 1 : 0.5,
-                boxShadow: isMyTurn ? `0 0 8px ${ARCADE.pink}44` : undefined,
-              }}
-            >
-              <Text style={{ color: isMyTurn ? ARCADE.pink : ARCADE.muted, fontFamily: 'Outfit_800ExtraBold', fontSize: 12, letterSpacing: 0.5 }}>
-                PASS
-              </Text>
-            </ScalePressable>
+              icon={<MaterialCommunityIcons name="skip-forward" size={14} color={isMyTurn ? ARCADE.bg : ARCADE.muted} />}
+              onPress={onPass}
+            />
           </View>
         </View>
         <ScrollView horizontal contentContainerStyle={{ gap: 8, padding: 8, alignItems: 'center' }}>

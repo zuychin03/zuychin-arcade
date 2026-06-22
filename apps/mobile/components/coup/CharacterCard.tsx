@@ -1,23 +1,30 @@
 import type { ReactElement } from 'react';
 import { Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupCharacter } from '@zuychin-arcade/types';
 import { ScalePressable } from '../ui/ScalePressable';
 import { COUP, COUP_CHARACTER_COLOR } from '../../constants/theme';
 import { CHARACTER_EMOJI } from '../../constants/coupReference';
 
-// Re-exported for existing importers.
+// Re-exported for existing importers
 export { CHARACTER_EMOJI };
 
-const GRAD_START = { x: 0, y: 0 };
-const GRAD_END = { x: 1, y: 1 };
-
 type Size = 'xs' | 'sm' | 'md' | 'lg';
-const DIMS: Record<Size, { w: number; h: number; emoji: number; label: number; radius: number }> = {
-  xs: { w: 30, h: 40, emoji: 16, label: 0, radius: 7 },
-  sm: { w: 52, h: 72, emoji: 26, label: 7, radius: 10 },
-  md: { w: 72, h: 100, emoji: 38, label: 9, radius: 12 },
-  lg: { w: 88, h: 122, emoji: 46, label: 10, radius: 14 },
+const DIMS: Record<Size, { w: number; h: number; icon: number; label: number; radius: number; border: number }> = {
+  xs: { w: 32, h: 44, icon: 16, label: 0, radius: 6, border: 1 },
+  sm: { w: 56, h: 78, icon: 26, label: 8, radius: 10, border: 1.5 },
+  md: { w: 78, h: 108, icon: 36, label: 10, radius: 12, border: 2 },
+  lg: { w: 96, h: 134, icon: 44, label: 11, radius: 14, border: 2.5 },
+};
+
+const CHARACTER_ICONS: Record<CoupCharacter, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  duke: 'crown',
+  assassin: 'sword',
+  captain: 'anchor',
+  ambassador: 'handshake',
+  contessa: 'shield-crown',
+  inquisitor: 'magnify',
 };
 
 interface Props {
@@ -35,88 +42,138 @@ export function CharacterCard({ character, faceDown, lost, size = 'sm', selected
   const showName = !faceDown && character && d.label > 0;
   const showCorner = !faceDown && character && (size === 'md' || size === 'lg');
 
-  // The gradient is a single bordered, rounded element — on web it renders as a
-  // CSS background-image that clips to border-radius, so corners always match.
   if (faceDown) {
     return wrap(
       <LinearGradient
-        colors={[COUP.panel, COUP.bg] as const}
-        start={GRAD_START}
-        end={GRAD_END}
+        colors={['#251520', '#11050F'] as const}
         style={{
           width: d.w,
           height: d.h,
           borderRadius: d.radius,
-          borderWidth: 1.5,
+          borderWidth: d.border,
           borderColor: COUP.border,
           backgroundColor: COUP.panel,
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: lost ? 0.4 : 1,
+          opacity: lost ? 0.35 : 1,
+          position: 'relative',
         }}
       >
-        {/* inset frame ring to read as a card back (inset, never touches corners) */}
+        {/* Inset ornamental frame */}
         <View
           style={{
             position: 'absolute',
-            top: 4,
-            left: 4,
-            right: 4,
-            bottom: 4,
-            borderRadius: d.radius - 4,
+            top: size === 'xs' ? 2 : 4,
+            left: size === 'xs' ? 2 : 4,
+            right: size === 'xs' ? 2 : 4,
+            bottom: size === 'xs' ? 2 : 4,
+            borderRadius: d.radius - (size === 'xs' ? 2 : 4),
             borderWidth: 1,
-            borderColor: `${COUP.crimson}3A`,
+            borderColor: 'rgba(226, 58, 94, 0.25)', // Subtle crimson border
+            borderStyle: 'solid',
           }}
         />
-        <Text style={{ fontSize: d.emoji, opacity: 0.85 }}>🎭</Text>
+        <MaterialCommunityIcons
+          name="shield-cross"
+          size={d.icon}
+          color={COUP.crimson}
+          style={{ opacity: 0.75 }}
+        />
       </LinearGradient>,
       onPress,
     );
   }
 
+  const iconName = character ? CHARACTER_ICONS[character] : 'help';
+
   return wrap(
     <LinearGradient
-      colors={[`${accent}80`, `${accent}12`] as const}
-      start={GRAD_START}
-      end={GRAD_END}
+      colors={[`${accent}40`, `${accent}0D`] as const}
       style={{
         width: d.w,
         height: d.h,
         borderRadius: d.radius,
-        borderWidth: selected ? 2.5 : 1.5,
-        borderColor: selected ? COUP.gold : accent,
-        backgroundColor: `${accent}1A`,
+        borderWidth: selected ? d.border + 1 : d.border,
+        borderColor: selected ? COUP.gold : lost ? `${accent}40` : accent,
+        backgroundColor: `${accent}0A`,
         alignItems: 'center',
         justifyContent: 'center',
         opacity: lost ? 0.4 : 1,
-        boxShadow: selected ? `0 0 12px ${COUP.gold}99` : !lost ? `0 0 8px ${accent}3A` : undefined,
+        position: 'relative',
+        boxShadow: selected ? `0 0 14px ${COUP.gold}E6` : !lost ? `0 0 10px ${accent}40` : undefined,
       }}
     >
-      {/* corner pip, like a playing card (inset, never touches corners) */}
+      {/* Outer corner badge decoration */}
       {showCorner && (
-        <Text style={{ position: 'absolute', top: 6, left: 6, fontSize: 11, opacity: 0.7 }}>
-          {CHARACTER_EMOJI[character!]}
-        </Text>
+        <View style={{ position: 'absolute', top: 5, left: 5, opacity: 0.6 }}>
+          <MaterialCommunityIcons name={iconName} size={11} color={accent} />
+        </View>
       )}
-      <Text style={{ fontSize: d.emoji }}>{CHARACTER_EMOJI[character!]}</Text>
+
+      {/* Decorative center shield bg */}
+      <View
+        style={{
+          width: d.icon * 1.3,
+          height: d.icon * 1.3,
+          borderRadius: (d.icon * 1.3) / 2,
+          backgroundColor: `${accent}1A`,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderWidth: 0.5,
+          borderColor: `${accent}30`,
+          boxShadow: !lost ? `0 0 6px ${accent}30` : undefined,
+        }}
+      >
+        <MaterialCommunityIcons name={iconName} size={d.icon} color={lost ? COUP.muted : accent} />
+      </View>
+
       {showName && (
         <Text
           numberOfLines={1}
           adjustsFontSizeToFit
           style={{
-            fontFamily: 'Outfit_700Bold',
+            fontFamily: 'Outfit_800ExtraBold',
             color: lost ? COUP.muted : accent,
             fontSize: d.label,
-            marginTop: 3,
-            letterSpacing: 0,
-            maxWidth: d.w - 4,
-            paddingHorizontal: 1,
+            marginTop: 6,
+            letterSpacing: 0.5,
+            maxWidth: d.w - 8,
+            paddingHorizontal: 2,
             textAlign: 'center',
             textDecorationLine: lost ? 'line-through' : 'none',
           }}
         >
           {character!.toUpperCase()}
         </Text>
+      )}
+
+      {/* Dead / Lost overlay ribbon */}
+      {lost && (
+        <View
+          style={{
+            position: 'absolute',
+            width: '105%',
+            height: 18,
+            backgroundColor: '#1E121C',
+            borderWidth: 1,
+            borderColor: COUP.border,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: [{ rotate: '-15deg' }],
+            boxShadow: '0 2px 4px rgba(0,0,0,0.5)',
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: 'SpaceMono_700Bold',
+              color: COUP.muted,
+              fontSize: size === 'md' ? 8 : 7,
+              letterSpacing: 1,
+            }}
+          >
+            DEAD
+          </Text>
+        </View>
       )}
     </LinearGradient>,
     onPress,

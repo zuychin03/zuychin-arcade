@@ -1,12 +1,14 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { PublicPlayerState, Tool } from '@zuychin-arcade/types';
 import { GlowPulse } from '../../ui/GlowPulse';
+import { Coin } from '../../ui/Coin';
 import { ARCADE } from '../../../constants/theme';
 
-const TOOLS: Array<{ tool: Tool; icon: string }> = [
-  { tool: 'lantern', icon: '🔦' },
-  { tool: 'pickaxe', icon: '⛏️' },
-  { tool: 'cart', icon: '🛒' },
+const TOOLS: Array<{ tool: Tool; icon: keyof typeof MaterialCommunityIcons.glyphMap }> = [
+  { tool: 'lantern', icon: 'flashlight' },
+  { tool: 'pickaxe', icon: 'pickaxe' },
+  { tool: 'cart', icon: 'cart-outline' },
 ];
 
 interface Props {
@@ -71,19 +73,14 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
             </Text>
 
             {/* Hand & Gold indicators */}
-            <View className="mt-1.5 flex-row items-center gap-2">
-              <View className="flex-row items-center gap-1 rounded bg-[#2E2452]/40 px-1 py-0.5 border border-arcade-border/30">
-                <Text style={{ fontSize: 10 }}>🂠</Text>
+            <View className="mt-1.5 flex-row items-center gap-3">
+              <View className="flex-row items-center gap-1.5 rounded bg-[#2E2452]/40 px-1.5 py-0.5 border border-arcade-border/30">
+                <MaterialCommunityIcons name="cards-playing-outline" size={11} color={ARCADE.muted} />
                 <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 10 }}>
                   {p.handSize}
                 </Text>
               </View>
-              <View className="flex-row items-center gap-1 rounded bg-[#2D1A00]/40 px-1 py-0.5 border border-[#F5C518]/20">
-                <Text style={{ fontSize: 10 }}>🪙</Text>
-                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: '#F5C518', fontSize: 10 }}>
-                  {p.goldCollected}
-                </Text>
-              </View>
+              <Coin amount={p.goldCollected} size="sm" showText />
             </View>
 
             {/* Tools badges */}
@@ -94,19 +91,23 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
                   <View
                     key={tool}
                     style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 10,
-                      backgroundColor: broken ? 'rgba(255, 51, 85, 0.2)' : 'rgba(22, 16, 40, 0.4)',
+                      width: 22,
+                      height: 22,
+                      borderRadius: 11,
+                      backgroundColor: broken ? 'rgba(255, 51, 85, 0.15)' : 'rgba(22, 16, 40, 0.4)',
                       borderWidth: 1,
                       borderColor: broken ? ARCADE.red : 'rgba(142, 134, 179, 0.3)',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      position: 'relative',
                     }}
                   >
-                    <Text style={{ fontSize: 11, opacity: broken ? 0.6 : 0.8 }}>
-                      {icon}
-                    </Text>
+                    <MaterialCommunityIcons
+                      name={icon}
+                      size={12}
+                      color={broken ? ARCADE.red : ARCADE.muted}
+                      style={{ opacity: broken ? 0.75 : 0.9 }}
+                    />
                     {broken && (
                       <View
                         style={{

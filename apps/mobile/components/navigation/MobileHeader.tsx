@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ARCADE } from '../../constants/theme';
 
 type Props = {
@@ -10,10 +11,15 @@ export default function MobileHeader({ onMenuPress }: Props) {
   return (
     <BlurView intensity={20} tint="dark" style={styles.header}>
       <Pressable onPress={onMenuPress} style={styles.menuButton}>
-        <Text style={styles.menuIcon}>☰</Text>
+        <MaterialCommunityIcons name="menu" size={24} color={ARCADE.text} />
       </Pressable>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleEmoji}>🕹️</Text>
+        <MaterialCommunityIcons
+          name="gamepad-variant"
+          size={18}
+          color={ARCADE.pink}
+          style={{ marginRight: 6 }}
+        />
         <Text style={styles.title}>ZUYCHIN</Text>
         <Text style={styles.titleSub}> ARCADE</Text>
       </View>
@@ -35,20 +41,12 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  menuIcon: {
-    color: ARCADE.text,
-    fontSize: 24,
-  },
   titleContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingRight: 44, // Offset the hamburger menu to keep title centered
-  },
-  titleEmoji: {
-    fontSize: 20,
-    marginRight: 6,
   },
   title: {
     color: ARCADE.text,

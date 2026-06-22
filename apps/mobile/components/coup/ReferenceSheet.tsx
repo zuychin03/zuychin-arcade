@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupVariant } from '@zuychin-arcade/types';
 import { charactersForVariant } from '@zuychin-arcade/types';
 import { CharacterCard } from './CharacterCard';
@@ -18,8 +19,21 @@ interface Props {
   onClose: () => void;
 }
 
-/** In-game rulebook: every character, action and the core rules — like the
- *  reference card that ships in the physical box. Opened from the table header. */
+const RULES_ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  Goal: 'trophy-outline',
+  Challenge: 'flag-outline',
+  Block: 'shield-outline',
+  Coins: 'cash-multiple',
+};
+
+const ACTION_ICONS_REF: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  'Income': 'cash-multiple',
+  'Foreign Aid': 'bank-transfer-in',
+  'Coup': 'flash-alert',
+  'Convert': 'swap-horizontal',
+  'Embezzle': 'bank-minus',
+};
+
 export function ReferenceSheet({ visible, variant, onClose }: Props) {
   if (!visible) return null;
   const characters = charactersForVariant(variant);
@@ -54,6 +68,7 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
           borderColor: COUP.border,
           backgroundColor: COUP.surface,
           overflow: 'hidden',
+          boxShadow: '0 8px 30px rgba(0,0,0,0.8)',
         }}
       >
         {/* header */}
@@ -79,18 +94,34 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
 
         <ScrollView contentContainerStyle={{ padding: 16, gap: 18 }} showsVerticalScrollIndicator={false}>
           {/* core rules */}
-          <View style={{ gap: 10 }}>
-            {RULES_NOTES.map((n) => (
-              <View key={n.title} style={{ flexDirection: 'row', gap: 10 }}>
-                <Text style={{ fontSize: 16 }}>{n.icon}</Text>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 13 }}>{n.title}</Text>
-                  <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
-                    {n.body}
-                  </Text>
+          <View style={{ gap: 12 }}>
+            {RULES_NOTES.map((n) => {
+              const iconName = RULES_ICONS[n.title] || 'help-circle-outline';
+              return (
+                <View key={n.title} style={{ flexDirection: 'row', gap: 12 }}>
+                  <View
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 14,
+                      backgroundColor: `${COUP.gold}1C`,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 0.5,
+                      borderColor: `${COUP.gold}40`,
+                    }}
+                  >
+                    <MaterialCommunityIcons name={iconName} size={15} color={COUP.gold} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 13 }}>{n.title}</Text>
+                    <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
+                      {n.body}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
 
           {/* characters */}
@@ -103,15 +134,18 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
                 <View key={c} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
                   <CharacterCard character={c} size="md" />
                   <View style={{ flex: 1, gap: 2 }}>
-                    <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: accent, fontSize: 15, letterSpacing: 0.5 }}>
+                    <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: accent, fontSize: 14, letterSpacing: 0.5 }}>
                       {ref.name.toUpperCase()}
                     </Text>
                     <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.text, fontSize: 11, lineHeight: 16 }}>
                       {ref.action}
                     </Text>
-                    <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11 }}>
-                      🛡️ Blocks: {ref.blocks}
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                      <MaterialCommunityIcons name="shield-outline" size={12} color={COUP.muted} />
+                      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11 }}>
+                        Blocks: {ref.blocks}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               );
@@ -119,7 +153,7 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
           </View>
 
           {/* general actions */}
-          <View style={{ gap: 10 }}>
+          <View style={{ gap: 12 }}>
             <SectionLabel>Actions · anyone</SectionLabel>
             {GENERAL_ACTIONS.map((a) => (
               <ActionRow key={a.name} action={a} />
@@ -128,7 +162,7 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
 
           {/* reformation extras */}
           {variant === 'reformation' && (
-            <View style={{ gap: 10 }}>
+            <View style={{ gap: 12 }}>
               <SectionLabel>Reformation</SectionLabel>
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
                 Players belong to two sides (⛪ Loyalist / ✊ Reformist). Coup, Assassinate and Steal only target the
@@ -147,16 +181,30 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 10, letterSpacing: 2.5 }}>
+    <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 10, letterSpacing: 2.5, marginBottom: 4 }}>
       {children.toUpperCase()}
     </Text>
   );
 }
 
 function ActionRow({ action }: { action: ActionRef }) {
+  const iconName = ACTION_ICONS_REF[action.name] || 'cash';
   return (
-    <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-      <Text style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{action.emoji}</Text>
+    <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+      <View
+        style={{
+          width: 32,
+          height: 32,
+          borderRadius: 16,
+          backgroundColor: `${action.tagColor}1C`,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderWidth: 0.5,
+          borderColor: `${action.tagColor}40`,
+        }}
+      >
+        <MaterialCommunityIcons name={iconName} size={16} color={action.tagColor} />
+      </View>
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 13 }}>{action.name}</Text>
@@ -170,10 +218,10 @@ function ActionRow({ action }: { action: ActionRef }) {
               paddingVertical: 1,
             }}
           >
-            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: action.tagColor, fontSize: 9 }}>{action.tag}</Text>
+            <Text style={{ fontFamily: 'SpaceMono_700Bold', color: action.tagColor, fontSize: 9 }}>{action.tag.toUpperCase()}</Text>
           </View>
         </View>
-        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
+        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16, marginTop: 2 }}>
           {action.detail}
         </Text>
       </View>
