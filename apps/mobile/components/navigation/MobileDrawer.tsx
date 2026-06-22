@@ -45,7 +45,7 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
       </Animated.View>
       
       <Animated.View 
-        entering={SlideInLeft.duration(300).easing(Easing.out(Easing.exp))}
+        entering={SlideInLeft.duration(300).easing(Easing.out(Easing.cubic))}
         exiting={SlideOutLeft.duration(200)}
         style={[styles.drawer, { height }]}
       >

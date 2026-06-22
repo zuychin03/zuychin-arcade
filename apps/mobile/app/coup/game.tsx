@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import type { CoupActionType, CoupCharacter } from '@zuychin-arcade/types';
@@ -11,6 +11,7 @@ import { PlayerSeat } from '../../components/coup/PlayerSeat';
 import { CharacterCard } from '../../components/coup/CharacterCard';
 import { GameLog } from '../../components/coup/GameLog';
 import { Countdown } from '../../components/coup/Countdown';
+import { ReferenceSheet } from '../../components/coup/ReferenceSheet';
 import { NeonButton } from '../../components/ui/NeonButton';
 import { COUP, OVERLAY_FILL, neonText } from '../../constants/theme';
 
@@ -34,6 +35,7 @@ export default function CoupGameScreen() {
 
   const [targeting, setTargeting] = useState<CoupActionType | null>(null);
   const [keepSel, setKeepSel] = useState<number[]>([]);
+  const [showRef, setShowRef] = useState(false);
 
   const phase = pub?.pending.phase;
   // reset transient UI when the situation changes
@@ -96,6 +98,16 @@ export default function CoupGameScreen() {
     router.replace('/');
   };
 
+  // Tint the situation banner by what kind of decision is in the air.
+  const bannerAccent =
+    pending.phase.includes('challenge')
+      ? COUP.crimson
+      : pending.phase === 'awaiting_block'
+        ? COUP.purple
+        : pending.phase === 'awaiting_lose_influence'
+          ? COUP.crimson
+          : COUP.gold;
+
   const myFaceDown = priv.influences.filter((i) => !i.revealed).map((i) => i.character);
   const gameOver = pending.phase === 'game_over' || pub.status === 'game_over';
   const iAmHost = pub.players[0]?.playerId === myId; // turn order starts with the host
@@ -106,11 +118,29 @@ export default function CoupGameScreen() {
         {/* header */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>🎭 COUP</Text>
-          <View style={{ flexDirection: 'row', gap: 14 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             {pub.variant === 'reformation' && (
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.gold, fontSize: 12 }}>🏦 {pub.treasuryReserve}</Text>
             )}
             <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12 }}>🂠 {pub.deckSize}</Text>
+            <Pressable
+              onPress={() => setShowRef(true)}
+              hitSlop={8}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 4,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: COUP.border,
+                backgroundColor: COUP.panel,
+                paddingHorizontal: 9,
+                paddingVertical: 4,
+              }}
+            >
+              <Text style={{ fontSize: 12 }}>📖</Text>
+              <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 11 }}>Rules</Text>
+            </Pressable>
           </View>
         </View>
 
@@ -118,7 +148,17 @@ export default function CoupGameScreen() {
         <Animated.View
           entering={FadeIn.duration(250)}
           key={`${pending.phase}-${pending.actorId}-${pending.blockerId}`}
-          style={{ borderRadius: 12, borderWidth: 1, borderColor: COUP.border, backgroundColor: COUP.panel, padding: 12, gap: 8 }}
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: `${bannerAccent}99`,
+            borderLeftWidth: 3,
+            borderLeftColor: bannerAccent,
+            backgroundColor: COUP.panel,
+            padding: 12,
+            gap: 8,
+            boxShadow: `0 0 12px ${bannerAccent}2E`,
+          }}
         >
           <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14, textAlign: 'center' }}>{describe()}</Text>
           {pending.deadline != null && <Countdown deadline={pending.deadline} />}
@@ -150,12 +190,18 @@ export default function CoupGameScreen() {
 
         {/* your influence */}
         <View>
-          <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 10, letterSpacing: 2, marginBottom: 6 }}>
-            YOUR INFLUENCE
-          </Text>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+            <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 10, letterSpacing: 2 }}>
+              YOUR INFLUENCE
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Text style={{ fontSize: 13 }}>🪙</Text>
+              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 15 }}>{myCoins}</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
             {priv.influences.map((inf, i) => (
-              <CharacterCard key={i} character={inf.character} lost={inf.revealed} size="sm" />
+              <CharacterCard key={i} character={inf.character} lost={inf.revealed} size="md" />
             ))}
           </View>
         </View>
@@ -319,6 +365,8 @@ export default function CoupGameScreen() {
           </View>
         </Animated.View>
       )}
+
+      <ReferenceSheet visible={showRef} variant={pub.variant} onClose={() => setShowRef(false)} />
     </View>
   );
 }

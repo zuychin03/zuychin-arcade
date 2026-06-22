@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -11,6 +11,7 @@ import { showDialog } from '../../lib/dialog';
 import { RoomCodeDisplay } from '../../components/lobby/RoomCodeDisplay';
 import { PlayerList } from '../../components/lobby/PlayerList';
 import { NeonButton } from '../../components/ui/NeonButton';
+import { ReferenceSheet } from '../../components/coup/ReferenceSheet';
 import { COUP } from '../../constants/theme';
 
 export default function CoupLobbyScreen() {
@@ -19,7 +20,9 @@ export default function CoupLobbyScreen() {
   const token = useGameStore((s) => s.token);
   const coupPublic = useGameStore((s) => s.coupPublic);
 
-  const minPlayers = COUP_LIMITS[room?.config.coupVariant ?? 'base'].min;
+  const [showRef, setShowRef] = useState(false);
+  const variant = room?.config.coupVariant ?? 'base';
+  const minPlayers = COUP_LIMITS[variant].min;
   const isHost = room?.players.find((p) => p.playerId === playerId)?.isHost ?? false;
   const canStart = (room?.playerCount ?? 0) >= minPlayers;
 
@@ -69,7 +72,7 @@ export default function CoupLobbyScreen() {
 
       <Animated.View entering={FadeInUp.delay(80).springify().damping(16)} className="items-center">
         <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12 }}>
-          🎭 Coup · base rules · {minPlayers}–{room.maxPlayers} players
+          🎭 Coup · {variant === 'reformation' ? 'reformation' : 'base'} rules · {minPlayers}–{room.maxPlayers} players
         </Text>
       </Animated.View>
 
@@ -90,8 +93,11 @@ export default function CoupLobbyScreen() {
             <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted }}>Waiting for host to start…</Text>
           </View>
         )}
+        <NeonButton label="📖 HOW TO PLAY" color={COUP.gold} variant="outline" onPress={() => setShowRef(true)} />
         <NeonButton label="LEAVE ROOM" color={COUP.crimson} variant="ghost" onPress={onLeave} />
       </Animated.View>
+
+      <ReferenceSheet visible={showRef} variant={variant} onClose={() => setShowRef(false)} />
     </View>
   );
 }
