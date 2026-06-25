@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ARCADE } from '../../constants/theme';
+import ZuychinLogo from './ZuychinLogo';
 
 type Props = {
   onMenuPress: () => void;
@@ -14,12 +15,7 @@ export default function MobileHeader({ onMenuPress }: Props) {
         <MaterialCommunityIcons name="menu" size={24} color={ARCADE.text} />
       </Pressable>
       <View style={styles.titleContainer}>
-        <MaterialCommunityIcons
-          name="gamepad-variant"
-          size={18}
-          color={ARCADE.pink}
-          style={{ marginRight: 6 }}
-        />
+        <ZuychinLogo color={ARCADE.pink} height={30} style={{ marginRight: 8 }} />
         <Text style={styles.title}>ZUYCHIN</Text>
         <Text style={styles.titleSub}> ARCADE</Text>
       </View>

@@ -4,6 +4,7 @@ import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { ARCADE } from '../../constants/theme';
+import ZuychinLogo from './ZuychinLogo';
 
 type NavItemProps = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -47,16 +48,7 @@ export default function Sidebar() {
   return (
     <BlurView intensity={20} tint="dark" style={styles.sidebar}>
       <View style={styles.logoContainer}>
-        <MaterialCommunityIcons
-          name="gamepad-variant"
-          size={32}
-          color={ARCADE.pink}
-          style={{
-            textShadowColor: 'rgba(255, 46, 136, 0.4)',
-            textShadowRadius: 8,
-            textShadowOffset: { width: 0, height: 0 },
-          }}
-        />
+        <ZuychinLogo color={ARCADE.pink} height={44} />
         <View>
           <Text style={styles.logoText}>ZUYCHIN</Text>
           <Text style={styles.logoSub}>ARCADE</Text>
