@@ -22,7 +22,7 @@
       "package": "com.zuychin.arcade"
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/favicon.svg",
       "output": "single"
     },
     "plugins": ["expo-router"]
