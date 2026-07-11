@@ -150,7 +150,6 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, onSele
               letterSpacing: 0.3,
             }}
           >
-            {player.isCurrentTurn ? '▶ ' : ''}
             {player.displayName}
             {isMe ? ' (you)' : ''}
           </Text>

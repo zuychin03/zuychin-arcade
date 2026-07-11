@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MIN_PLAYERS } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
 import { getSocket } from '../../hooks/useSocket';
@@ -78,8 +79,9 @@ export default function LobbyScreen() {
       <Animated.View entering={FadeInUp.delay(200).springify().damping(16)} style={{ gap: 10 }}>
         {isHost ? (
           <NeonButton
-            label={canStart ? '▶ START GAME' : `NEED ${MIN_PLAYERS}+ PLAYERS`}
+            label={canStart ? 'START GAME' : `NEED ${MIN_PLAYERS}+ PLAYERS`}
             color={ARCADE.pink}
+            icon={canStart ? <MaterialCommunityIcons name="play" size={16} color={ARCADE.bg} /> : undefined}
             disabled={!canStart}
             onPress={() => getSocket()?.emit('start_game', {})}
           />

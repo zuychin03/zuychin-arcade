@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeInLeft } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { Player } from '@zuychin-arcade/types';
 import { ScalePressable } from '../ui/ScalePressable';
 import { ARCADE } from '../../constants/theme';
@@ -97,7 +98,7 @@ export function PlayerList({ players, maxPlayers, canKick, onKick }: Props) {
                         paddingVertical: 1,
                       }}
                     >
-                      <Text style={{ fontSize: 9 }}>👑</Text>
+                      <MaterialCommunityIcons name="crown-outline" size={10} color={ARCADE.cyan} />
                       <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: ARCADE.cyan, fontSize: 9, letterSpacing: 1 }}>
                         HOST
                       </Text>
@@ -125,9 +126,7 @@ export function PlayerList({ players, maxPlayers, canKick, onKick }: Props) {
                   backgroundColor: `${ARCADE.red}1A`,
                 }}
               >
-                <Text style={{ color: ARCADE.red, fontFamily: 'Outfit_800ExtraBold', fontSize: 15, lineHeight: 17 }}>
-                  ✕
-                </Text>
+                <MaterialCommunityIcons name="close" size={17} color={ARCADE.red} />
               </ScalePressable>
             )}
           </Animated.View>

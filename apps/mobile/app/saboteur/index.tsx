@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useGameStore } from '../../store/useGameStore';
 import { createRoom } from '../../lib/api';
 import { loadDisplayName, saveAuth, saveDisplayName } from '../../lib/storage';
@@ -51,7 +52,7 @@ export default function SaboteurLanding() {
     <ScrollView className="flex-1 bg-arcade-bg" contentContainerStyle={{ padding: 24, gap: 14 }}>
       {/* Hero */}
       <Animated.View entering={FadeInDown.duration(500)} className="items-center py-4">
-        <Text style={{ fontSize: 64 }}>⛏️</Text>
+        <MaterialCommunityIcons name="pickaxe" size={64} color={ARCADE.pink} />
         <Text style={{ fontSize: 28, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 3, marginTop: 6, ...neonText(ARCADE.pink, 14) }}>
           SABOTEUR
         </Text>
@@ -60,9 +61,10 @@ export default function SaboteurLanding() {
           Nobody knows who's who. 3–10 players, 3 rounds.
         </Text>
         <View className="mt-3 flex-row gap-2">
-          {['🕵️ hidden roles', '🃏 card game', '🪙 most gold wins'].map((tag) => (
-            <View key={tag} className="rounded-full border border-arcade-border bg-arcade-surface px-3 py-1">
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 11 }}>{tag}</Text>
+          {[{ icon: 'account-search-outline', label: 'hidden roles' }, { icon: 'cards-playing-outline', label: 'card game' }, { icon: 'cash-multiple', label: 'most gold wins' }].map((tag) => (
+            <View key={tag.label} className="flex-row items-center gap-1.5 rounded-full border border-arcade-border bg-arcade-surface px-3 py-1">
+              <MaterialCommunityIcons name={tag.icon as keyof typeof MaterialCommunityIcons.glyphMap} size={13} color={ARCADE.muted} />
+              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 11 }}>{tag.label}</Text>
             </View>
           ))}
         </View>
@@ -100,7 +102,8 @@ export default function SaboteurLanding() {
           </View>
         )}
         <NeonButton
-          label={busy ? 'CREATING…' : showCreate ? 'CREATE ROOM ✓' : 'CREATE ROOM'}
+          label={busy ? 'CREATING…' : 'CREATE ROOM'}
+          icon={!busy ? <MaterialCommunityIcons name={showCreate ? 'check' : 'plus'} size={17} color={ARCADE.bg} /> : undefined}
           color={ARCADE.pink}
           disabled={busy}
           onPress={() => (showCreate ? void onCreate() : setShowCreate(true))}

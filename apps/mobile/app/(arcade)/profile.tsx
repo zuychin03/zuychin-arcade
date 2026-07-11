@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, TextInput, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { loadDisplayName, saveDisplayName } from '../../lib/storage';
@@ -43,7 +44,8 @@ export default function ProfileScreen() {
         />
         <View className="mt-4">
           <NeonButton
-            label={saved ? '✓ SAVED' : 'SAVE NAME'}
+            label={saved ? 'SAVED' : 'SAVE NAME'}
+            icon={saved ? <MaterialCommunityIcons name="check" size={16} color={ARCADE.bg} /> : undefined}
             color={saved ? ARCADE.cyan : ARCADE.purple}
             onPress={() => void onSave()}
           />

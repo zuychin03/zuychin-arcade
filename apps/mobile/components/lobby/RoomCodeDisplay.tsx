@@ -1,5 +1,6 @@
 import { Share, Text, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScalePressable } from '../ui/ScalePressable';
 import { ARCADE, neonText } from '../../constants/theme';
 
@@ -18,7 +19,9 @@ export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
       <Text style={{ fontSize: 38, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 6, marginVertical: 4, ...neonText(ARCADE.cyan, 16) }}>
         {roomCode}
       </Text>
-      {hasPassword && <Text className="text-xs text-arcade-muted">🔒 password protected</Text>}
+      {hasPassword && (
+        <View className="flex-row items-center gap-1"><MaterialCommunityIcons name="lock-outline" size={13} color={ARCADE.muted} /><Text className="text-xs text-arcade-muted">password protected</Text></View>
+      )}
       <View className="mt-4 flex-row gap-3">
         <ScalePressable
           onPress={() => void Clipboard.setStringAsync(roomCode)}

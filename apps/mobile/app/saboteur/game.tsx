@@ -69,7 +69,7 @@ export default function GameScreen() {
     if (peeks.length > lastPeekCountRef.current) {
       lastPeekCountRef.current = peeks.length;
       const last = peeks[peeks.length - 1];
-      setPeekMessage(last.isGold ? '💎 That goal is the GOLD!' : '🪨 Just worthless stone…');
+      setPeekMessage(last.isGold ? 'That goal is the GOLD!' : 'Just worthless stone…');
       const t = setTimeout(() => setPeekMessage(null), 3500);
       return () => clearTimeout(t);
     }
@@ -80,7 +80,7 @@ export default function GameScreen() {
     publicState?.goldDistribution?.steps.find((s) => s.playerId === playerId)?.chosenCard ?? null;
   useEffect(() => {
     if (myGoldPickValue !== null) {
-      showDialog('Gold collected!', `You drew a nugget card worth ${myGoldPickValue} gold! 🪙`);
+      showDialog('Gold collected!', `You drew a nugget card worth ${myGoldPickValue} gold!`);
     }
   }, [myGoldPickValue]);
 
@@ -124,9 +124,7 @@ export default function GameScreen() {
             router.replace('/');
           }}
         >
-          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.blue, fontSize: 12 }}>
-            ← BACK TO ARCADE
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}><MaterialCommunityIcons name="arrow-left" size={14} color={ARCADE.blue} /><Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.blue, fontSize: 12 }}>BACK TO ARCADE</Text></View>
         </Pressable>
       </View>
     );
@@ -269,7 +267,7 @@ export default function GameScreen() {
       <View className="flex-[30] px-2 pt-1">
         <View className="flex-row items-center justify-between px-2">
           <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12 }}>
-            {isMyTurn ? '🟢 Your turn' : `Waiting for ${
+            {isMyTurn ? 'Your turn' : `Waiting for ${
               publicState.players.find((p) => p.isCurrentTurn)?.displayName ?? '…'
             }`}
           </Text>

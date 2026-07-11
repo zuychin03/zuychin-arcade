@@ -1,19 +1,22 @@
 import { Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { ActionCard, ActionSubtype } from '@zuychin-arcade/types';
 import { ARCADE, neonBox } from '../../../constants/theme';
 
-const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icon: string; color: string }> = {
-  sabotage_lantern: { title: 'SABOTAGE', label: 'Break Lamp', icon: '🔦', color: ARCADE.red },
-  sabotage_cart: { title: 'SABOTAGE', label: 'Break Cart', icon: '🛒', color: ARCADE.red },
-  sabotage_pickaxe: { title: 'SABOTAGE', label: 'Break Pick', icon: '⛏️', color: ARCADE.red },
-  repair_lantern: { title: 'REPAIR', label: 'Fix Lamp', icon: '🔦', color: '#16A34A' },
-  repair_cart: { title: 'REPAIR', label: 'Fix Cart', icon: '🛒', color: '#16A34A' },
-  repair_pickaxe: { title: 'REPAIR', label: 'Fix Pick', icon: '⛏️', color: '#16A34A' },
-  repair_lantern_cart: { title: 'REPAIR', label: 'Lamp/Cart', icon: '🔦🛒', color: '#16A34A' },
-  repair_lantern_pickaxe: { title: 'REPAIR', label: 'Lamp/Pick', icon: '🔦⛏️', color: '#16A34A' },
-  repair_cart_pickaxe: { title: 'REPAIR', label: 'Cart/Pick', icon: '🛒⛏️', color: '#16A34A' },
-  map: { title: 'INTEL', label: 'Map Goal', icon: '🗺️', color: '#F5C518' },
-  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icon: '🪨', color: '#6B7280' },
+type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
+
+const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icons: IconName[]; color: string }> = {
+  sabotage_lantern: { title: 'SABOTAGE', label: 'Break Lamp', icons: ['flashlight'], color: ARCADE.red },
+  sabotage_cart: { title: 'SABOTAGE', label: 'Break Cart', icons: ['cart-outline'], color: ARCADE.red },
+  sabotage_pickaxe: { title: 'SABOTAGE', label: 'Break Pick', icons: ['pickaxe'], color: ARCADE.red },
+  repair_lantern: { title: 'REPAIR', label: 'Fix Lamp', icons: ['flashlight'], color: '#16A34A' },
+  repair_cart: { title: 'REPAIR', label: 'Fix Cart', icons: ['cart-outline'], color: '#16A34A' },
+  repair_pickaxe: { title: 'REPAIR', label: 'Fix Pick', icons: ['pickaxe'], color: '#16A34A' },
+  repair_lantern_cart: { title: 'REPAIR', label: 'Lamp/Cart', icons: ['flashlight','cart-outline'], color: '#16A34A' },
+  repair_lantern_pickaxe: { title: 'REPAIR', label: 'Lamp/Pick', icons: ['flashlight','pickaxe'], color: '#16A34A' },
+  repair_cart_pickaxe: { title: 'REPAIR', label: 'Cart/Pick', icons: ['cart-outline','pickaxe'], color: '#16A34A' },
+  map: { title: 'INTEL', label: 'Map Goal', icons: ['map-outline'], color: '#F5C518' },
+  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icons: ['image-broken-variant'], color: '#6B7280' },
 };
 
 interface Props {
@@ -69,34 +72,12 @@ export function ActionCardView({ card, width = 56, height = 84 }: Props) {
           borderColor: `${data.color}40`,
         }}
       >
-        <Text style={{ fontSize: minDim * 0.3 }}>{data.icon}</Text>
+        <View style={{ flexDirection: 'row', gap: 1 }}>{data.icons.map((icon) => <MaterialCommunityIcons key={icon} name={icon} size={minDim * (data.icons.length > 1 ? 0.22 : 0.32)} color={data.color} />)}</View>
         {isSabotage && (
-          <Text
-            style={{
-              position: 'absolute',
-              right: -2,
-              bottom: -2,
-              fontSize: minDim * 0.2,
-              color: ARCADE.red,
-              fontWeight: 'bold',
-            }}
-          >
-            💥
-          </Text>
+          <MaterialCommunityIcons name={isSabotage ? 'alert-circle' : 'auto-fix'} size={minDim * 0.2} color={isSabotage ? ARCADE.red : '#16A34A'} style={{ position: 'absolute', right: -2, bottom: -2 }} />
         )}
         {card.subtype.startsWith('repair_') && (
-          <Text
-            style={{
-              position: 'absolute',
-              right: -2,
-              bottom: -2,
-              fontSize: minDim * 0.2,
-              color: '#16A34A',
-              fontWeight: 'bold',
-            }}
-          >
-            ✨
-          </Text>
+          <MaterialCommunityIcons name={isSabotage ? 'alert-circle' : 'auto-fix'} size={minDim * 0.2} color={isSabotage ? ARCADE.red : '#16A34A'} style={{ position: 'absolute', right: -2, bottom: -2 }} />
         )}
       </View>
 

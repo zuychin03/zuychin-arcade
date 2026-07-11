@@ -182,7 +182,7 @@ export default function CoupGameScreen() {
       <ScrollView contentContainerStyle={{ padding: 16, paddingTop: 52, gap: 12, paddingBottom: 36 }}>
         {/* header */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>🎭 COUP</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}><MaterialCommunityIcons name="drama-masks" size={21} color={COUP.crimson} /><Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>COUP</Text></View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             {pub.variant === 'reformation' && (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -588,12 +588,12 @@ export default function CoupGameScreen() {
       {/* game over */}
       {gameOver && (
         <Animated.View entering={FadeIn.duration(400)} style={OVERLAY_FILL}>
-          <Text style={{ fontSize: 64 }}>{pub.winnerId === myId ? '👑' : '🎭'}</Text>
+          <MaterialCommunityIcons name={pub.winnerId === myId ? 'crown-outline' : 'drama-masks'} size={64} color={COUP.gold} />
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 26, ...neonText(COUP.gold, 16), marginTop: 8 }}>
             {pub.winnerId === myId ? 'YOU WIN!' : `${nameOf(pub.winnerId)} WINS`}
           </Text>
           <View style={{ width: 240, gap: 10, marginTop: 28 }}>
-            {iAmHost && <NeonButton label="▶ PLAY AGAIN" color={COUP.crimson} onPress={() => emit('start_game', {})} />}
+            {iAmHost && <NeonButton label="PLAY AGAIN" icon={<MaterialCommunityIcons name="play" size={16} color={COUP.bg} />} color={COUP.crimson} onPress={() => emit('start_game', {})} />}
             <NeonButton label="BACK TO HUB" color={COUP.blue} variant="outline" onPress={onLeave} />
           </View>
         </Animated.View>

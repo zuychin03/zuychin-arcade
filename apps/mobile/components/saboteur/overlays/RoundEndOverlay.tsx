@@ -1,7 +1,9 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { SaboteurPublicState } from '@zuychin-arcade/types';
 import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
+import { Coin } from '../../ui/Coin';
 
 interface Props {
   state: SaboteurPublicState;
@@ -20,9 +22,7 @@ export function RoundEndOverlay({ state }: Props) {
       entering={FadeIn.duration(300)}
       style={[OVERLAY_FILL, { zIndex: 40, paddingHorizontal: 24 }]}
     >
-      <Animated.Text entering={ZoomIn.delay(100).springify().damping(10)} style={{ fontSize: 64 }}>
-        {minersWon ? '💰' : '😈'}
-      </Animated.Text>
+      <MaterialCommunityIcons name={minersWon ? 'cash-multiple' : 'emoticon-devil-outline'} size={64} color={accent} />
       <Animated.Text
         entering={ZoomIn.delay(200).springify().damping(12)}
         style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 32, letterSpacing: 3, marginVertical: 8, ...neonText(accent, 18) }}
@@ -43,13 +43,14 @@ export function RoundEndOverlay({ state }: Props) {
               entering={FadeInUp.delay(450 + i * 80)}
               style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 6 }}
             >
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: 16, color: ARCADE.text }}>
-                {r.role === 'saboteur' ? '😈' : '⛏️'} {r.displayName}
+              <MaterialCommunityIcons name={r.role === 'saboteur' ? 'emoticon-devil-outline' : 'pickaxe'} size={17} color={r.role === 'saboteur' ? ARCADE.red : '#F5C518'} />
+              <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: 16, color: ARCADE.text, flex: 1, marginLeft: 7 }}>
+                {r.displayName}
                 <Text style={{ fontFamily: 'SpaceMono_400Regular', color: r.role === 'saboteur' ? ARCADE.red : ARCADE.muted, fontSize: 11 }}>
                   {'  '}{r.role}
                 </Text>
               </Text>
-              <Text style={{ fontSize: 15, fontWeight: '700', ...neonText('#F5C518', 6) }}>{gold} 🪙</Text>
+              <Coin amount={gold} size="sm" showText />
             </Animated.View>
           );
         })}

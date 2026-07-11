@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { PathCard, PathCardEdges } from '@zuychin-arcade/types';
 import { rotateEdges } from '../../../lib/placement';
 import { ARCADE, MINE, neonBox } from '../../../constants/theme';
@@ -147,7 +148,7 @@ function Arms({ edges, width, height }: ArmsProps) {
             justifyContent: 'center',
           }}
         >
-          <Text style={{ fontSize: Math.floor(thick * 0.5), color: '#FF3355', fontWeight: '900' }}>✕</Text>
+          <MaterialCommunityIcons name="close-thick" size={Math.floor(thick * 0.5)} color="#FF3355" />
         </View>
       )}
     </>
@@ -209,7 +210,7 @@ export function PathCardView({ card, rotated = false, width = 44, height = 66 }:
             ...neonBox(MINE.gold, 8),
           }}
         >
-          <Text style={{ fontSize: minDim * 0.45 }}>🪙</Text>
+          <MaterialCommunityIcons name="cash-multiple" size={minDim * 0.48} color={MINE.gold} />
         </View>
       );
     }
@@ -227,7 +228,7 @@ export function PathCardView({ card, rotated = false, width = 44, height = 66 }:
             justifyContent: 'center',
           }}
         >
-          <Text style={{ fontSize: minDim * 0.4 }}>🪨</Text>
+          <MaterialCommunityIcons name="image-broken-variant" size={minDim * 0.44} color={MINE.stone} />
         </View>
       );
     }

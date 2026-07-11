@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { GameId, LeaderboardRow } from '@zuychin-arcade/types';
 import { getLeaderboard } from '../../lib/api';
 import { ARCADE, neonText } from '../../constants/theme';
 
 const RANK_COLORS = [ARCADE.pink, ARCADE.purple, ARCADE.blue];
 
-const TABS: Array<{ id: GameId; label: string; unit: string }> = [
-  { id: 'saboteur', label: '⛏️ Saboteur', unit: '🪙' },
-  { id: 'coup', label: '🎭 Coup', unit: '🏆' },
+const TABS: Array<{ id: GameId; label: string; icon: keyof typeof MaterialCommunityIcons.glyphMap }> = [
+  { id: 'saboteur', label: 'Saboteur', icon: 'pickaxe' },
+  { id: 'coup', label: 'Coup', icon: 'drama-masks' },
 ];
 
 export default function LeaderboardScreen() {
@@ -62,9 +63,10 @@ export default function LeaderboardScreen() {
                 boxShadow: active ? `0 0 10px ${ARCADE.cyan}55` : undefined,
               }}
             >
-              <Text style={{ fontFamily: 'Outfit_700Bold', color: active ? ARCADE.cyan : ARCADE.muted, fontSize: 13 }}>
-                {t.label}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <MaterialCommunityIcons name={t.icon} size={15} color={active ? ARCADE.cyan : ARCADE.muted} />
+                <Text style={{ fontFamily: 'Outfit_700Bold', color: active ? ARCADE.cyan : ARCADE.muted, fontSize: 13 }}>{t.label}</Text>
+              </View>
             </Pressable>
           );
         })}
@@ -110,9 +112,10 @@ export default function LeaderboardScreen() {
                 <Text style={{ color: ARCADE.muted, fontSize: 11 }}>
                   {item.games_played} games{isCoup ? '' : ` · ${item.wins} wins`}
                 </Text>
-                <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>
-                  {isCoup ? `🏆 ${item.wins}` : `🪙 ${item.total_nuggets}`}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                  <MaterialCommunityIcons name={isCoup ? 'trophy-outline' : 'cash-multiple'} size={16} color="#F5C518" />
+                  <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>{isCoup ? item.wins : item.total_nuggets}</Text>
+                </View>
               </View>
             </Animated.View>
           );

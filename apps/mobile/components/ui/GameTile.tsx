@@ -1,11 +1,12 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScalePressable } from './ScalePressable';
 import { ARCADE, neonBox, neonText } from '../../constants/theme';
 
 interface Props {
   title: string;
-  emoji: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   subtitle: string;
   accent: string;          // neon color for this game
   locked?: boolean;
@@ -13,7 +14,7 @@ interface Props {
   onPress?: () => void;
 }
 
-export function GameTile({ title, emoji, subtitle, accent, locked, index, onPress }: Props) {
+export function GameTile({ title, icon, subtitle, accent, locked, index, onPress }: Props) {
   return (
     <Animated.View entering={FadeInUp.delay(120 * index).springify().damping(16)}>
       <ScalePressable
@@ -46,7 +47,7 @@ export function GameTile({ title, emoji, subtitle, accent, locked, index, onPres
             borderColor: locked ? ARCADE.border : accent,
           }}
         >
-          <Text style={{ fontSize: 32 }}>{locked ? '🔒' : emoji}</Text>
+          <MaterialCommunityIcons name={locked ? 'lock-outline' : icon} size={34} color={locked ? ARCADE.muted : accent} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={locked ? { color: ARCADE.muted, fontSize: 18, fontFamily: 'Outfit_800ExtraBold' } : { fontSize: 18, fontFamily: 'Outfit_800ExtraBold', ...neonText(accent, 8) }}>
@@ -54,7 +55,7 @@ export function GameTile({ title, emoji, subtitle, accent, locked, index, onPres
           </Text>
           <Text style={{ color: ARCADE.muted, marginTop: 3, fontSize: 13, fontFamily: 'SpaceMono_400Regular', letterSpacing: 0.5 }}>{subtitle}</Text>
         </View>
-        {!locked && <Text style={{ color: accent, fontSize: 22 }}>▶</Text>}
+        {!locked && <MaterialCommunityIcons name="chevron-right" size={26} color={accent} />}
       </ScalePressable>
     </Animated.View>
   );

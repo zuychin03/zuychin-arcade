@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { COUP_LIMITS } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
 import { getSocket } from '../../hooks/useSocket';
@@ -71,9 +72,11 @@ export default function CoupLobbyScreen() {
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(80).springify().damping(16)} className="items-center">
-        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12 }}>
-          🎭 Coup · {variant === 'reformation' ? 'reformation' : 'base'} rules · {minPlayers}–{room.maxPlayers} players
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+          <MaterialCommunityIcons name="drama-masks" size={14} color={COUP.muted} />
+          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12 }}>Coup · {variant === 'reformation' ? 'reformation' : 'base'} rules · {minPlayers}–{room.maxPlayers} players
         </Text>
+        </View>
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(120).springify().damping(16)}>
@@ -83,8 +86,9 @@ export default function CoupLobbyScreen() {
       <Animated.View entering={FadeInUp.delay(200).springify().damping(16)} style={{ gap: 10 }}>
         {isHost ? (
           <NeonButton
-            label={canStart ? '▶ START GAME' : `NEED ${minPlayers}+ PLAYERS`}
+            label={canStart ? 'START GAME' : `NEED ${minPlayers}+ PLAYERS`}
             color={COUP.crimson}
+            icon={canStart ? <MaterialCommunityIcons name="play" size={16} color={COUP.bg} /> : undefined}
             disabled={!canStart}
             onPress={() => getSocket()?.emit('start_game', {})}
           />
@@ -93,7 +97,7 @@ export default function CoupLobbyScreen() {
             <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted }}>Waiting for host to start…</Text>
           </View>
         )}
-        <NeonButton label="📖 HOW TO PLAY" color={COUP.gold} variant="outline" onPress={() => setShowRef(true)} />
+        <NeonButton label="HOW TO PLAY" icon={<MaterialCommunityIcons name="book-open-variant" size={16} color={COUP.gold} />} color={COUP.gold} variant="outline" onPress={() => setShowRef(true)} />
         <NeonButton label="LEAVE ROOM" color={COUP.crimson} variant="ghost" onPress={onLeave} />
       </Animated.View>
 

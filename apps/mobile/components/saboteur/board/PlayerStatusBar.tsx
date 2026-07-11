@@ -68,7 +68,6 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
                 fontWeight: '800',
               }}
             >
-              {p.playerId === myPlayerId ? '⭐ ' : ''}
               {p.displayName}
             </Text>
 
@@ -122,7 +121,7 @@ export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: P
                           justifyContent: 'center',
                         }}
                       >
-                        <Text style={{ fontSize: 5, color: '#FFF', fontWeight: '900' }}>✕</Text>
+                        <MaterialCommunityIcons name="close" size={6} color="#FFF" />
                       </View>
                     )}
                   </View>

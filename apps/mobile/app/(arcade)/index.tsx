@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useGameStore } from '../../store/useGameStore';
 import { getRoom } from '../../lib/api';
 import { isTokenExpired } from '../../lib/tokenUtils';
@@ -85,7 +86,7 @@ export default function ArcadeHub() {
               boxShadow: `0 0 14px ${ARCADE.cyan}55`,
             }}
           >
-            <Text style={{ fontSize: 26 }}>⏯️</Text>
+            <MaterialCommunityIcons name="play-circle-outline" size={28} color={ARCADE.cyan} />
             <View style={{ flex: 1 }}>
               <Text style={{ fontFamily: 'Outfit_800ExtraBold', ...neonText(ARCADE.cyan, 8) }}>
                 {room.status === 'in_game' ? 'Game in progress' : 'Back to lobby'}
@@ -94,7 +95,7 @@ export default function ArcadeHub() {
                 Room {roomCode} · tap to rejoin
               </Text>
             </View>
-            <Text style={{ color: ARCADE.cyan, fontSize: 20 }}>▶</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color={ARCADE.cyan} />
           </ScalePressable>
         </Animated.View>
       )}
@@ -114,7 +115,7 @@ export default function ArcadeHub() {
       <GameTile
         index={0}
         title="SABOTEUR"
-        emoji="⛏️"
+        icon="pickaxe"
         subtitle="3–10 players · hidden roles · dig for gold or sabotage the dig"
         accent={ARCADE.pink}
         onPress={() => router.push('/saboteur')}
@@ -122,7 +123,7 @@ export default function ArcadeHub() {
       <GameTile
         index={1}
         title="COUP"
-        emoji="🎭"
+        icon="drama-masks"
         subtitle="2–6 players · bluff, challenge & deduce · last influence standing wins"
         accent={ARCADE.purple}
         onPress={() => router.push('/coup')}
@@ -130,7 +131,7 @@ export default function ArcadeHub() {
       <GameTile
         index={2}
         title="COMING SOON"
-        emoji="🃏"
+        icon="cards-playing-outline"
         subtitle="The next gamespace is being wired up…"
         accent={ARCADE.blue}
         locked

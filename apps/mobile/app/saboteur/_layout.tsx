@@ -12,7 +12,7 @@ export default function SaboteurLayout() {
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen name="index" options={{ title: '⛏️ SABOTEUR' }} />
+      <Stack.Screen name="index" options={{ title: 'SABOTEUR' }} />
       <Stack.Screen name="join" options={{ title: 'Join Room' }} />
       <Stack.Screen name="lobby" options={{ title: 'Lobby', headerBackVisible: false }} />
       <Stack.Screen name="game" options={{ headerShown: false }} />

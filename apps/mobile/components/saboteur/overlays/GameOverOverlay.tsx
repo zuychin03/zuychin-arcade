@@ -1,7 +1,9 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { SaboteurPublicState } from '@zuychin-arcade/types';
 import { NeonButton } from '../../ui/NeonButton';
+import { Coin } from '../../ui/Coin';
 import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
 
 const GOLD = '#F5C518';
@@ -22,9 +24,7 @@ export function GameOverOverlay({ state, isHost, onPlayAgain, onLeave }: Props) 
       entering={FadeIn.duration(300)}
       style={[OVERLAY_FILL, { zIndex: 50, paddingHorizontal: 24 }]}
     >
-      <Animated.Text entering={ZoomIn.springify().damping(9)} style={{ fontSize: 64 }}>
-        🏆
-      </Animated.Text>
+      <MaterialCommunityIcons name="trophy-outline" size={64} color={GOLD} />
       <Animated.Text
         entering={ZoomIn.delay(150).springify().damping(12)}
         style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 34, letterSpacing: 4, marginVertical: 8, ...neonText(ARCADE.pink, 18) }}
@@ -49,18 +49,15 @@ export function GameOverOverlay({ state, isHost, onPlayAgain, onLeave }: Props) 
                   : { fontFamily: 'SpaceMono_400Regular', fontSize: 15, color: ARCADE.text }
               }
             >
-              {i + 1}. {p.displayName} {winners.has(p.playerId) ? '👑' : ''}{' '}
-              {state.revealedRoles?.find((r) => r.playerId === p.playerId)?.role === 'saboteur' ? '😈' : '⛏️'}
+              {i + 1}. {p.displayName}
             </Text>
-            <Text style={{ fontSize: 15, fontWeight: '700', ...neonText(GOLD, 6) }}>
-              {p.goldCollected} 🪙
-            </Text>
+            <Coin amount={p.goldCollected} size="sm" showText />
           </Animated.View>
         ))}
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(650).springify().damping(16)} style={{ marginTop: 28, width: '100%', gap: 12 }}>
-        {isHost && <NeonButton label="▶ PLAY AGAIN" color={ARCADE.pink} onPress={onPlayAgain} />}
+        {isHost && <NeonButton label="PLAY AGAIN" icon={<MaterialCommunityIcons name="play" size={16} color={ARCADE.bg} />} color={ARCADE.pink} onPress={onPlayAgain} />}
         <NeonButton label="BACK TO ARCADE" color={ARCADE.blue} variant="outline" onPress={onLeave} />
       </Animated.View>
     </Animated.View>

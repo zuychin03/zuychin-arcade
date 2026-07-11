@@ -84,11 +84,9 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
             backgroundColor: COUP.panel,
           }}
         >
-          <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 16, ...neonText(COUP.gold, 8) }}>
-            🎭 COUP · Reference
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}><MaterialCommunityIcons name="drama-masks" size={18} color={COUP.gold} /><Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 16, ...neonText(COUP.gold, 8) }}>COUP · Reference</Text></View>
           <Pressable onPress={onClose} hitSlop={10}>
-            <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 20 }}>✕</Text>
+            <MaterialCommunityIcons name="close" size={21} color={COUP.muted} />
           </Pressable>
         </View>
 
@@ -165,8 +163,8 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
             <View style={{ gap: 12 }}>
               <SectionLabel>Reformation</SectionLabel>
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
-                Players belong to two sides (⛪ Loyalist / ✊ Reformist). Coup, Assassinate and Steal only target the
-                opposing side. Coins paid to Convert go to the 🏦 Treasury.
+                Players belong to two sides (Loyalist / Reformist). Coup, Assassinate and Steal only target the
+                opposing side. Coins paid to Convert go to the Treasury.
               </Text>
               {REFORMATION_ACTIONS.map((a) => (
                 <ActionRow key={a.name} action={a} />

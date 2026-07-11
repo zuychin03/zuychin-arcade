@@ -27,7 +27,7 @@ export function BoardCell({ placed, goal, isValidTarget, isActionTarget, width, 
         </View>
       ) : goal && !goal.revealed ? (
         <View style={{ width: innerW, height: innerH }}>
-          <CardBack width={innerW} height={innerH} label="❓" />
+          <CardBack width={innerW} height={innerH} icon="help" />
           {isActionTarget && <GlowPulse color={ARCADE.cyan} borderRadius={6} />}
         </View>
       ) : (

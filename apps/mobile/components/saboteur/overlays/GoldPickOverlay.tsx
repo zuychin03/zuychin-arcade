@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { ScalePressable } from '../../ui/ScalePressable';
+import { Coin } from '../../ui/Coin';
 import { ARCADE, OVERLAY_FILL, neonText } from '../../../constants/theme';
 
 const GOLD = '#F5C518';
@@ -40,7 +41,7 @@ export function GoldPickOverlay({ cardCount, onPick }: Props) {
                 boxShadow: `0 0 14px ${GOLD}55`,
               }}
             >
-              <Text style={{ fontSize: 34 }}>🪙</Text>
+              <Coin size="lg" />
               <Text style={{ fontSize: 32, fontWeight: '900', marginTop: 6, ...neonText(GOLD, 10) }}>?</Text>
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, fontSize: 12 }}>face-down</Text>
             </ScalePressable>

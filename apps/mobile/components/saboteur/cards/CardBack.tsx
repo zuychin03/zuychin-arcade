@@ -1,13 +1,14 @@
 import { Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ARCADE, neonBox, neonText } from '../../../constants/theme';
 
 interface Props {
   width?: number;
   height?: number;
-  label?: string;
+  icon?: keyof typeof MaterialCommunityIcons.glyphMap;
 }
 
-export function CardBack({ width = 44, height = 66, label = '⛏️' }: Props) {
+export function CardBack({ width = 44, height = 66, icon = 'pickaxe' }: Props) {
   const minDim = Math.min(width, height);
   return (
     <View
@@ -39,7 +40,7 @@ export function CardBack({ width = 44, height = 66, label = '⛏️' }: Props) {
           justifyContent: 'center',
         }}
       >
-        <Text style={{ fontSize: minDim * 0.35, ...neonText('#FF2E88', 8) }}>{label}</Text>
+        <MaterialCommunityIcons name={icon} size={minDim * 0.38} color="#FF2E88" />
         
         {/* Subtle card identifier at bottom */}
         <Text style={{ position: 'absolute', bottom: 4, fontSize: minDim * 0.14, opacity: 0.6, color: '#A855F7', fontWeight: 'bold' }}>

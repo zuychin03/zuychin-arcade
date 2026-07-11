@@ -5,10 +5,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupCharacter } from '@zuychin-arcade/types';
 import { ScalePressable } from '../ui/ScalePressable';
 import { COUP, COUP_CHARACTER_COLOR } from '../../constants/theme';
-import { CHARACTER_EMOJI } from '../../constants/coupReference';
-
-// Re-exported for existing importers
-export { CHARACTER_EMOJI };
 
 type Size = 'xs' | 'sm' | 'md' | 'lg';
 const DIMS: Record<Size, { w: number; h: number; icon: number; label: number; radius: number; border: number }> = {
