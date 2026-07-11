@@ -16,7 +16,7 @@ const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icons: Ic
   repair_lantern_pickaxe: { title: 'REPAIR', label: 'Lamp/Pick', icons: ['flashlight','pickaxe'], color: '#16A34A' },
   repair_cart_pickaxe: { title: 'REPAIR', label: 'Cart/Pick', icons: ['cart-outline','pickaxe'], color: '#16A34A' },
   map: { title: 'INTEL', label: 'Map Goal', icons: ['map-outline'], color: '#F5C518' },
-  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icons: ['image-broken-variant'], color: '#6B7280' },
+  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icons: ['bomb'], color: '#6B7280' },
 };
 
 interface Props {
