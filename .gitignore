@@ -10,3 +10,4 @@ dist/
 android/
 ios/
 .claude/
+.agents/
