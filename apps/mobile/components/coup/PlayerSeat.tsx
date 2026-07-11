@@ -13,6 +13,7 @@ interface Props {
   selectable?: boolean;
   waiting?: boolean; // game is currently waiting on this player
   reaction?: string; // transient speech bubble text
+  fill?: boolean; // stretch to fill the parent's height (equal-height grid cells)
   onSelect?: () => void;
 }
 
@@ -31,7 +32,7 @@ function getReactionColorAndIcon(reaction: string): { color: string; icon?: keyo
   return { color: '#F4C04E' }; // Default is gold
 }
 
-export function PlayerSeat({ player, isMe, selectable, waiting, reaction, onSelect }: Props) {
+export function PlayerSeat({ player, isMe, selectable, waiting, reaction, fill, onSelect }: Props) {
   const dead = player.eliminated;
   const borderColor = player.isCurrentTurn ? COUP.gold : selectable ? COUP.crimson : COUP.border;
   const reactionConfig = reaction ? getReactionColorAndIcon(reaction) : { color: COUP.gold };
@@ -73,6 +74,7 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, onSele
   const inner = (
     <View
       style={{
+        flex: fill ? 1 : undefined,
         borderRadius: 14,
         borderWidth: player.isCurrentTurn || selectable ? 2 : 1,
         borderColor,
@@ -186,5 +188,11 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, onSele
     </View>
   );
 
-  return selectable && onSelect ? <ScalePressable onPress={onSelect}>{inner}</ScalePressable> : inner;
+  return selectable && onSelect ? (
+    <ScalePressable onPress={onSelect} style={fill ? { flex: 1 } : undefined}>
+      {inner}
+    </ScalePressable>
+  ) : (
+    inner
+  );
 }

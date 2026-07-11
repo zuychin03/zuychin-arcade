@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,7 +12,7 @@ import { PlayerSeat } from '../../components/coup/PlayerSeat';
 import { CharacterCard } from '../../components/coup/CharacterCard';
 import { GameLog } from '../../components/coup/GameLog';
 import { Countdown } from '../../components/coup/Countdown';
-import { ReferenceSheet } from '../../components/coup/ReferenceSheet';
+import { ReferenceSheet, ReferencePanel } from '../../components/coup/ReferenceSheet';
 import { NeonButton } from '../../components/ui/NeonButton';
 import { Coin } from '../../components/ui/Coin';
 import { COUP, OVERLAY_FILL, neonText } from '../../constants/theme';
@@ -57,6 +57,10 @@ export default function CoupGameScreen() {
   const [showRef, setShowRef] = useState(false);
   const [activeReactions, setActiveReactions] = useState<Record<string, string>>({});
   const [showTaunts, setShowTaunts] = useState(false);
+  const [seatsWidth, setSeatsWidth] = useState(0);
+  const { width: winWidth } = useWindowDimensions();
+  const isWide = winWidth >= 900; // desktop-ish: action dock becomes a right sidebar
+  const isXWide = winWidth >= 1180; // extra-wide: reference shows as a persistent panel too
 
   const phase = pub?.pending.phase;
 
@@ -177,9 +181,15 @@ export default function CoupGameScreen() {
 
   const actionGroup = getActionsForVariant(pub.variant);
 
+  // Responsive player grid — fit as many seats per row as the width allows.
+  const SEAT_GAP = 10;
+  const MIN_SEAT_W = 168;
+  const seatCols = seatsWidth > 0 ? Math.max(1, Math.floor((seatsWidth + SEAT_GAP) / (MIN_SEAT_W + SEAT_GAP))) : 1;
+  const seatW = seatsWidth > 0 ? Math.floor((seatsWidth - SEAT_GAP * (seatCols - 1)) / seatCols) : undefined;
+
   return (
-    <View className="flex-1 bg-coup-bg">
-      <ScrollView contentContainerStyle={{ padding: 16, paddingTop: 52, gap: 12, paddingBottom: 36 }}>
+    <View className="flex-1 bg-coup-bg" style={{ flexDirection: isWide ? 'row' : 'column' }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingTop: 52, gap: 12, paddingBottom: 36 }}>
         {/* header */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}><MaterialCommunityIcons name="drama-masks" size={21} color={COUP.crimson} /><Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>COUP</Text></View>
@@ -194,23 +204,25 @@ export default function CoupGameScreen() {
               <MaterialCommunityIcons name="cards-playing-outline" size={14} color={COUP.muted} />
               <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.muted, fontSize: 13 }}>{pub.deckSize}</Text>
             </View>
-            <Pressable
-              onPress={() => setShowRef(true)}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 5,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: COUP.border,
-                backgroundColor: COUP.panel,
-                paddingHorizontal: 9,
-                paddingVertical: 5,
-              }}
-            >
-              <MaterialCommunityIcons name="book-open-variant" size={11} color={COUP.muted} />
-              <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 11 }}>Rules</Text>
-            </Pressable>
+            {!isXWide && (
+              <Pressable
+                onPress={() => setShowRef(true)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 5,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: COUP.border,
+                  backgroundColor: COUP.panel,
+                  paddingHorizontal: 9,
+                  paddingVertical: 5,
+                }}
+              >
+                <MaterialCommunityIcons name="book-open-variant" size={11} color={COUP.muted} />
+                <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 11 }}>Rules</Text>
+              </Pressable>
+            )}
           </View>
         </View>
 
@@ -237,33 +249,41 @@ export default function CoupGameScreen() {
           {pending.deadline != null && <Countdown deadline={pending.deadline} />}
         </Animated.View>
 
-        {/* players */}
-        <View style={{ gap: 8 }}>
+        {/* players — responsive grid: more seats per row as the width grows */}
+        <View
+          onLayout={(e) => {
+            const w = e.nativeEvent.layout.width;
+            setSeatsWidth((prev) => (Math.abs(prev - w) > 1 ? w : prev));
+          }}
+          style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SEAT_GAP }}
+        >
           {pub.players.map((p) => {
             const selectable = targeting != null && p.playerId !== myId && !p.eliminated;
             return (
-              <PlayerSeat
-                key={p.playerId}
-                player={p}
-                isMe={p.playerId === myId}
-                selectable={selectable}
-                waiting={pending.waitingOn.includes(p.playerId)}
-                reaction={activeReactions[p.playerId]}
-                onSelect={
-                  selectable
-                    ? () => {
-                        act(targeting!, p.playerId);
-                        setTargeting(null);
-                      }
-                    : undefined
-                }
-              />
+              <View key={p.playerId} style={{ width: seatW ?? '100%' }}>
+                <PlayerSeat
+                  player={p}
+                  isMe={p.playerId === myId}
+                  fill
+                  selectable={selectable}
+                  waiting={pending.waitingOn.includes(p.playerId)}
+                  reaction={activeReactions[p.playerId]}
+                  onSelect={
+                    selectable
+                      ? () => {
+                          act(targeting!, p.playerId);
+                          setTargeting(null);
+                        }
+                      : undefined
+                  }
+                />
+              </View>
             );
           })}
         </View>
 
         {/* your influence */}
-        <View style={{ marginTop: 4 }}>
+        <View style={{ marginTop: 4, marginBottom: 12, gap: 6 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
             <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.muted, fontSize: 10, letterSpacing: 2 }}>
               YOUR INFLUENCE
@@ -279,12 +299,14 @@ export default function CoupGameScreen() {
 
         {/* Collapsible Taunts Reaction Tray */}
         <View style={{ marginVertical: 4 }}>
+          <GameLog log={pub.log} />
           <Pressable
             onPress={() => setShowTaunts(!showTaunts)}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
+              marginTop: 22,
               marginBottom: showTaunts ? 8 : 2,
               paddingVertical: 4,
             }}
@@ -300,7 +322,8 @@ export default function CoupGameScreen() {
 
           {showTaunts && (
             <Animated.View entering={FadeIn.duration(200)}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, paddingRight: 10 }}>
+              <ScrollView style={{ maxHeight: 132 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                 {getTauntsForVariant(pub.variant).map((taunt) => (
                   <Pressable
                     key={taunt.text}
@@ -322,23 +345,26 @@ export default function CoupGameScreen() {
                     <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 11 }}>{taunt.label}</Text>
                   </Pressable>
                 ))}
+                </View>
               </ScrollView>
             </Animated.View>
           )}
         </View>
-
-        <GameLog log={pub.log} />
       </ScrollView>
 
-      {/* action / response dock */}
+      {/* action / response dock — bottom bar on narrow, right sidebar on wide */}
       {!gameOver && (
         <Animated.View
-          entering={FadeInUp.duration(250)}
-          style={{ borderTopWidth: 1, borderTopColor: COUP.border, backgroundColor: COUP.surface, padding: 14, gap: 10 }}
+          entering={(isWide ? FadeIn : FadeInUp).duration(250)}
+          style={
+            isWide
+              ? { maxWidth: 400, borderLeftWidth: 1, borderLeftColor: COUP.border, backgroundColor: COUP.surface, padding: 14, gap: 10 }
+              : { borderTopWidth: 1, borderTopColor: COUP.border, backgroundColor: COUP.surface, padding: 14, gap: 10 }
+          }
         >
           {/* my turn */}
           {isMyTurn && targeting == null && (
-            <ScrollView style={{ maxHeight: 220 }} showsVerticalScrollIndicator={false}>
+            <ScrollView style={isWide ? { flex: 1 } : { maxHeight: 350 }} showsVerticalScrollIndicator={false}>
               <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, letterSpacing: 1, marginBottom: 8 }}>
                 YOUR TURN {mustCoup ? ' · 10+ coins — you must Coup' : ''}
               </Text>
@@ -585,6 +611,9 @@ export default function CoupGameScreen() {
         </Animated.View>
       )}
 
+      {/* reference — persistent panel, right of the action dock, on extra-wide screens */}
+      {!gameOver && isXWide && <ReferencePanel variant={pub.variant} style={{ maxWidth: 400 }} />}
+
       {/* game over */}
       {gameOver && (
         <Animated.View entering={FadeIn.duration(400)} style={OVERLAY_FILL}>
@@ -599,7 +628,7 @@ export default function CoupGameScreen() {
         </Animated.View>
       )}
 
-      <ReferenceSheet visible={showRef} variant={pub.variant} onClose={() => setShowRef(false)} />
+      <ReferenceSheet visible={showRef && !isXWide} variant={pub.variant} onClose={() => setShowRef(false)} />
     </View>
   );
 }
@@ -635,7 +664,7 @@ function renderActionButton(
   const buttonColor = isDanger ? COUP.crimson : isSpecial ? COUP.purple : COUP.blue;
 
   return (
-    <View key={a} style={{ width: '48%', flexGrow: 1 }}>
+    <View key={a} style={{ width: '48%', flexGrow: 1, marginBottom: 8 }}>
       <NeonButton
         label={info.label}
         color={buttonColor}

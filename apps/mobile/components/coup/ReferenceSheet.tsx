@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupVariant } from '@zuychin-arcade/types';
@@ -34,9 +34,9 @@ const ACTION_ICONS_REF: Record<string, keyof typeof MaterialCommunityIcons.glyph
   'Embezzle': 'bank-minus',
 };
 
+/** Full-screen modal (narrow / on-demand via the Rules button). */
 export function ReferenceSheet({ visible, variant, onClose }: Props) {
   if (!visible) return null;
-  const characters = charactersForVariant(variant);
 
   return (
     <Animated.View
@@ -71,109 +71,147 @@ export function ReferenceSheet({ visible, variant, onClose }: Props) {
           boxShadow: '0 8px 30px rgba(0,0,0,0.8)',
         }}
       >
-        {/* header */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 16,
-            paddingVertical: 14,
-            borderBottomWidth: 1,
-            borderBottomColor: COUP.border,
-            backgroundColor: COUP.panel,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}><MaterialCommunityIcons name="drama-masks" size={18} color={COUP.gold} /><Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 16, ...neonText(COUP.gold, 8) }}>COUP · Reference</Text></View>
+        <ReferenceBody variant={variant} onClose={onClose} />
+      </Animated.View>
+    </Animated.View>
+  );
+}
+
+/** Persistent side panel (wide desktop) — same content, no modal chrome. */
+export function ReferencePanel({ variant, style }: { variant: CoupVariant; style?: StyleProp<ViewStyle> }) {
+  return (
+    <View
+      style={[
+        { borderLeftWidth: 1, borderLeftColor: COUP.border, backgroundColor: COUP.surface, overflow: 'hidden' },
+        style,
+      ]}
+    >
+      <ReferenceBody variant={variant} fillHeight />
+    </View>
+  );
+}
+
+function ReferenceBody({
+  variant,
+  onClose,
+  fillHeight,
+}: {
+  variant: CoupVariant;
+  onClose?: () => void;
+  fillHeight?: boolean;
+}) {
+  const characters = charactersForVariant(variant);
+
+  return (
+    <>
+      {/* header */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: 16,
+          paddingVertical: 14,
+          borderBottomWidth: 1,
+          borderBottomColor: COUP.border,
+          backgroundColor: COUP.panel,
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}><MaterialCommunityIcons name="drama-masks" size={18} color={COUP.gold} /><Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 16, ...neonText(COUP.gold, 8) }}>COUP · Reference</Text></View>
+        {onClose && (
           <Pressable onPress={onClose} hitSlop={10}>
             <MaterialCommunityIcons name="close" size={21} color={COUP.muted} />
           </Pressable>
+        )}
+      </View>
+
+      <ScrollView
+        style={fillHeight ? { flex: 1 } : undefined}
+        contentContainerStyle={{ padding: 16, gap: 18 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* core rules */}
+        <View style={{ gap: 12 }}>
+          {RULES_NOTES.map((n) => {
+            const iconName = RULES_ICONS[n.title] || 'help-circle-outline';
+            return (
+              <View key={n.title} style={{ flexDirection: 'row', gap: 12 }}>
+                <View
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 14,
+                    backgroundColor: `${COUP.gold}1C`,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 0.5,
+                    borderColor: `${COUP.gold}40`,
+                  }}
+                >
+                  <MaterialCommunityIcons name={iconName} size={15} color={COUP.gold} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 13 }}>{n.title}</Text>
+                  <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
+                    {n.body}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
         </View>
 
-        <ScrollView contentContainerStyle={{ padding: 16, gap: 18 }} showsVerticalScrollIndicator={false}>
-          {/* core rules */}
-          <View style={{ gap: 12 }}>
-            {RULES_NOTES.map((n) => {
-              const iconName = RULES_ICONS[n.title] || 'help-circle-outline';
-              return (
-                <View key={n.title} style={{ flexDirection: 'row', gap: 12 }}>
-                  <View
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor: `${COUP.gold}1C`,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 0.5,
-                      borderColor: `${COUP.gold}40`,
-                    }}
-                  >
-                    <MaterialCommunityIcons name={iconName} size={15} color={COUP.gold} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 13 }}>{n.title}</Text>
-                    <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
-                      {n.body}
+        {/* characters */}
+        <View style={{ gap: 12 }}>
+          <SectionLabel>Characters</SectionLabel>
+          {characters.map((c) => {
+            const ref = CHARACTER_REF[c];
+            const accent = COUP_CHARACTER_COLOR[c];
+            return (
+              <View key={c} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                <CharacterCard character={c} size="md" />
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: accent, fontSize: 14, letterSpacing: 0.5 }}>
+                    {ref.name.toUpperCase()}
+                  </Text>
+                  <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.text, fontSize: 11, lineHeight: 16 }}>
+                    {ref.action}
+                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <MaterialCommunityIcons name="shield-outline" size={12} color={COUP.muted} />
+                    <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11 }}>
+                      Blocks: {ref.blocks}
                     </Text>
                   </View>
                 </View>
-              );
-            })}
-          </View>
+              </View>
+            );
+          })}
+        </View>
 
-          {/* characters */}
-          <View style={{ gap: 12 }}>
-            <SectionLabel>Characters</SectionLabel>
-            {characters.map((c) => {
-              const ref = CHARACTER_REF[c];
-              const accent = COUP_CHARACTER_COLOR[c];
-              return (
-                <View key={c} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
-                  <CharacterCard character={c} size="md" />
-                  <View style={{ flex: 1, gap: 2 }}>
-                    <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: accent, fontSize: 14, letterSpacing: 0.5 }}>
-                      {ref.name.toUpperCase()}
-                    </Text>
-                    <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.text, fontSize: 11, lineHeight: 16 }}>
-                      {ref.action}
-                    </Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                      <MaterialCommunityIcons name="shield-outline" size={12} color={COUP.muted} />
-                      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11 }}>
-                        Blocks: {ref.blocks}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
+        {/* general actions */}
+        <View style={{ gap: 12 }}>
+          <SectionLabel>Actions · anyone</SectionLabel>
+          {GENERAL_ACTIONS.map((a) => (
+            <ActionRow key={a.name} action={a} />
+          ))}
+        </View>
 
-          {/* general actions */}
+        {/* reformation extras */}
+        {variant === 'reformation' && (
           <View style={{ gap: 12 }}>
-            <SectionLabel>Actions · anyone</SectionLabel>
-            {GENERAL_ACTIONS.map((a) => (
+            <SectionLabel>Reformation</SectionLabel>
+            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
+              Players belong to two sides (Loyalist / Reformist). Coup, Assassinate and Steal only target the
+              opposing side. Coins paid to Convert go to the Treasury.
+            </Text>
+            {REFORMATION_ACTIONS.map((a) => (
               <ActionRow key={a.name} action={a} />
             ))}
           </View>
-
-          {/* reformation extras */}
-          {variant === 'reformation' && (
-            <View style={{ gap: 12 }}>
-              <SectionLabel>Reformation</SectionLabel>
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 11, lineHeight: 16 }}>
-                Players belong to two sides (Loyalist / Reformist). Coup, Assassinate and Steal only target the
-                opposing side. Coins paid to Convert go to the Treasury.
-              </Text>
-              {REFORMATION_ACTIONS.map((a) => (
-                <ActionRow key={a.name} action={a} />
-              ))}
-            </View>
-          )}
-        </ScrollView>
-      </Animated.View>
-    </Animated.View>
+        )}
+      </ScrollView>
+    </>
   );
 }
 
