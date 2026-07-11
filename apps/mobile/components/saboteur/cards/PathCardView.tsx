@@ -1,196 +1,175 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Svg, { Circle, Line, Path } from 'react-native-svg';
 import type { PathCard, PathCardEdges } from '@zuychin-arcade/types';
 import { rotateEdges } from '../../../lib/placement';
-import { ARCADE, MINE, neonBox } from '../../../constants/theme';
-
-const PATH_BG = '#4D3119'; // Rich dark earth brown for tunnel floor
-const BEAM_COLOR = '#8E5225'; // Warm timber brown for shaft support beams
-const RAIL_COLOR = '#9CA3AF'; // Steel silver for railway tracks
-const TIE_COLOR = '#2E1905'; // Dark wood for railroad ties
-
+import { MINE, neonBox } from '../../../constants/theme';
+const PATH_BG = '#352314';
+const PATH_HIGHLIGHT = '#5A3820';
+const ROCK_EDGE = '#79502F';
+const ROCK_SHADOW = '#24150D';
+const BEAM_COLOR = '#9A5D2D';
 interface ArmsProps {
   edges: PathCardEdges;
   width: number;
   height: number;
 }
-
+type Direction = 'top' | 'right' | 'bottom' | 'left';
 function Arms({ edges, width, height }: ArmsProps) {
-  const thick = Math.floor(width * 0.36); // Uniform thickness in pixels
   const halfW = width / 2;
   const halfH = height / 2;
-  const pathX = (width - thick) / 2;
-  const pathY = (height - thick) / 2;
-
-  // Rail dimensions
-  const railGauge = Math.floor(thick * 0.45);
-  const railOffsetV = (thick - railGauge) / 2;
-  const railOffsetH = (thick - railGauge) / 2;
-
+  const outerHalf = width * 0.24;
+  const innerHalf = width * 0.155;
+  const directions: Direction[] = ['top', 'right', 'bottom', 'left'];
+  const openDirections = directions.filter((direction) => edges[direction] === 'open');
+  const armPath = (direction: Direction, radius: number) => {
+    const irregular = radius * 0.12;
+    switch (direction) {
+      case 'top':
+        return `M ${halfW - radius} 0 L ${halfW + radius} 0 L ${halfW + radius - irregular} ${halfH * 0.38} L ${halfW + radius + irregular} ${halfH * 0.72} L ${halfW + radius * 0.9} ${halfH + radius} L ${halfW - radius * 0.92} ${halfH + radius} L ${halfW - radius - irregular} ${halfH * 0.7} L ${halfW - radius + irregular} ${halfH * 0.36} Z`;
+      case 'bottom':
+        return `M ${halfW - radius * 0.92} ${halfH - radius} L ${halfW + radius * 0.9} ${halfH - radius} L ${halfW + radius + irregular} ${halfH * 1.3} L ${halfW + radius - irregular} ${halfH * 1.66} L ${halfW + radius} ${height} L ${halfW - radius} ${height} L ${halfW - radius + irregular} ${halfH * 1.64} L ${halfW - radius - irregular} ${halfH * 1.28} Z`;
+      case 'left':
+        return `M 0 ${halfH - radius} L 0 ${halfH + radius} L ${halfW * 0.36} ${halfH + radius - irregular} L ${halfW * 0.7} ${halfH + radius + irregular} L ${halfW + radius} ${halfH + radius * 0.9} L ${halfW + radius} ${halfH - radius * 0.92} L ${halfW * 0.7} ${halfH - radius - irregular} L ${halfW * 0.35} ${halfH - radius + irregular} Z`;
+      case 'right':
+        return `M ${halfW - radius} ${halfH - radius * 0.92} L ${halfW - radius} ${halfH + radius * 0.9} L ${halfW * 1.3} ${halfH + radius + irregular} L ${halfW * 1.65} ${halfH + radius - irregular} L ${width} ${halfH + radius} L ${width} ${halfH - radius} L ${halfW * 1.65} ${halfH - radius + irregular} L ${halfW * 1.3} ${halfH - radius - irregular} Z`;
+    }
+  };
+  const centerPath = (radius: number) =>
+    `M ${halfW} ${halfH - radius * 1.05} C ${halfW + radius * 0.72} ${halfH - radius * 1.1}, ${halfW + radius * 1.1} ${halfH - radius * 0.5}, ${halfW + radius} ${halfH} C ${halfW + radius * 1.08} ${halfH + radius * 0.65}, ${halfW + radius * 0.5} ${halfH + radius * 1.08}, ${halfW} ${halfH + radius} C ${halfW - radius * 0.72} ${halfH + radius * 1.08}, ${halfW - radius * 1.08} ${halfH + radius * 0.52}, ${halfW - radius} ${halfH} C ${halfW - radius * 1.08} ${halfH - radius * 0.62}, ${halfW - radius * 0.5} ${halfH - radius * 1.08}, ${halfW} ${halfH - radius * 1.05} Z`;
   return (
     <>
-      {/* 1. TUNNEL PATH BASE FLOOR */}
-      {edges.top === 'open' && (
-        <View style={{ position: 'absolute', top: 0, left: pathX, width: thick, height: halfH, backgroundColor: PATH_BG }} />
-      )}
-      {edges.bottom === 'open' && (
-        <View style={{ position: 'absolute', bottom: 0, left: pathX, width: thick, height: halfH, backgroundColor: PATH_BG }} />
-      )}
-      {edges.left === 'open' && (
-        <View style={{ position: 'absolute', left: 0, top: pathY, height: thick, width: halfW, backgroundColor: PATH_BG }} />
-      )}
-      {edges.right === 'open' && (
-        <View style={{ position: 'absolute', right: 0, top: pathY, height: thick, width: halfW, backgroundColor: PATH_BG }} />
-      )}
-      {edges.center && (
-        <View style={{ position: 'absolute', top: pathY, left: pathX, width: thick, height: thick, backgroundColor: PATH_BG }} />
-      )}
+      <Svg width={width} height={height} style={{ position: 'absolute' }}>
+        {openDirections.map((direction) => (
+          <Path
+            key={`${direction}-rock`}
+            d={armPath(direction, outerHalf)}
+            fill={ROCK_EDGE}
+            stroke={ROCK_SHADOW}
+            strokeWidth={1}
+          />
+        ))}
+        {edges.center && <Path d={centerPath(outerHalf * 1.12)} fill={ROCK_EDGE} />}
+        {openDirections.map((direction) => (
+          <Path key={`${direction}-floor`} d={armPath(direction, innerHalf)} fill={PATH_BG} />
+        ))}
+        {edges.center && <Path d={centerPath(innerHalf * 1.22)} fill={PATH_BG} />}
+        {edges.top === 'open' && (
+          <>
+            <Line x1={halfW - innerHalf * 0.7} y1={height * 0.06} x2={halfW - innerHalf * 0.5} y2={height * 0.38} stroke={PATH_HIGHLIGHT} strokeWidth={1.2} strokeLinecap="round" />
+            <Circle cx={halfW + innerHalf * 0.45} cy={height * 0.2} r={Math.max(0.8, width * 0.025)} fill={ROCK_EDGE} />
+          </>
+        )}
+        {edges.bottom === 'open' && (
+          <>
+            <Line x1={halfW + innerHalf * 0.55} y1={height * 0.62} x2={halfW + innerHalf * 0.72} y2={height * 0.93} stroke={PATH_HIGHLIGHT} strokeWidth={1.2} strokeLinecap="round" />
+            <Circle cx={halfW - innerHalf * 0.42} cy={height * 0.8} r={Math.max(0.8, width * 0.025)} fill={ROCK_EDGE} />
+          </>
+        )}
+        {edges.left === 'open' && (
+          <>
+            <Circle cx={width * 0.2} cy={halfH + innerHalf * 0.38} r={Math.max(0.8, width * 0.025)} fill={ROCK_EDGE} />
+          </>
+        )}
+        {edges.right === 'open' && (
+          <>
+            <Circle cx={width * 0.8} cy={halfH - innerHalf * 0.35} r={Math.max(0.8, width * 0.025)} fill={ROCK_EDGE} />
+          </>
+        )}
+        {!edges.center && (
+          <>
+            {/* A dense cave-in silhouette closes every route into the center. */}
+            <Path
+              d={'M ' + (halfW - outerHalf * 1.16) + ' ' + (halfH + outerHalf * 0.88) + ' L ' + (halfW - outerHalf * 1.1) + ' ' + (halfH - outerHalf * 0.08) + ' L ' + (halfW - outerHalf * 0.72) + ' ' + (halfH - outerHalf * 0.72) + ' L ' + (halfW - outerHalf * 0.2) + ' ' + (halfH - outerHalf * 0.52) + ' L ' + (halfW + outerHalf * 0.18) + ' ' + (halfH - outerHalf * 0.92) + ' L ' + (halfW + outerHalf * 0.68) + ' ' + (halfH - outerHalf * 0.66) + ' L ' + (halfW + outerHalf * 1.12) + ' ' + (halfH - outerHalf * 0.04) + ' L ' + (halfW + outerHalf * 1.16) + ' ' + (halfH + outerHalf * 0.88) + ' Z'}
+              fill="#1D120C"
+              stroke={ROCK_SHADOW}
+              strokeWidth={1.5}
+              strokeLinejoin="round"
+            />
 
-      {/* 2. TIMBER SUPPORT BEAMS (SHAFT WALL BORDERS) */}
-      {edges.top === 'open' && (
-        <>
-          <View style={{ position: 'absolute', top: 0, left: pathX, width: 2, height: halfH, backgroundColor: BEAM_COLOR }} />
-          <View style={{ position: 'absolute', top: 0, left: pathX + thick - 2, width: 2, height: halfH, backgroundColor: BEAM_COLOR }} />
-        </>
-      )}
-      {edges.bottom === 'open' && (
-        <>
-          <View style={{ position: 'absolute', bottom: 0, left: pathX, width: 2, height: halfH, backgroundColor: BEAM_COLOR }} />
-          <View style={{ position: 'absolute', bottom: 0, left: pathX + thick - 2, width: 2, height: halfH, backgroundColor: BEAM_COLOR }} />
-        </>
-      )}
-      {edges.left === 'open' && (
-        <>
-          <View style={{ position: 'absolute', left: 0, top: pathY, height: 2, width: halfW, backgroundColor: BEAM_COLOR }} />
-          <View style={{ position: 'absolute', left: 0, top: pathY + thick - 2, height: 2, width: halfW, backgroundColor: BEAM_COLOR }} />
-        </>
-      )}
-      {edges.right === 'open' && (
-        <>
-          <View style={{ position: 'absolute', right: 0, top: pathY, height: 2, width: halfW, backgroundColor: BEAM_COLOR }} />
-          <View style={{ position: 'absolute', right: 0, top: pathY + thick - 2, height: 2, width: halfW, backgroundColor: BEAM_COLOR }} />
-        </>
-      )}
+            {/* Large angular boulders, layered front-to-back. */}
+            <Path
+              d={'M ' + (halfW - outerHalf * 1.08) + ' ' + (halfH + outerHalf * 0.62) + ' L ' + (halfW - outerHalf * 1.02) + ' ' + (halfH - outerHalf * 0.18) + ' L ' + (halfW - outerHalf * 0.72) + ' ' + (halfH - outerHalf * 0.7) + ' L ' + (halfW - outerHalf * 0.28) + ' ' + (halfH - outerHalf * 0.52) + ' L ' + (halfW - outerHalf * 0.12) + ' ' + (halfH + outerHalf * 0.24) + ' L ' + (halfW - outerHalf * 0.48) + ' ' + (halfH + outerHalf * 0.7) + ' Z'}
+              fill="#765038"
+              stroke="#B07A50"
+              strokeWidth={1.2}
+              strokeLinejoin="round"
+            />
+            <Path
+              d={'M ' + (halfW - outerHalf * 0.44) + ' ' + (halfH + outerHalf * 0.72) + ' L ' + (halfW - outerHalf * 0.5) + ' ' + (halfH - outerHalf * 0.2) + ' L ' + (halfW - outerHalf * 0.14) + ' ' + (halfH - outerHalf * 0.88) + ' L ' + (halfW + outerHalf * 0.38) + ' ' + (halfH - outerHalf * 0.68) + ' L ' + (halfW + outerHalf * 0.62) + ' ' + (halfH + outerHalf * 0.16) + ' L ' + (halfW + outerHalf * 0.26) + ' ' + (halfH + outerHalf * 0.78) + ' Z'}
+              fill="#936444"
+              stroke="#C28B5C"
+              strokeWidth={1.3}
+              strokeLinejoin="round"
+            />
+            <Path
+              d={'M ' + (halfW + outerHalf * 0.26) + ' ' + (halfH + outerHalf * 0.72) + ' L ' + (halfW + outerHalf * 0.38) + ' ' + (halfH - outerHalf * 0.42) + ' L ' + (halfW + outerHalf * 0.74) + ' ' + (halfH - outerHalf * 0.66) + ' L ' + (halfW + outerHalf * 1.08) + ' ' + (halfH - outerHalf * 0.06) + ' L ' + (halfW + outerHalf * 1.02) + ' ' + (halfH + outerHalf * 0.66) + ' Z'}
+              fill="#68452F"
+              stroke="#A8734C"
+              strokeWidth={1.2}
+              strokeLinejoin="round"
+            />
 
-      {/* 3. RAILWAY TRACKS (TIES & STEEL RAILS) */}
-      {/* Vertical Tracks */}
-      {edges.top === 'open' && (
-        <View style={{ position: 'absolute', top: 0, left: pathX + railOffsetV, width: railGauge, height: halfH, overflow: 'hidden' }}>
-          {/* Ties */}
-          <View style={{ position: 'absolute', top: '15%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', top: '45%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', top: '75%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          {/* Steel Rails */}
-          <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-        </View>
-      )}
-      {edges.bottom === 'open' && (
-        <View style={{ position: 'absolute', bottom: 0, left: pathX + railOffsetV, width: railGauge, height: halfH, overflow: 'hidden' }}>
-          {/* Ties */}
-          <View style={{ position: 'absolute', bottom: '15%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', bottom: '45%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', bottom: '75%', left: 0, right: 0, height: 2, backgroundColor: TIE_COLOR }} />
-          {/* Steel Rails */}
-          <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-        </View>
-      )}
-
-      {/* Horizontal Tracks */}
-      {edges.left === 'open' && (
-        <View style={{ position: 'absolute', left: 0, top: pathY + railOffsetH, height: railGauge, width: halfW, overflow: 'hidden' }}>
-          {/* Ties */}
-          <View style={{ position: 'absolute', left: '15%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', left: '45%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', left: '75%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          {/* Steel Rails */}
-          <View style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-        </View>
-      )}
-      {edges.right === 'open' && (
-        <View style={{ position: 'absolute', right: 0, top: pathY + railOffsetH, height: railGauge, width: halfW, overflow: 'hidden' }}>
-          {/* Ties */}
-          <View style={{ position: 'absolute', right: '15%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', right: '45%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          <View style={{ position: 'absolute', right: '75%', top: 0, bottom: 0, width: 2, backgroundColor: TIE_COLOR }} />
-          {/* Steel Rails */}
-          <View style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-        </View>
-      )}
-
-      {/* Center rail crossings */}
-      {edges.center && (edges.top === 'open' || edges.bottom === 'open') && (edges.left === 'open' || edges.right === 'open') && (
-        <View style={{ position: 'absolute', top: pathY + railOffsetH, left: pathX + railOffsetV, width: railGauge, height: railGauge }}>
-          <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 1.5, backgroundColor: RAIL_COLOR }} />
-        </View>
-      )}
-
-      {/* 4. DEAD END WALL (CAVE-IN) */}
-      {!edges.center && (
-        <View
-          style={{
-            position: 'absolute',
-            width: thick + 6,
-            height: thick + 6,
-            top: pathY - 3,
-            left: pathX - 3,
-            backgroundColor: '#3F2512',
-            borderRadius: 6,
-            borderWidth: 2,
-            borderColor: BEAM_COLOR,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <MaterialCommunityIcons name="close-thick" size={Math.floor(thick * 0.5)} color="#FF3355" />
-        </View>
-      )}
+            {/* Fractures help the largest rocks read as rough stone at card size. */}
+            <Path
+              d={'M ' + (halfW - outerHalf * 0.08) + ' ' + (halfH - outerHalf * 0.56) + ' L ' + (halfW + outerHalf * 0.04) + ' ' + (halfH - outerHalf * 0.16) + ' L ' + (halfW - outerHalf * 0.12) + ' ' + (halfH + outerHalf * 0.08)}
+              fill="none"
+              stroke="#4D3022"
+              strokeWidth={1.1}
+              strokeLinecap="round"
+            />
+            <Path
+              d={'M ' + (halfW - outerHalf * 0.78) + ' ' + (halfH - outerHalf * 0.3) + ' L ' + (halfW - outerHalf * 0.58) + ' ' + (halfH + outerHalf * 0.02) + ' L ' + (halfW - outerHalf * 0.76) + ' ' + (halfH + outerHalf * 0.3)}
+              fill="none"
+              stroke="#41291D"
+              strokeWidth={1}
+              strokeLinecap="round"
+            />
+          </>
+        )}
+      </Svg>
     </>
   );
 }
-
 interface Props {
   card: PathCard;
   rotated?: boolean;
   width?: number;
   height?: number;
 }
-
 export function PathCardView({ card, rotated = false, width = 44, height = 66 }: Props) {
   const edges = rotateEdges(card.edges, rotated);
-
   const renderSpecialNode = () => {
     const minDim = Math.min(width, height);
     if (card.subtype === 'start') {
       return (
         <View
           style={{
-            width: minDim * 0.75,
-            height: minDim * 0.75,
-            borderRadius: minDim * 0.375,
-            backgroundColor: '#1E1B4B',
+            width: minDim * 0.48,
+            height: minDim * 0.42,
+            borderRadius: minDim * 0.21,
+            backgroundColor: ROCK_SHADOW,
             borderWidth: 2,
-            borderColor: ARCADE.cyan,
+            borderColor: ROCK_EDGE,
             alignItems: 'center',
             justifyContent: 'center',
-            ...neonBox(ARCADE.cyan, 6),
+            overflow: 'hidden',
           }}
         >
-          {/* Shaft opening with ladder */}
-          <View style={{ width: '80%', height: '80%', borderRadius: 99, backgroundColor: '#0B0716', borderStyle: 'dashed', borderWidth: 1, borderColor: ARCADE.muted, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-            {/* Wooden ladder */}
-            <View style={{ width: 10, height: '120%', borderLeftWidth: 2, borderRightWidth: 2, borderColor: BEAM_COLOR }}>
-              <View style={{ width: '100%', height: 2, backgroundColor: BEAM_COLOR, marginTop: 4 }} />
-              <View style={{ width: '100%', height: 2, backgroundColor: BEAM_COLOR, marginTop: 6 }} />
-              <View style={{ width: '100%', height: 2, backgroundColor: BEAM_COLOR, marginTop: 6 }} />
-              <View style={{ width: '100%', height: 2, backgroundColor: BEAM_COLOR, marginTop: 6 }} />
-            </View>
+          {/* Ladder emerging from the central mine shaft */}
+          <View
+            style={{
+              width: 8,
+              height: '135%',
+              borderLeftWidth: 2,
+              borderRightWidth: 2,
+              borderColor: BEAM_COLOR,
+            }}
+          >
+            <View style={{ width: '100%', height: 1.5, backgroundColor: BEAM_COLOR, marginTop: 3 }} />
+            <View style={{ width: '100%', height: 1.5, backgroundColor: BEAM_COLOR, marginTop: 4 }} />
+            <View style={{ width: '100%', height: 1.5, backgroundColor: BEAM_COLOR, marginTop: 4 }} />
+            <View style={{ width: '100%', height: 1.5, backgroundColor: BEAM_COLOR, marginTop: 4 }} />
           </View>
         </View>
       );
@@ -234,7 +213,6 @@ export function PathCardView({ card, rotated = false, width = 44, height = 66 }:
     }
     return null;
   };
-
   return (
     <View
       style={{ width, height }}
