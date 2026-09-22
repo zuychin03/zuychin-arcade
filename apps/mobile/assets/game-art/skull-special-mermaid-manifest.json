@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/skull-special-mermaid.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2057636,
+    "sha256": "d72afd21555bdef1908e4288b7e147a384e639792be806d5c5b18cd5fa91d945"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "skull-special-mermaid.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13296,
+      "sha256": "33818243a25d80afad757dce76374321382d40010a99608156a19034f350e0d1"
+    }
+  ],
+  "totalBytes": 13296,
+  "maxTotalBytes": 614400
+}

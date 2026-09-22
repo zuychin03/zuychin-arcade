@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-bullet.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1938752,
+    "sha256": "3b98685abf182e6cb06ea07e58624a946cc3c7e7dfd4078893ea5b220076ed8d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-bullet.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11236,
+      "sha256": "7b21ae2a0980b3368cb79b5cdd154270e324862b1b965698d5a24a63e7946bb7"
+    }
+  ],
+  "totalBytes": 11236,
+  "maxTotalBytes": 614400
+}

@@ -1,8 +1,10 @@
 node_modules/
 dist/
 .expo/
+apps/mobile/.expo-export-*/
 .turbo/
 *.log
+.tmp-*
 .env
 .env.*
 !.env.example
@@ -11,3 +13,41 @@ android/
 ios/
 .claude/
 .agents/
+.codex/
+/.pnpm-store/
+
+# Local audit records, planning notes and unpublished identity explorations.
+/QA_PROGRESS.md
+/QA_AUDIT_REPORT.md
+/docs/design/BRAND_STATUS.md
+/docs/design/TACTILE_REDESIGN.md
+/docs/design/TACTILE_PILOT_REVIEW.md
+/docs/design/SABOTEUR_TACTILE_REVIEW.md
+/docs/design/COUP_TACTILE_REVIEW.md
+/docs/design/TOKYO_TACTILE_REVIEW.md
+/docs/design/SKULL_TACTILE_REVIEW.md
+/docs/design/CITADELS_TACTILE_REVIEW.md
+/docs/design/NOT_ALONE_TACTILE_REVIEW.md
+/docs/design/NOT_ALONE_TACTILE_SUPPLEMENT_REVIEW.md
+/docs/design/BANG_TACTILE_REVIEW.md
+/docs/design/BANG_FIXTURE_TACTILE_REVIEW.md
+/docs/design/LIBERTALIA_TACTILE_REVIEW.md
+/docs/design/COLT_TACTILE_REVIEW.md
+/docs/design/SHARED_SHELL_TACTILE_REVIEW.md
+/docs/design/CARD_SIZING_TACTILE_REVIEW.md
+/docs/design/COLT_TACTILE_PLAN.md
+/docs/design/COUP_TOKYO_TACTILE_PLAN.md
+/docs/design/SKULL_CITADELS_TACTILE_PLAN.md
+/docs/design/FINAL_THREE_TACTILE_PLAN.md
+/docs/design/assistant-logo-concepts/
+/docs/design/gallery-photobooth-concepts/
+/docs/design/logo-concepts/02-z-game-tile.png
+/docs/design/logo-concepts/03-z-arcade.png
+/docs/design/logo-concepts/previous-camera/
+/tools/card-gallery/frozen-source*.json
+
+# Unapproved local licence draft; no new licence grant is published.
+/LICENSE
+
+# Local future-game implementation blueprint (intentionally untracked)
+/FUTURE_GAMES_IMPLEMENTATION_PLAN.md

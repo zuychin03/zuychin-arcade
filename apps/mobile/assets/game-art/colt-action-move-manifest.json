@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-move.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2188355,
+    "sha256": "3e46a1005c1902c72784af564da4b0afc51f4487edc2fd2deef295c0ebb06470"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-move.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17168,
+      "sha256": "09c754d3cb777a41943c3d6df017ac5cd6849cc8a8b72c3317b491c9be9050de"
+    }
+  ],
+  "totalBytes": 17168,
+  "maxTotalBytes": 614400
+}

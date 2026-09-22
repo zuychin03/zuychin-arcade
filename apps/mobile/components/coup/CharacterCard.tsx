@@ -1,181 +1,82 @@
 import type { ReactElement } from 'react';
-import { Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Platform, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupCharacter } from '@zuychin-arcade/types';
 import { ScalePressable } from '../ui/ScalePressable';
+import { CardSurface } from '../ui/CardSurface';
+import { CoupCharacterArtwork } from './CoupCharacterArtwork';
 import { COUP, COUP_CHARACTER_COLOR } from '../../constants/theme';
 
 type Size = 'xs' | 'sm' | 'md' | 'lg';
-const DIMS: Record<Size, { w: number; h: number; icon: number; label: number; radius: number; border: number }> = {
-  xs: { w: 32, h: 44, icon: 16, label: 0, radius: 6, border: 1 },
-  sm: { w: 56, h: 78, icon: 26, label: 8, radius: 10, border: 1.5 },
-  md: { w: 78, h: 108, icon: 36, label: 10, radius: 12, border: 2 },
-  lg: { w: 96, h: 134, icon: 44, label: 11, radius: 14, border: 2.5 },
+const DIMS = {
+  xs: { width: 32, art: 32, back: 44, radius: 6 },
+  sm: { width: 88, art: 88, back: 120, radius: 10 },
+  md: { width: 128, art: 144, back: 192, radius: 12 },
+  lg: { width: 160, art: 176, back: 228, radius: 14 },
+} as const;
+const abilities: Record<CoupCharacter, string> = {
+  duke: 'Tax +3\nBlocks aid', assassin: 'Pay 3 to assassinate', captain: 'Steal 2\nBlocks stealing',
+  ambassador: 'Exchange\nBlocks stealing', contessa: 'Blocks assassination', inquisitor: 'Exchange / examine',
 };
-
-const CHARACTER_ICONS: Record<CoupCharacter, keyof typeof MaterialCommunityIcons.glyphMap> = {
-  duke: 'crown',
-  assassin: 'sword',
-  captain: 'anchor',
-  ambassador: 'handshake',
-  contessa: 'shield-crown',
-  inquisitor: 'magnify',
-};
+const decoration = { accessible: false, accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' as const, pointerEvents: 'none' as const };
 
 interface Props {
   character?: CoupCharacter;
   faceDown?: boolean;
   lost?: boolean;
   size?: Size;
+  fluid?: boolean;
   selected?: boolean;
+  disabled?: boolean;
   onPress?: () => void;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
-export function CharacterCard({ character, faceDown, lost, size = 'sm', selected, onPress }: Props) {
-  const d = DIMS[size];
-  const accent = character ? COUP_CHARACTER_COLOR[character] : COUP.border;
-  const showName = !faceDown && character && d.label > 0;
-  const showCorner = !faceDown && character && (size === 'md' || size === 'lg');
-
+export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = false, selected, disabled, onPress, accessibilityLabel, accessibilityHint }: Props) {
+  const { width, fontScale = 1 } = useWindowDimensions();
+  const d = DIMS[size], compact = size === 'xs', detailed = size === 'md' || size === 'lg';
+  const frame: ViewStyle = compact ? { width: d.width, paddingBottom: 2 } : fluid ? {
+    width: '100%', flexGrow: 1, flexShrink: 0, minWidth: 0, maxWidth: '100%', paddingBottom: 4,
+  } : {
+    flexBasis: d.width, flexGrow: 1, flexShrink: 1, maxWidth: '100%', paddingBottom: 4,
+    // Web intrinsic sizing responds to text-only enlargement, not just native fontScale.
+    minWidth: Platform.OS === 'web' ? 'min-content' as ViewStyle['minWidth'] : Math.min(d.width * Math.max(1, fontScale), Math.max(48, width - 56)),
+  };
+  const cardLabel = accessibilityLabel ?? (faceDown ? 'Hidden influence' : character
+    ? `${character}${lost ? ', revealed and lost' : ', active influence'}${selected ? ', selected' : ''}` : 'Unknown influence');
   if (faceDown) {
     return wrap(
-      <LinearGradient
-        colors={['#251520', '#11050F'] as const}
-        style={{
-          width: d.w,
-          height: d.h,
-          borderRadius: d.radius,
-          borderWidth: d.border,
-          borderColor: COUP.border,
-          backgroundColor: COUP.panel,
-          alignItems: 'center',
-          justifyContent: 'center',
-          opacity: lost ? 0.35 : 1,
-          position: 'relative',
-        }}
-      >
-        {/* Inset ornamental frame */}
-        <View
-          style={{
-            position: 'absolute',
-            top: size === 'xs' ? 2 : 4,
-            left: size === 'xs' ? 2 : 4,
-            right: size === 'xs' ? 2 : 4,
-            bottom: size === 'xs' ? 2 : 4,
-            borderRadius: d.radius - (size === 'xs' ? 2 : 4),
-            borderWidth: 1,
-            borderColor: 'rgba(226, 58, 94, 0.25)', // Subtle crimson border
-            borderStyle: 'solid',
-          }}
-        />
-        <MaterialCommunityIcons
-          name="shield-cross"
-          size={d.icon}
-          color={COUP.crimson}
-          style={{ opacity: 0.75 }}
-        />
-      </LinearGradient>,
-      onPress,
+      <CardSurface fill={!compact} radius={d.radius} faceColor={COUP.panel} edgeColor={COUP.bg} highlightColor={selected ? COUP.gold : COUP.border} selected={selected} depth={compact ? 1 : 3}>
+        <View style={{ minHeight: d.back, padding: compact ? 3 : 12, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <View {...decoration} style={{ alignItems: 'center', justifyContent: 'center', padding: compact ? 0 : 10, borderWidth: 1, borderColor: COUP.border, borderRadius: compact ? 3 : 12 }}><MaterialCommunityIcons name="shield-cross" size={compact ? 20 : 42} color={COUP.crimson} /></View>
+          {!compact ? <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Hidden influence</Text> : null}
+        </View>
+      </CardSurface>, onPress, cardLabel, accessibilityHint, selected, disabled, frame,
     );
   }
 
-  const iconName = character ? CHARACTER_ICONS[character] : 'help';
-
+  const accent = character ? COUP_CHARACTER_COLOR[character] : COUP.border;
+  const title = character ? character[0].toUpperCase() + character.slice(1) : 'Unknown';
   return wrap(
-    <LinearGradient
-      colors={[`${accent}40`, `${accent}0D`] as const}
-      style={{
-        width: d.w,
-        height: d.h,
-        borderRadius: d.radius,
-        borderWidth: selected ? d.border + 1 : d.border,
-        borderColor: selected ? COUP.gold : lost ? `${accent}40` : accent,
-        backgroundColor: `${accent}0A`,
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: lost ? 0.4 : 1,
-        position: 'relative',
-        boxShadow: selected ? `0 0 14px ${COUP.gold}E6` : !lost ? `0 0 10px ${accent}40` : undefined,
-      }}
-    >
-      {/* Outer corner badge decoration */}
-      {showCorner && (
-        <View style={{ position: 'absolute', top: 5, left: 5, opacity: 0.6 }}>
-          <MaterialCommunityIcons name={iconName} size={11} color={accent} />
+    <CardSurface fill={!compact} radius={d.radius} faceColor={COUP.panel} edgeColor={COUP.bg} highlightColor={selected ? COUP.gold : accent} selected={selected} depth={compact ? 1 : 3}>
+      <View style={{ padding: compact ? 0 : 8, gap: compact ? 0 : 8 }}>
+        <View {...decoration} style={{ width: '100%', maxWidth: d.art, alignSelf: 'center', overflow: 'hidden', borderRadius: compact ? 4 : 8 }}>
+          {character ? <CoupCharacterArtwork character={character} /> : <View style={{ minHeight: compact ? 32 : 88, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="help" size={compact ? 20 : 32} color={COUP.muted} /></View>}
         </View>
-      )}
-
-      {/* Decorative center shield bg */}
-      <View
-        style={{
-          width: d.icon * 1.3,
-          height: d.icon * 1.3,
-          borderRadius: (d.icon * 1.3) / 2,
-          backgroundColor: `${accent}1A`,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: 0.5,
-          borderColor: `${accent}30`,
-          boxShadow: !lost ? `0 0 6px ${accent}30` : undefined,
-        }}
-      >
-        <MaterialCommunityIcons name={iconName} size={d.icon} color={lost ? COUP.muted : accent} />
+        {!compact ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.text, fontSize: detailed ? 16 : 12, lineHeight: detailed ? 22 : 18, textAlign: 'center' }}>{title}</Text> : null}
+        {detailed && character && !lost ? <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>{abilities[character]}</Text> : null}
+        {lost ? compact
+          ? <View {...decoration} style={{ alignItems: 'center', backgroundColor: COUP.bg }}><MaterialCommunityIcons name="close" size={12} color={COUP.text} /></View>
+          : <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Revealed · lost</Text>
+          : selected && !compact ? <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.gold, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Selected</Text> : null}
       </View>
-
-      {showName && (
-        <Text
-          numberOfLines={1}
-          adjustsFontSizeToFit
-          style={{
-            fontFamily: 'Outfit_800ExtraBold',
-            color: lost ? COUP.muted : accent,
-            fontSize: d.label,
-            marginTop: 6,
-            letterSpacing: 0.5,
-            maxWidth: d.w - 8,
-            paddingHorizontal: 2,
-            textAlign: 'center',
-            textDecorationLine: lost ? 'line-through' : 'none',
-          }}
-        >
-          {character!.toUpperCase()}
-        </Text>
-      )}
-
-      {/* Dead / Lost overlay ribbon */}
-      {lost && (
-        <View
-          style={{
-            position: 'absolute',
-            width: '105%',
-            height: 18,
-            backgroundColor: '#1E121C',
-            borderWidth: 1,
-            borderColor: COUP.border,
-            alignItems: 'center',
-            justifyContent: 'center',
-            transform: [{ rotate: '-15deg' }],
-            boxShadow: '0 2px 4px rgba(0,0,0,0.5)',
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: 'SpaceMono_700Bold',
-              color: COUP.muted,
-              fontSize: size === 'md' ? 8 : 7,
-              letterSpacing: 1,
-            }}
-          >
-            DEAD
-          </Text>
-        </View>
-      )}
-    </LinearGradient>,
-    onPress,
+    </CardSurface>, onPress, cardLabel, accessibilityHint, selected, disabled, frame,
   );
 }
 
-function wrap(body: ReactElement, onPress?: () => void) {
-  return onPress ? <ScalePressable onPress={onPress}>{body}</ScalePressable> : body;
+function wrap(body: ReactElement, onPress: (() => void) | undefined, accessibilityLabel: string, accessibilityHint: string | undefined, selected: boolean | undefined, disabled: boolean | undefined, frame: ViewStyle) {
+  return onPress ? <ScalePressable onPress={onPress} disabled={disabled} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} accessibilityState={{ selected, disabled }} style={{ ...frame, minHeight: 48, minWidth: frame.minWidth ?? 48 }}>
+    {body}
+  </ScalePressable> : <View accessible accessibilityRole="image" accessibilityLabel={accessibilityLabel} style={frame}>{body}</View>;
 }

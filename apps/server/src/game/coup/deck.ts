@@ -1,5 +1,5 @@
 import type { CoupCharacter, CoupVariant } from '@zuychin-arcade/types';
-import { charactersForVariant, copiesPerCharacter } from '@zuychin-arcade/types';
+import { COUP_LIMITS, charactersForVariant, copiesPerCharacter } from '@zuychin-arcade/types';
 
 export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -12,6 +12,10 @@ export function shuffle<T>(arr: T[]): T[] {
 
 /** The shuffled court deck: `copies` of each character in play for the variant. */
 export function buildCourtDeck(variant: CoupVariant, playerCount: number): CoupCharacter[] {
+  const limits = COUP_LIMITS[variant];
+  if (!limits || !Number.isInteger(playerCount) || playerCount < limits.min || playerCount > limits.max) {
+    throw new RangeError(`Invalid ${variant} Coup player count: ${playerCount}`);
+  }
   const chars = charactersForVariant(variant);
   const copies = copiesPerCharacter(playerCount);
   const deck: CoupCharacter[] = [];

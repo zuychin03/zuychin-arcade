@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-fleet-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2641227,
+    "sha256": "eb0c685c0986cd7ad26648282f212fa7795825508e343158a7178d0e5c47f016"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 52084,
+      "sha256": "1322674d42cdb2629cf2e354234e0a557884814872d0a0f006b18c4794204364"
+    },
+    {
+      "file": "libertalia-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 164530,
+      "sha256": "99928fada278f9058efb3e34b025658d50882dea98924b9d1c4fe7661cad6712"
+    }
+  ],
+  "totalBytes": 216614,
+  "maxTotalBytes": 614400
+}

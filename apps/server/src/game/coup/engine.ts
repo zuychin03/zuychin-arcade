@@ -1,6 +1,6 @@
 // Coup (+ Reformation) authoritative engine. Pure: no IO, no sockets.
 //
-// The whole design problem is interactivity — see COUP_PLAN.md §3. Unlike
+// The whole design problem is interactivity - see COUP_PLAN.md §3. Unlike
 // Saboteur (only the current player ever acts), a declared action waits on
 // *other* players to challenge or block. The game therefore lives in a
 // `pending` phase machine and most of the time is spent between turns waiting
@@ -19,12 +19,12 @@ import type {
   CoupLogEntry,
   CoupPhase,
   CoupPlayerState,
+  CoupRespondPayload,
   CoupVariant,
   LoseInfluenceReason,
 } from '@zuychin-arcade/types';
 import {
   ACTION_META,
-  ASSASSINATE_COST,
   FOREIGN_AID_GAIN,
   INCOME_GAIN,
   MANDATORY_COUP_AT,
@@ -56,6 +56,8 @@ interface PendingState {
   claimedCharacter: CoupCharacter | null;
   blockerId: string | null;
   blockCharacter: CoupCharacter | null;
+  challengerId: string | null;
+  challengeKind: 'action' | 'block' | null;
   passed: Set<string>;
   losingPlayerId: string | null;
   loseReason: LoseInfluenceReason | null;
@@ -69,6 +71,7 @@ interface PendingState {
 
 export interface CoupServerState {
   roomCode: string;
+  revision: number;
   variant: CoupVariant;
   status: 'playing' | 'game_over';
   players: Map<string, CoupPlayerState>;
@@ -80,6 +83,7 @@ export interface CoupServerState {
   log: CoupLogEntry[];
   logSeq: number;
   winnerId: string | null;
+  terminationReason: 'no_players_remaining' | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -89,9 +93,15 @@ export interface CoupServerState {
 export function initGame(
   roomCode: string,
   variant: CoupVariant,
-  players: Array<{ playerId: string; displayName: string }>,
+  players: { playerId: string; displayName: string }[],
 ): CoupServerState {
   const n = players.length;
+  if (players.some((player) => typeof player.playerId !== 'string' || player.playerId.length === 0)) {
+    throw new TypeError('Every Coup player needs a non-empty playerId');
+  }
+  if (new Set(players.map((player) => player.playerId)).size !== n) {
+    throw new TypeError('Coup playerIds must be unique');
+  }
   const deck = buildCourtDeck(variant, n);
   const turnOrder = players.map((p) => p.playerId);
 
@@ -109,11 +119,13 @@ export function initGame(
       // host's choice); base has no allegiances.
       allegiance: variant === 'reformation' ? (i % 2 === 0 ? 'reformist' : 'loyalist') : null,
       eliminated: false,
+      forfeited: false,
     });
   });
 
   const state: CoupServerState = {
     roomCode,
+    revision: 0,
     variant,
     status: 'playing',
     players: map,
@@ -125,8 +137,9 @@ export function initGame(
     log: [],
     logSeq: 0,
     winnerId: null,
+    terminationReason: null,
   };
-  log(state, `Game started — ${n} players, ${variant} rules.`);
+  log(state, `Game started - ${n} players, ${variant} rules.`);
   log(state, `${nameOf(state, turnOrder[0])} goes first.`);
   return state;
 }
@@ -140,6 +153,8 @@ function freshPending(actorId: string): PendingState {
     claimedCharacter: null,
     blockerId: null,
     blockCharacter: null,
+    challengerId: null,
+    challengeKind: null,
     passed: new Set(),
     losingPlayerId: null,
     loseReason: null,
@@ -223,6 +238,33 @@ function armTimer(state: CoupServerState): void {
   state.pending.deadline = Date.now() + RESPONSE_TIMEOUT_MS;
 }
 
+function stale(state: CoupServerState, expectedRevision: unknown): EngineResult | null {
+  if (!Number.isSafeInteger(expectedRevision) || (expectedRevision as number) < 0) {
+    return fail('A valid game state revision is required');
+  }
+  return expectedRevision !== state.revision
+    ? fail('Game state changed. Please try again.')
+    : null;
+}
+
+function commit(state: CoupServerState, result: EngineResult): EngineResult {
+  if (result.ok) state.revision += 1;
+  return result;
+}
+
+const VALID_CHARACTERS = new Set<CoupCharacter>([
+  'duke',
+  'assassin',
+  'captain',
+  'ambassador',
+  'contessa',
+  'inquisitor',
+]);
+
+function isAction(value: unknown): value is CoupActionType {
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(ACTION_META, value);
+}
+
 // ---------------------------------------------------------------------------
 // 1. Action declaration
 // ---------------------------------------------------------------------------
@@ -232,6 +274,17 @@ export function declareAction(
   playerId: string,
   payload: CoupActionPayload,
 ): EngineResult {
+  const staleResult = stale(state, payload?.expectedRevision);
+  if (staleResult) return staleResult;
+  if (!payload || !isAction(payload.action)) return fail('Unknown action');
+  return commit(state, declareActionUnchecked(state, playerId, payload));
+}
+
+function declareActionUnchecked(
+  state: CoupServerState,
+  playerId: string,
+  payload: Pick<CoupActionPayload, 'action' | 'targetPlayerId'>,
+): EngineResult {
   if (state.status !== 'playing') return fail('The game is over');
   if (state.pending.phase !== 'awaiting_action') return fail('Not waiting for an action right now');
   if (currentPlayerId(state) !== playerId) return fail('It is not your turn');
@@ -239,7 +292,6 @@ export function declareAction(
   const actor = state.players.get(playerId)!;
   const action = payload.action;
   const meta = ACTION_META[action];
-  if (!meta) return fail('Unknown action');
   if (meta.reformationOnly && state.variant !== 'reformation') {
     return fail('That action is only available with Reformation rules');
   }
@@ -249,14 +301,18 @@ export function declareAction(
     return fail('You have 10 or more coins and must launch a Coup');
   }
   if (actor.coins < meta.cost) return fail('Not enough coins');
+  if (!meta.needsTarget && payload.targetPlayerId !== undefined) {
+    return fail('This action does not take a target');
+  }
 
   let targetId: string | null = null;
   if (meta.needsTarget) {
-    targetId = payload.targetPlayerId ?? null;
+    targetId = typeof payload.targetPlayerId === 'string' ? payload.targetPlayerId : null;
     if (!targetId) return fail('This action needs a target');
     if (targetId === playerId) return fail('You cannot target yourself');
     const target = state.players.get(targetId);
     if (!target || aliveCardCount(target) === 0) return fail('Invalid target');
+    if (action === 'steal' && target.coins === 0) return fail('Choose a player who has coins');
     // Allegiance restriction (Reformation) is enforced in Phase 2.
   }
 
@@ -278,19 +334,19 @@ export function declareAction(
       return startLoseInfluence(state, targetId!, 'coup', { kind: 'end_turn' });
     case 'tax':
       state.pending.claimedCharacter = 'duke';
-      log(state, `${actor.displayName} claims Duke — Tax (+3).`);
+      log(state, `${actor.displayName} claims Duke - Tax (+3).`);
       return openActionChallenge(state);
     case 'assassinate':
       state.pending.claimedCharacter = 'assassin';
-      log(state, `${actor.displayName} claims Assassin — assassinate ${nameOf(state, targetId)} (-3).`);
+      log(state, `${actor.displayName} claims Assassin - assassinate ${nameOf(state, targetId)} (-3).`);
       return openActionChallenge(state);
     case 'steal':
       state.pending.claimedCharacter = 'captain';
-      log(state, `${actor.displayName} claims Captain — steal from ${nameOf(state, targetId)}.`);
+      log(state, `${actor.displayName} claims Captain - steal from ${nameOf(state, targetId)}.`);
       return openActionChallenge(state);
     case 'exchange':
       state.pending.claimedCharacter = 'ambassador';
-      log(state, `${actor.displayName} claims Ambassador — Exchange.`);
+      log(state, `${actor.displayName} claims Ambassador - Exchange.`);
       return openActionChallenge(state);
     default:
       return fail('That action is not available yet');
@@ -332,7 +388,23 @@ function openBlockChallenge(state: CoupServerState): EngineResult {
 export function respond(
   state: CoupServerState,
   playerId: string,
-  payload: { response: 'challenge' | 'block' | 'pass'; blockCharacter?: CoupCharacter },
+  payload: CoupRespondPayload,
+): EngineResult {
+  const staleResult = stale(state, payload?.expectedRevision);
+  if (staleResult) return staleResult;
+  if (!payload || !['challenge', 'block', 'pass'].includes(payload.response)) {
+    return fail('Invalid response');
+  }
+  if (payload.response !== 'block' && payload.blockCharacter !== undefined) {
+    return fail('Only a block may name a blocking character');
+  }
+  return commit(state, respondUnchecked(state, playerId, payload));
+}
+
+function respondUnchecked(
+  state: CoupServerState,
+  playerId: string,
+  payload: Pick<CoupRespondPayload, 'response' | 'blockCharacter'>,
 ): EngineResult {
   switch (state.pending.phase) {
     case 'awaiting_action_challenge':
@@ -359,25 +431,20 @@ function respondActionChallenge(
     state.pending.passed.add(playerId);
     return windowComplete(state) ? proceedAfterActionSurvives(state) : OK;
   }
-  // challenge the actor's claimed character
-  return resolveActionChallenge(state, playerId);
+  return openChallengeDecision(state, playerId, 'action');
 }
 
-function resolveActionChallenge(state: CoupServerState, challengerId: string): EngineResult {
-  const actor = state.players.get(state.pending.actorId)!;
-  const claim = state.pending.claimedCharacter!;
-  const challenger = state.players.get(challengerId)!;
-
-  if (hasCharacter(actor, claim)) {
-    // Challenger was wrong: actor proves it, reshuffles, draws; challenger loses.
-    log(state, `${challenger.displayName} challenged — ${actor.displayName} reveals ${cap(claim)}. Challenge fails.`);
-    reshuffleReveal(state, actor, claim);
-    return startLoseInfluence(state, challengerId, 'failed_challenge', { kind: 'proceed_action' });
-  }
-  // Actor was bluffing: action fails, cost refunded, actor loses an influence.
-  log(state, `${challenger.displayName} challenged — ${actor.displayName} could not show ${cap(claim)}. Bluff caught!`);
-  actor.coins += ACTION_META[state.pending.action!].cost; // refund (e.g. assassinate)
-  return startLoseInfluence(state, state.pending.actorId, 'failed_bluff', { kind: 'end_turn' });
+function openChallengeDecision(
+  state: CoupServerState,
+  challengerId: string,
+  kind: 'action' | 'block',
+): EngineResult {
+  state.pending.phase = 'awaiting_challenge_decision';
+  state.pending.challengerId = challengerId;
+  state.pending.challengeKind = kind;
+  state.pending.passed = new Set();
+  armTimer(state);
+  return OK;
 }
 
 function respondBlock(
@@ -426,20 +493,67 @@ function respondBlockChallenge(
     state.pending.passed.add(playerId);
     return windowComplete(state) ? blockStands(state) : OK;
   }
-  // challenge the block
-  const blocker = state.players.get(state.pending.blockerId!)!;
-  const bc = state.pending.blockCharacter!;
-  const challenger = state.players.get(playerId)!;
+  return openChallengeDecision(state, playerId, 'block');
+}
 
-  if (hasCharacter(blocker, bc)) {
-    // Block is real: challenger was wrong, block stands, action is countered.
-    log(state, `${challenger.displayName} challenged the block — ${blocker.displayName} reveals ${cap(bc)}. Block holds.`);
-    reshuffleReveal(state, blocker, bc);
-    return startLoseInfluence(state, playerId, 'failed_challenge', { kind: 'end_turn' });
+export function resolveChallenge(
+  state: CoupServerState,
+  playerId: string,
+  prove: boolean,
+  expectedRevision: number,
+): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (typeof prove !== 'boolean') return fail('Choose whether to prove or concede');
+  return commit(state, resolveChallengeUnchecked(state, playerId, prove));
+}
+
+function resolveChallengeUnchecked(
+  state: CoupServerState,
+  playerId: string,
+  prove: boolean,
+): EngineResult {
+  const pending = state.pending;
+  if (pending.phase !== 'awaiting_challenge_decision' || !pending.challengeKind) {
+    return fail('There is no challenge to resolve');
   }
-  // Block was a bluff: blocker loses an influence, the original action resolves.
-  log(state, `${challenger.displayName} challenged the block — ${blocker.displayName} could not show ${cap(bc)}. Block fails!`);
-  return startLoseInfluence(state, state.pending.blockerId!, 'failed_bluff', { kind: 'resolve_action' });
+
+  const isBlock = pending.challengeKind === 'block';
+  const claimantId = isBlock ? pending.blockerId : pending.actorId;
+  if (!claimantId || claimantId !== playerId) return fail('Only the challenged player can decide');
+
+  const claimant = state.players.get(claimantId)!;
+  const challengerId = pending.challengerId!;
+  const challenger = state.players.get(challengerId)!;
+  const claim = isBlock ? pending.blockCharacter! : pending.claimedCharacter!;
+
+  if (prove) {
+    if (!hasCharacter(claimant, claim)) return fail(`You cannot prove ${cap(claim)}`);
+    log(
+      state,
+      `${challenger.displayName} challenged - ${claimant.displayName} proves ${cap(claim)}. Challenge fails.`,
+    );
+    reshuffleReveal(state, claimant, claim);
+    pending.challengerId = null;
+    pending.challengeKind = null;
+    if (isBlock) {
+      return startLoseInfluence(state, challengerId, 'failed_challenge', { kind: 'end_turn' });
+    }
+    const resume: Resume =
+      pending.action === 'assassinate' && pending.targetId === challengerId
+        ? { kind: 'resolve_action' }
+        : { kind: 'proceed_action' };
+    return startLoseInfluence(state, challengerId, 'failed_challenge', resume);
+  }
+
+  log(state, `${claimant.displayName} concedes the challenge to ${challenger.displayName}.`);
+  pending.challengerId = null;
+  pending.challengeKind = null;
+  if (isBlock) {
+    return startLoseInfluence(state, claimantId, 'conceded_challenge', { kind: 'resolve_action' });
+  }
+  claimant.coins += ACTION_META[pending.action!].cost;
+  return startLoseInfluence(state, claimantId, 'conceded_challenge', { kind: 'end_turn' });
 }
 
 function blockStands(state: CoupServerState): EngineResult {
@@ -476,11 +590,12 @@ function resolveActionEffect(state: CoupServerState): EngineResult {
       log(state, `${actor.displayName} taxed (+3).`);
       return endTurn(state);
     case 'steal': {
-      if (!target || aliveCardCount(target) === 0) return endTurn(state);
+      if (!target) return endTurn(state);
       const amt = Math.min(STEAL_MAX, target.coins);
       target.coins -= amt;
       actor.coins += amt;
       log(state, `${actor.displayName} stole ${amt} from ${target.displayName}.`);
+      if (target.eliminated) target.coins = 0;
       return endTurn(state);
     }
     case 'assassinate': {
@@ -520,20 +635,35 @@ function startLoseInfluence(
 ): EngineResult {
   const loser = state.players.get(loserId)!;
   const alive = loser.influences.filter((i) => !i.revealed);
-  if (alive.length === 0) return runResume(state, resume); // nothing to lose
+  state.pending.losingPlayerId = loserId;
+  state.pending.loseReason = reason;
+  state.pending.resume = resume;
+  if (alive.length === 0) {
+    clearLossDecision(state);
+    return runResume(state, resume);
+  }
   if (alive.length === 1) {
     applyReveal(state, loser, alive[0].character);
     return afterLoss(state, resume);
   }
   state.pending.phase = 'awaiting_lose_influence';
-  state.pending.losingPlayerId = loserId;
-  state.pending.loseReason = reason;
-  state.pending.resume = resume;
   armTimer(state);
   return OK;
 }
 
 export function loseInfluence(
+  state: CoupServerState,
+  playerId: string,
+  character: CoupCharacter,
+  expectedRevision: number,
+): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (!VALID_CHARACTERS.has(character)) return fail('Invalid character');
+  return commit(state, loseInfluenceUnchecked(state, playerId, character));
+}
+
+function loseInfluenceUnchecked(
   state: CoupServerState,
   playerId: string,
   character: CoupCharacter,
@@ -560,8 +690,25 @@ function applyReveal(state: CoupServerState, p: CoupPlayerState, character: Coup
 
 /** After any influence loss: check for a winner, else run the continuation. */
 function afterLoss(state: CoupServerState, resume: Resume): EngineResult {
+  const loserId = state.pending.losingPlayerId;
+  const loser = loserId ? state.players.get(loserId) : null;
+  const resolveStealBeforeCleanup =
+    loser?.eliminated === true &&
+    resume.kind === 'resolve_action' &&
+    state.pending.action === 'steal' &&
+    state.pending.targetId === loserId;
+  clearLossDecision(state);
+  if (resolveStealBeforeCleanup) return runResume(state, resume);
+  if (loser?.eliminated) loser.coins = 0;
   if (checkWin(state)) return OK;
   return runResume(state, resume);
+}
+
+function clearLossDecision(state: CoupServerState): void {
+  state.pending.losingPlayerId = null;
+  state.pending.loseReason = null;
+  state.pending.resume = null;
+  state.pending.deadline = null;
 }
 
 function runResume(state: CoupServerState, resume: Resume): EngineResult {
@@ -580,6 +727,20 @@ function runResume(state: CoupServerState, resume: Resume): EngineResult {
 // ---------------------------------------------------------------------------
 
 export function chooseExchange(
+  state: CoupServerState,
+  playerId: string,
+  keep: CoupCharacter[],
+  expectedRevision: number,
+): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (!Array.isArray(keep) || keep.some((character) => !VALID_CHARACTERS.has(character))) {
+    return fail('Invalid exchange selection');
+  }
+  return commit(state, chooseExchangeUnchecked(state, playerId, keep));
+}
+
+function chooseExchangeUnchecked(
   state: CoupServerState,
   playerId: string,
   keep: CoupCharacter[],
@@ -610,6 +771,7 @@ export function chooseExchange(
 
 function endTurn(state: CoupServerState): EngineResult {
   if (state.status === 'game_over') return OK;
+  if (checkWin(state)) return OK;
   const n = state.turnOrder.length;
   for (let i = 1; i <= n; i++) {
     const idx = (state.currentTurnIndex + i) % n;
@@ -627,19 +789,29 @@ function checkWin(state: CoupServerState): boolean {
   if (alive.length <= 1) {
     state.status = 'game_over';
     state.winnerId = alive[0] ?? null;
+    state.terminationReason = alive.length === 0 ? 'no_players_remaining' : null;
+    returnExchangeDraw(state);
+    state.pending = freshPending('');
     state.pending.phase = 'game_over';
     state.pending.deadline = null;
     if (state.winnerId) log(state, `${nameOf(state, state.winnerId)} wins the game!`);
+    else log(state, 'Game ended without a winner: no players remain.');
     return true;
   }
   return false;
 }
 
 // ---------------------------------------------------------------------------
-// 8. Timer-driven window expiry (auto-pass) — called by the socket layer
+// 8. Timer-driven window expiry (auto-pass) - called by the socket layer
 // ---------------------------------------------------------------------------
 
-export function expireWindow(state: CoupServerState): EngineResult {
+export function expireWindow(state: CoupServerState, expectedRevision: number): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  return commit(state, expireWindowUnchecked(state));
+}
+
+function expireWindowUnchecked(state: CoupServerState): EngineResult {
   switch (state.pending.phase) {
     case 'awaiting_action_challenge':
       return proceedAfterActionSurvives(state);
@@ -647,6 +819,16 @@ export function expireWindow(state: CoupServerState): EngineResult {
       return resolveActionEffect(state);
     case 'awaiting_block_challenge':
       return blockStands(state);
+    case 'awaiting_challenge_decision': {
+      const claimantId = challengeClaimantId(state);
+      if (!claimantId) return fail('The challenged player is unavailable');
+      const claim = challengeCharacter(state);
+      return resolveChallengeUnchecked(
+        state,
+        claimantId,
+        claim !== null && hasCharacter(state.players.get(claimantId)!, claim),
+      );
+    }
     case 'awaiting_lose_influence': {
       // auto-reveal the first face-down card
       const loser = state.players.get(state.pending.losingPlayerId!)!;
@@ -657,14 +839,155 @@ export function expireWindow(state: CoupServerState): EngineResult {
       return afterLoss(state, resume);
     }
     case 'awaiting_exchange': {
-      // auto-keep the player's first `keepCount` options (i.e. keep current cards)
+      // Keep the player's original cards when their decision window expires.
       const need = state.pending.exchangeKeep;
       const keep = (state.pending.exchangePool ?? []).slice(0, need);
-      return chooseExchange(state, state.pending.actorId, keep);
+      return chooseExchangeUnchecked(state, state.pending.actorId, keep);
     }
     default:
-      return OK;
+      return fail('There is no decision window to expire');
   }
+}
+
+export function resolveAbsentDecision(
+  state: CoupServerState,
+  playerId: string,
+  expectedRevision: number,
+): EngineResult {
+  return forfeitPlayer(state, playerId, expectedRevision);
+}
+
+export function forfeitPlayer(
+  state: CoupServerState,
+  playerId: string,
+  expectedRevision: number,
+): EngineResult {
+  return forfeitPlayers(state, [playerId], expectedRevision);
+}
+
+export function forfeitPlayers(
+  state: CoupServerState,
+  playerIds: string[],
+  expectedRevision: number,
+): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (!Array.isArray(playerIds) || playerIds.length === 0) return fail('Choose players to forfeit');
+  if (playerIds.some((id) => typeof id !== 'string' || !state.players.has(id))) return fail('Unknown player');
+  return commit(state, forfeitPlayersUnchecked(state, new Set(playerIds)));
+}
+
+function forfeitPlayersUnchecked(state: CoupServerState, playerIds: Set<string>): EngineResult {
+  if (state.status !== 'playing') return fail('The game is over');
+  const departing = new Set([...playerIds].filter((id) => aliveCardCount(state.players.get(id)!) > 0));
+  if (departing.size === 0) return fail('Those players are already out');
+
+  const phase = state.pending.phase;
+  const leaves = (id: string | null) => id !== null && departing.has(id);
+  const wasActor = leaves(state.pending.actorId);
+  const wasTarget = leaves(state.pending.targetId);
+  const wasBlocker = leaves(state.pending.blockerId);
+  const wasChallenger = leaves(state.pending.challengerId);
+  const wasLoser = leaves(state.pending.losingPlayerId);
+  const challengeKind = state.pending.challengeKind;
+  const resume = state.pending.resume;
+  const resolveStealBeforeCleanup =
+    phase === 'awaiting_lose_influence'
+    && wasLoser
+    && wasTarget
+    && !wasActor
+    && resume?.kind === 'resolve_action'
+    && state.pending.action === 'steal';
+
+  if (phase === 'awaiting_exchange' && wasActor) returnExchangeDraw(state);
+  // Remove the entire batch before any continuation can select a winner.
+  for (const playerId of departing) {
+    const player = state.players.get(playerId)!;
+    state.pending.passed.delete(playerId);
+    log(state, `${player.displayName} forfeits the game.`);
+    for (const influence of player.influences) {
+      if (influence.revealed) continue;
+      influence.revealed = true;
+      log(state, `${player.displayName} reveals and loses ${cap(influence.character)}.`);
+    }
+    player.eliminated = true;
+    player.forfeited = true;
+    if (!resolveStealBeforeCleanup || playerId !== state.pending.targetId) player.coins = 0;
+  }
+
+  if (resolveStealBeforeCleanup && resume) {
+    clearLossDecision(state);
+    return runResume(state, resume);
+  }
+
+  const owedLossSurvives = phase === 'awaiting_lose_influence' && !wasLoser;
+  if (aliveIds(state).length <= 1 && !owedLossSurvives) {
+    if (state.pending.phase === 'awaiting_exchange') returnExchangeDraw(state);
+    checkWin(state);
+    return OK;
+  }
+
+  if (wasActor) {
+    if (phase === 'awaiting_lose_influence' && !wasLoser) {
+      // A departure cancels unfinished actions, not an already adjudicated loss.
+      state.pending.resume = { kind: 'end_turn' };
+      return OK;
+    }
+    return endTurn(state);
+  }
+
+  switch (phase) {
+    case 'awaiting_action':
+      return OK;
+    case 'awaiting_action_challenge':
+      if (wasTarget) return endTurn(state);
+      return windowComplete(state) ? proceedAfterActionSurvives(state) : OK;
+    case 'awaiting_block':
+      if (wasTarget) return endTurn(state);
+      return windowComplete(state) ? resolveActionEffect(state) : OK;
+    case 'awaiting_block_challenge':
+      if (wasBlocker) return resolveActionEffect(state);
+      if (wasTarget) return endTurn(state);
+      return windowComplete(state) ? blockStands(state) : OK;
+    case 'awaiting_challenge_decision':
+      if (wasBlocker) return resolveActionEffect(state);
+      if (wasChallenger) {
+        state.pending.challengerId = null;
+        state.pending.challengeKind = null;
+        return challengeKind === 'block' ? blockStands(state) : proceedAfterActionSurvives(state);
+      }
+      if (wasTarget) return endTurn(state);
+      return OK;
+    case 'awaiting_lose_influence':
+      if (wasLoser && resume) {
+        clearLossDecision(state);
+        return runResume(state, resume);
+      }
+      return OK;
+    case 'awaiting_exchange':
+      return OK;
+    default:
+      return wasTarget ? endTurn(state) : OK;
+  }
+}
+
+function challengeClaimantId(state: CoupServerState): string | null {
+  return state.pending.challengeKind === 'block' ? state.pending.blockerId : state.pending.actorId;
+}
+
+function challengeCharacter(state: CoupServerState): CoupCharacter | null {
+  return state.pending.challengeKind === 'block'
+    ? state.pending.blockCharacter
+    : state.pending.claimedCharacter;
+}
+
+function returnExchangeDraw(state: CoupServerState): void {
+  if (state.pending.phase !== 'awaiting_exchange' || !state.pending.exchangePool) return;
+  const drawn = state.pending.exchangePool.slice(state.pending.exchangeKeep);
+  state.deck.push(...drawn);
+  state.deck = shuffle(state.deck);
+  state.pending.exchangePool = null;
+  state.pending.exchangeKeep = 0;
 }
 
 // ---------------------------------------------------------------------------

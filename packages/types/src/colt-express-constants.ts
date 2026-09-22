@@ -1,0 +1,4 @@
+import type { ColtAction, ColtCharacter } from './colt-express';
+export const COLT_MIN_PLAYERS=2; export const COLT_MAX_PLAYERS=6; export const COLT_RULES_VERSION='base-2016-digital-v2';
+export const COLT_ACTION_COUNTS:Record<ColtAction,number>={move:2,floor:2,shoot:2,punch:1,rob:2,marshal:1};
+export const COLT_CHARACTERS:Record<ColtCharacter,{name:string;summary:string}>={ghost:{name:'Ghost',summary:'May program the first action of each round face down.'},doc:{name:'Doc',summary:'Draws seven cards instead of six.'},tuco:{name:'Tuco',summary:'May shoot a bandit on the other level of the same car.'},django:{name:'Django',summary:'A shot pushes its target one car away when possible.'},cheyenne:{name:'Cheyenne',summary:'May take a purse dropped by a punched target.'},belle:{name:'Belle',summary:'Cannot be targeted when another legal target exists.'}};

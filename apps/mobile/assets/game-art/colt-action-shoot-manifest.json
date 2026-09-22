@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-shoot.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2259327,
+    "sha256": "93fefa6520aba56ebbdb09c96ab12e1497bec3244fcb856d8367b658ed79aa18"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-shoot.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13270,
+      "sha256": "ce1da5da64ce58310fc90fdbe424d70bcba719f2bc64009d9420314ce305881e"
+    }
+  ],
+  "totalBytes": 13270,
+  "maxTotalBytes": 614400
+}

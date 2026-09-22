@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-interference.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2294871,
+    "sha256": "ff7754370f502b1350e982c3facd0fb8e303f729358c92008d0846bbf14938af"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-interference.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14926,
+      "sha256": "537a1d3d367a7f4e8f3c22ff7ede4a1235aa23217ae14f0cba0f23abb7e69fcb"
+    }
+  ],
+  "totalBytes": 14926,
+  "maxTotalBytes": 614400
+}

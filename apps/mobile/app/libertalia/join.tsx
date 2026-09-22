@@ -1,0 +1,1 @@
+import{RemainingJoin}from'../../components/remaining/RemainingJoin';import{LibertaliaMark}from'../../components/remaining/RemainingArtwork';import{LIBERTALIA}from'../../constants/theme';export default function Page(){return <RemainingJoin title="JOIN THE FLEET" mark={<LibertaliaMark size={76}/>} palette={{...LIBERTALIA,accent:LIBERTALIA.sky,secondary:LIBERTALIA.gold}}/>}

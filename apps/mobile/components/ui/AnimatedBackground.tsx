@@ -7,11 +7,14 @@ import Animated, {
   withTiming,
   withSequence,
   Easing,
+  cancelAnimation,
 } from 'react-native-reanimated';
 import { ARCADE } from '../../constants/theme';
+import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
 
 export default function AnimatedBackground() {
   const { width, height } = useWindowDimensions();
+  const reduceMotion = useReducedMotionPreference();
 
   const glow1X = useSharedValue(-100);
   const glow1Y = useSharedValue(-100);
@@ -19,6 +22,18 @@ export default function AnimatedBackground() {
   const glow2Y = useSharedValue(height);
 
   useEffect(() => {
+    cancelAnimation(glow1X);
+    cancelAnimation(glow1Y);
+    cancelAnimation(glow2X);
+    cancelAnimation(glow2Y);
+    if (reduceMotion) {
+      glow1X.value = width * 0.1 - 100;
+      glow1Y.value = height * 0.1 - 100;
+      glow2X.value = width * 0.75 - 100;
+      glow2Y.value = height * 0.7 - 100;
+      return;
+    }
+
     glow1X.value = withRepeat(
       withSequence(
         withTiming(width * 0.5, { duration: 15000, easing: Easing.inOut(Easing.ease) }),
@@ -52,7 +67,13 @@ export default function AnimatedBackground() {
       -1,
       true
     );
-  }, [width, height]);
+    return () => {
+      cancelAnimation(glow1X);
+      cancelAnimation(glow1Y);
+      cancelAnimation(glow2X);
+      cancelAnimation(glow2Y);
+    };
+  }, [glow1X, glow1Y, glow2X, glow2Y, height, reduceMotion, width]);
 
   const style1 = useAnimatedStyle(() => ({
     transform: [{ translateX: glow1X.value }, { translateY: glow1Y.value }],

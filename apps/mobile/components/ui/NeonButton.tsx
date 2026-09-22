@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Text, View } from 'react-native';
+import { ReactNode, useId } from 'react';
+import { Platform, Text, View } from 'react-native';
 import { ScalePressable } from './ScalePressable';
 import { ARCADE, neonBox } from '../../constants/theme';
 
@@ -10,17 +10,23 @@ interface Props {
   variant?: 'solid' | 'outline' | 'ghost';
   disabled?: boolean;
   icon?: ReactNode;
+  accessibilityHint?: string;
 }
 
-export function NeonButton({ label, onPress, color = ARCADE.pink, variant = 'solid', disabled, icon }: Props) {
+export function NeonButton({ label, onPress, color = ARCADE.pink, variant = 'solid', disabled, icon, accessibilityHint }: Props) {
   const solid = variant === 'solid';
   const ghost = variant === 'ghost';
+  const hintId = useId();
   return (
     <ScalePressable
       onPress={onPress}
       disabled={disabled}
+      accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
+      aria-describedby={Platform.OS === 'web' && accessibilityHint ? hintId : undefined}
       style={[
         {
+          minHeight: 48,
           borderRadius: 14,
           paddingVertical: 12,
           paddingHorizontal: 16,
@@ -46,7 +52,11 @@ export function NeonButton({ label, onPress, color = ARCADE.pink, variant = 'sol
           {label}
         </Text>
       </View>
+      {Platform.OS === 'web' && accessibilityHint ? (
+        <Text nativeID={hintId} style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}>
+          {accessibilityHint}
+        </Text>
+      ) : null}
     </ScalePressable>
   );
 }
-

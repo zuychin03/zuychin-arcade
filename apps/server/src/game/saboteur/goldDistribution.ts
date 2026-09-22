@@ -8,11 +8,7 @@ export interface GoldDistributionState {
   assignments: Map<string, number>;
 }
 
-/**
- * Miners win: draw one nugget card per miner; the player who placed the
- * winning card picks first, then the cards pass counter-clockwise (i.e.
- * against turn order) to the next miner.
- */
+// The winning placer starts the counter-clockwise draft; saboteurs are skipped.
 export function initGoldDistribution(
   players: Map<string, PlayerGameState>,
   turnOrder: string[],
@@ -25,7 +21,7 @@ export function initGoldDistribution(
   const order: string[] = [];
   for (let i = 0; i < n; i++) {
     const pid = turnOrder[(startIdx - i + n * 2) % n];   // backwards = counter-clockwise
-    if (players.get(pid)!.role === 'miner') order.push(pid);
+    if (players.get(pid)!.role === 'miner' && !players.get(pid)!.forfeited) order.push(pid);
   }
 
   const drawCount = Math.min(order.length, goldDeck.length);
@@ -38,13 +34,31 @@ export function initGoldDistribution(
   };
 }
 
-/**
- * Saboteurs win: each saboteur receives nuggets per the reward table
- * (1 saboteur → 4, 2–3 → 3 each, 4 → 2 each).
- */
-export function applySaboteurRewards(players: Map<string, PlayerGameState>): void {
-  const saboteurs = [...players.values()].filter((p) => p.role === 'saboteur');
-  if (saboteurs.length === 0) return;
+// Prefer larger cards while requiring exact payment.
+function rewardCards(deck: number[], reward: number): number[] | null {
+  if (reward === 0) return [];
+  for (let value = Math.min(3, reward); value >= 1; value--) {
+    const index = deck.lastIndexOf(value);
+    if (index < 0) continue;
+    const remaining = [...deck];
+    remaining.splice(index, 1);
+    const rest = rewardCards(remaining, reward - value);
+    if (rest) return [value, ...rest];
+  }
+  return null;
+}
+
+export function applySaboteurRewards(roundPlayers: Map<string, PlayerGameState>, goldDeck: number[]): void {
+  const saboteurs = [...roundPlayers.values()].filter((p) => p.role === 'saboteur');
+  const recipients = saboteurs.filter((p) => !p.forfeited);
+  if (recipients.length === 0) return;
   const reward = SABOTEUR_REWARDS[saboteurs.length] ?? 2;
-  for (const s of saboteurs) s.goldCollected += reward;
+  const remaining = [...goldDeck];
+  for (let paid = 0; paid < recipients.length; paid++) {
+    const cards = rewardCards(remaining, reward);
+    if (!cards) throw new Error('Gold deck cannot pay the Saboteur reward');
+    for (const value of cards) remaining.splice(remaining.lastIndexOf(value), 1);
+  }
+  goldDeck.splice(0, goldDeck.length, ...remaining);
+  for (const s of recipients) s.goldCollected += reward;
 }

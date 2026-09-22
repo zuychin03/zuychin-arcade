@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: #0b0716;
+  color-scheme: dark;
+}
+
+html {
+  scrollbar-color: #4f3a70 #0b0716;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0716;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #0b0716;
+  border-radius: 999px;
+  background: #4f3a70;
+}
+
+:where(button, a, [role='button'], [role='link'], [tabindex]):focus-visible,
+:where(input, textarea, select):focus-visible {
+  outline-color: #f7faff !important;
+  outline-style: solid !important;
+  outline-width: 3px !important;
+  outline-offset: 3px !important;
+}
+
+:where(button, a, [role='button'], [role='link'], [tabindex]):focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

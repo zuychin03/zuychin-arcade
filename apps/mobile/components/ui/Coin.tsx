@@ -1,14 +1,15 @@
 import { Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COUP, neonBox } from '../../constants/theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { COUP, neonBox, neonText } from '../../constants/theme';
 
 interface Props {
-  amount?: number;
+  amount?: number | null;
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
 }
 
-const METALLIC_CORE = ['#3E250A', '#1C1004', '#4D300F'] as const; // High-contrast metallic cyber-gold core
+const METALLIC_CORE = ['#3E250A', '#1C1004', '#4D300F'] as const;
 const GRAD_START = { x: 0, y: 0 };
 const GRAD_END = { x: 1, y: 1 };
 
@@ -21,6 +22,9 @@ export function Coin({ amount, size = 'sm', showText = false }: Props) {
 
   const disc = (
     <LinearGradient
+      accessible={!showText}
+      accessibilityRole="image"
+      accessibilityLabel="Gold nugget"
       colors={METALLIC_CORE}
       start={GRAD_START}
       end={GRAD_END}
@@ -30,15 +34,14 @@ export function Coin({ amount, size = 'sm', showText = false }: Props) {
           height: dims.disc,
           borderRadius: dims.disc / 2,
           borderWidth: dims.border,
-          borderColor: COUP.gold, // Glowing gold outer rim
+          borderColor: COUP.gold,
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
         },
-        neonBox('rgba(244, 192, 78, 0.55)', dims.disc * 0.45), // Futuristic neon gold glow
+        neonBox('rgba(244, 192, 78, 0.55)', dims.disc * 0.45),
       ]}
     >
-      {/* High-tech inner ring groove */}
       <View
         style={{
           position: 'absolute',
@@ -48,41 +51,30 @@ export function Coin({ amount, size = 'sm', showText = false }: Props) {
           bottom: dims.innerOffset,
           borderRadius: (dims.disc - dims.innerOffset * 2) / 2,
           borderWidth: 1.0,
-          borderColor: 'rgba(244, 192, 78, 0.65)', // Sleek glowing groove
+          borderColor: 'rgba(244, 192, 78, 0.65)',
         }}
       />
-      {/* Holographic glowing center symbol */}
-      <Text
-        style={{
-          fontSize: dims.disc * 0.45,
-          fontFamily: 'Outfit_800ExtraBold',
-          color: COUP.gold,
-          textAlign: 'center',
-          textShadowColor: 'rgba(244, 192, 78, 0.9)',
-          textShadowRadius: 6,
-          textShadowOffset: { width: 0, height: 0 },
-        }}
-      >
-        $
-      </Text>
+      <MaterialCommunityIcons name="gold" size={dims.disc * 0.5} color={COUP.gold} />
     </LinearGradient>
   );
 
   if (showText && amount !== undefined) {
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: dims.gap }}>
+      <View
+        accessible
+        accessibilityLabel={amount === null ? 'Gold total hidden' : `${amount} gold`}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: dims.gap }}
+      >
         {disc}
         <Text
           style={{
             fontFamily: 'Outfit_800ExtraBold',
-            color: COUP.gold,
             fontSize: dims.font,
-            textShadowColor: 'rgba(244, 192, 78, 0.3)',
-            textShadowRadius: 6,
-            textShadowOffset: { width: 0, height: 0 },
+            ...neonText('rgba(244, 192, 78, 0.3)', 6),
+            color: COUP.gold,
           }}
         >
-          {amount}
+          {amount === null ? '?' : amount}
         </Text>
       </View>
     );

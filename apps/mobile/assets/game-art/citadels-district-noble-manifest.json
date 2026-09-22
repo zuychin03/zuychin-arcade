@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-noble.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2333120,
+    "sha256": "fae61d323cafdfbff538bee5542c8a2b91a71cbe5ea9b23ef6393efb72da339a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-noble.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19292,
+      "sha256": "3e3d878a91c9e9f7c5d1ec301c492ed65cc93d636ea81128196d892d26298331"
+    }
+  ],
+  "totalBytes": 19292,
+  "maxTotalBytes": 614400
+}

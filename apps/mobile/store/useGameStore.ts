@@ -4,6 +4,19 @@ import type {
   SaboteurPrivateState,
   CoupPublicState,
   CoupPrivateState,
+  KingOfTokyoPublicState,
+  SkullKingPrivateState,
+  SkullKingPublicState,
+  CitadelsPrivateState,
+  CitadelsPublicState,
+  NotAlonePrivateState,
+  NotAlonePublicState,
+  BangPrivateState,
+  BangPublicState,
+  LibertaliaPrivateState,
+  LibertaliaPublicState,
+  ColtPrivateState,
+  ColtPublicState,
   RoomPublicState,
 } from '@zuychin-arcade/types';
 
@@ -27,10 +40,40 @@ interface GameStore {
   // Saboteur game state
   publicState: SaboteurPublicState | null;
   privateState: SaboteurPrivateState | null;
+  saboteurSyncing: boolean;
 
   // Coup game state
   coupPublic: CoupPublicState | null;
   coupPrivate: CoupPrivateState | null;
+  coupSyncing: boolean;
+
+  // One viewer-specific frame includes private Lab offers and preferences.
+  kingOfTokyoPublic: KingOfTokyoPublicState | null;
+  kingOfTokyoSyncing: boolean;
+
+  // Skull King has a shared table plus a viewer-specific hand.
+  skullKingPublic: SkullKingPublicState | null;
+  skullKingPrivate: SkullKingPrivateState | null;
+  skullKingSyncing: boolean;
+
+  // Citadels keeps the draft and hand viewer-specific.
+  citadelsPublic: CitadelsPublicState | null;
+  citadelsPrivate: CitadelsPrivateState | null;
+  citadelsSyncing: boolean;
+
+  // Not Alone separates asymmetric hands and hidden destinations per viewer.
+  notAlonePublic: NotAlonePublicState | null;
+  notAlonePrivate: NotAlonePrivateState | null;
+  notAloneSyncing: boolean;
+  bangPublic: BangPublicState | null;
+  bangPrivate: BangPrivateState | null;
+  bangSyncing: boolean;
+  libertaliaPublic: LibertaliaPublicState | null;
+  libertaliaPrivate: LibertaliaPrivateState | null;
+  libertaliaSyncing: boolean;
+  coltPublic: ColtPublicState | null;
+  coltPrivate: ColtPrivateState | null;
+  coltSyncing: boolean;
 
   // Selected card (for plays)
   selectedCardId: string | null;
@@ -41,14 +84,44 @@ interface GameStore {
   setRoom: (room: RoomPublicState) => void;
   setPublicState: (state: SaboteurPublicState) => void;
   setPrivateState: (state: SaboteurPrivateState) => void;
+  setSaboteurState: (publicState: SaboteurPublicState, privateState: SaboteurPrivateState) => void;
+  setSaboteurSyncing: (syncing: boolean) => void;
   setCoupPublic: (state: CoupPublicState) => void;
   setCoupPrivate: (state: CoupPrivateState) => void;
+  setCoupState: (publicState: CoupPublicState, privateState: CoupPrivateState) => void;
+  setCoupSyncing: (syncing: boolean) => void;
+  setKingOfTokyoPublic: (state: KingOfTokyoPublicState) => void;
+  setKingOfTokyoSyncing: (syncing: boolean) => void;
+  setSkullKingPublic: (state: SkullKingPublicState) => void;
+  setSkullKingPrivate: (state: SkullKingPrivateState) => void;
+  setSkullKingState: (publicState: SkullKingPublicState, privateState: SkullKingPrivateState) => void;
+  setSkullKingSyncing: (syncing: boolean) => void;
+  setCitadelsPublic: (state: CitadelsPublicState) => void;
+  setCitadelsPrivate: (state: CitadelsPrivateState) => void;
+  setCitadelsState: (publicState: CitadelsPublicState, privateState: CitadelsPrivateState) => void;
+  setCitadelsSyncing: (syncing: boolean) => void;
+  setNotAlonePublic: (state: NotAlonePublicState) => void;
+  setNotAlonePrivate: (state: NotAlonePrivateState) => void;
+  setNotAloneState: (publicState: NotAlonePublicState, privateState: NotAlonePrivateState) => void;
+  setNotAloneSyncing: (syncing: boolean) => void;
+  setBangPublic: (state: BangPublicState) => void;
+  setBangPrivate: (state: BangPrivateState) => void;
+  setBangState: (publicState: BangPublicState, privateState: BangPrivateState) => void;
+  setBangSyncing: (syncing: boolean) => void;
+  setLibertaliaPublic: (state: LibertaliaPublicState) => void;
+  setLibertaliaPrivate: (state: LibertaliaPrivateState) => void;
+  setLibertaliaState: (publicState: LibertaliaPublicState, privateState: LibertaliaPrivateState) => void;
+  setLibertaliaSyncing: (syncing: boolean) => void;
+  setColtPublic: (state: ColtPublicState) => void;
+  setColtPrivate: (state: ColtPrivateState) => void;
+  setColtState: (publicState: ColtPublicState, privateState: ColtPrivateState) => void;
+  setColtSyncing: (syncing: boolean) => void;
   setSelectedCard: (cardId: string | null) => void;
   toggleRotated: () => void;
   clearAll: () => void;
 }
 
-export const useGameStore = create<GameStore>((set) => ({
+const emptyState = () => ({
   token: null,
   playerId: null,
   displayName: null,
@@ -56,31 +129,75 @@ export const useGameStore = create<GameStore>((set) => ({
   room: null,
   publicState: null,
   privateState: null,
+  saboteurSyncing: true,
   coupPublic: null,
   coupPrivate: null,
+  coupSyncing: true,
+  kingOfTokyoPublic: null,
+  kingOfTokyoSyncing: true,
+  skullKingPublic: null,
+  skullKingPrivate: null,
+  skullKingSyncing: true,
+  citadelsPublic: null,
+  citadelsPrivate: null,
+  citadelsSyncing: true,
+  notAlonePublic: null,
+  notAlonePrivate: null,
+  notAloneSyncing: true,
+  bangPublic: null,
+  bangPrivate: null,
+  bangSyncing: true,
+  libertaliaPublic: null,
+  libertaliaPrivate: null,
+  libertaliaSyncing: true,
+  coltPublic: null,
+  coltPrivate: null,
+  coltSyncing: true,
   selectedCardId: null,
   rotated: false,
+});
 
-  setAuth: (auth) => set(auth),
+export const useGameStore = create<GameStore>((set) => ({
+  ...emptyState(),
+  setAuth: (auth) => set((state) => state.token === auth.token
+    && state.playerId === auth.playerId && state.roomCode === auth.roomCode
+    ? auth : { ...emptyState(), ...auth }),
   setRoom: (room) => set({ room }),
   setPublicState: (publicState) => set({ publicState }),
   setPrivateState: (privateState) => set({ privateState }),
+  setSaboteurState: (publicState, privateState) => set({ publicState, privateState, saboteurSyncing: false }),
+  setSaboteurSyncing: (saboteurSyncing) => set({ saboteurSyncing }),
   setCoupPublic: (coupPublic) => set({ coupPublic }),
   setCoupPrivate: (coupPrivate) => set({ coupPrivate }),
+  setCoupState: (coupPublic, coupPrivate) => set({ coupPublic, coupPrivate, coupSyncing: false }),
+  setCoupSyncing: (coupSyncing) => set({ coupSyncing }),
+  setKingOfTokyoPublic: (kingOfTokyoPublic) => set({ kingOfTokyoPublic, kingOfTokyoSyncing: false }),
+  setKingOfTokyoSyncing: (kingOfTokyoSyncing) => set({ kingOfTokyoSyncing }),
+  setSkullKingPublic: (skullKingPublic) => set({ skullKingPublic }),
+  setSkullKingPrivate: (skullKingPrivate) => set({ skullKingPrivate }),
+  setSkullKingState: (skullKingPublic, skullKingPrivate) => set({ skullKingPublic, skullKingPrivate, skullKingSyncing: false }),
+  setSkullKingSyncing: (skullKingSyncing) => set({ skullKingSyncing }),
+  setCitadelsPublic: (citadelsPublic) => set({ citadelsPublic }),
+  setCitadelsPrivate: (citadelsPrivate) => set({ citadelsPrivate }),
+  setCitadelsState: (citadelsPublic, citadelsPrivate) => set({ citadelsPublic, citadelsPrivate, citadelsSyncing: false }),
+  setCitadelsSyncing: (citadelsSyncing) => set({ citadelsSyncing }),
+  setNotAlonePublic: (notAlonePublic) => set({ notAlonePublic }),
+  setNotAlonePrivate: (notAlonePrivate) => set({ notAlonePrivate }),
+  setNotAloneState: (notAlonePublic, notAlonePrivate) => set({ notAlonePublic, notAlonePrivate, notAloneSyncing: false }),
+  setNotAloneSyncing: (notAloneSyncing) => set({ notAloneSyncing }),
+  setBangPublic: (bangPublic) => set({ bangPublic }),
+  setBangPrivate: (bangPrivate) => set({ bangPrivate }),
+  setBangState: (bangPublic, bangPrivate) => set({ bangPublic, bangPrivate, bangSyncing: false }),
+  setBangSyncing: (bangSyncing) => set({ bangSyncing }),
+  setLibertaliaPublic: (libertaliaPublic) => set({ libertaliaPublic }),
+  setLibertaliaPrivate: (libertaliaPrivate) => set({ libertaliaPrivate }),
+  setLibertaliaState: (libertaliaPublic, libertaliaPrivate) => set({ libertaliaPublic, libertaliaPrivate, libertaliaSyncing: false }),
+  setLibertaliaSyncing: (libertaliaSyncing) => set({ libertaliaSyncing }),
+  setColtPublic: (coltPublic) => set({ coltPublic }),
+  setColtPrivate: (coltPrivate) => set({ coltPrivate }),
+  setColtState: (coltPublic, coltPrivate) => set({ coltPublic, coltPrivate, coltSyncing: false }),
+  setColtSyncing: (coltSyncing) => set({ coltSyncing }),
   setSelectedCard: (selectedCardId) => set({ selectedCardId, rotated: false }),
   toggleRotated: () => set((s) => ({ rotated: !s.rotated })),
-  clearAll: () =>
-    set({
-      token: null,
-      playerId: null,
-      displayName: null,
-      roomCode: null,
-      room: null,
-      publicState: null,
-      privateState: null,
-      coupPublic: null,
-      coupPrivate: null,
-      selectedCardId: null,
-      rotated: false,
-    }),
+  clearAll: () => set(emptyState()),
 }));

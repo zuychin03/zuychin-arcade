@@ -1,14 +1,19 @@
-// Mining-themed word list — fits the Saboteur theme
-const WORDS = [
-  'GOLD', 'MOLE', 'PICK', 'CART', 'LAMP',
-  'ROCK', 'VEIN', 'MINE', 'DEEP', 'DUST',
-  'AXEL', 'SLAB', 'SEAM', 'LODE', 'NUGGET',
-];
+import { randomInt } from 'node:crypto';
+import { ROOM_CODE_ALPHABET, ROOM_CODE_PATTERN } from '@zuychin-arcade/types';
+
+// Eight unambiguous base-32 characters provide 40 bits of room-code entropy.
+export { ROOM_CODE_PATTERN };
 
 export function generateRoomCode(): string {
-  const word = WORDS[Math.floor(Math.random() * WORDS.length)];
-  const num = String(Math.floor(Math.random() * 90) + 10);  // 10–99
-  return `${word}-${num}`;
+  const segment = () => Array.from(
+    { length: 4 },
+    () => ROOM_CODE_ALPHABET[randomInt(ROOM_CODE_ALPHABET.length)],
+  ).join('');
+  return `${segment()}-${segment()}`;
+}
+
+export function isRoomCode(value: string): boolean {
+  return ROOM_CODE_PATTERN.test(value.toUpperCase().trim());
 }
 
 export function generateUniqueRoomCode(exists: (code: string) => boolean): string {

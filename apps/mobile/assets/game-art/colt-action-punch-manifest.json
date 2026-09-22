@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-punch.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1910445,
+    "sha256": "9b4b4f1b9d1a593a28b8fff0bcb68ca8940ae07d82d8620ae753c635b49ad51b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-punch.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 10828,
+      "sha256": "f6ba7ec70f06151aad53c96eabe6213c8ede7d6434608296291b81d454849921"
+    }
+  ],
+  "totalBytes": 10828,
+  "maxTotalBytes": 614400
+}

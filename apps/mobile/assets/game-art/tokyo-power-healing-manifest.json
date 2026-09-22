@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-healing.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2556932,
+    "sha256": "9c6f6cc2d4dcb3269bd4e576408e22636204cab264364b176b767bc249c89728"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-healing.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 36636,
+      "sha256": "a44b6564f56357d322fbdc5aed661daaf12bdd3bec4186a60f72ef67f44abb25"
+    }
+  ],
+  "totalBytes": 36636,
+  "maxTotalBytes": 614400
+}

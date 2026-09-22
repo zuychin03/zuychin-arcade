@@ -1,0 +1,1 @@
+import type{GameId}from'@zuychin-arcade/types';export function gameBaseRoute(id:GameId){return id==='king_of_tokyo'?'/king-of-tokyo':id==='skull_king'?'/skull-king':id==='not_alone'?'/not-alone':id==='colt_express'?'/colt-express':`/${id.replace('_','-')}`;}export function gameLobbyRoute(id:GameId){return`${gameBaseRoute(id)}/lobby`;}

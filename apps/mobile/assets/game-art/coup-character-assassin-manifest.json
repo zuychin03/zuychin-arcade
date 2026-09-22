@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/coup-character-assassin.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1916176,
+    "sha256": "a0df81e3010d88254e04db8ea679ef151f78a1ada187d5994be81ece3c5ee422"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "coup-character-assassin.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 9714,
+      "sha256": "b95caa114df9cce743e5d8303473193cbbc5cb4836cf1d5e7bdf25fbc117957a"
+    }
+  ],
+  "totalBytes": 9714,
+  "maxTotalBytes": 614400
+}

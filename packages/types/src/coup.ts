@@ -1,8 +1,8 @@
 // Coup (+ Reformation) shared contracts.
 //
-// Two variants, chosen by the room owner at creation:
-//   'base'        — 5 characters (Duke/Assassin/Captain/Ambassador/Contessa), 2–6 players
-//   'reformation' — adds allegiances, Convert/Embezzle/Treasury, Inquisitor
+// The contracts reserve two variants; the current selectable release exposes base only:
+//   'base'        - 5 characters (Duke/Assassin/Captain/Ambassador/Contessa), 2–6 players
+//   'reformation' - adds allegiances, Convert/Embezzle/Treasury, Inquisitor
 //                   replaces Ambassador, 2–10 players
 //
 // As with Saboteur, the server is authoritative: a player's face-down
@@ -39,7 +39,7 @@ export type CoupActionType =
 // --- INFLUENCE (a player's character cards) ---
 export interface Influence {
   character: CoupCharacter;
-  revealed: boolean; // true once lost (flipped face-up) — then public and dead
+  revealed: boolean; // true once lost (flipped face-up) - then public and dead
 }
 
 // --- SERVER-ONLY player state (never serialized to clients in full) ---
@@ -50,6 +50,7 @@ export interface CoupPlayerState {
   coins: number;
   allegiance: Allegiance | null; // null in the base variant
   eliminated: boolean;
+  forfeited: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -61,6 +62,7 @@ export type CoupPhase =
   | 'awaiting_action_challenge' // others may challenge the claimed character
   | 'awaiting_block' // eligible blocker(s) may block
   | 'awaiting_block_challenge' // others may challenge the block
+  | 'awaiting_challenge_decision' // challenged claimant chooses to prove or concede
   | 'awaiting_lose_influence' // a player picks which card to reveal/lose
   | 'awaiting_exchange' // actor picks which cards to keep (Ambassador/Inquisitor)
   | 'awaiting_examine' // Inquisitor decides keep/force-swap (reformation)
@@ -71,7 +73,7 @@ export type LoseInfluenceReason =
   | 'coup'
   | 'assassinate'
   | 'failed_challenge' // challenged and was wrong
-  | 'failed_bluff'; // got challenged on a claim they couldn't back
+  | 'conceded_challenge'; // claimant declined to prove, without revealing whether the claim was true
 
 // --- PUBLIC view of the pending window (safe to broadcast) ---
 export interface CoupPendingPublic {
@@ -82,6 +84,7 @@ export interface CoupPendingPublic {
   claimedCharacter: CoupCharacter | null; // character the actor is claiming (challenge windows)
   blockerId: string | null; // who declared a block
   blockCharacter: CoupCharacter | null; // character the blocker is claiming
+  challengerId: string | null; // whose challenge is being resolved
   waitingOn: string[]; // playerIds the engine is waiting on for input
   responded: string[]; // playerIds who have already passed/responded (UI ticks)
   deadline: number | null; // epoch ms when the auto-pass timer fires (countdown)
@@ -96,8 +99,9 @@ export interface CoupPublicPlayer {
   coins: number;
   allegiance: Allegiance | null;
   influenceCount: number; // face-down (alive) cards remaining
-  revealedCharacters: CoupCharacter[]; // face-up (lost) cards — public
+  revealedCharacters: CoupCharacter[]; // face-up (lost) cards - public
   eliminated: boolean;
+  forfeited: boolean;
   isCurrentTurn: boolean;
 }
 
@@ -108,7 +112,9 @@ export interface CoupLogEntry {
 
 // --- PUBLIC game state (broadcast to the room) ---
 export interface CoupPublicState {
+  gameId: 'coup';
   roomCode: string;
+  revision: number;
   variant: CoupVariant;
   status: 'playing' | 'game_over';
   players: CoupPublicPlayer[]; // in turn order
@@ -118,6 +124,7 @@ export interface CoupPublicState {
   pending: CoupPendingPublic;
   log: CoupLogEntry[];
   winnerId: string | null;
+  terminationReason: 'no_players_remaining' | null;
 }
 
 // --- PRIVATE per-player decision context ---
@@ -135,6 +142,9 @@ export interface CoupExamineResult {
 }
 
 export interface CoupPrivateState {
+  gameId: 'coup';
+  roomCode: string;
+  revision: number;
   playerId: string;
   influences: Influence[]; // this player's own cards (face-down + revealed)
   exchange: CoupExchangeOption | null; // set during this player's awaiting_exchange
@@ -144,9 +154,12 @@ export interface CoupPrivateState {
 // ---------------------------------------------------------------------------
 // SOCKET EVENT PAYLOADS (client → server)
 // ---------------------------------------------------------------------------
+export type CoupActionKind = 'start_game' | 'action' | 'respond' | 'lose_influence' | 'exchange' | 'resolve_challenge';
+
 export interface CoupActionPayload {
   action: CoupActionType;
   targetPlayerId?: string; // assassinate/coup/steal/convert(other)/examine
+  expectedRevision: number;
 }
 
 export type CoupResponse = 'challenge' | 'block' | 'pass';
@@ -156,16 +169,25 @@ export interface CoupRespondPayload {
   // required when response === 'block' and more than one character could block
   // (Steal: Captain / Ambassador / Inquisitor)
   blockCharacter?: CoupCharacter;
+  expectedRevision: number;
 }
 
 export interface CoupLoseInfluencePayload {
   character: CoupCharacter; // which face-down card to reveal
+  expectedRevision: number;
 }
 
 export interface CoupExchangePayload {
   keep: CoupCharacter[]; // characters to keep (length must equal alive influence count)
+  expectedRevision: number;
 }
 
 export interface CoupExaminePayload {
   forceSwap: boolean; // Inquisitor: force the examined player to redraw
+  expectedRevision: number;
+}
+
+export interface CoupChallengeDecisionPayload {
+  prove: boolean;
+  expectedRevision: number;
 }

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/coup-court-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2560498,
+    "sha256": "e1fd8bbd590e9827943aac171c9c1b90b763a768d38ae80fa8b56c659173bab5"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "coup-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 58224,
+      "sha256": "44d99e35adeb109d78c3ba0d10a2ea30705a9024a6e991bdb5400e21c476cafa"
+    },
+    {
+      "file": "coup-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 165120,
+      "sha256": "b2048bc5be2f00c7d21ee7761b90627c64188c0297e7cb678e9b5dd7423d476e"
+    }
+  ],
+  "totalBytes": 223344,
+  "maxTotalBytes": 614400
+}

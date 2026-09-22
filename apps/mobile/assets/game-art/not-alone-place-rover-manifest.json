@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-place-rover.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2422498,
+    "sha256": "f0c47e8167ef6fecada6e8d452ffdc90535298db15e41ca700651dcf4066f150"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-place-rover.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21712,
+      "sha256": "bc576e8e2210e5392b939c22d9b0930860a922ba9a2ebeaa164612a941514337"
+    }
+  ],
+  "totalBytes": 21712,
+  "maxTotalBytes": 614400
+}

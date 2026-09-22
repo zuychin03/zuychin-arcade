@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-place-artefact.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2241035,
+    "sha256": "b06688f0d25868423627464743ee12f20ad140825b8d8cdbef0cfa72f3491ca1"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-place-artefact.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16172,
+      "sha256": "742b99b15014c4d3bf9f6e8e4e37040a952e8d64303a542fc0ba6462b5f7cbf6"
+    }
+  ],
+  "totalBytes": 16172,
+  "maxTotalBytes": 614400
+}

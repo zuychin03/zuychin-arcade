@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-mine-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2929255,
+    "sha256": "bf090a090532fded880c2ff6f8895592fdc8904fbff77ff1dc330370c80db0cc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 68704,
+      "sha256": "247b4164c7bf7dc8170e5d93389f1f8d4787f786847abfbafa0cc232b95c7359"
+    },
+    {
+      "file": "saboteur-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 220538,
+      "sha256": "6b1d360e502d708d56fd7e33cd0c320dc7fa81f7fd150ed03af52206be5eab5e"
+    }
+  ],
+  "totalBytes": 289242,
+  "maxTotalBytes": 614400
+}

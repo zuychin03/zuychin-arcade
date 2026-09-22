@@ -1,0 +1,1 @@
+import{RemainingJoin}from'../../components/remaining/RemainingJoin';import{ColtMark}from'../../components/remaining/RemainingArtwork';import{COLT}from'../../constants/theme';export default function Page(){return <RemainingJoin title="JOIN THE ROBBERY" mark={<ColtMark size={76}/>} palette={{...COLT,accent:COLT.ember,secondary:COLT.gold}}/>}

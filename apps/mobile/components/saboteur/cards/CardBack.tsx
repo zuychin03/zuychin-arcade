@@ -1,30 +1,27 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ARCADE, neonBox, neonText } from '../../../constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { CardSurface } from '../../ui/CardSurface';
 
 interface Props {
   width?: number;
   height?: number;
   icon?: keyof typeof MaterialCommunityIcons.glyphMap;
+  depth?: number;
 }
 
-export function CardBack({ width = 44, height = 66, icon = 'pickaxe' }: Props) {
+export function CardBack({ width = 44, height = 66, icon = 'pickaxe', depth = 3 }: Props) {
   const minDim = Math.min(width, height);
   return (
-    <View
+    <CardSurface width={width} height={height} depth={depth} radius={8} faceColor="#30202B" edgeColor="#160E16" highlightColor="#BC9261">
+    <LinearGradient colors={['#573D35', '#31212B', '#201622']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
       style={{
         width,
         height,
-        backgroundColor: '#161028',
-        borderRadius: 8,
-        borderWidth: 2,
-        borderColor: '#FF2E88',
         alignItems: 'center',
         justifyContent: 'center',
-        ...neonBox('#FF2E88', 8),
       }}
     >
-      {/* Decorative inner border */}
       <View
         style={{
           position: 'absolute',
@@ -32,21 +29,18 @@ export function CardBack({ width = 44, height = 66, icon = 'pickaxe' }: Props) {
           bottom: 4,
           left: 4,
           right: 4,
-          borderRadius: 6,
+          borderRadius: 4,
           borderWidth: 1,
-          borderColor: 'rgba(255, 46, 136, 0.3)',
-          borderStyle: 'dashed',
+          borderColor: '#9A7455',
+          borderBottomColor: '#21131C',
+          borderRightColor: '#21131C',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <MaterialCommunityIcons name={icon} size={minDim * 0.38} color="#FF2E88" />
-        
-        {/* Subtle card identifier at bottom */}
-        <Text style={{ position: 'absolute', bottom: 4, fontSize: minDim * 0.14, opacity: 0.6, color: '#A855F7', fontWeight: 'bold' }}>
-          ARCADE
-        </Text>
+        <MaterialCommunityIcons name={icon} size={minDim * 0.38} color="#E6BE81" />
       </View>
-    </View>
+    </LinearGradient>
+    </CardSurface>
   );
 }

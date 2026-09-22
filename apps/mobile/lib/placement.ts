@@ -5,7 +5,7 @@ import { BOARD } from '@zuychin-arcade/types';
 
 type Side = 'top' | 'right' | 'bottom' | 'left';
 const OPPOSITE: Record<Side, Side> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
-const NEIGHBOURS: Array<{ side: Side; dr: number; dc: number }> = [
+const NEIGHBOURS: { side: Side; dr: number; dc: number }[] = [
   { side: 'top', dr: -1, dc: 0 },
   { side: 'right', dr: 0, dc: 1 },
   { side: 'bottom', dr: 1, dc: 0 },
@@ -58,10 +58,11 @@ export function validPlacements(
   const edges = rotateEdges(card.edges, rotated);
 
   const candidates = new Set<string>();
+  const { minRow, maxRow, minCol, maxCol } = BOARD.playableBounds;
   for (const pc of board) {
     for (const { dr, dc } of NEIGHBOURS) {
       const pos = { row: pc.position.row + dr, col: pc.position.col + dc };
-      if (pos.row < 0 || pos.row > 8 || pos.col < 2 || pos.col > 6) continue;
+      if (pos.row < minRow || pos.row > maxRow || pos.col < minCol || pos.col > maxCol) continue;
       const k = key(pos);
       if (!cells.has(k) && !blocked.has(k)) candidates.add(k);
     }

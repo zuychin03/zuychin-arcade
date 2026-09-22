@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-unique.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2474256,
+    "sha256": "4bf7eabe29b67737b0d4fc5a82328f3caccd28da48820c957181751b1d6143a3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-unique.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22386,
+      "sha256": "3175d874a4b8144fc1e4f3e5dbe7e9c830b7bed03f79d8bb29765c7d089d42df"
+    }
+  ],
+  "totalBytes": 22386,
+  "maxTotalBytes": 614400
+}

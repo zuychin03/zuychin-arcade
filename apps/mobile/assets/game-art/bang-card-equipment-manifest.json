@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-equipment.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2597591,
+    "sha256": "18f5ca50965cc4891f2b24e5ef9289f98e609e11b2f81697acecb3f199fc80f9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-equipment.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23222,
+      "sha256": "75c6423b8b18e79ca9f229bbbc12d097510e66e8cd90f4cd16ed428a3486dbf9"
+    }
+  ],
+  "totalBytes": 23222,
+  "maxTotalBytes": 614400
+}

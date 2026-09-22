@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-place-shelter.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2289838,
+    "sha256": "72b17cc63fb51ef3e40035dd6444508615f46e0fad00d5ea3199a7aec7205ac4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-place-shelter.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18856,
+      "sha256": "ccff123417049c1959477bbc0c623d5bd8ea598946e9aa431a4012263de4e051"
+    }
+  ],
+  "totalBytes": 18856,
+  "maxTotalBytes": 614400
+}

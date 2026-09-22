@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/coup-character-inquisitor.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1835488,
+    "sha256": "535ad0ef86c0c3226b44766e07a4b69d3c60f8016de993fa9f4250052bd528fa"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "coup-character-inquisitor.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 10396,
+      "sha256": "35d0bad7c544b37f0b16e76ac038d1422090eb389bab9378ee30652e084b8093"
+    }
+  ],
+  "totalBytes": 10396,
+  "maxTotalBytes": 614400
+}

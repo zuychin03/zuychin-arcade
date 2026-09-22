@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-loot-relic.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2017022,
+    "sha256": "368ef5c4e609b20b52d1f4025ece3327bba2a0ceba831b37359d116e4b737bfe"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-loot-relic.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11814,
+      "sha256": "1463cb3b7166e70863c1e941baafa0d4f5351d7f1d5b24725efd9729def019a0"
+    }
+  ],
+  "totalBytes": 11814,
+  "maxTotalBytes": 614400
+}

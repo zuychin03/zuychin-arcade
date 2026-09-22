@@ -1,9 +1,14 @@
-import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
+import { useEffect } from 'react';
+import { BackHandler, Platform, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { Easing, SlideInLeft, SlideOutLeft, FadeIn, FadeOut } from 'react-native-reanimated';
 import { ARCADE } from '../../constants/theme';
 import ZuychinLogo from './ZuychinLogo';
+import { useWebModalFocus } from '../../hooks/useWebModalFocus';
+import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
+
+const DRAWER_ID = 'arcade-mobile-navigation';
 
 type Props = {
   isOpen: boolean;
@@ -13,23 +18,26 @@ type Props = {
 type NavItemProps = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   label: string;
-  route: string;
   isActive: boolean;
   onPress: () => void;
 };
 
-function NavItem({ icon, label, route, isActive, onPress }: NavItemProps) {
+function NavItem({ icon, label, isActive, onPress }: NavItemProps) {
   return (
-    <Pressable onPress={onPress}>
-      <View style={[styles.navItem, isActive && styles.navItemActive]}>
-        <MaterialCommunityIcons
-          name={icon}
-          size={20}
-          color={isActive ? ARCADE.pink : ARCADE.muted}
-          style={{ marginRight: 16 }}
-        />
-        <Text style={[styles.navLabel, isActive ? styles.navLabelActive : styles.navLabelInactive]}>{label}</Text>
-      </View>
+    <Pressable
+      accessibilityRole="link"
+      accessibilityState={{ selected: isActive }}
+      aria-current={Platform.OS === 'web' && isActive ? 'page' : undefined}
+      onPress={onPress}
+      style={[styles.navItem, isActive && styles.navItemActive]}
+    >
+      <MaterialCommunityIcons
+        name={icon}
+        size={20}
+        color={isActive ? ARCADE.pink : ARCADE.muted}
+        style={{ marginRight: 16 }}
+      />
+      <Text style={[styles.navLabel, isActive ? styles.navLabelActive : styles.navLabelInactive]}>{label}</Text>
     </Pressable>
   );
 }
@@ -37,39 +45,73 @@ function NavItem({ icon, label, route, isActive, onPress }: NavItemProps) {
 export default function MobileDrawer({ isOpen, onClose }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const { height } = useWindowDimensions();
+  const reduceMotion = useReducedMotionPreference();
+  useWebModalFocus(isOpen, DRAWER_ID, onClose);
+
+  useEffect(() => {
+    if (!isOpen || Platform.OS === 'web') return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      onClose();
+      return true;
+    });
+    return () => subscription.remove();
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
     <View style={[StyleSheet.absoluteFill, { zIndex: 100 }]}>
       <Animated.View 
-        entering={FadeIn} 
-        exiting={FadeOut}
+        entering={reduceMotion ? undefined : FadeIn}
+        exiting={reduceMotion ? undefined : FadeOut}
         style={StyleSheet.absoluteFill}
       >
-        <Pressable style={[StyleSheet.absoluteFill, styles.backdrop]} onPress={onClose} />
+        <Pressable
+          accessibilityLabel="Close navigation menu"
+          accessibilityRole="button"
+          style={[StyleSheet.absoluteFill, styles.backdrop]}
+          onPress={onClose}
+        />
       </Animated.View>
       
-      <Animated.View 
-        entering={SlideInLeft.duration(300).easing(Easing.out(Easing.cubic))}
-        exiting={SlideOutLeft.duration(200)}
-        style={[styles.drawer, { height }]}
+      <Animated.View
+        accessibilityViewIsModal
+        accessibilityLabel="Arcade navigation"
+        aria-modal
+        entering={reduceMotion ? undefined : SlideInLeft.duration(300).easing(Easing.out(Easing.cubic))}
+        exiting={reduceMotion ? undefined : SlideOutLeft.duration(200)}
+        nativeID={DRAWER_ID}
+        role="dialog"
+        style={styles.drawer}
       >
-        <View style={styles.logoContainer}>
-          <ZuychinLogo color={ARCADE.pink} height={44} />
-          <View>
-            <Text style={styles.logoText}>ZUYCHIN</Text>
-            <Text style={styles.logoSub}>ARCADE</Text>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.drawerHeader}>
+            <View style={styles.headerControls}>
+              <ZuychinLogo color={ARCADE.pink} height={44} style={{ flexShrink: 0 }} />
+              <Pressable
+                accessibilityLabel="Close navigation menu"
+                accessibilityRole="button"
+                hitSlop={8}
+                onPress={onClose}
+                style={styles.closeButton}
+              >
+                <MaterialCommunityIcons name="close" size={24} color={ARCADE.text} />
+              </Pressable>
+            </View>
+            <View style={styles.logoWords}>
+              <Text style={styles.logoText}>ZUYCHIN</Text>
+              <Text style={styles.logoSub}>ARCADE</Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.navContainer}>
-          <NavItem icon="controller-classic" label="Hub" route="/" isActive={pathname === '/'} onPress={() => { router.push('/'); onClose(); }} />
-          <NavItem icon="trophy-outline" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} onPress={() => { router.push('/leaderboard'); onClose(); }} />
-          <NavItem icon="account-circle-outline" label="Profile" route="/profile" isActive={pathname === '/profile'} onPress={() => { router.push('/profile'); onClose(); }} />
-          <NavItem icon="information-outline" label="About" route="/about" isActive={pathname === '/about'} onPress={() => { router.push('/about'); onClose(); }} />
-        </View>
+          <View style={styles.navContainer}>
+            <NavItem icon="controller-classic" label="Hub" isActive={pathname === '/'} onPress={() => { router.push('/'); onClose(); }} />
+            <NavItem icon="trophy-outline" label="Ranks" isActive={pathname === '/leaderboard'} onPress={() => { router.push('/leaderboard'); onClose(); }} />
+            <NavItem icon="account-circle-outline" label="Profile" isActive={pathname === '/profile'} onPress={() => { router.push('/profile'); onClose(); }} />
+            <NavItem icon="information-outline" label="About" isActive={pathname === '/about'} onPress={() => { router.push('/about'); onClose(); }} />
+            <NavItem icon="shield-lock-outline" label="Privacy" isActive={pathname === '/privacy'} onPress={() => { router.push('/privacy'); onClose(); }} />
+          </View>
+        </ScrollView>
       </Animated.View>
     </View>
   );
@@ -80,18 +122,43 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   drawer: {
-    width: 280,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: '82%',
+    maxWidth: 320,
     backgroundColor: ARCADE.panel,
     borderRightWidth: 1,
     borderRightColor: ARCADE.border,
-    paddingTop: 60,
   },
-  logoContainer: {
+  drawerHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    gap: 8,
+  },
+  scroll: {
+    flex: 1,
+    minHeight: 0,
+  },
+  headerControls: {
+    minWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    marginBottom: 40,
-    gap: 12,
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  logoWords: {
+    minWidth: 0,
+    maxWidth: '100%',
+    flexShrink: 0,
+  },
+  closeButton: {
+    minWidth: 48,
+    minHeight: 48,
+    flexShrink: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logoText: {
     color: ARCADE.text,
@@ -108,7 +175,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   navContainer: {
-    flex: 1,
+    paddingBottom: 16,
   },
   navItem: {
     flexDirection: 'row',
@@ -123,6 +190,8 @@ const styles = StyleSheet.create({
     borderLeftColor: ARCADE.pink,
   },
   navLabel: {
+    flex: 1,
+    minWidth: 0,
     fontSize: 18,
     fontFamily: 'Outfit_700Bold',
   },

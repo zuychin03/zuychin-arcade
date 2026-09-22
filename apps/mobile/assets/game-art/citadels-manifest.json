@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-city-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2607616,
+    "sha256": "1a1bdb1ce8e6f578d6c5a546a9e5e2c5a4658e597523fd6a4fe3477045b455cd"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 59182,
+      "sha256": "f03fa716549202a1bae3cb2bd98100e3caefc1e43e7a5b0ae04a99a9be8b304b"
+    },
+    {
+      "file": "citadels-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 172996,
+      "sha256": "f106f0bff81e1b0bf8efee25a1a460ee94cf6c609ed03c76727f9ef37181fc9f"
+    }
+  ],
+  "totalBytes": 232178,
+  "maxTotalBytes": 614400
+}

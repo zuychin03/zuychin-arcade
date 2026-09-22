@@ -1,0 +1,9 @@
+const path = require('node:path');
+const { getDefaultConfig } = require('expo/metro-config');
+const { withNativeWind } = require('nativewind/metro');
+const config = getDefaultConfig(__dirname);
+const repo = path.resolve(__dirname, '../..');
+config.watchFolders = [repo];
+config.resolver.nodeModulesPaths = [path.join(repo, 'apps/mobile/node_modules'), path.join(repo, 'node_modules')];
+config.resolver.blockList = [/[/\\]\.tmp-qa-evidence(?:[/\\]|$)/, /[/\\]card-gallery[/\\]dist(?:[/\\]|$)/];
+module.exports = withNativeWind(config, { input: path.join(repo, 'apps/mobile/global.css'), configPath: path.join(__dirname, 'tailwind.config.js'), disableTypeScriptGeneration: true });

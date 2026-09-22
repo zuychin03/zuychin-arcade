@@ -1,30 +1,53 @@
 {
   "expo": {
-    "name": "zuychin-arcade",
+    "name": "Zuychin Arcade",
     "slug": "zuychin-arcade",
     "scheme": "zuychin-arcade",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "description": "Create a private tabletop room and play social board games with friends on web, iOS and Android.",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0B0716",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zuychin.arcade",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0B0716",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.MANAGE_EXTERNAL_STORAGE",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO"
+      ],
+      "predictiveBackGestureEnabled": true,
       "package": "com.zuychin.arcade"
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "output": "single"
+      "output": "static"
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": false
+        }
+      ]
+    ]
   }
 }

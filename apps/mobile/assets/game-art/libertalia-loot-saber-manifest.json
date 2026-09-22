@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-loot-saber.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2223299,
+    "sha256": "b6bdc2254c6701e8b7306567cc1e1abaef99c5dcf5fb4839859f007635840515"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-loot-saber.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15774,
+      "sha256": "eec46da047b78ec04738bb1c1121b369f06645c5cb7b2f8b6b24b306d4a35c6e"
+    }
+  ],
+  "totalBytes": 15774,
+  "maxTotalBytes": 614400
+}

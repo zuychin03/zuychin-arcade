@@ -9,6 +9,12 @@ const config = getDefaultConfig(projectRoot);
 
 // Monorepo: watch the workspace and resolve hoisted dependencies
 config.watchFolders = [workspaceRoot];
+const existingBlockList = config.resolver.blockList;
+config.resolver.blockList = [
+  ...(Array.isArray(existingBlockList) ? existingBlockList : existingBlockList ? [existingBlockList] : []),
+  // Temporary evidence and dependency backups are not source modules.
+  /[/\\]\.tmp-[^/\\]+(?:[/\\]|$)/,
+];
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),

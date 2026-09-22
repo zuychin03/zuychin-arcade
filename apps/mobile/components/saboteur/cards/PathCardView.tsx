@@ -1,9 +1,11 @@
 import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
 import type { PathCard, PathCardEdges } from '@zuychin-arcade/types';
 import { rotateEdges } from '../../../lib/placement';
 import { MINE, neonBox } from '../../../constants/theme';
+import { CardSurface } from '../../ui/CardSurface';
 const PATH_BG = '#352314';
 const PATH_HIGHLIGHT = '#5A3820';
 const ROCK_EDGE = '#79502F';
@@ -13,9 +15,10 @@ interface ArmsProps {
   edges: PathCardEdges;
   width: number;
   height: number;
+  fill?: boolean;
 }
 type Direction = 'top' | 'right' | 'bottom' | 'left';
-function Arms({ edges, width, height }: ArmsProps) {
+function Arms({ edges, width, height, fill = false }: ArmsProps) {
   const halfW = width / 2;
   const halfH = height / 2;
   const outerHalf = width * 0.24;
@@ -39,7 +42,10 @@ function Arms({ edges, width, height }: ArmsProps) {
     `M ${halfW} ${halfH - radius * 1.05} C ${halfW + radius * 0.72} ${halfH - radius * 1.1}, ${halfW + radius * 1.1} ${halfH - radius * 0.5}, ${halfW + radius} ${halfH} C ${halfW + radius * 1.08} ${halfH + radius * 0.65}, ${halfW + radius * 0.5} ${halfH + radius * 1.08}, ${halfW} ${halfH + radius} C ${halfW - radius * 0.72} ${halfH + radius * 1.08}, ${halfW - radius * 1.08} ${halfH + radius * 0.52}, ${halfW - radius} ${halfH} C ${halfW - radius * 1.08} ${halfH - radius * 0.62}, ${halfW - radius * 0.5} ${halfH - radius * 1.08}, ${halfW} ${halfH - radius * 1.05} Z`;
   return (
     <>
-      <Svg width={width} height={height} style={{ position: 'absolute' }}>
+      <Svg width={fill ? '100%' : width} height={fill ? '100%' : height}
+        viewBox={fill ? `0 0 ${width} ${height}` : undefined}
+        preserveAspectRatio={fill ? 'none' : undefined}
+        style={{ position: 'absolute' }}>
         {openDirections.map((direction) => (
           <Path
             key={`${direction}-rock`}
@@ -136,8 +142,10 @@ interface Props {
   rotated?: boolean;
   width?: number;
   height?: number;
+  depth?: number;
+  fill?: boolean;
 }
-export function PathCardView({ card, rotated = false, width = 44, height = 66 }: Props) {
+export function PathCardView({ card, rotated = false, width = 44, height = 66, depth = 3, fill = false }: Props) {
   const edges = rotateEdges(card.edges, rotated);
   const renderSpecialNode = () => {
     const minDim = Math.min(width, height);
@@ -189,7 +197,7 @@ export function PathCardView({ card, rotated = false, width = 44, height = 66 }:
             ...neonBox(MINE.gold, 8),
           }}
         >
-          <MaterialCommunityIcons name="cash-multiple" size={minDim * 0.48} color={MINE.gold} />
+          <MaterialCommunityIcons name="gold" size={minDim * 0.48} color={MINE.gold} />
         </View>
       );
     }
@@ -213,17 +221,21 @@ export function PathCardView({ card, rotated = false, width = 44, height = 66 }:
     }
     return null;
   };
-  return (
-    <View
-      style={{ width, height }}
-      className="overflow-hidden rounded-md border border-mine-surface bg-[#1E142B]"
-    >
-      <Arms edges={edges} width={width} height={height} />
+  const face = (
+    <CardSurface fill={fill} width={width} height={fill ? undefined : height} depth={depth} radius={6} faceColor="#251D30" edgeColor="#100B17" highlightColor="#9A8065">
+      <LinearGradient
+        colors={['#49384B', '#29212E', '#17131E']}
+        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+        accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none"
+        style={{ position: 'absolute', inset: 0 }}
+      />
+      <Arms edges={edges} width={width} height={height} fill={fill} />
       {card.subtype !== 'tunnel' && (
         <View className="absolute inset-0 items-center justify-center">
           {renderSpecialNode()}
         </View>
       )}
-    </View>
+    </CardSurface>
   );
+  return fill ? <View style={{ width, minHeight: height, flexGrow: 1 }}>{face}</View> : face;
 }

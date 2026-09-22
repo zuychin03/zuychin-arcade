@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-defense.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2413347,
+    "sha256": "54ebd01b8d89080e4192560ea22d22d073dc69d65c90d8ddca072100a4637e53"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-defense.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13314,
+      "sha256": "f62f04721f93a908be74c1fff0fb9f4f51a15a3c57aa7c3066e57c92a87cea73"
+    }
+  ],
+  "totalBytes": 13314,
+  "maxTotalBytes": 614400
+}

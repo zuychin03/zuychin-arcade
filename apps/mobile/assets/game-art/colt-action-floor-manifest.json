@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-floor.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2197933,
+    "sha256": "a2863b10b34297aea1726ee3c5e87e4f3e6db7b5a9ebdfa1c2f07072523fdffb"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-floor.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15908,
+      "sha256": "aae22595a29241c5113184a3349e8c4b6511f7a3a8b2c09dc09d5ba593c7aa02"
+    }
+  ],
+  "totalBytes": 15908,
+  "maxTotalBytes": 614400
+}

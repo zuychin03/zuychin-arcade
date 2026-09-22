@@ -18,6 +18,7 @@ import {
 } from './deck.js';
 import {
   isGoalReached,
+  orientReachedGoal,
   rotateEdges,
   validatePlacement,
 } from './boardValidator.js';
@@ -36,23 +37,28 @@ export interface GoalState {
   position: BoardPosition;
   isGold: boolean;
   revealed: boolean;
+  card: PathCard;
 }
 
 export interface SaboteurServerState {
+  revision: number;
   roomCode: string;
   round: number;
   status: 'playing' | 'round_end' | 'game_over';
+  terminationReason: 'not_enough_players' | null;
   deck: GameCard[];
   discard: GameCard[];
   board: PlacedCard[];                 // start + tunnels + revealed goals
   goals: GoalState[];
   players: Map<string, PlayerGameState>;
   turnOrder: string[];                 // playerIds, lobby join order
+  roundPlayerIds: string[];
   currentTurnIndex: number;
   roundWinner: 'miners' | 'saboteurs' | null;
   goldDeck: number[];                  // shared nugget deck, persists across rounds
   goldDistribution: GoldDistributionState | null;
   lastPlacerId: string | null;         // last player to place a path card this round
+  lastActorId: string | null;          // last player to play or discard a card this round
   roundStarterIndex: number;
   winnerIds: string[] | null;
 }
@@ -63,12 +69,14 @@ export interface SaboteurServerState {
 
 export function initGame(
   roomCode: string,
-  players: Array<{ playerId: string; displayName: string }>,
+  players: { playerId: string; displayName: string }[],
 ): SaboteurServerState {
   const state: SaboteurServerState = {
+    revision: 1,
     roomCode,
     round: 0,
     status: 'playing',
+    terminationReason: null,
     deck: [],
     discard: [],
     board: [],
@@ -78,6 +86,7 @@ export function initGame(
         p.playerId,
         {
           playerId: p.playerId,
+          forfeited: false,
           displayName: p.displayName,
           role: 'miner' as Role,
           hand: [],
@@ -88,11 +97,13 @@ export function initGame(
       ]),
     ),
     turnOrder: players.map((p) => p.playerId),
+    roundPlayerIds: [],
     currentTurnIndex: 0,
     roundWinner: null,
     goldDeck: buildGoldDeck(),
     goldDistribution: null,
     lastPlacerId: null,
+    lastActorId: null,
     roundStarterIndex: 0,
     winnerIds: null,
   };
@@ -101,31 +112,36 @@ export function initGame(
 }
 
 function setupRound(state: SaboteurServerState, round: number, starterIndex: number): void {
-  const n = state.turnOrder.length;
+  const activeOrder = state.turnOrder.filter((pid) => !state.players.get(pid)!.forfeited);
+  const n = activeOrder.length;
+  state.roundPlayerIds = activeOrder;
 
-  // Roles: exactly ROLE_TABLE[n].saboteurs saboteurs each round, the rest
-  // miners. (The tabletop "deal n of n+1 role cards" variant can produce a
-  // round with zero saboteurs, which plays badly in a digital game.)
+  // Deal n roles from the official n+1 pool. Only a zero-saboteur result is
+  // repeated, avoiding an opposition-free digital round.
   const ratio = ROLE_TABLE[n];
-  const roleDeck = shuffle<Role>([
-    ...Array<Role>(n - ratio.saboteurs).fill('miner'),
-    ...Array<Role>(ratio.saboteurs).fill('saboteur'),
-  ]);
+  let roleDeck: Role[];
+  do {
+    roleDeck = shuffle<Role>([
+      ...Array<Role>(ratio.miners).fill('miner'),
+      ...Array<Role>(ratio.saboteurs).fill('saboteur'),
+    ]).slice(0, n);
+  } while (!roleDeck.includes('saboteur'));
 
   state.deck = buildFullDeck();
   state.discard = [];
   state.board = [{ card: makeStartCard(), position: { ...BOARD.startPos }, placedBy: '' }];
 
-  const goldIndex = Math.floor(Math.random() * BOARD.goalPositions.length);
+  const goalCards = shuffle([makeGoalCard(true, 0), makeGoalCard(false, 1, 'left'), makeGoalCard(false, 2, 'right')]);
   state.goals = BOARD.goalPositions.map((pos, i) => ({
     index: i,
     position: { ...pos },
-    isGold: i === goldIndex,
+    isGold: goalCards[i].subtype === 'goal_gold',
     revealed: false,
+    card: { ...goalCards[i], id: `goal-${i}` },
   }));
 
   const handSize = getHandSize(n);
-  state.turnOrder.forEach((pid, i) => {
+  activeOrder.forEach((pid, i) => {
     const p = state.players.get(pid)!;
     p.role = roleDeck[i];
     p.hand = state.deck.splice(0, handSize);
@@ -138,8 +154,10 @@ function setupRound(state: SaboteurServerState, round: number, starterIndex: num
   state.roundWinner = null;
   state.goldDistribution = null;
   state.lastPlacerId = null;
-  state.roundStarterIndex = starterIndex;
-  state.currentTurnIndex = starterIndex;
+  state.lastActorId = null;
+  const actualStarter = state.turnOrder.findIndex((pid, index) => index >= starterIndex && !state.players.get(pid)!.forfeited);
+  state.roundStarterIndex = actualStarter >= 0 ? actualStarter : state.turnOrder.indexOf(activeOrder[0]);
+  state.currentTurnIndex = state.roundStarterIndex;
 }
 
 // ---------------------------------------------------------------------------
@@ -152,6 +170,7 @@ function currentPlayerId(state: SaboteurServerState): string {
 
 function requireTurn(state: SaboteurServerState, playerId: string): EngineResult {
   if (state.status !== 'playing') return fail('The round is not in progress');
+  if (state.players.get(playerId)?.forfeited) return fail('You have left this game');
   if (currentPlayerId(state) !== playerId) return fail('It is not your turn');
   return OK;
 }
@@ -168,6 +187,7 @@ function drawCard(state: SaboteurServerState, player: PlayerGameState): void {
 }
 
 function advanceTurn(state: SaboteurServerState): void {
+  state.revision += 1;
   if (state.status !== 'playing') return;
 
   // Round ends (saboteurs win) when the deck is exhausted and nobody has
@@ -181,7 +201,7 @@ function advanceTurn(state: SaboteurServerState): void {
   const n = state.turnOrder.length;
   for (let i = 1; i <= n; i++) {
     const idx = (state.currentTurnIndex + i) % n;
-    if (state.players.get(state.turnOrder[idx])!.hand.length > 0) {
+    if (!state.players.get(state.turnOrder[idx])!.forfeited && state.players.get(state.turnOrder[idx])!.hand.length > 0) {
       state.currentTurnIndex = idx;
       return;
     }
@@ -222,9 +242,10 @@ export function placeCard(
   takeFromHand(player, cardId);
   state.board.push({ card: oriented, position: { ...position }, placedBy: playerId });
   state.lastPlacerId = playerId;
+  state.lastActorId = playerId;
   drawCard(state, player);
 
-  revealReachedGoals(state, playerId);
+  revealReachedGoals(state, playerId, position);
   advanceTurn(state);
   return OK;
 }
@@ -232,9 +253,9 @@ export function placeCard(
 /**
  * Reveal any face-down goal now reached by the tunnel network. Revealing a
  * stone goal adds it to the board as a path node, which can in turn reach
- * further goals — hence the loop.
+ * further goals - hence the loop.
  */
-function revealReachedGoals(state: SaboteurServerState, placerId: string): void {
+function revealReachedGoals(state: SaboteurServerState, placerId: string, lastPlacement: BoardPosition): void {
   let changed = true;
   while (changed && state.status === 'playing') {
     changed = false;
@@ -243,7 +264,7 @@ function revealReachedGoals(state: SaboteurServerState, placerId: string): void 
       if (!isGoalReached(state.board, goal.position)) continue;
       goal.revealed = true;
       state.board.push({
-        card: makeGoalCard(goal.isGold, goal.index),
+        card: orientReachedGoal(state.board, goal.card, goal.position, lastPlacement),
         position: { ...goal.position },
         placedBy: '',
       });
@@ -278,6 +299,7 @@ export function playAction(
 
   takeFromHand(player, cardId);
   state.discard.push(card);
+  state.lastActorId = playerId;
   drawCard(state, player);
   advanceTurn(state);
   return OK;
@@ -312,6 +334,7 @@ function dispatchAction(
     if (targetPlayerId === player.playerId) return fail('You cannot sabotage yourself');
     const target = state.players.get(targetPlayerId);
     if (!target) return fail('Unknown target player');
+    if (target.forfeited) return fail('That player has left the game');
     if (target.brokenTools.includes(sabotageTool)) {
       return fail(`${target.displayName}'s ${sabotageTool} is already broken`);
     }
@@ -324,6 +347,7 @@ function dispatchAction(
     if (!targetPlayerId) return fail('Repair needs a target player');
     const target = state.players.get(targetPlayerId);
     if (!target) return fail('Unknown target player');
+    if (target.forfeited) return fail('That player has left the game');
     let tool: Tool;
     if (repairTools.length === 1) {
       tool = repairTools[0];
@@ -347,7 +371,7 @@ function dispatchAction(
     if (!goal) return fail('That is not a goal position');
     if (goal.revealed) return fail('That goal is already revealed');
     if (!player.peekedGoals.some((p) => p.position.row === goal.position.row && p.position.col === goal.position.col)) {
-      player.peekedGoals.push({ position: { ...goal.position }, isGold: goal.isGold });
+      player.peekedGoals.push({ position: { ...goal.position }, isGold: goal.isGold, edges: { ...goal.card.edges } });
     }
     return OK;
   }
@@ -379,7 +403,8 @@ export function passTurn(state: SaboteurServerState, playerId: string, discardCa
     const card = takeFromHand(player, discardCardId);
     if (!card) return fail('Card is not in your hand');
     state.discard.push(card);
-    // Official rules: every turn — including a pass — ends by drawing a card.
+    state.lastActorId = playerId;
+    // Official rules: every turn - including a pass - ends by drawing a card.
     drawCard(state, player);
   }
   advanceTurn(state);
@@ -402,12 +427,13 @@ export function chooseGold(state: SaboteurServerState, playerId: string, cardInd
   dist.assignments.set(playerId, cardValue);
   state.players.get(playerId)!.goldCollected += cardValue;
   dist.currentIndex += 1;
+  state.revision += 1;
   return OK;
 }
 
 export function isGoldDistributionComplete(state: SaboteurServerState): boolean {
   if (state.status !== 'round_end') return false;
-  if (!state.goldDistribution) return true;   // saboteur win — nothing to pick
+  if (!state.goldDistribution) return true;   // saboteur win - nothing to pick
   return state.goldDistribution.currentIndex >= state.goldDistribution.order.length;
 }
 
@@ -421,27 +447,79 @@ function endRound(state: SaboteurServerState, winner: 'miners' | 'saboteurs'): v
   if (winner === 'miners') {
     state.goldDistribution = initGoldDistribution(state.players, state.turnOrder, state.lastPlacerId, state.goldDeck);
   } else {
-    applySaboteurRewards(state.players);
+    applySaboteurRewards(new Map(state.roundPlayerIds.map((pid) => [pid, state.players.get(pid)!])), state.goldDeck);
   }
 }
 
 /** Move to the next round, or finish the game after round 3. */
 export function advanceRound(state: SaboteurServerState): void {
-  if (state.status !== 'round_end') return;
+  if (!isGoldDistributionComplete(state)) return;
+  state.revision += 1;
   if (state.round >= ROUNDS_PER_GAME) {
     endGame(state);
     return;
   }
-  // Player to the left of whoever placed the last path card starts next round
-  const lastIdx = state.lastPlacerId
-    ? state.turnOrder.indexOf(state.lastPlacerId)
-    : state.roundStarterIndex;
+  // The player to the left of whoever played or discarded the final card starts.
+  const actorIdx = state.lastActorId ? state.turnOrder.indexOf(state.lastActorId) : -1;
+  const lastIdx = actorIdx >= 0 ? actorIdx : state.roundStarterIndex;
   setupRound(state, state.round + 1, (lastIdx + 1) % state.turnOrder.length);
+}
+
+export function forfeitSaboteurPlayers(state: SaboteurServerState, playerIds: string[]): boolean {
+  if (state.status === 'game_over') return false;
+  const leaving = [...new Set(playerIds)].filter((id) => state.players.has(id) && !state.players.get(id)!.forfeited);
+  if (leaving.length === 0) return false;
+  const activeCount = [...state.players.values()].filter((player) => !player.forfeited).length - leaving.length;
+
+  for (const id of leaving) {
+    const player = state.players.get(id)!;
+    player.forfeited = true;
+    state.discard.push(...player.hand);
+    player.hand = [];
+    player.brokenTools = [];
+  }
+
+  const dist = state.goldDistribution;
+  if (activeCount < 3) {
+    if (dist) state.goldDeck.push(...dist.availableCards);
+    state.goldDistribution = null;
+    state.status = 'game_over';
+    state.terminationReason = 'not_enough_players';
+    state.roundWinner = null;
+    state.winnerIds = [];
+    state.revision += 1;
+    return true;
+  }
+  if (dist) {
+    const completed = dist.order.slice(0, dist.currentIndex);
+    const pending = dist.order.slice(dist.currentIndex).filter((id) => !state.players.get(id)!.forfeited);
+    const surplus = dist.availableCards.length - pending.length;
+    if (surplus > 0) state.goldDeck.push(...dist.availableCards.splice(-surplus));
+    dist.order = [...completed, ...pending];
+  }
+
+  if (state.status === 'playing') {
+    const anyCards = [...state.players.values()].some((player) => !player.forfeited && player.hand.length > 0);
+    if (!anyCards) endRound(state, 'saboteurs');
+    else if (state.players.get(currentPlayerId(state))!.forfeited) {
+      const n = state.turnOrder.length;
+      for (let offset = 1; offset <= n; offset++) {
+        const next = (state.currentTurnIndex + offset) % n;
+        const player = state.players.get(state.turnOrder[next])!;
+        if (!player.forfeited && player.hand.length > 0) {
+          state.currentTurnIndex = next;
+          break;
+        }
+      }
+    }
+  }
+  state.revision += 1;
+  return true;
 }
 
 function endGame(state: SaboteurServerState): void {
   state.status = 'game_over';
-  const players = [...state.players.values()];
+  const players = [...state.players.values()].filter((player) => !player.forfeited);
   const max = Math.max(...players.map((p) => p.goldCollected));
   state.winnerIds = players.filter((p) => p.goldCollected === max).map((p) => p.playerId);
 }

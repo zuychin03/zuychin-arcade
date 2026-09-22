@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-weapon.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2436564,
+    "sha256": "22fd3ce13812ec848b888e19cad1b81a52ac85add400f607f29f3c0d3453e0a8"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-weapon.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18450,
+      "sha256": "553b8ae96009afa2a543ca060592f338dfd465e45ae0d71afa54a4464994d811"
+    }
+  ],
+  "totalBytes": 18450,
+  "maxTotalBytes": 614400
+}

@@ -1,55 +1,165 @@
-import { Share, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Share, Text, useWindowDimensions, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScalePressable } from '../ui/ScalePressable';
 import { ARCADE, neonText } from '../../constants/theme';
 
+export interface RoomCodePalette {
+  background: string;
+  surface: string;
+  border: string;
+  accent: string;
+  secondary: string;
+  muted: string;
+  text: string;
+}
+
 interface Props {
   roomCode: string;
   hasPassword: boolean;
+  gameName?: string;
+  palette?: RoomCodePalette;
 }
 
-export function RoomCodeDisplay({ roomCode, hasPassword }: Props) {
+const DEFAULT_PALETTE: RoomCodePalette = {
+  background: ARCADE.bg,
+  surface: ARCADE.surface,
+  border: ARCADE.border,
+  accent: ARCADE.cyan,
+  secondary: ARCADE.purple,
+  muted: ARCADE.muted,
+  text: ARCADE.text,
+};
+
+export function RoomCodeDisplay({
+  roomCode,
+  hasPassword,
+  gameName = 'Zuychin Arcade',
+  palette = DEFAULT_PALETTE,
+}: Props) {
+  const { width } = useWindowDimensions();
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const codeFontSize = width <= 340 ? 28 : width <= 420 ? 32 : 38;
+  const codeLetterSpacing = width <= 340 ? 3 : width <= 420 ? 4 : 6;
+
+  useEffect(() => () => {
+    if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
+  }, []);
+
+  const showFeedback = (message: string) => {
+    setFeedback(message);
+    if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
+    feedbackTimer.current = setTimeout(() => setFeedback(null), 2500);
+  };
+
+  const copyCode = async () => {
+    try {
+      await Clipboard.setStringAsync(roomCode);
+      showFeedback('Room code copied.');
+    } catch {
+      showFeedback('Could not copy. Select the code above instead.');
+    }
+  };
+
+  const shareCode = async () => {
+    try {
+      const result = await Share.share({ message: `Join my ${gameName} game on Zuychin Arcade! Room code: ${roomCode}` });
+      if (result.action === Share.sharedAction) showFeedback('Share sheet opened.');
+    } catch {
+      showFeedback('Sharing is unavailable. Copy the room code instead.');
+    }
+  };
+
   return (
     <View
-      className="items-center rounded-2xl border border-arcade-border bg-arcade-surface p-5"
-      style={{ boxShadow: `0 0 16px ${ARCADE.cyan}33` }}
+      style={{
+        alignItems: 'center',
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: palette.border,
+        backgroundColor: palette.surface,
+        padding: 20,
+        width: '100%',
+        boxShadow: `0 0 16px ${palette.accent}33`,
+      }}
     >
-      <Text style={{ fontFamily: 'Outfit_700Bold', fontSize: 11, letterSpacing: 2, color: ARCADE.muted }}>ROOM CODE</Text>
-      <Text style={{ fontSize: 38, fontFamily: 'Outfit_800ExtraBold', letterSpacing: 6, marginVertical: 4, ...neonText(ARCADE.cyan, 16) }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <MaterialCommunityIcons name="access-point" size={13} color={palette.accent} />
+        <Text style={{ fontFamily: 'Outfit_700Bold', fontSize: 11, letterSpacing: 2, color: palette.muted }}>
+          ROOM CODE
+        </Text>
+      </View>
+      <Text
+        selectable
+        accessibilityLabel={`Room code ${roomCode}`}
+        style={{
+          fontSize: codeFontSize,
+          fontFamily: 'Outfit_800ExtraBold',
+          letterSpacing: codeLetterSpacing,
+          marginVertical: 4,
+          maxWidth: '100%',
+          textAlign: 'center',
+          ...neonText(palette.accent, 16),
+        }}
+      >
         {roomCode}
       </Text>
-      {hasPassword && (
-        <View className="flex-row items-center gap-1"><MaterialCommunityIcons name="lock-outline" size={13} color={ARCADE.muted} /><Text className="text-xs text-arcade-muted">password protected</Text></View>
+      {hasPassword ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <MaterialCommunityIcons name="lock-outline" size={13} color={palette.muted} />
+          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 11 }}>
+            password protected
+          </Text>
+        </View>
+      ) : (
+        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 11 }}>
+          Share this code with your players
+        </Text>
       )}
-      <View className="mt-4 flex-row gap-3">
+
+      <View style={{ marginTop: 14, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
         <ScalePressable
-          onPress={() => void Clipboard.setStringAsync(roomCode)}
+          accessibilityLabel={feedback === 'Room code copied.' ? 'Room code copied' : 'Copy room code'}
+          onPress={() => void copyCode()}
           style={{
+            minHeight: 48,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 6,
             borderRadius: 12,
             borderWidth: 1.5,
-            borderColor: ARCADE.purple,
-            paddingHorizontal: 18,
-            paddingVertical: 10,
+            borderColor: palette.secondary,
+            paddingHorizontal: 16,
+            paddingVertical: 9,
           }}
         >
-          <Text style={{ color: ARCADE.purple, fontFamily: 'Outfit_700Bold', fontSize: 13 }}>Copy</Text>
+          <MaterialCommunityIcons name="content-copy" size={14} color={palette.secondary} />
+          <Text style={{ color: palette.secondary, fontFamily: 'Outfit_700Bold', fontSize: 12 }}>COPY</Text>
         </ScalePressable>
         <ScalePressable
-          onPress={() =>
-            void Share.share({ message: `Join my Saboteur game on zuychin-arcade! Room code: ${roomCode}` })
-          }
+          accessibilityLabel="Share room code"
+          onPress={() => void shareCode()}
           style={{
+            minHeight: 48,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 6,
             borderRadius: 12,
-            backgroundColor: ARCADE.cyan,
-            paddingHorizontal: 18,
-            paddingVertical: 10,
-            boxShadow: `0 0 10px ${ARCADE.cyan}66`,
+            backgroundColor: palette.accent,
+            paddingHorizontal: 16,
+            paddingVertical: 9,
+            boxShadow: `0 0 10px ${palette.accent}66`,
           }}
         >
-          <Text style={{ color: ARCADE.bg, fontFamily: 'Outfit_700Bold', fontSize: 13 }}>Share</Text>
+          <MaterialCommunityIcons name="share-variant-outline" size={14} color={palette.background} />
+          <Text style={{ color: palette.background, fontFamily: 'Outfit_700Bold', fontSize: 12 }}>SHARE</Text>
         </ScalePressable>
       </View>
+      <Text accessibilityLiveRegion="polite" style={{ minHeight: 18, marginTop: 7, fontFamily: 'SpaceMono_700Bold', color: feedback?.startsWith('Could') || feedback?.startsWith('Sharing') ? '#FF6B7D' : palette.secondary, fontSize: 10, textAlign: 'center' }}>
+        {feedback ?? ''}
+      </Text>
     </View>
   );
 }

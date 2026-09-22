@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/coup-character-ambassador.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1864567,
+    "sha256": "df71fa6beec6707d4058a525484ce44fc5020e05352b667c9df438f4624c0a9d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "coup-character-ambassador.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 10200,
+      "sha256": "35c6d8301878123088b93adff9a222ee0fb6da450e533438e3acf3a1a51bd2bf"
+    }
+  ],
+  "totalBytes": 10200,
+  "maxTotalBytes": 614400
+}

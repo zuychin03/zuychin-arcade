@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-wild.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2164903,
+    "sha256": "b798e7072cd749dab4c46255b2f863ebba8ab217f251ac726d5a87ea58226c8e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-wild.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 12756,
+      "sha256": "7970984fc8d5b7825a1b7f420dec66f0c3e6099cb3dc6b864bbb4e69e6fa174b"
+    }
+  ],
+  "totalBytes": 12756,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-phase-dusk.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2340762,
+    "sha256": "ab303c8b7709e7fd733553dab7fc68df47ff4fd3efc8d57fe2b3f45ece8e44d9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-phase-dusk.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21272,
+      "sha256": "1d8354eb29693e9c34d41688f13260d66f8c37f715c7e2b75d161b3c8b33ba94"
+    }
+  ],
+  "totalBytes": 21272,
+  "maxTotalBytes": 614400
+}

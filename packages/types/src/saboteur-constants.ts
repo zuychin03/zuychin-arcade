@@ -1,15 +1,8 @@
-// Saboteur game constants.
-//
-// Values verified on 2026-06-11 against:
-//   https://ultraboardgames.com/saboteur/game-rules.php
-//   https://en.wikipedia.org/wiki/Saboteur_(card_game)
-//   https://en.doc.boardgamearena.com/Gamehelpsaboteur
-//   https://zatu.com/how-to-play-saboteur/ (redirect of board-game.co.uk/how-to-play-saboteur)
-//
-// Note: the tabletop game deals playerCount of playerCount + 1 role cards
-// (one set aside unseen), so saboteurs can come up one short. This app
-// instead guarantees exactly `saboteurs` saboteurs per round; the `miners`
-// column is the physical card count and is informational only.
+// Rules: https://blog.amigo-spiele.de/content/ap/rule/04900-GB-AmigoRule.pdf
+// Digital rules add the board cap, guaranteed opposition and immediate forfeits.
+export const SABOTEUR_RULESET_VERSION = 'base-v4-2025-digital-20260920';
+
+// Deal players + 1 roles, set one aside, and repeat only opposition-free deals.
 
 export const ROLE_TABLE: Record<number, { miners: number; saboteurs: number }> = {
   3:  { miners: 3, saboteurs: 1 },
@@ -64,12 +57,21 @@ export const SABOTEUR_REWARDS: Record<number, number> = {
   4: 2,
 };
 
-// Board layout. Physical game: goal cards sit 8 card-lengths from the start
-// card, with the outer two goals one card-width away from the centre goal.
-// We orient the mine vertically: start at top centre, goals 8 rows below.
+// The legal board is deliberately capped for mobile observability. BOARD keeps
+// the larger viewport dimensions used to frame that playable area.
+export const SABOTEUR_PLAYABLE_BOUNDS = Object.freeze({
+  minRow: 0,
+  maxRow: 8,
+  minCol: 2,
+  maxCol: 6,
+});
+
+// Physical goal spacing, rotated vertically: start at top centre, goals 8 rows
+// below. The viewport may include non-playable framing outside these bounds.
 export const BOARD = {
   cols: 9,
-  rows: 13,         // allow tunnels to overflow past the goal row
+  rows: 13,
+  playableBounds: SABOTEUR_PLAYABLE_BOUNDS,
   startPos: { row: 0, col: 4 },
   goalPositions: [
     { row: 8, col: 2 },

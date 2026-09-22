@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-world-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2560857,
+    "sha256": "734cf25d4fd122be2579c7a7952981fe9b43a2dafd650bc860c8d09d29b6ce9b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 53604,
+      "sha256": "0b9550320680e1d19f0955cbecaccf489a133b0115e646e25fb198a1e6379312"
+    },
+    {
+      "file": "not-alone-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 156372,
+      "sha256": "a05192175e7aaddb7d94890f417f038df8bb88616391c9561b313a2ec985c2b5"
+    }
+  ],
+  "totalBytes": 209976,
+  "maxTotalBytes": 614400
+}

@@ -1,21 +1,42 @@
-import { useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
-import type { BoardPosition, GoalStatus, PlacedCard } from '@zuychin-arcade/types';
+import { useEffect, useMemo, useRef } from 'react';
+import { Platform, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import type { BoardPosition, GoalStatus, PeekedGoal, PlacedCard } from '@zuychin-arcade/types';
 import { BOARD } from '@zuychin-arcade/types';
 import { BoardCell } from './BoardCell';
-
-const CELL_WIDTH = 46;
-const CELL_HEIGHT = 69;
+import { ARCADE, MINE } from '../../../constants/theme';
+import { NeonButton } from '../../ui/NeonButton';
+import { useReducedMotionPreference } from '../../../hooks/useReducedMotionPreference';
 
 interface Props {
   board: PlacedCard[];
   goals: GoalStatus[];
   validTargets: Set<string>;          // 'row,col' placement spots
   actionTargets: Set<string>;         // 'row,col' rockfall/map targets
+  peekedGoals: PeekedGoal[];
+  round: number;
+  interactionActive: boolean;
+  availableWidth?: number;
+  scrollViewportHeight?: number;
   onCellPress: (pos: BoardPosition) => void;
 }
 
-export function GameBoard({ board, goals, validTargets, actionTargets, onCellPress }: Props) {
+export function GameBoard({
+  board,
+  goals,
+  validTargets,
+  actionTargets,
+  peekedGoals,
+  round,
+  interactionActive,
+  availableWidth,
+  scrollViewportHeight,
+  onCellPress,
+}: Props) {
+  const scrollRef = useRef<ScrollView>(null);
+  const reducedMotion = useReducedMotionPreference();
+  const { width: viewportWidth } = useWindowDimensions();
+  const cellWidth = Math.min(64, Math.max(48, Math.floor(((availableWidth ?? viewportWidth) - 36) / 5)));
+  const cellHeight = Math.round(cellWidth * 1.44);
   const cells = useMemo(() => {
     const m = new Map<string, PlacedCard>();
     for (const p of board) m.set(`${p.position.row},${p.position.col}`, p);
@@ -28,65 +49,93 @@ export function GameBoard({ board, goals, validTargets, actionTargets, onCellPre
     return m;
   }, [goals]);
 
-  // Compute active bounding box to dynamically crop empty rows and columns
-  const boundaries = useMemo(() => {
-    // Standard playable board is row 0 to 8, col 2 to 6
-    let minRow = 0;
-    let maxRow = 8;
-    let minCol = 2;
-    let maxCol = 6;
-
-    // Expand to cover placed cards
-    for (const pc of board) {
-      minRow = Math.min(minRow, pc.position.row);
-      maxRow = Math.max(maxRow, pc.position.row);
-      minCol = Math.min(minCol, pc.position.col);
-      maxCol = Math.max(maxCol, pc.position.col);
+  const peekMap = useMemo(() => {
+    const map = new Map<string, PeekedGoal>();
+    for (const peek of peekedGoals) {
+      const key = `${peek.position.row},${peek.position.col}`;
+      if (goalMap.get(key)?.revealed === false) map.set(key, peek);
     }
+    return map;
+  }, [goalMap, peekedGoals]);
 
-    // Expand to cover highlighted valid targets
-    for (const key of validTargets) {
-      const [r, c] = key.split(',').map(Number);
-      minRow = Math.min(minRow, r);
-      maxRow = Math.max(maxRow, r);
-      minCol = Math.min(minCol, c);
-      maxCol = Math.max(maxCol, c);
-    }
-
-    // Expand to cover action targets (rockfall, map peeks)
-    for (const key of actionTargets) {
-      const [r, c] = key.split(',').map(Number);
-      minRow = Math.min(minRow, r);
-      maxRow = Math.max(maxRow, r);
-      minCol = Math.min(minCol, c);
-      maxCol = Math.max(maxCol, c);
-    }
-
-    // Add 1 cell of padding for smooth play/panning, clamped to absolute layout limits
-    minRow = Math.max(0, minRow - 1);
-    maxRow = Math.min(BOARD.rows - 1, maxRow + 1);
-    minCol = Math.max(0, minCol - 1);
-    maxCol = Math.min(BOARD.cols - 1, maxCol + 1);
-
-    return { minRow, maxRow, minCol, maxCol };
-  }, [board, validTargets, actionTargets]);
+  const { minRow, maxRow, minCol, maxCol } = BOARD.playableBounds;
 
   const rowIndexes = useMemo(() => {
     const arr = [];
-    for (let r = boundaries.minRow; r <= boundaries.maxRow; r++) arr.push(r);
+    for (let r = minRow; r <= maxRow; r++) arr.push(r);
     return arr;
-  }, [boundaries]);
+  }, [maxRow, minRow]);
 
   const colIndexes = useMemo(() => {
     const arr = [];
-    for (let c = boundaries.minCol; c <= boundaries.maxCol; c++) arr.push(c);
+    for (let c = minCol; c <= maxCol; c++) arr.push(c);
     return arr;
-  }, [boundaries]);
+  }, [maxCol, minCol]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => scrollRef.current?.scrollTo({ y: 0, animated: false }));
+    return () => cancelAnimationFrame(frame);
+  }, [round]);
+
+  const goalName = (col: number) => {
+    if (col === minCol) return 'LEFT';
+    if (col === maxCol) return 'RIGHT';
+    return 'CENTRE';
+  };
 
   return (
-    <ScrollView className="flex-1 bg-mine-bg" contentContainerStyle={{ padding: 12, alignItems: 'center', justifyContent: 'center' }}>
-      <ScrollView horizontal contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
-        <View className="items-center justify-center">
+    <View nativeID="saboteur-board" style={{ flex: scrollViewportHeight === undefined ? 1 : undefined, backgroundColor: MINE.bg }}>
+      <View
+        style={{
+          minHeight: 28,
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 6,
+          borderBottomWidth: 1,
+          borderBottomColor: `${ARCADE.border}88`,
+          backgroundColor: ARCADE.bg,
+        }}
+      >
+        <Text style={{ fontFamily: 'Outfit_700Bold', color: ARCADE.muted, fontSize: 12 }}>
+          5 × 9 PLAY AREA
+        </Text>
+        <NeonButton label="START" color={ARCADE.cyan} variant="ghost" onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: !reducedMotion })} />
+        <NeonButton label="GOALS" color={MINE.gold} variant="ghost" onPress={() => scrollRef.current?.scrollToEnd({ animated: !reducedMotion })} />
+        {Array.from(peekMap.values()).map((peek) => (
+          <View
+            key={`${peek.position.row},${peek.position.col}`}
+            accessible
+            accessibilityLabel={`Private map knowledge: ${goalName(peek.position.col)} goal is ${peek.isGold ? 'gold' : 'stone'}. Openings ${Object.entries(peek.edges).filter(([edge, value]) => edge !== 'center' && value === 'open').map(([edge]) => edge).join(', ')}`}
+            style={{
+              borderRadius: 7,
+              borderWidth: 1,
+              borderColor: peek.isGold ? MINE.gold : MINE.stone,
+              backgroundColor: peek.isGold ? `${MINE.gold}18` : `${MINE.stone}22`,
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+            }}
+          >
+            <Text style={{ fontFamily: 'Outfit_700Bold', color: peek.isGold ? MINE.gold : '#B8BEC9', fontSize: 12 }}>
+              PRIVATE MAP · {goalName(peek.position.col)} {peek.isGold ? 'GOLD' : 'STONE'}
+            </Text>
+            <Text style={{ color: ARCADE.text, fontSize: 12 }}>Opens {Object.entries(peek.edges).filter(([edge, value]) => edge !== 'center' && value === 'open').map(([edge]) => edge).join(', ')}</Text>
+          </View>
+        ))}
+      </View>
+      <ScrollView
+        ref={scrollRef}
+        tabIndex={Platform.OS === 'web' ? 0 : undefined}
+        role={Platform.OS === 'web' ? 'region' : undefined}
+        accessibilityLabel="Mine board, nine rows and five columns. Scroll to inspect every row."
+        style={scrollViewportHeight === undefined ? { flex: 1 } : { height: scrollViewportHeight, flexGrow: 0, flexShrink: 0 }}
+        contentContainerStyle={{ minHeight: '100%', paddingVertical: 8, alignItems: 'center', justifyContent: 'flex-start' }}
+        showsVerticalScrollIndicator
+      >
+        <View style={{ alignItems: 'center', justifyContent: 'center', padding: 3, borderRadius: 9, borderWidth: 2, borderColor: '#4E3843', borderTopColor: '#8C6955', borderBottomColor: '#1A111D', backgroundColor: '#302332' }}>
           {rowIndexes.map((row) => (
             <View key={row} className="flex-row">
               {colIndexes.map((col) => {
@@ -96,10 +145,14 @@ export function GameBoard({ board, goals, validTargets, actionTargets, onCellPre
                     key={k}
                     placed={cells.get(k) ?? null}
                     goal={goalMap.get(k) ?? null}
+                    peekedGoal={peekMap.get(k) ?? null}
                     isValidTarget={validTargets.has(k)}
                     isActionTarget={actionTargets.has(k)}
-                    width={CELL_WIDTH}
-                    height={CELL_HEIGHT}
+                    isInteractive={interactionActive}
+                    row={row}
+                    col={col}
+                    width={cellWidth}
+                    height={cellHeight}
                     onPress={() => onCellPress({ row, col })}
                   />
                 );
@@ -108,6 +161,6 @@ export function GameBoard({ board, goals, validTargets, actionTargets, onCellPre
           ))}
         </View>
       </ScrollView>
-    </ScrollView>
+    </View>
   );
 }

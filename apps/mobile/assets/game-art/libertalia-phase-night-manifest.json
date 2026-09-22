@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-phase-night.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2422092,
+    "sha256": "a132a7d15867db82cbcf9239d8b0f5ca26ab18bff779b0756ed280fc40fa0c94"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-phase-night.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18462,
+      "sha256": "f876064597e29c12670594f641b9b217224bf0af79533839305633aaf389d631"
+    }
+  ],
+  "totalBytes": 18462,
+  "maxTotalBytes": 614400
+}

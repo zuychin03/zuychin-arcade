@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-recovery.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2227653,
+    "sha256": "bc94eef4946d0f9e065238fffe3ea1550ecb8547596ae734ebc42797105c4e75"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-recovery.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18346,
+      "sha256": "91d4789c1139f3470aba297680b1907707e7764e5f3f5d02c0580ca99682c70c"
+    }
+  ],
+  "totalBytes": 18346,
+  "maxTotalBytes": 614400
+}

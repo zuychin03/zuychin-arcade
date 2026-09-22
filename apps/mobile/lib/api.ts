@@ -1,19 +1,43 @@
 import { SERVER_URL } from '../constants/config';
 import type { GameId, JoinRoomResponse, LeaderboardRow, RoomPublicState } from '@zuychin-arcade/types';
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${SERVER_URL}${path}`, init);
-  if (!res.ok) {
-    let message = `Request failed (${res.status})`;
-    try {
-      const body = (await res.json()) as { message?: string };
-      if (body.message) message = body.message;
-    } catch {
-      // keep default message
-    }
-    throw new Error(message);
+export class ApiError extends Error {
+  constructor(public readonly status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
   }
-  return res.json() as Promise<T>;
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  const signal = init?.signal;
+  if (signal?.aborted) abort();
+  else signal?.addEventListener('abort', abort, { once: true });
+  let timedOut = false;
+  const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 20_000);
+  try {
+    const res = await fetch(`${SERVER_URL}${path}`, { ...init, signal: controller.signal });
+    if (!res.ok) {
+      let message = `Request failed (${res.status})`;
+      try {
+        const body = (await res.json()) as { message?: string };
+        if (typeof body.message === 'string' && body.message.trim()) message = body.message;
+      } catch {
+        // Keep the status-based message when the server did not return JSON.
+      }
+      throw new ApiError(res.status, message);
+    }
+    return await res.json() as T;
+  } catch (error) {
+    if (timedOut) {
+      throw new Error('The server took too long to respond. Check your connection and try again.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+    signal?.removeEventListener('abort', abort);
+  }
 }
 
 export function createRoom(
@@ -40,8 +64,11 @@ export function joinRoom(
   });
 }
 
-export function getRoom(roomCode: string): Promise<RoomPublicState> {
-  return request(`/rooms/${encodeURIComponent(roomCode)}`);
+export function getRoom(roomCode: string, token: string, signal?: AbortSignal): Promise<RoomPublicState> {
+  return request(`/rooms/${encodeURIComponent(roomCode)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal,
+  });
 }
 
 export function kickPlayer(roomCode: string, token: string, targetPlayerId: string): Promise<void> {
@@ -52,6 +79,18 @@ export function kickPlayer(roomCode: string, token: string, targetPlayerId: stri
   });
 }
 
-export function getLeaderboard(game?: GameId): Promise<LeaderboardRow[]> {
-  return request(`/leaderboard${game ? `?game=${encodeURIComponent(game)}` : ''}`);
+export interface LeaveRoomResponse {
+  ok: true;
+  retainedForGameRecovery: boolean;
+}
+
+export function leaveRoom(roomCode: string, token: string): Promise<LeaveRoomResponse> {
+  return request(`/rooms/${encodeURIComponent(roomCode)}/leave`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export function getLeaderboard(game?: GameId, signal?: AbortSignal): Promise<LeaderboardRow[]> {
+  return request(`/leaderboard${game ? `?game=${encodeURIComponent(game)}` : ''}`, { signal });
 }

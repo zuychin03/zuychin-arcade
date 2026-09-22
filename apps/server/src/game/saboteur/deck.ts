@@ -16,15 +16,15 @@ function edges(top: boolean, right: boolean, bottom: boolean, left: boolean, cen
 
 // The 40 tunnel cards of the physical deck.
 // Connecting cards (31) + dead-end cards (9), counts per the original game.
-const PATH_COMPOSITION: Array<{ count: number; edges: PathCardEdges; deadEnd: boolean }> = [
+const PATH_COMPOSITION: { count: number; edges: PathCardEdges; deadEnd: boolean }[] = [
   // connecting cards
   { count: 5, edges: edges(true, true, true, true, true), deadEnd: false },    // crossroads
   { count: 5, edges: edges(true, false, true, true, true), deadEnd: false },   // T: vertical + left
   { count: 5, edges: edges(false, true, true, true, true), deadEnd: false },   // T: horizontal + bottom
   { count: 4, edges: edges(true, false, true, false, true), deadEnd: false },  // straight vertical
   { count: 3, edges: edges(false, true, false, true, true), deadEnd: false },  // straight horizontal
-  { count: 4, edges: edges(false, false, true, true, true), deadEnd: false },  // curve bottom-left
-  { count: 5, edges: edges(false, true, true, false, true), deadEnd: false },  // curve bottom-right
+  { count: 5, edges: edges(false, false, true, true, true), deadEnd: false },  // curve bottom-left
+  { count: 4, edges: edges(false, true, true, false, true), deadEnd: false },  // curve bottom-right
   // dead-end cards (one of each shape)
   { count: 1, edges: edges(true, true, true, true, false), deadEnd: true },
   { count: 1, edges: edges(true, false, true, true, false), deadEnd: true },
@@ -99,14 +99,12 @@ export function makeStartCard(): PathCard {
   };
 }
 
-// Revealed goal cards are oriented so their paths fit the maze, so we model
-// them as connecting on all sides.
-export function makeGoalCard(isGold: boolean, index: number): PathCard {
+export function makeGoalCard(isGold: boolean, index: number, stoneShape: 'left' | 'right' = 'left'): PathCard {
   return {
     id: `goal-${index}`,
     type: 'path',
     subtype: isGold ? 'goal_gold' : 'goal_stone',
-    edges: edges(true, true, true, true, true),
+    edges: isGold ? edges(true, true, true, true, true) : edges(true, stoneShape === 'right', false, stoneShape === 'left', true),
     isDeadEnd: false,
   };
 }

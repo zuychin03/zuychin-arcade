@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-loot-amulet.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2304272,
+    "sha256": "2db708a6f34f17ff1b62e2e2781d3fc7a932808d79b7c9717b731dc168721599"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-loot-amulet.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14166,
+      "sha256": "b02b9e540076a2d1b15b526867d53a9f47dc6304556222a699e8e270c683dee9"
+    }
+  ],
+  "totalBytes": 14166,
+  "maxTotalBytes": 614400
+}

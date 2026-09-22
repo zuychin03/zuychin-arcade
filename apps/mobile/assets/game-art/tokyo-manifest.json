@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-city-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2638122,
+    "sha256": "39bb3eca0d3d35aceacb9b939fc83634c9d60c1fa107cae089842b11af0de93a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 54106,
+      "sha256": "8451f716766882142812d5869c3da910f9d8132c2cdf5f169deda77b8e953478"
+    },
+    {
+      "file": "tokyo-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 168470,
+      "sha256": "b3aa0201e36b84d78c8315eaad6f38ce0f63ac09310c1981764b4aefe8235cf8"
+    }
+  ],
+  "totalBytes": 222576,
+  "maxTotalBytes": 614400
+}

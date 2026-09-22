@@ -1,7 +1,9 @@
 import { Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { ActionCard, ActionSubtype } from '@zuychin-arcade/types';
-import { ARCADE, neonBox } from '../../../constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ARCADE } from '../../../constants/theme';
+import { CardSurface } from '../../ui/CardSurface';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -16,40 +18,53 @@ const CARD_DATA: Record<ActionSubtype, { title: string; label: string; icons: Ic
   repair_lantern_pickaxe: { title: 'REPAIR', label: 'Lamp/Pick', icons: ['flashlight','pickaxe'], color: '#16A34A' },
   repair_cart_pickaxe: { title: 'REPAIR', label: 'Cart/Pick', icons: ['cart-outline','pickaxe'], color: '#16A34A' },
   map: { title: 'INTEL', label: 'Map Goal', icons: ['map-outline'], color: '#F5C518' },
-  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icons: ['bomb'], color: '#6B7280' },
+  rockfall: { title: 'OBSTRUCT', label: 'Rockfall', icons: ['bomb'], color: '#B8BEC9' },
 };
 
 interface Props {
   card: ActionCard;
   width?: number;
   height?: number;
+  fill?: boolean;
 }
 
-export function ActionCardView({ card, width = 56, height = 84 }: Props) {
+export function saboteurHandCardSize(nativeFontScale = 1, headingFontSize = 12) {
+  const nativeScale = Number.isFinite(nativeFontScale) ? nativeFontScale : 1;
+  const webScale = Number.isFinite(headingFontSize) ? headingFontSize / 12 : 1;
+  const scale = Math.max(1, nativeScale, webScale);
+  return { width: 76 * scale, height: 114 * scale };
+}
+
+export function ActionCardView({ card, width = 56, height = 84, fill = false }: Props) {
   const data = CARD_DATA[card.subtype];
   const isSabotage = card.subtype.startsWith('sabotage_');
   const minDim = Math.min(width, height);
+  // Physical enlargement must not multiply the user's text enlargement again.
+  const typeBasis = Math.min(76, minDim);
 
   return (
-    <View
+    <CardSurface fill={fill} width={width} depth={3} radius={8} faceColor="#241B2B" edgeColor="#100C16" highlightColor="#BBA082">
+    <LinearGradient colors={['#3C303B', '#211925', '#17131D']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
       style={{
         width,
-        height,
-        backgroundColor: '#130E1F',
+        minHeight: height,
+        ...(fill ? { flexGrow: 1 } : {}),
+        gap: 4,
         borderRadius: 8,
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: data.color,
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 4,
-        ...neonBox(data.color, 6),
       }}
     >
-      {/* Category header */}
       <Text
         style={{
-          fontSize: minDim * 0.15,
-          fontWeight: '900',
+          fontSize: Math.max(11, typeBasis * 0.15),
+          alignSelf: 'stretch',
+          flexShrink: 0,
+          minWidth: 0,
+          fontFamily: 'Outfit_800ExtraBold',
           color: data.color,
           letterSpacing: 0.5,
           textAlign: 'center',
@@ -59,17 +74,13 @@ export function ActionCardView({ card, width = 56, height = 84 }: Props) {
         {data.title}
       </Text>
 
-      {/* Main icon with glowing indicator */}
       <View
         style={{
           width: minDim * 0.55,
           height: minDim * 0.55,
-          borderRadius: 99,
-          backgroundColor: `${data.color}15`,
+          flexShrink: 0,
           alignItems: 'center',
           justifyContent: 'center',
-          borderWidth: 1,
-          borderColor: `${data.color}40`,
         }}
       >
         <View style={{ flexDirection: 'row', gap: 1 }}>{data.icons.map((icon) => <MaterialCommunityIcons key={icon} name={icon} size={minDim * (data.icons.length > 1 ? 0.22 : 0.32)} color={data.color} />)}</View>
@@ -81,19 +92,21 @@ export function ActionCardView({ card, width = 56, height = 84 }: Props) {
         )}
       </View>
 
-      {/* Title description */}
       <Text
-        numberOfLines={1}
         style={{
           color: '#EDEAFB',
-          fontSize: minDim * 0.14,
-          fontWeight: '800',
+          alignSelf: 'stretch',
+          flexShrink: 0,
+          minWidth: 0,
+          fontSize: Math.max(12, typeBasis * 0.16),
+          fontFamily: 'Outfit_800ExtraBold',
           textAlign: 'center',
           marginBottom: 4,
         }}
       >
         {data.label}
       </Text>
-    </View>
+    </LinearGradient>
+    </CardSurface>
   );
 }

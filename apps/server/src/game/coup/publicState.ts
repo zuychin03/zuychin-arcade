@@ -33,6 +33,10 @@ function waitingOn(state: CoupServerState): string[] {
       return [];
     case 'awaiting_block_challenge':
       return notPassed(alive.filter((id) => id !== p.blockerId));
+    case 'awaiting_challenge_decision': {
+      const claimantId = p.challengeKind === 'block' ? p.blockerId : p.actorId;
+      return claimantId && alive.includes(claimantId) ? [claimantId] : [];
+    }
     case 'awaiting_lose_influence':
       return p.losingPlayerId ? [p.losingPlayerId] : [];
     case 'awaiting_exchange':
@@ -57,12 +61,15 @@ export function toPublicState(state: CoupServerState): CoupPublicState {
       influenceCount: aliveCount(p.influences),
       revealedCharacters: p.influences.filter((i) => i.revealed).map((i) => i.character),
       eliminated: p.eliminated,
+      forfeited: p.forfeited,
       isCurrentTurn: id === currentTurnPlayerId,
     };
   });
 
   return {
+    gameId: 'coup',
     roomCode: state.roomCode,
+    revision: state.revision,
     variant: state.variant,
     status: state.status,
     players,
@@ -77,14 +84,16 @@ export function toPublicState(state: CoupServerState): CoupPublicState {
       claimedCharacter: state.pending.claimedCharacter,
       blockerId: state.pending.blockerId,
       blockCharacter: state.pending.blockCharacter,
+      challengerId: state.pending.challengerId,
       waitingOn: waitingOn(state),
       responded: [...state.pending.passed],
       deadline: state.pending.deadline,
       losingPlayerId: state.pending.losingPlayerId,
       loseReason: state.pending.loseReason,
     },
-    log: state.log,
+    log: state.log.map((entry) => ({ ...entry })),
     winnerId: state.winnerId,
+    terminationReason: state.terminationReason,
   };
 }
 
@@ -94,11 +103,14 @@ export function toPrivateState(state: CoupServerState, playerId: string): CoupPr
   const pend = state.pending;
   const exchange =
     pend.phase === 'awaiting_exchange' && pend.actorId === playerId && pend.exchangePool
-      ? { pool: pend.exchangePool as CoupCharacter[], keepCount: pend.exchangeKeep }
+      ? { pool: [...pend.exchangePool] as CoupCharacter[], keepCount: pend.exchangeKeep }
       : null;
   return {
+    gameId: 'coup',
+    roomCode: state.roomCode,
+    revision: state.revision,
     playerId: p.playerId,
-    influences: p.influences,
+    influences: p.influences.map((influence) => ({ ...influence })),
     exchange,
     examine: null, // Phase 2 (Inquisitor)
   };

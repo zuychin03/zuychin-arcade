@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-attack.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2417791,
+    "sha256": "65c55bbfcc6dea2f6812b99f0dc4f46abdfd54f2165ee72ac29b19f7e31df634"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-attack.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18800,
+      "sha256": "c480c30f1ce503e79a14dd56217dfc9a08204e578d9c3282f3d9a07261cef84b"
+    }
+  ],
+  "totalBytes": 18800,
+  "maxTotalBytes": 614400
+}

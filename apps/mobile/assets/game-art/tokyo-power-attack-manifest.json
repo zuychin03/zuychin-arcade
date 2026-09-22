@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-attack.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2364005,
+    "sha256": "bdd123574657790ec161473c5c8c9971382b425c0faa4ed4e8a5236c62fa737a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-attack.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14528,
+      "sha256": "1f9a224bc2900910db11c4fda97fd46e2238e5f9c90dee060a9f01fb620f8689"
+    }
+  ],
+  "totalBytes": 14528,
+  "maxTotalBytes": 614400
+}

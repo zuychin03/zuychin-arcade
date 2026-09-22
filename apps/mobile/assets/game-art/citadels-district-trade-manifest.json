@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-trade.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2549025,
+    "sha256": "47ea1ba7920565f9a683435df1fde0d4a2eb054553de44d640163f1373ce4e18"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-trade.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21916,
+      "sha256": "fd5c9289417bef81588f18150e8a424d6d730f773ece80001f96fae2c879fd12"
+    }
+  ],
+  "totalBytes": 21916,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,1 @@
+import{RemainingJoin}from'../../components/remaining/RemainingJoin';import{BangMark}from'../../components/remaining/RemainingArtwork';import{BANG}from'../../constants/theme';export default function Page(){return <RemainingJoin title="JOIN THE SHOOTOUT" mark={<BangMark size={76}/>} palette={{...BANG,accent:BANG.gold,secondary:BANG.red}}/>}

@@ -1,10 +1,9 @@
 // Coup (+ Reformation) constants and rules data.
 //
-// Verified 2026-06-21 against:
-//   https://www.ultraboardgames.com/coup/game-rules.php
-//   https://ultraboardgames.com/coup/reformation.php
-//   https://coup.thebrown.net/rules.html  (faithful online implementation)
-// See COUP_PLAN.md §2 for the full rules reference.
+// Base rules reverified 07/09/2026 against the publisher's current product and
+// official how-to listing, plus the current Dized rules and FAQ.
+//   https://indieboardsandcards.com/our-games/coup/
+//   https://rules.dized.com/game/xzsTtI3VTV-2wvos3otxIg
 
 import type { CoupActionType, CoupCharacter, CoupVariant } from './coup';
 
@@ -54,7 +53,7 @@ export function charactersForVariant(variant: CoupVariant): CoupCharacter[] {
 // ---------------------------------------------------------------------------
 // Action metadata. `cost` is the up-front coin cost (Convert is computed
 // dynamically per self/other). `claim` is the character the actor asserts
-// (challengeable). `blockableBy` lists every character that could block —
+// (challengeable). `blockableBy` lists every character that could block -
 // the engine filters by the variant's character set. Embezzle is a *reverse*
 // challenge (actor claims NOT to hold a Duke) and is handled specially.
 // ---------------------------------------------------------------------------

@@ -1,25 +1,25 @@
-# Implementation plan — Coup + Reformation (game #2)
+# Implementation plan - Coup + Reformation (game #2)
 
-Status: **planning**. This document is the design + delivery plan for adding
+Status: **Phase 1 built; Phase 2 planning**. This document is the design + delivery plan for adding
 **Coup** (with the **Reformation** expansion) as the second game in the arcade
 hub. It assumes the patterns in [ARCHITECTURE.md](./ARCHITECTURE.md) and the
 "adding a new game" recipe there.
 
 The headline: Coup is *not* a harder Saboteur. The rules are simpler, but the
-**interaction model is fundamentally different** — and that difference is the
+**interaction model is fundamentally different** - and that difference is the
 whole engineering job. Read [§3](#3-the-core-problem-interactive-response-windows)
 first.
 
 ---
 
-## 1. Scope — two variants, two delivery phases
+## 1. Scope - two variants, two delivery phases
 
-Coup ships as **two selectable variants**, chosen by the **room owner at room
-creation** (a `variant` toggle in the create flow). They are built and shipped
-in two phases — Phase 1 (base) is a complete, playable game on its own; Phase 2
-adds the Reformation layer on top.
+Delivery is staged across two variants. The current selectable release exposes
+**Base Coup only**. Reformation remains a Phase 2 target and is not offered at
+room creation; once Phase 2 is implemented, the room owner will choose the
+variant. Phase 1 is a complete, playable game on its own.
 
-**Variant A — Base Coup** *(delivery Phase 1)*
+**Variant A - Base Coup** *(delivery Phase 1)*
 
 - 5 characters: **Duke, Assassin, Captain, Ambassador, Contessa**.
 - General actions: **Income, Foreign Aid, Coup**.
@@ -27,13 +27,13 @@ adds the Reformation layer on top.
 - **Challenges** and **blocks (counteractions)**, with bluffing.
 - **2–6 players.** No allegiances. Last player standing wins.
 
-**Variant B — Reformation + Inquisitor** *(delivery Phase 2)*
+**Variant B - Reformation + Inquisitor** *(delivery Phase 2)*
 
 - Everything in base, plus:
 - **Allegiances** (Loyalist / Reformist) and allegiance-based targeting
   restrictions.
 - **Convert**, **Embezzle**, and the **Treasury Reserve**.
-- The **Inquisitor replaces the Ambassador** — weaker exchange (draw 1, not 2)
+- The **Inquisitor replaces the Ambassador** - weaker exchange (draw 1, not 2)
   plus an *examine* power (look at an opponent's card, optionally force a swap).
 - **2–10 players.**
 
@@ -42,7 +42,7 @@ adds the Reformation layer on top.
 > path. The phase state machine is identical across variants; Reformation only
 > *adds* actions (Convert, Embezzle), the allegiance dimension, and the
 > Ambassador→Inquisitor swap. (Should you later want Reformation *without* the
-> Inquisitor, that becomes a trivial sub-toggle — but the default Reformation
+> Inquisitor, that becomes a trivial sub-toggle - but the default Reformation
 > variant uses it.)
 
 Win condition for **both** variants (verified across sources): **last player
@@ -62,7 +62,10 @@ engine must satisfy.
 - Court deck: **3 copies of each character** (15 cards) for 2–6 players;
   **4 copies each** for 7–8; **5 copies each** for 9–10.
 - Each player starts with **2 influence** (face-down character cards) and
-  **2 coins** (1 coin in the 2-player base variant).
+  **2 coins**. In the regular 2-player base game, only the starting player
+  receives **1 coin**; the other player still receives **2**. Confirmed against
+  the [published regular setup](https://rules.dized.com/game/xzsTtI3VTV-2wvos3otxIg/AM39r8IyTcmrHEMIQLGypQ/regular-setup)
+  on 20/09/2026.
 - **Influence** = your face-down cards. Losing influence = flip one face-up
   (owner chooses which); face-up cards are public and dead. **0 influence ⇒
   eliminated.**
@@ -74,19 +77,22 @@ engine must satisfy.
 
 | Action | Cost | Effect | Claim? | Challengeable | Blockable by |
 | --- | --- | --- | --- | --- | --- |
-| Income | — | +1 coin | no | no | — |
-| Foreign Aid | — | +2 coins | no | no | **Duke** |
-| Coup | 7 | target loses 1 influence | no | no | — (unstoppable) |
-| Tax | — | +3 coins | Duke | yes | — |
+| Income | - | +1 coin | no | no | - |
+| Foreign Aid | - | +2 coins | no | no | **Duke** |
+| Coup | 7 | target loses 1 influence | no | no | - (unstoppable) |
+| Tax | - | +3 coins | Duke | yes | - |
 | Assassinate | 3 | target loses 1 influence | Assassin | yes | **Contessa** |
-| Steal | — | take up to 2 coins from target | Captain | yes | **Captain / Ambassador** |
-| Exchange | — | draw 2 from court, keep any, return 2 | Ambassador | yes | — |
-| **Convert** | 1 self / 2 other → **Reserve** | flip an allegiance card | no | no | — |
-| **Embezzle** | — | take **all** Reserve coins | "I have **no** Duke" | yes (reverse) | — |
+| Steal | - | take up to 2 coins from target | Captain | yes | **Captain / Ambassador** |
+| Exchange | - | draw 2 from court, keep any, return 2 | Ambassador | yes | - |
+| **Convert** | 1 self / 2 other → **Reserve** | flip an allegiance card | no | no | - |
+| **Embezzle** | - | take **all** Reserve coins | "I have **no** Duke" | yes (reverse) | - |
 
 - **Mandatory coup:** if you **start your turn with ≥10 coins**, your only legal
   action is Coup.
-- **Steal** from a target with 1 coin takes 1; with 0 takes 0.
+- **Steal** from a target with 1 coin takes 1; a player with 0 coins is not a
+  legal Steal target.
+- If a bluffing Steal target loses their last influence to the block challenge,
+  transfer up to 2 coins before returning any remainder to the Treasury.
 - **Embezzle is a *reverse* claim:** the actor claims they do **not** hold a
   Duke. A challenger claims they **do**. If the actor in fact has no Duke, the
   challenger loses an influence; if they secretly hold a Duke, the actor loses
@@ -99,12 +105,13 @@ A turn resolves through up to four windows, in this exact order:
 ```
 1. Actor declares an action (+ target if needed).
 2. CHALLENGE WINDOW on the action      (character-claim actions only)
-      → if challenged: actor must reveal the claimed card.
-          • has it    → challenger loses 1 influence; actor shuffles the
-                        revealed card into the deck and draws a replacement;
-                        action proceeds to step 3.
-          • lacks it  → actor loses 1 influence; action FAILS; any prepaid
-                        cost (e.g. Assassinate's 3) is refunded.
+      → if challenged: actor chooses to prove the claim or concede it.
+          • prove     → only legal while holding the claimed card; challenger
+                        loses 1 influence; actor shuffles that card into the
+                        deck and draws a replacement; action proceeds to step 3.
+          • concede   → actor loses 1 influence without exposing whether they
+                        held the card; action FAILS; any prepaid cost (e.g.
+                        Assassinate's 3) is refunded.
       → if nobody challenges: proceed to step 3.
 3. BLOCK WINDOW                          (blockable actions only)
       Eligible blocker(s) may claim a blocking character, or pass.
@@ -113,16 +120,20 @@ A turn resolves through up to four windows, in this exact order:
       → if nobody blocks: action resolves (step 5).
 4. CHALLENGE WINDOW on the block
       Anyone (incl. the original actor) may challenge the block, or pass.
-      → block holds  → original action is countered (does NOT resolve).
-      → block fails   → blocker loses 1 influence; original action resolves.
+      → blocker proves  → challenger loses 1 influence; the block holds and
+                          the original action is countered.
+      → blocker concedes → blocker loses 1 influence without exposing their
+                           hand; the original action resolves.
 5. Apply the action's effect.
 ```
 
 Consequences to model carefully:
 
-- **Double influence loss:** challenging an Assassinate and losing costs you
-  the challenge **and** the assassination — you can be knocked out in one turn.
-  Same if you bluff a Contessa block and get challenged.
+- **Double influence loss:** if the Assassinate target challenges the Assassin
+  and loses, they lose one influence to the challenge and the assassination
+  then resolves immediately. A different player's failed challenge does not
+  remove the target's opportunity to block with Contessa. Bluffing a Contessa
+  block and losing its challenge also lets the assassination resolve.
 - A successfully challenged **action** is fully reverted incl. coin refund. A
   successfully challenged **block** means the action goes through.
 - Income, Coup, Convert have **no challenge window**. Foreign Aid has no
@@ -131,7 +142,7 @@ Consequences to model carefully:
 ### Reformation targeting restriction
 
 You may **not** Coup, Assassinate, Steal from, or block the Foreign Aid of a
-player with the **same allegiance** — *unless every living player shares one
+player with the **same allegiance** - *unless every living player shares one
 allegiance*, in which case all restrictions lift. **Convert** is exempt (it's
 how allegiances change) and may target anyone, including yourself.
 
@@ -156,7 +167,7 @@ resolve it until **every other living player** has had the chance to challenge.
 A block can come from a different player than the actor, and a block can itself
 be challenged by a third player. The engine therefore needs:
 
-1. A **pending-resolution state machine** — the game spends most of its time
+1. A **pending-resolution state machine** - the game spends most of its time
    *between* turns, waiting on responses, not on the active player.
 2. **Multi-player response collection** with a resolution rule.
 3. **Server-driven timeouts** so one AFK player can't freeze the table.
@@ -180,15 +191,30 @@ A discriminated `pending` object on the game state. Phases:
 | `awaiting_lose_influence` | the losing player | they pick a card to reveal (auto if 1 left) |
 | `awaiting_exchange` | the actor | they choose which drawn cards to keep |
 | `awaiting_examine` | the Inquisitor (variant) | they decide keep/force-swap |
-| `game_over` | — | one player remains |
+| `game_over` | - | one player remains |
 
 **Response-window rule (challenge & block):** the window stays open until
 *either* one player responds with challenge/block, *or* every eligible player
 has explicitly passed. First responder wins priority (a second simultaneous
-challenge is redundant — the outcome is identical). A per-room **auto-pass timer
-(30s)** passes for anyone who hasn't responded, so the game never stalls; the
+challenge is redundant - the outcome is identical). A per-room **auto-pass timer
+(30s)** passes for anyone who hasn't responded, so an unanswered response cannot
+hold that window open indefinitely; the
 remaining time is projected to clients for a visible countdown. This reuses the
 existing per-room timer concept (today's `nextRoundTimer`).
+
+**Current digital conventions (20/09/2026):** timed proof decisions prove a
+held claim or concede otherwise; timed influence loss reveals the first hidden
+card; timed Exchange keeps the original hand. These defaults are separate from
+reconnect grace. The user chose immediate active-seat forfeiture on explicit
+leave or expired grace. Departures are batched before settlement, and no active
+survivor means no winner or competitive result. An already-adjudicated loss
+must still be paid before a surviving player can win. Leaving after natural
+elimination does not retroactively forfeit completed participation.
+
+Public/private state is adopted as a matching room/player/revision pair. Initial
+revision zero is valid; rematches begin above the previous terminal revision.
+Each mutation receives a sender-only acknowledgement, which confirms acceptance
+rather than the final outcome of a challengeable action.
 
 The `pending` object carries: `action`, `actorId`, `targetId?`,
 `claimedCharacter?`, `blockerId?`, `blockCharacter?`, and a
@@ -197,30 +223,31 @@ the current window so the UI can render the right prompt.
 
 ---
 
-## 4. Shared types — `packages/types`
+## 4. Shared types - `packages/types`
 
 New files, exported from `index.ts` (keep the existing public/private split):
 
 **`coup.ts`**
 
-- `CoupVariant = 'base' | 'reformation'` — chosen at room creation; carried on
-  the game state and consumed by setup, action legality, and projection.
+- `CoupVariant = 'base' | 'reformation'` - carried on the game state and
+  consumed by setup, action legality, and projection. The create route fixes it
+  to `base` until Phase 2 exposes variant selection.
 - `CoupCharacter = 'duke' | 'assassin' | 'captain' | 'ambassador' | 'contessa' | 'inquisitor'`
   (base never deals `inquisitor`; reformation deals it in place of `ambassador`).
 - `Allegiance = 'loyalist' | 'reformist'` (reformation only; `null` in base).
-- `CoupActionType` — the union from the actions table (`income`, `foreign_aid`,
+- `CoupActionType` - the union from the actions table (`income`, `foreign_aid`,
   `coup`, `tax`, `assassinate`, `steal`, `exchange`, `convert`, `embezzle`,
   `inquisitor_exchange`, `inquisitor_examine`).
 - `Influence = { character: CoupCharacter; revealed: boolean }`
-- **Server-only** `CoupPlayerState` — `influences: Influence[]`, `coins`,
+- **Server-only** `CoupPlayerState` - `influences: Influence[]`, `coins`,
   `allegiance`, `eliminated`. (Face-down characters never leave the server in
   full.)
-- **Public** `CoupPublicState` — per player: `coins`, `allegiance`,
+- **Public** `CoupPublicState` - per player: `coins`, `allegiance`,
   `influenceCount` (alive), `revealedCharacters` (face-up only), `eliminated`;
   plus `treasuryReserve`, `deckSize`, `currentTurnPlayerId`, the projected
   `pending` window (phase + who it's waiting on + the claim being made), the
   action `log`, and `winnerId`.
-- **Private** `CoupPrivateState` — this player's own `influences` (the
+- **Private** `CoupPrivateState` - this player's own `influences` (the
   face-down characters), plus transient `exchangeDraw?` / `examineResult?`.
 - Socket payloads: `CoupActionPayload`, `CoupRespondPayload`
   (`'challenge' | 'block' | 'pass'`, + `blockCharacter?`),
@@ -280,9 +307,9 @@ reused as-is.
 
 ---
 
-## 6. New code — server, mobile, persistence
+## 6. New code - server, mobile, persistence
 
-### Server engine — `apps/server/src/game/coup/`
+### Server engine - `apps/server/src/game/coup/`
 
 Pure, no-IO TypeScript (same discipline as `game/saboteur/`):
 
@@ -298,7 +325,7 @@ Pure, no-IO TypeScript (same discipline as `game/saboteur/`):
 Engine entry points are all `(state, playerId, payload) → EngineResult`, so the
 socket handler stays as thin as Saboteur's `applyEngineCall`.
 
-### Server socket — `apps/server/src/socket/coupHandlers.ts`
+### Server socket - `apps/server/src/socket/coupHandlers.ts`
 
 Mirror `gameHandlers.ts`: `coup:action`, `coup:respond`,
 `coup:lose_influence`, `coup:exchange`, `coup:examine`, plus reuse
@@ -307,7 +334,7 @@ Mirror `gameHandlers.ts`: `coup:action`, `coup:respond`,
 Saboteur. Arm/disarm the room auto-pass timer on entering/leaving a response
 window.
 
-### Mobile — `apps/mobile/app/coup/`
+### Mobile - `apps/mobile/app/coup/`
 
 Route group mirroring `saboteur/` (the hub→game template):
 
@@ -321,7 +348,7 @@ Route group mirroring `saboteur/` (the hub→game template):
   (Challenge / Block / Allow with a countdown), **LoseInfluence** picker,
   **Exchange** selector, **Examine** dialog, **GameOver**.
 
-New components — `apps/mobile/components/coup/`: `PlayerSeat`, `InfluenceCard`,
+New components - `apps/mobile/components/coup/`: `PlayerSeat`, `InfluenceCard`,
 `CoinPile`, `AllegianceBadge`, `ActionBar`, `ResponsePrompt`, `GameLog`,
 `ExchangeOverlay`, `LoseInfluenceOverlay`. Reuse `CardBack`, `NeonButton`,
 `ScalePressable`, `ArcadeDialog`, the overlay patterns, and the animated
@@ -329,12 +356,12 @@ background.
 
 **Store / socket:** add `coupPublic` / `coupPrivate` slices to
 `useGameStore` (or generalize the existing `publicState`/`privateState` into a
-tagged `{ game, ... }` value). Reuse the single `useSocket` hook unchanged —
+tagged `{ game, ... }` value). Reuse the single `useSocket` hook unchanged -
 just route the new event names into the store. The action bar emits via
 `getSocket()?.emit('coup:action', …)`; **no optimistic updates** (same as
-Saboteur — render only what the server sends).
+Saboteur - render only what the server sends).
 
-**Theme:** add a `coup.*` palette (royal court — crimson / gold / deep purple)
+**Theme:** add a `coup.*` palette (royal court - crimson / gold / deep purple)
 to `tailwind.config.js` and `constants/theme.ts`, alongside `mine.*`. Add a
 Coup tile to the hub (`app/(arcade)/index.tsx` already has a "COMING SOON"
 placeholder to replace) and a resume-route branch for `gameId === 'coup'`.
@@ -354,10 +381,10 @@ Coup, results are win/loss with no score. Plan:
 
 ### Testing
 
-Mirror Saboteur's simulation discipline — this is the regression net for a
+Mirror Saboteur's simulation discipline - this is the regression net for a
 state machine with a lot of branches:
 
-- `apps/server/scripts/simulate-coup.ts` — play many random *legal* games
+- `apps/server/scripts/simulate-coup.ts` - play many random *legal* games
   across 2–10 players, with random challenge/block responses, asserting
   invariants: coin conservation (bank + reserve + players, minus coup/assassinate
   sinks), influence counts only ever decrease, deck + hands + revealed = total
@@ -377,60 +404,60 @@ on the room-creation variant toggle. Each stage is independently verifiable;
 don't start the next until the previous passes its check (the staged-build style
 used elsewhere in this repo).
 
-### Phase 1 — Base Coup (2–6 players, shippable on its own)
+### Phase 1 - Base Coup (2–6 players, shippable on its own)
 
-> **Status: built (2026-06-21).** All stages below implemented and verified —
+> **Status: built (2026-06-21).** All stages below implemented and verified -
 > server typechecks, `simulate:coup` (1,250 games / ~1.5M assertions) and the
 > Saboteur sim both pass, and `smoke:coup` + `smoke` pass against a live server.
 > Mobile typechecks. Reformation (Phase 2) is gated off at the create route.
 
-- **1.0 — types & constants.** `coup.ts` + `coup-constants.ts`, exported,
+- **1.0 - types & constants.** `coup.ts` + `coup-constants.ts`, exported,
   including the `CoupVariant` seam (only `'base'` exercised now). Check:
   `pnpm typecheck` green.
-- **1.1 — multi-game room refactor.** `gameId` + `config` on create &
+- **1.1 - multi-game room refactor.** `gameId` + `config` on create &
   `ServerRoom`, `RoomGame` union, handler dispatch, per-game min/max, `gameId`
   in `RoomPublicState`. Saboteur still fully works. Check: existing `simulate` +
   `smoke-e2e` still pass.
-- **1.2 — engine core (no challenges).** Deck, setup, coins, turn order, the
+- **1.2 - engine core (no challenges).** Deck, setup, coins, turn order, the
   unchallengeable/unblockable actions (Income, Foreign Aid w/o block, Coup) and
   the character claims resolved *as if true* (Tax, Steal, Assassinate, Exchange)
   + lose-influence + win detection. Check: a reduced `simulate-coup` plays to
   completion.
-- **1.3 — the resolution machine.** Challenge + block + block-challenge windows,
+- **1.3 - the resolution machine.** Challenge + block + block-challenge windows,
   response collection, **30s auto-pass timeout**, refunds, double-loss. This is
   the centerpiece (§3). Check: full `simulate-coup` invariants hold over many
   random games with random responses.
-- **1.4 — socket layer.** `coupHandlers.ts`, projections, per-socket private
+- **1.4 - socket layer.** `coupHandlers.ts`, projections, per-socket private
   state, the auto-pass room timer + projected countdown. Check: extended
   `smoke-e2e` with a Coup room (declare → challenge → block → reconnect).
-- **1.5 — mobile.** `/coup` route group, table UI, action bar, response
+- **1.5 - mobile.** `/coup` route group, table UI, action bar, response
   prompts, lose-influence + exchange + game-over overlays, `coup.*` theme, hub
   tile. Check: `expo export` bundles; play a real 3-tab web game end-to-end.
-- **1.6 — persistence + per-game leaderboard.** Save Coup results
+- **1.6 - persistence + per-game leaderboard.** Save Coup results
   (`game_name='coup'`, win/loss), add the `?game=` leaderboard query, point the
   Coup Ranks screen at it.
 
 **Phase 1 checkpoint:** a fully playable base Coup reachable from the hub.
 
-### Phase 2 — Reformation + Inquisitor (2–10 players, variant toggle)
+### Phase 2 - Reformation + Inquisitor (2–10 players, variant toggle)
 
-- **2.0 — extend types/constants.** `Allegiance`, Convert/Embezzle payloads,
+- **2.0 - extend types/constants.** `Allegiance`, Convert/Embezzle payloads,
   Inquisitor character + actions, reformation deck sizes (3/4/5 copies), 2–10
   limits.
-- **2.1 — allegiance layer.** Setup assignment (alternating), the "can A target
+- **2.1 - allegiance layer.** Setup assignment (alternating), the "can A target
   B?" predicate with the all-same-allegiance lift, applied to Coup / Assassinate
   / Steal / block-Foreign-Aid.
-- **2.2 — Convert, Embezzle, Treasury Reserve.** Convert (1 self / 2 other →
+- **2.2 - Convert, Embezzle, Treasury Reserve.** Convert (1 self / 2 other →
   Reserve, flips allegiance), Embezzle incl. the **reverse-challenge** ("I have
   no Duke"), Reserve accounting.
-- **2.3 — Inquisitor.** Replaces Ambassador in the reformation deck: draw-1
+- **2.3 - Inquisitor.** Replaces Ambassador in the reformation deck: draw-1
   exchange + the `awaiting_examine` sub-phase (look at an opponent's card,
   optionally force-swap).
-- **2.4 — variant toggle.** Surface `base | reformation` in the `/coup` create
+- **2.4 - variant toggle.** Surface `base | reformation` in the `/coup` create
   screen and lobby; raise the room cap to 10 for reformation rooms.
-- **2.5 — mobile additions.** Allegiance badges, Treasury Reserve display,
+- **2.5 - mobile additions.** Allegiance badges, Treasury Reserve display,
   Convert/Embezzle in the action bar, the examine overlay.
-- **2.6 — coverage.** `simulate-coup` runs both variants (base 2–6, reformation
+- **2.6 - coverage.** `simulate-coup` runs both variants (base 2–6, reformation
   2–10) under one invariant set.
 
 **Phase 2 checkpoint:** room owner picks base vs Reformation at creation; both
@@ -453,35 +480,38 @@ largest surface area; Phase 2 is mostly additive on the seams Phase 1 leaves.
 
 ## 9. Risks
 
-- **State-machine complexity / deadlocks** — the dominant risk. Mitigated by
+- **State-machine complexity / deadlocks** - the dominant risk. Mitigated by
   the explicit phase table, the simulation harness asserting "every window
   resolves," and building it in Stage 3 *before* any UI.
-- **Response timing UX** — windows that wait on humans need clear countdowns and
+- **Response timing UX** - windows that wait on humans need clear countdowns and
   an auto-pass fallback, or play drags. Tunable timeout + "Allow" button.
-- **Reconnect mid-window** — `request_state` must fully re-describe the pending
+- **Reconnect mid-window** - `request_state` must fully re-describe the pending
   phase (whose response is awaited) so a refreshed client can re-prompt. Covered
   by the projection design and a smoke-test reconnect case.
-- **Scope creep from Reformation** — isolated to delivery Phase 2 so it can't
+- **Scope creep from Reformation** - isolated to delivery Phase 2 so it can't
   block shipping a complete base game first.
 
 ## 10. Decisions (locked 2026-06-21)
 
-1. **Variants & phasing** — ship **both**, split across two delivery phases:
+1. **Variants & phasing** - ship **both**, split across two delivery phases:
    Phase 1 = base Coup, Phase 2 = Reformation **with the Inquisitor**. The
    **room owner toggles the variant at room creation**. (§1, §7)
-2. **Response window timeout** — **30s auto-pass**, with the remaining time
+2. **Response window timeout** - **30s auto-pass**, with the remaining time
    projected to clients for a visible countdown. (§3)
-3. **Leaderboard** — **separate per-game board** (`?game=` filter); Coup ranks
+3. **Leaderboard** - **separate per-game board** (`?game=` filter); Coup ranks
    by wins, not nuggets. (§6)
-4. **Win condition** — **last player standing** for both variants, per official
+4. **Win condition** - **last player standing** for both variants, per official
    rules; allegiance only restricts targeting. (No house-rule team victory.)
 
 ---
 
 ## 11. Sources
 
-- [Coup official rules — UltraBoardGames](https://www.ultraboardgames.com/coup/game-rules.php)
-- [Coup: Reformation official rules — UltraBoardGames](https://ultraboardgames.com/coup/reformation.php)
-- [Coup: Reformation rules — Group Games 101](https://groupgames101.com/coup-reformation-rules/)
-- [Coup + Reformation faithful online implementation (rules) — thebrown.net](https://coup.thebrown.net/rules.html)
-- [Coup: Reformation overview — The Game Rules](https://thegamerules.com/coup-reformation-detail)
+- [Coup publisher page - Indie Boards & Cards](https://indieboardsandcards.com/our-games/coup/)
+- [Coup printed rulebook PDF](https://www.northstreetgames.com/images/Rulebooks/Coup-Rules.pdf)
+- [Coup publisher-linked rules and FAQ - Dized](https://rules.dized.com/game/xzsTtI3VTV-2wvos3otxIg)
+- [Coup base rules summary - UltraBoardGames](https://www.ultraboardgames.com/coup/game-rules.php)
+- [Coup: Reformation rules summary - UltraBoardGames](https://ultraboardgames.com/coup/reformation.php)
+- [Coup: Reformation rules - Group Games 101](https://groupgames101.com/coup-reformation-rules/)
+- [Coup + Reformation faithful online implementation (rules) - thebrown.net](https://coup.thebrown.net/rules.html)
+- [Coup: Reformation overview - The Game Rules](https://thegamerules.com/coup-reformation-detail)

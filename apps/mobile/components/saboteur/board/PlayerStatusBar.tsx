@@ -1,136 +1,68 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import type { PublicPlayerState, Tool } from '@zuychin-arcade/types';
-import { GlowPulse } from '../../ui/GlowPulse';
-import { Coin } from '../../ui/Coin';
-import { ARCADE } from '../../../constants/theme';
-
-const TOOLS: Array<{ tool: Tool; icon: keyof typeof MaterialCommunityIcons.glyphMap }> = [
-  { tool: 'lantern', icon: 'flashlight' },
-  { tool: 'pickaxe', icon: 'pickaxe' },
-  { tool: 'cart', icon: 'cart-outline' },
-];
+import type { Player, PublicPlayerState } from '@zuychin-arcade/types';
+import { NeonButton } from '../../ui/NeonButton';
+import { ARCADE, MINE } from '../../../constants/theme';
+import { useReducedMotionPreference } from '../../../hooks/useReducedMotionPreference';
 
 interface Props {
   players: PublicPlayerState[];
+  presencePlayers: Player[] | null;
   myPlayerId: string | null;
-  selectable: boolean;            // true while picking a sabotage/repair target
+  myGoldCollected: number;
+  targeting: boolean;
+  eligiblePlayerIds: Set<string>;
   onSelect: (playerId: string) => void;
 }
 
-export function PlayerStatusBar({ players, myPlayerId, selectable, onSelect }: Props) {
-  return (
-    <ScrollView
-      horizontal
-      className="grow-0 border-y border-arcade-border/50 bg-[#0B0716]/80"
-      contentContainerStyle={{ padding: 8, gap: 8 }}
-      showsHorizontalScrollIndicator={false}
-    >
-      {players.map((p) => {
-        const hasBrokenTools = p.brokenTools.length > 0;
-        
-        let cardBorderColor: string = ARCADE.border;
-        let cardBg = 'rgba(22, 16, 40, 0.6)';
-        
-        if (p.isCurrentTurn) {
-          cardBorderColor = ARCADE.cyan;
-          cardBg = 'rgba(31, 24, 56, 0.85)';
-        } else if (hasBrokenTools) {
-          cardBorderColor = 'rgba(255, 51, 85, 0.4)';
-          cardBg = 'rgba(40, 16, 28, 0.5)';
-        }
-
-        return (
-          <Pressable
-            key={p.playerId}
-            disabled={!selectable}
-            onPress={() => onSelect(p.playerId)}
-            style={{
-              minWidth: 100,
-              borderRadius: 14,
-              paddingHorizontal: 10,
-              paddingVertical: 8,
-              backgroundColor: cardBg,
-              borderWidth: 1.5,
-              borderColor: cardBorderColor,
-            }}
-          >
-            {p.isCurrentTurn && <GlowPulse color={ARCADE.cyan} borderRadius={14} borderWidth={1.5} />}
-            {selectable && <GlowPulse color={ARCADE.pink} borderRadius={14} borderWidth={1.5} />}
-            
-            {/* Player Name */}
-            <Text
-              numberOfLines={1}
-              style={{
-                fontFamily: 'SpaceMono_700Bold',
-                color: p.isCurrentTurn ? ARCADE.cyan : ARCADE.text,
-                fontSize: 12,
-                fontWeight: '800',
-              }}
-            >
-              {p.displayName}
-            </Text>
-
-            {/* Hand & Gold indicators */}
-            <View className="mt-1.5 flex-row items-center gap-3">
-              <View className="flex-row items-center gap-1.5 rounded bg-[#2E2452]/40 px-1.5 py-0.5 border border-arcade-border/30">
-                <MaterialCommunityIcons name="cards-playing-outline" size={11} color={ARCADE.muted} />
-                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: ARCADE.muted, fontSize: 10 }}>
-                  {p.handSize}
-                </Text>
-              </View>
-              <Coin amount={p.goldCollected} size="sm" showText />
-            </View>
-
-            {/* Tools badges */}
-            <View className="mt-2 flex-row gap-1.5">
-              {TOOLS.map(({ tool, icon }) => {
-                const broken = p.brokenTools.includes(tool);
-                return (
-                  <View
-                    key={tool}
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: 11,
-                      backgroundColor: broken ? 'rgba(255, 51, 85, 0.15)' : 'rgba(22, 16, 40, 0.4)',
-                      borderWidth: 1,
-                      borderColor: broken ? ARCADE.red : 'rgba(142, 134, 179, 0.3)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name={icon}
-                      size={12}
-                      color={broken ? ARCADE.red : ARCADE.muted}
-                      style={{ opacity: broken ? 0.75 : 0.9 }}
-                    />
-                    {broken && (
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: -2,
-                          right: -2,
-                          width: 8,
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: ARCADE.red,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <MaterialCommunityIcons name="close" size={6} color="#FFF" />
-                      </View>
-                    )}
-                  </View>
-                );
-              })}
-            </View>
-          </Pressable>
-        );
-      })}
-    </ScrollView>
-  );
+export function PlayerStatusBar({ players, presencePlayers, myPlayerId, myGoldCollected, targeting, eligiblePlayerIds, onSelect }: Props) {
+  const [expanded, setExpanded] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [viewport, setViewport] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
+  const scroll = useRef<ScrollView>(null);
+  const reduceMotion = useReducedMotionPreference();
+  const renderPlayer = (player: PublicPlayerState) => {
+    const presence = presencePlayers?.find((seat) => seat.playerId === player.playerId);
+    const left = player.forfeited || Boolean(presencePlayers && (!presence || presence.hasLeft));
+    const connected = !left && (presence?.isConnected ?? true);
+    const eligible = targeting && eligiblePlayerIds.has(player.playerId);
+    const gold = player.goldCollected ?? (player.playerId === myPlayerId ? myGoldCollected : null);
+    const tools = player.brokenTools.length ? 'Broken: ' + player.brokenTools.join(', ') : 'All tools working';
+    return <Pressable key={player.playerId} nativeID={'saboteur-player-' + player.playerId}
+      accessibilityRole={eligible ? 'button' : 'summary'} disabled={!eligible}
+      accessibilityLabel={player.displayName + (player.playerId === myPlayerId ? ', you.' : '.') + (left ? ' Has left the game.' : !connected ? ' Reconnecting.' : '') + ' ' + player.handSize + ' cards. ' + tools + '. ' + (gold === null ? 'Gold hidden.' : gold + ' gold.') + (eligible ? ' Eligible target.' : '')}
+      accessibilityState={{ disabled: !eligible }}
+      onPress={() => onSelect(player.playerId)}
+      style={{ width: expanded ? '100%' : 180, minHeight: 108, borderRadius: 12, padding: 12, gap: 5, borderWidth: 2, borderColor: eligible ? ARCADE.pink : player.isCurrentTurn ? ARCADE.cyan : ARCADE.border, backgroundColor: MINE.bg }}>
+      <Text style={{ color: player.isCurrentTurn ? ARCADE.cyan : ARCADE.text, fontFamily: 'Outfit_700Bold', fontSize: 15 }}>{player.displayName}{player.playerId === myPlayerId ? ' (you)' : ''}</Text>
+      <Text style={{ color: left ? ARCADE.red : ARCADE.muted, fontSize: 12, lineHeight: 17 }}>{left ? 'LEFT · NO LONGER PLAYING' : !connected ? 'RECONNECTING · SEAT RESERVED' : player.isCurrentTurn ? 'CURRENT TURN' : player.handSize + ' cards'}</Text>
+      {!left && <Text style={{ color: player.brokenTools.length ? ARCADE.red : ARCADE.text, fontSize: 12, lineHeight: 17 }}>{tools}</Text>}
+      <Text style={{ color: gold === null ? ARCADE.muted : MINE.gold, fontSize: 12 }}>{gold === null ? 'Gold hidden until final scores' : gold + ' gold'}</Text>
+      {eligible && <Text style={{ color: ARCADE.pink, fontSize: 12, fontFamily: 'Outfit_700Bold' }}>CHOOSE PLAYER</Text>}
+    </Pressable>;
+  };
+  return <View nativeID="saboteur-players" style={{ borderTopWidth: 1, borderBottomWidth: 1, borderColor: ARCADE.border, padding: 8, gap: 8 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+      <Text accessibilityRole="header" style={{ color: ARCADE.text, fontFamily: 'Outfit_700Bold', fontSize: 15 }}>Players · {players.length}</Text>
+      <NeonButton label={expanded ? 'COLLAPSE PLAYERS' : 'VIEW ALL PLAYERS'} color={ARCADE.cyan} variant="ghost" onPress={() => setExpanded(!expanded)} />
+    </View>
+    {expanded ? <View style={{ gap: 8 }}>{players.map(renderPlayer)}</View> : <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Previous players" disabled={offset <= 2} accessibilityState={{ disabled: offset <= 2 }}
+        onPress={() => scroll.current?.scrollTo({ x: Math.max(0, offset - viewport), animated: !reduceMotion })} style={{ width: 44, minHeight: 80, alignItems: 'center', justifyContent: 'center', opacity: offset > 2 ? 1 : 0.4 }}>
+        <MaterialCommunityIcons name="chevron-left" size={24} color={ARCADE.cyan} />
+      </Pressable>
+      <ScrollView ref={scroll} horizontal style={{ flex: 1 }} contentContainerStyle={{ gap: 8, paddingBottom: 8 }} showsHorizontalScrollIndicator
+        tabIndex={Platform.OS === 'web' ? 0 : undefined} role={Platform.OS === 'web' ? 'region' : undefined} accessibilityLabel="Player roster, scroll sideways or view all players"
+        onLayout={(event) => setViewport(event.nativeEvent.layout.width)} onContentSizeChange={setContentWidth}
+        onScroll={(event) => setOffset(event.nativeEvent.contentOffset.x)} scrollEventThrottle={16}>
+        {players.map(renderPlayer)}
+      </ScrollView>
+      <Pressable accessibilityRole="button" accessibilityLabel="Next players" disabled={offset + viewport >= contentWidth - 2} accessibilityState={{ disabled: offset + viewport >= contentWidth - 2 }}
+        onPress={() => scroll.current?.scrollTo({ x: offset + viewport, animated: !reduceMotion })} style={{ width: 44, minHeight: 80, alignItems: 'center', justifyContent: 'center', opacity: offset + viewport < contentWidth - 2 ? 1 : 0.4 }}>
+        <MaterialCommunityIcons name="chevron-right" size={24} color={ARCADE.cyan} />
+      </Pressable>
+    </View>}
+  </View>;
 }

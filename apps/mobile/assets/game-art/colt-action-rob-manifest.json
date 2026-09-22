@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-action-rob.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2071634,
+    "sha256": "cb808df2f9477545dc00d40e4fe3179071f2d21c2da4de23f3eb54c0f7d076f8"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-action-rob.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 10914,
+      "sha256": "2fd23b4bac63c6130e76b10ca6a29b08dcc3ec0ddf75830343ed479bfd9882b3"
+    }
+  ],
+  "totalBytes": 10914,
+  "maxTotalBytes": 614400
+}

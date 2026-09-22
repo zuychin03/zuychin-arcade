@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-place-wreck.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2459249,
+    "sha256": "37d0aa83fdde7cf8c602ef823e78cde9250d2345e5224fcb9c1824f69856e5e2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-place-wreck.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19158,
+      "sha256": "09fb773fcc0e5451b88f2a62e781ac4eac1ebe28c634d332556ca7f3049a7c78"
+    }
+  ],
+  "totalBytes": 19158,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-energy.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2123075,
+    "sha256": "c344b07a8dddadeb64cfaade354a2f1fd30d832aa9d12f20598a3349834e41d5"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-energy.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11596,
+      "sha256": "65035c20afca76b0cdaa9e0f3ca0703b0bc7528d038d32d125df18b0213a9858"
+    }
+  ],
+  "totalBytes": 11596,
+  "maxTotalBytes": 614400
+}

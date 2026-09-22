@@ -57,28 +57,31 @@ export interface PlacedCard {
 
 // --- PLAYER GAME STATE (server-side, never sent in full to clients) ---
 export interface PlayerGameState {
+  forfeited: boolean;
   playerId: string;
   displayName: string;
-  role: Role;                    // SECRET — only sent to that player
-  hand: GameCard[];              // SECRET — only sent to that player
-  brokenTools: Tool[];           // PUBLIC — visible to all
+  role: Role;                    // SECRET - only sent to that player
+  hand: GameCard[];              // SECRET - only sent to that player
+  brokenTools: Tool[];           // PUBLIC - visible to all
   goldCollected: number;         // running total across rounds
-  peekedGoals: PeekedGoal[];     // SECRET — goals seen via map cards
+  peekedGoals: PeekedGoal[];     // SECRET - goals seen via map cards
 }
 
 export interface PeekedGoal {
   position: BoardPosition;
   isGold: boolean;
+  edges: PathCardEdges;
 }
 
 // --- PUBLIC PLAYER STATE (safe to broadcast to all) ---
 export interface PublicPlayerState {
+  forfeited: boolean;
   playerId: string;
   displayName: string;
   handSize: number;              // card count only, not the cards
   brokenTools: Tool[];
   isCurrentTurn: boolean;
-  goldCollected: number;
+  goldCollected: number | null;  // exact total is public only at game over
 }
 
 // --- GOAL CARD STATUS (public) ---
@@ -91,13 +94,13 @@ export interface GoalStatus {
 // --- GOLD DISTRIBUTION ---
 export interface GoldDistributionStep {
   playerId: string;
-  chosenCard: number | null;     // null until chosen
+  hasChosen: boolean;
 }
 
 export interface GoldDistributionPublic {
   order: string[];               // playerIds, winning placer first, counter-clockwise
   currentPickerId: string | null;
-  availableCardCount: number;    // cards are face-down: values stay server-side until picked
+  availableCardCount: number;    // values are visible only to the current picker
   steps: GoldDistributionStep[];
 }
 
@@ -109,9 +112,12 @@ export interface RoleReveal {
 
 // --- GAME STATE (public board state broadcast to all) ---
 export interface SaboteurPublicState {
+  gameId: 'saboteur';
+  revision: number;
   roomCode: string;
   round: number;                 // 1, 2, or 3
   status: 'playing' | 'round_end' | 'game_over';
+  terminationReason: 'not_enough_players' | null;
   board: PlacedCard[];           // start card + placed tunnels + revealed goals
   goals: GoalStatus[];
   deckSize: number;
@@ -127,20 +133,28 @@ export interface SaboteurPublicState {
 
 // --- PRIVATE STATE SENT TO INDIVIDUAL PLAYERS ---
 export interface SaboteurPrivateState {
+  gameId: 'saboteur';
+  roomCode: string;
+  revision: number;
   playerId: string;
   role: Role;
   hand: GameCard[];
   peekedGoals: PeekedGoal[];     // goals this player has seen via map
+  goldCollected: number;
+  chosenGoldCard: number | null;
+  availableGoldCards: number[] | null;
 }
 
 // --- SOCKET EVENT PAYLOADS (client → server) ---
 export interface PlaceCardPayload {
+  expectedRevision: number;
   cardId: string;
   position: BoardPosition;
   rotated: boolean;              // true if card is rotated 180°
 }
 
 export interface PlayActionPayload {
+  expectedRevision: number;
   cardId: string;
   targetPlayerId?: string;       // for sabotage/repair
   targetPosition?: BoardPosition; // for rockfall/map
@@ -148,12 +162,16 @@ export interface PlayActionPayload {
 }
 
 export interface PassTurnPayload {
+  expectedRevision: number;
   discardCardId?: string;        // omitted only when hand is empty
 }
 
 export interface ChooseGoldPayload {
-  cardIndex: number;             // index into the face-down cards on offer
+  expectedRevision: number;
+  cardIndex: number;
 }
+
+export type SaboteurActionKind = 'start_game' | 'place_card' | 'play_action' | 'pass_turn' | 'choose_gold';
 
 export interface ActionRejected {
   reason: string;

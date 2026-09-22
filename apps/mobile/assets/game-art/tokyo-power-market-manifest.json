@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-market.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2022580,
+    "sha256": "74921115b20444b9e9653abb94608b916808656573a3f9a66010a09217d895fa"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-market.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 8678,
+      "sha256": "db79c7b7b2677a1d998c349b5ebc49f4537a789a18de3716efd5819be79ec26f"
+    }
+  ],
+  "totalBytes": 8678,
+  "maxTotalBytes": 614400
+}

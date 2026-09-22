@@ -1,41 +1,69 @@
-import { useCallback, useEffect, useState } from 'react';
-import { FlatList, Pressable, RefreshControl, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, Platform, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { GameId, LeaderboardRow } from '@zuychin-arcade/types';
 import { getLeaderboard } from '../../lib/api';
 import { ARCADE, neonText } from '../../constants/theme';
+import { NeonButton } from '../../components/ui/NeonButton';
 
 const RANK_COLORS = [ARCADE.pink, ARCADE.purple, ARCADE.blue];
 
-const TABS: Array<{ id: GameId; label: string; icon: keyof typeof MaterialCommunityIcons.glyphMap }> = [
-  { id: 'saboteur', label: 'Saboteur', icon: 'pickaxe' },
-  { id: 'coup', label: 'Coup', icon: 'drama-masks' },
+const TABS: { id: GameId; label: string; metric: 'wins' | 'nuggets' | 'points' | 'loot'; icon: keyof typeof MaterialCommunityIcons.glyphMap }[] = [
+  { id: 'saboteur', label: 'Saboteur', metric: 'nuggets', icon: 'pickaxe' },
+  { id: 'coup', label: 'Coup', metric: 'wins', icon: 'drama-masks' },
+  { id: 'king_of_tokyo', label: 'King of Tokyo', metric: 'wins', icon: 'city-variant-outline' },
+  { id: 'skull_king', label: 'Skull King', metric: 'points', icon: 'pirate' },
+  { id: 'citadels', label: 'Citadels', metric: 'points', icon: 'castle' },
+  { id: 'not_alone', label: 'Not Alone', metric: 'wins', icon: 'alien-outline' },
+  { id: 'bang', label: 'BANG!', metric: 'wins', icon: 'pistol' },
+  { id: 'libertalia', label: 'Libertalia', metric: 'points', icon: 'ship-wheel' },
+  { id: 'colt_express', label: 'Colt Express', metric: 'loot', icon: 'train' },
 ];
 
 export default function LeaderboardScreen() {
   const [game, setGame] = useState<GameId>('saboteur');
-  const [rows, setRows] = useState<LeaderboardRow[]>([]);
+  const [board, setBoard] = useState<{ game: GameId; rows: LeaderboardRow[]; error: string | null; loaded: boolean }>({
+    game, rows: [], error: null, loaded: false,
+  });
   const [refreshing, setRefreshing] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const requestId = useRef(0);
+  const requestController = useRef<AbortController | null>(null);
 
   const load = useCallback(async () => {
+    if (requestController.current) return;
+    const id = ++requestId.current;
+    const controller = new AbortController();
+    requestController.current = controller;
+    setBoard({ game, rows: [], error: null, loaded: false });
     setRefreshing(true);
     try {
-      setRows(await getLeaderboard(game));
+      const rows = await getLeaderboard(game, controller.signal);
+      if (id === requestId.current) setBoard({ game, rows, error: null, loaded: true });
     } catch {
-      // server offline — show empty state
+      if (id === requestId.current) {
+        setBoard({ game, rows: [], error: 'Scores are unavailable right now. Check your connection and retry.', loaded: true });
+      }
     } finally {
-      setRefreshing(false);
-      setLoaded(true);
+      if (id === requestId.current) {
+        requestController.current = null;
+        setRefreshing(false);
+      }
     }
   }, [game]);
 
   useEffect(() => {
     void load();
+    return () => {
+      requestId.current += 1;
+      requestController.current?.abort();
+      requestController.current = null;
+    };
   }, [load]);
 
-  const isCoup = game === 'coup';
+  const currentBoard = board.game === game ? board : { rows: [], error: null, loaded: false };
+  const selectedGame = TABS.find((tab) => tab.id === game)!;
+  const ranksByWins = selectedGame.metric === 'wins';
 
   return (
     <View className="flex-1 bg-arcade-bg pt-16">
@@ -43,17 +71,23 @@ export default function LeaderboardScreen() {
         HIGH SCORES
       </Text>
       <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', fontSize: 12, marginTop: 4, marginBottom: 12 }}>
-        {isCoup ? 'all-time Coup wins' : 'all-time Saboteur nuggets'}
+        all-time {selectedGame.label} {selectedGame.metric}
       </Text>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 14 }}>
+      <ScrollView horizontal style={{ flexGrow: 0, marginBottom: 14 }} contentContainerStyle={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingBottom: 6 }} showsHorizontalScrollIndicator>
         {TABS.map((t) => {
           const active = t.id === game;
           return (
             <Pressable
               key={t.id}
+              accessibilityRole="button"
+              accessibilityLabel={t.label}
+              accessibilityState={{ selected: active }}
+              aria-pressed={Platform.OS === 'web' ? active : undefined}
               onPress={() => setGame(t.id)}
               style={{
+                minHeight: 44,
+                justifyContent: 'center',
                 borderRadius: 999,
                 borderWidth: 1.5,
                 borderColor: active ? ARCADE.cyan : ARCADE.border,
@@ -65,26 +99,28 @@ export default function LeaderboardScreen() {
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                 <MaterialCommunityIcons name={t.icon} size={15} color={active ? ARCADE.cyan : ARCADE.muted} />
-                <Text style={{ fontFamily: 'Outfit_700Bold', color: active ? ARCADE.cyan : ARCADE.muted, fontSize: 13 }}>{t.label}</Text>
+                <Text style={{ fontFamily: 'Outfit_700Bold', color: active ? ARCADE.cyan : ARCADE.muted, fontSize: 14 }}>{t.label}</Text>
               </View>
             </Pressable>
           );
         })}
+      </ScrollView>
+
+      <View style={{ paddingHorizontal: 16, paddingBottom: 14 }}>
+        <NeonButton label={refreshing ? 'LOADING SCORES…' : currentBoard.error ? 'RETRY SCORES' : 'REFRESH SCORES'} color={ARCADE.cyan} variant="outline" disabled={refreshing} onPress={() => { void load(); }} />
       </View>
 
       <FlatList
-        data={rows}
+        data={currentBoard.rows}
         keyExtractor={(r) => r.display_name}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => void load()} tintColor={ARCADE.cyan} />
         }
         contentContainerStyle={{ padding: 16, paddingTop: 4 }}
         ListEmptyComponent={
-          loaded ? (
-            <Text style={{ fontFamily: 'SpaceMono_400Regular', color: ARCADE.muted, textAlign: 'center', marginTop: 40, lineHeight: 20 }}>
-              No games recorded yet.{'\n'}Finish a game to flash your name in neon!
-            </Text>
-          ) : null
+          <Text accessibilityRole={currentBoard.error ? 'alert' : undefined} accessibilityLiveRegion="polite" style={{ color: currentBoard.error ? ARCADE.text : ARCADE.muted, fontSize: 16, textAlign: 'center', marginTop: 24, lineHeight: 24 }}>
+            {currentBoard.error ?? (currentBoard.loaded ? 'No games recorded yet.\nFinish a game to flash your name in neon!' : 'Loading scores…')}
+          </Text>
         }
         renderItem={({ item, index }) => {
           const accent = RANK_COLORS[index] ?? ARCADE.border;
@@ -110,11 +146,11 @@ export default function LeaderboardScreen() {
               <Text style={{ flex: 1, color: ARCADE.text, fontWeight: '600' }}>{item.display_name}</Text>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={{ color: ARCADE.muted, fontSize: 11 }}>
-                  {item.games_played} games{isCoup ? '' : ` · ${item.wins} wins`}
+                  {item.games_played} games{ranksByWins ? '' : ` · ${item.wins} wins`}
                 </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                  <MaterialCommunityIcons name={isCoup ? 'trophy-outline' : 'cash-multiple'} size={16} color="#F5C518" />
-                  <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>{isCoup ? item.wins : item.total_nuggets}</Text>
+                  <MaterialCommunityIcons name={ranksByWins ? 'trophy-outline' : selectedGame.metric === 'points' ? 'star-circle-outline' : 'cash-multiple'} size={16} color="#F5C518" />
+                  <Text style={{ fontWeight: '800', ...neonText('#F5C518', 6) }}>{ranksByWins ? item.wins : item.total_nuggets}</Text>
                 </View>
               </View>
             </Animated.View>

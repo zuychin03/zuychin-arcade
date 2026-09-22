@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/coup-character-captain.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1725403,
+    "sha256": "07445c29a9dec45e707e1f91300870070e19f4f24050314cea4c23036c255b58"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "coup-character-captain.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 9636,
+      "sha256": "deb2d1965458f915bfaa983aed09ae2679966b045b53960ffc348a3474629035"
+    }
+  ],
+  "totalBytes": 9636,
+  "maxTotalBytes": 614400
+}

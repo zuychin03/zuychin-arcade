@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-military.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2309766,
+    "sha256": "be1f18f85c0b6e68a766fd469069677f5890cc4b3b34e8a758714c4514de8ad4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-military.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16440,
+      "sha256": "60884b78132f8ed8e0d43b1f7a022bbad706e432233dd9911d3bc74102501551"
+    }
+  ],
+  "totalBytes": 16440,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-frontier-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2628380,
+    "sha256": "aeada8d3373de6116c4717bef4023814a1a41d2861df52ab21331461d3e9f8fc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 48336,
+      "sha256": "46a03ba7244bcf76993f285485afb5a96bf3c66ecf8a82c2e4c9b7102e49a6ec"
+    },
+    {
+      "file": "bang-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 168418,
+      "sha256": "9fe517fea99dd82bdd0f41c561bd27341f76b16ecb4a2abf0a866911d5cc07f3"
+    }
+  ],
+  "totalBytes": 216754,
+  "maxTotalBytes": 614400
+}

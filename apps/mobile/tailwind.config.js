@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neon arcade chrome — red/purple/blue like neon lights
+        // Neon arcade chrome - red/purple/blue like neon lights
         arcade: {
           bg: '#0B0716',        // near-black violet
           surface: '#161028',   // panel background
@@ -34,15 +34,15 @@ module.exports = {
           danger: '#FF3355',    // saboteur neon red
           tunnel: '#92400E',    // tunnel path brown
         },
-        // In-game Coup palette — a royal court of crimson, gold and purple
+        // In-game Coup palette - a royal court of crimson, gold and purple
         coup: {
           bg: '#140A12',        // dark wine
           surface: '#241221',   // panel background
           panel: '#311828',     // raised panel
           border: '#4A2238',    // subtle borders
-          crimson: '#E23A5E',   // coup red
+          crimson: '#EF5775',   // coup red
           gold: '#F4C04E',      // coin gold
-          purple: '#A855F7',    // royal purple
+          purple: '#B365FF',    // royal purple
           blue: '#4F8EF7',      // duke blue
           green: '#34D399',     // allow / confirm
           muted: '#B79AAE',     // muted rose text

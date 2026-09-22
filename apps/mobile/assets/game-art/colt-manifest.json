@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-train-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2521852,
+    "sha256": "368d1e18ede67916b5aedfe91988969b80d2c837bd2994a375bee66fb588f275"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 58088,
+      "sha256": "3f5c3cea14958d4e79762ea779b637e4f79a2317eb2cc15000d302773ca07e5a"
+    },
+    {
+      "file": "colt-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 168018,
+      "sha256": "4166459cc35e58d7b46b26c2a4636999f0afc14c1d0ae6f6daa1f9a3af17ad1c"
+    }
+  ],
+  "totalBytes": 226106,
+  "maxTotalBytes": 614400
+}

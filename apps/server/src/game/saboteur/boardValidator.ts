@@ -1,5 +1,5 @@
 import type { BoardPosition, PathCard, PathCardEdges, PlacedCard } from '@zuychin-arcade/types';
-import { BOARD } from '@zuychin-arcade/types';
+import { SABOTEUR_PLAYABLE_BOUNDS } from '@zuychin-arcade/types';
 
 export interface ValidationResult {
   valid: boolean;
@@ -8,10 +8,20 @@ export interface ValidationResult {
 
 const key = (p: BoardPosition) => `${p.row},${p.col}`;
 
+function isWithinPlayableBounds(position: BoardPosition): boolean {
+  const { minRow, maxRow, minCol, maxCol } = SABOTEUR_PLAYABLE_BOUNDS;
+  return (
+    position.row >= minRow &&
+    position.row <= maxRow &&
+    position.col >= minCol &&
+    position.col <= maxCol
+  );
+}
+
 type Side = 'top' | 'right' | 'bottom' | 'left';
 const OPPOSITE: Record<Side, Side> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
 
-const NEIGHBOURS: Array<{ side: Side; dr: number; dc: number }> = [
+const NEIGHBOURS: { side: Side; dr: number; dc: number }[] = [
   { side: 'top', dr: -1, dc: 0 },
   { side: 'right', dr: 0, dc: 1 },
   { side: 'bottom', dr: 1, dc: 0 },
@@ -76,7 +86,10 @@ export function validatePlacement(
   blockedPositions: BoardPosition[],
 ): ValidationResult {
   const { row, col } = position;
-  if (row < 0 || row > 8 || col < 2 || col > 6) {
+  if (!Number.isSafeInteger(row) || !Number.isSafeInteger(col)) {
+    return { valid: false, reason: 'Position coordinates must be safe integers' };
+  }
+  if (!isWithinPlayableBounds(position)) {
     return { valid: false, reason: 'Position is outside the 5x9 board boundaries' };
   }
 
@@ -137,6 +150,37 @@ export function isGoalReached(board: PlacedCard[], goalPosition: BoardPosition):
   return false;
 }
 
+export function orientReachedGoal(
+  board: PlacedCard[],
+  card: PathCard,
+  position: BoardPosition,
+  lastPlacement: BoardPosition,
+): PathCard {
+  const cells = boardMap(board);
+  const traversable = traversableSet(board);
+  let best = card;
+  let bestScore = -Infinity;
+  for (const rotated of [false, true]) {
+    const candidate = { ...card, edges: rotateEdges(card.edges, rotated) };
+    let connected = false;
+    let score = 0;
+    for (const { side, dr, dc } of NEIGHBOURS) {
+      const neighbour = cells.get(key({ row: position.row + dr, col: position.col + dc }));
+      if (!neighbour) continue;
+      if (candidate.edges[side] === neighbour.card.edges[OPPOSITE[side]]) score += 1;
+      if (candidate.edges[side] !== 'open' || neighbour.card.edges[OPPOSITE[side]] !== 'open') continue;
+      if (!traversable.has(key(neighbour.position))) continue;
+      connected = true;
+      if (key(neighbour.position) === key(lastPlacement)) score += 10;
+    }
+    if (connected && score > bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 /** Does the player have at least one legal placement for any path card in hand? */
 export function hasAnyLegalPlacement(
   board: PlacedCard[],
@@ -153,7 +197,7 @@ export function hasAnyLegalPlacement(
   }
   for (const k of candidates) {
     const [row, col] = k.split(',').map(Number);
-    if (row < 0 || row > 8 || col < 2 || col > 6) continue;
+    if (!isWithinPlayableBounds({ row, col })) continue;
     for (const card of hand) {
       for (const rotated of [false, true]) {
         const c = { ...card, edges: rotateEdges(card.edges, rotated) };

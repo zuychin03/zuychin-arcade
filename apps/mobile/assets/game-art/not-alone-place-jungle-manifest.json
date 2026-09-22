@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-place-jungle.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2470107,
+    "sha256": "31f0999b3af81668f22d94b0144b66049b6a315f5fbd17c4ced0aac3f6b7f218"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-place-jungle.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21622,
+      "sha256": "a3e9296785c8c278c0d2e44ec1bf43c08ee028d9829bc3be75bc7e991b9ff097"
+    }
+  ],
+  "totalBytes": 21622,
+  "maxTotalBytes": 614400
+}

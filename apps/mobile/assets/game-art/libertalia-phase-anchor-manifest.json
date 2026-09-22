@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-phase-anchor.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2441361,
+    "sha256": "c20553d3b6771775af0ded5bb22f0ae7f5f26078a9462dd1e0b49a0038113755"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-phase-anchor.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19932,
+      "sha256": "04458ad130df28853a18547ae65cd5619af14d9eff62b4781f65dbff7f022328"
+    }
+  ],
+  "totalBytes": 19932,
+  "maxTotalBytes": 614400
+}

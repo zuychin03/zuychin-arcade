@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-religious.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2386682,
+    "sha256": "9b12cbb07747c215129b6eb0d3293d0436b4c4f2251b920c12f515f2fe0e1c46"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-religious.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19500,
+      "sha256": "70ee40f5d004e12ce77decb92f6da7b9d3da6086b9d141d41c12564d27e6843b"
+    }
+  ],
+  "totalBytes": 19500,
+  "maxTotalBytes": 614400
+}
