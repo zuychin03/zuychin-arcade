@@ -163,7 +163,8 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
       displayName?: string;
       password?: string;
       gameId?: string;
-      coupVariant?: string;
+      coupVariant?: unknown;
+      config?: unknown;
     };
     const displayName = validateDisplayName(body.displayName);
     if (!displayName) {
@@ -179,8 +180,27 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
       return reply.code(400).send({ message: 'Unsupported game' });
     }
     const gameId = requestedGameId;
-    // Phase 1 ships base Coup only; the Reformation toggle arrives in Phase 2.
-    const config: RoomConfig = gameId === 'coup' ? { coupVariant: 'base' } : {};
+    const config: RoomConfig = {};
+    if (gameId === 'coup') {
+      const suppliedConfig = body.config;
+      if (suppliedConfig !== undefined && (
+        suppliedConfig === null || typeof suppliedConfig !== 'object' || Array.isArray(suppliedConfig)
+        || Object.keys(suppliedConfig).some(key => key !== 'coupVariant')
+      )) {
+        return reply.code(400).send({ message: 'Invalid Coup configuration' });
+      }
+      const nestedVariant = (suppliedConfig as { coupVariant?: unknown } | undefined)?.coupVariant;
+      const legacyVariant = body.coupVariant;
+      for (const variant of [nestedVariant, legacyVariant]) {
+        if (variant !== undefined && variant !== 'base' && variant !== 'reformation') {
+          return reply.code(400).send({ message: 'Coup version must be base or reformation' });
+        }
+      }
+      if (nestedVariant !== undefined && legacyVariant !== undefined && nestedVariant !== legacyVariant) {
+        return reply.code(400).send({ message: 'Conflicting Coup versions' });
+      }
+      config.coupVariant = (nestedVariant ?? legacyVariant ?? 'base') as RoomConfig['coupVariant'];
+    }
 
     let passwordHash: string | null = null;
     if (password !== null) {
@@ -347,7 +367,7 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
       return reply.code(400).send({ message: 'Choose a supported game leaderboard.' });
     }
     if (!resultsClient) {
-      return reply.code(503).send({ message: 'Leaderboards are not available on this server yet.' });
+      return reply.code(503).send({ code: 'RANKINGS_DISABLED', message: 'Rankings are currently disabled by the administrator.' });
     }
     try {
       const rankByWins = game === 'coup' || game === 'king_of_tokyo' || game === 'not_alone' || game === 'bang';

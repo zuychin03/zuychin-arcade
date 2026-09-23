@@ -1,5 +1,6 @@
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { ARCADE, MINE } from '../../constants/theme';
+import { SaboteurRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   {
@@ -128,6 +129,6 @@ export function SaboteurReferenceSheet({ visible, onClose }: Props) {
       }}
       sections={SECTIONS}
       onClose={onClose}
-    />
+    ><SaboteurRulesGuide /></RulesReferenceSheet>
   );
 }

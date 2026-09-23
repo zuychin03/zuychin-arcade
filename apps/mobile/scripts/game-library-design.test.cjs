@@ -154,7 +154,7 @@ function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }) {
   return { routes, render: () => { state.reset(); return Hub(); } };
 }
 const expected = [
-  ['SABOTEUR', '3–10 players', '/saboteur'], ['COUP', '2–6 players', '/coup'], ['KING OF TOKYO', '2–6 players', '/king-of-tokyo'],
+  ['SABOTEUR', '3–10 players', '/saboteur'], ['COUP', '2–10 players', '/coup'], ['KING OF TOKYO', '2–6 players', '/king-of-tokyo'],
   ['SKULL KING', '3–8 players', '/skull-king'], ['CITADELS', '4–7 players', '/citadels'], ['NOT ALONE', '2–7 players', '/not-alone'],
   ['BANG!', '4–7 players', '/bang'], ['LIBERTALIA', '2–6 players', '/libertalia'], ['COLT EXPRESS', '2–6 players', '/colt-express'],
 ];

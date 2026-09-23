@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { Platform, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupCharacter } from '@zuychin-arcade/types';
@@ -31,9 +31,10 @@ interface Props {
   onPress?: () => void;
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  referenceContent?: ReactNode;
 }
 
-export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = false, selected, disabled, onPress, accessibilityLabel, accessibilityHint }: Props) {
+export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = false, selected, disabled, onPress, accessibilityLabel, accessibilityHint, referenceContent }: Props) {
   const { width, fontScale = 1 } = useWindowDimensions();
   const d = DIMS[size], compact = size === 'xs', detailed = size === 'md' || size === 'lg';
   const frame: ViewStyle = compact ? { width: d.width, paddingBottom: 2 } : fluid ? {
@@ -65,7 +66,7 @@ export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = 
           {character ? <CoupCharacterArtwork character={character} /> : <View style={{ minHeight: compact ? 32 : 88, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="help" size={compact ? 20 : 32} color={COUP.muted} /></View>}
         </View>
         {!compact ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.text, fontSize: detailed ? 16 : 12, lineHeight: detailed ? 22 : 18, textAlign: 'center' }}>{title}</Text> : null}
-        {detailed && character && !lost ? <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>{abilities[character]}</Text> : null}
+        {detailed && character && !lost ? referenceContent ?? <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>{abilities[character]}</Text> : null}
         {lost ? compact
           ? <View {...decoration} style={{ alignItems: 'center', backgroundColor: COUP.bg }}><MaterialCommunityIcons name="close" size={12} color={COUP.text} /></View>
           : <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Revealed · lost</Text>

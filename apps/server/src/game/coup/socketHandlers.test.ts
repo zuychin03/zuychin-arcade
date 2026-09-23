@@ -5,6 +5,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import { Server } from 'socket.io';
 import { io as createClient, type Socket as ClientSocket } from 'socket.io-client';
 import type { CoupPrivateState, CoupPublicState, JoinRoomResponse } from '@zuychin-arcade/types';
+import { canTargetCoupPlayer, type CoupVariant } from '@zuychin-arcade/types';
 import { registerRoomRoutes } from '../../routes/room.js';
 import { registerSocketHandlers } from '../../socket/handlers.js';
 import { roomStore, type ServerRoom } from '../../store/RoomStore.js';
@@ -38,11 +39,11 @@ interface Seat {
   receipts: { action: string; revision: number }[];
 }
 
-async function seatsFor(harness: Harness, count: number): Promise<Seat[]> {
+async function seatsFor(harness: Harness, count: number, variant: CoupVariant = 'base'): Promise<Seat[]> {
   const seats: Seat[] = [];
   for (let index = 0; index < count; index++) {
     const auth = index === 0
-      ? await createRoom(harness, 'Auditor 1')
+      ? await createRoom(harness, 'Auditor 1', variant)
       : await joinRoom(harness, seats[0]!.auth.roomCode, `Auditor ${index + 1}`);
     const socket = await connect(harness, auth.token);
     const seat: Seat = { auth, socket, public: null, private: null, receipts: [] };
@@ -80,6 +81,10 @@ async function accepted(seats: Seat[], seat: Seat, action: string, payload: unkn
     assert.equal(client.private!.playerId, client.auth.playerId);
     assert.equal(client.public!.players.some(player => 'influences' in player), false);
     assert.equal('exchangePool' in client.public!.pending, false);
+    assert.equal('examineCharacter' in client.public!.pending, false);
+    if (client.public!.pending.phase !== 'awaiting_examine' || client.public!.pending.actorId !== client.auth.playerId) {
+      assert.equal(client.private!.examine, null);
+    }
     if (client.public!.pending.phase !== 'awaiting_exchange' || client.public!.pending.actorId !== client.auth.playerId) {
       assert.equal(client.private!.exchange, null, 'exchange pool stays with its owner');
     }
@@ -101,19 +106,29 @@ async function playProjectedMatch(seats: Seat[], match: number): Promise<{ decis
     const pending = view.pending;
     phases.add(pending.phase);
     const own = view.players.find(player => player.playerId === seat.auth.playerId)!;
-    const target = view.players.find(player => player.playerId !== own.playerId && !player.eliminated)!;
+    const target = view.players.find(player => canTargetCoupPlayer(view.variant, view.players, own.playerId, player.playerId))!;
     const revision = view.revision;
     let action: string;
     let payload: Record<string, unknown>;
     switch (pending.phase) {
+      case 'awaiting_allegiance':
+        action = 'choose_allegiance'; payload = { allegiance: match % 2 ? 'loyalist' : 'reformist' }; break;
+      case 'awaiting_examine_selection':
+        action = 'examine_select'; payload = { character: mine.influences.find(card => !card.revealed)!.character }; break;
+      case 'awaiting_examine':
+        action = 'examine'; payload = { forceSwap: decisions % 2 === 0 }; assert(mine.examine); break;
       case 'awaiting_action': {
         action = 'action';
-        const claimed = ['exchange', 'tax', 'foreign_aid', 'steal', 'assassinate'][Math.floor(decisions / seats.length) % 5]!;
+        const options = view.variant === 'reformation'
+          ? ['inquisitor_examine', 'inquisitor_exchange', 'convert', 'embezzle', 'tax', 'foreign_aid', 'steal', 'assassinate']
+          : ['exchange', 'tax', 'foreign_aid', 'steal', 'assassinate'];
+        const claimed = options[Math.floor(decisions / seats.length) % options.length]!;
         const chosen = own.coins >= 7 ? 'coup'
           : decisions > 55 ? 'income'
           : claimed === 'assassinate' && own.coins < 3 ? 'income'
+          : claimed === 'convert' && own.coins < 1 ? 'income'
           : claimed === 'steal' && target.coins === 0 ? 'income' : claimed;
-        payload = { action: chosen, ...(['coup', 'assassinate', 'steal'].includes(chosen) ? { targetPlayerId: target.playerId } : {}) };
+        payload = { action: chosen, ...(['coup', 'assassinate', 'steal', 'inquisitor_examine'].includes(chosen) ? { targetPlayerId: target.playerId } : {}) };
         break;
       }
       case 'awaiting_action_challenge':
@@ -123,14 +138,16 @@ async function playProjectedMatch(seats: Seat[], match: number): Promise<{ decis
         break;
       case 'awaiting_block': {
         action = 'respond';
-        const blockers = pending.action === 'foreign_aid' ? ['duke'] : pending.action === 'assassinate' ? ['contessa'] : ['captain', 'ambassador'];
+        const blockers = pending.action === 'foreign_aid' ? ['duke'] : pending.action === 'assassinate' ? ['contessa'] : ['captain', view.variant === 'base' ? 'ambassador' : 'inquisitor'];
         const character = mine.influences.find(card => !card.revealed && blockers.includes(card.character))?.character;
         payload = character ? { response: 'block', blockCharacter: character } : { response: 'pass' };
         break;
       }
       case 'awaiting_challenge_decision':
         action = 'resolve_challenge';
-        payload = { prove: mine.influences.some(card => !card.revealed && card.character === (pending.blockerId === own.playerId ? pending.blockCharacter : pending.claimedCharacter)) };
+        payload = { prove: pending.action === 'embezzle'
+          ? !mine.influences.some(card => !card.revealed && card.character === 'duke')
+          : mine.influences.some(card => !card.revealed && card.character === (pending.blockerId === own.playerId ? pending.blockCharacter : pending.claimedCharacter)) };
         break;
       case 'awaiting_lose_influence':
         action = 'lose_influence';
@@ -152,6 +169,72 @@ async function playProjectedMatch(seats: Seat[], match: number): Promise<{ decis
   assert.equal(result.winnerId, result.players.find(player => !player.eliminated)!.playerId);
   seats.forEach(seat => assert.deepEqual(seat.public, result));
   return { decisions, phases: [...phases] };
+}
+
+test('Reformation private examination rejects malformed, wrong-seat, stale and duplicate decisions', async () => {
+  const harness = await createHarness();
+  try {
+    const seats = await seatsFor(harness, 3, 'reformation');
+    const [actor, target, other] = seats as [Seat, Seat, Seat];
+    await accepted(seats, actor, 'start_game', {});
+    await accepted(seats, actor, 'choose_allegiance', { allegiance: 'reformist', expectedRevision: actor.public!.revision });
+    await accepted(seats, actor, 'action', { action: 'inquisitor_examine', targetPlayerId: target.auth.playerId, expectedRevision: actor.public!.revision });
+    for (const seat of [target, other]) await accepted(seats, seat, 'respond', { response: 'pass', expectedRevision: seat.public!.revision });
+    assert.equal(actor.public!.pending.phase, 'awaiting_examine_selection');
+    const character = target.private!.influences[0]!.character;
+    const rejectDecision = async (seat: Seat, event: string, payload: unknown) => {
+      const before = actor.public!.revision;
+      const rejected = waitForEvent<{ reason: string }>(seat.socket, 'action_rejected');
+      seat.socket.emit(`coup:${event}`, payload);
+      assert.ok((await rejected).reason);
+      assert.equal(actor.public!.revision, before);
+    };
+    await rejectDecision(target, 'examine_select', { character, expectedRevision: target.public!.revision, playerId: target.auth.playerId });
+    await rejectDecision(actor, 'examine_select', { character, expectedRevision: actor.public!.revision });
+    await rejectDecision(target, 'examine_select', { character, expectedRevision: target.public!.revision - 1 });
+    const selectionRevision = target.public!.revision;
+    await accepted(seats, target, 'examine_select', { character, expectedRevision: selectionRevision });
+    await rejectDecision(target, 'examine_select', { character, expectedRevision: selectionRevision });
+    assert.equal(actor.private!.examine!.character, character);
+    assert.equal(target.private!.examine, null);
+    assert.equal(other.private!.examine, null);
+    await rejectDecision(actor, 'examine', { forceSwap: 'true', expectedRevision: actor.public!.revision });
+    await rejectDecision(target, 'examine', { forceSwap: true, expectedRevision: target.public!.revision });
+    await rejectDecision(actor, 'examine', { forceSwap: true, expectedRevision: actor.public!.revision - 1 });
+    const decisionRevision = actor.public!.revision;
+    await accepted(seats, actor, 'examine', { forceSwap: true, expectedRevision: decisionRevision });
+    await rejectDecision(actor, 'examine', { forceSwap: true, expectedRevision: decisionRevision });
+    assert.equal(actor.private!.examine, null);
+  } finally { await closeHarness(harness); }
+});
+
+for (let count = 2; count <= 10; count++) {
+  test(`Reformation ${count}-seat projection-only full match, refresh and rematch`, async t => {
+    const harness = await createHarness();
+    try {
+      const seats = await seatsFor(harness, count, 'reformation');
+      await accepted(seats, seats[0]!, 'start_game', {});
+      assert.equal(seats[0]!.public!.pending.phase, 'awaiting_allegiance');
+      const revision = seats[0]!.public!.revision;
+      for (const seat of seats) {
+        const publicRefresh = waitForEvent<CoupPublicState>(seat.socket, 'game_state');
+        const privateRefresh = waitForEvent<CoupPrivateState>(seat.socket, 'private_state');
+        seat.socket.emit('request_state');
+        assert.equal((await publicRefresh).revision, revision);
+        assert.equal((await privateRefresh).playerId, seat.auth.playerId);
+      }
+      const invalid = waitForEvent<{ reason: string }>(seats[0]!.socket, 'action_rejected');
+      seats[0]!.socket.emit('coup:choose_allegiance', { allegiance: 'invalid', expectedRevision: revision });
+      assert.equal((await invalid).reason, 'Invalid payload');
+      const first = await playProjectedMatch(seats, 0);
+      const previous = seats[0]!.public!;
+      await accepted(seats, seats[0]!, 'start_game', {});
+      assert.equal(seats[0]!.public!.pending.actorId, previous.winnerId);
+      assert.equal(seats[0]!.public!.pending.phase, 'awaiting_allegiance');
+      const second = await playProjectedMatch(seats, 1);
+      t.diagnostic(JSON.stringify({ count, first, second }));
+    } finally { await closeHarness(harness); }
+  });
 }
 
 for (const count of [2, 3, 4, 5, 6]) {
@@ -260,10 +343,10 @@ async function closeHarness(harness: Harness): Promise<void> {
   if (harness.app.server.listening) await harness.app.close();
 }
 
-async function createRoom(harness: Harness, displayName: string): Promise<JoinRoomResponse> {
+async function createRoom(harness: Harness, displayName: string, variant: CoupVariant = 'base'): Promise<JoinRoomResponse> {
   const response = await fetch(`${harness.url}/rooms/create`, {
     method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ displayName, gameId: 'coup' }),
+    body: JSON.stringify({ displayName, gameId: 'coup', config: { coupVariant: variant } }),
   });
   assert.equal(response.status, 201);
   const joined = await response.json() as JoinRoomResponse;
@@ -776,7 +859,7 @@ test('Coup real HTTP password, reservation, capacity, variant and cross-room aut
     assert.equal(variant.status, 201);
     const forcedBase = await variant.json() as JoinRoomResponse;
     harness.roomCodes.add(forcedBase.roomCode);
-    assert.equal(forcedBase.room.config.coupVariant, 'base');
+    assert.equal(forcedBase.room.config.coupVariant, 'reformation');
     const other = await createRoom(harness, 'Other host');
     const forbidden = await post(`/rooms/${other.roomCode}/leave`, {}, host.token);
     assert.equal(forbidden.status, 403);

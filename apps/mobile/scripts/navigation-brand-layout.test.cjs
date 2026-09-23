@@ -54,6 +54,30 @@ test('mobile menu keeps an independent 48px target and its actual callback', () 
   menu.props.onPress(); assert.equal(presses, 1);
 });
 
+test('mobile branding is centred between equal, non-shrinking side slots', () => {
+  for (const platform of ['web', 'ios', 'android']) {
+    const tree = render('MobileHeader', {}, platform);
+    const [menu, brand, balance] = children(tree);
+    assert.equal(children(tree).length, 3);
+    assert.equal(tree.props.style.flexDirection, 'row');
+    assert.equal(tree.props.style.paddingHorizontal, 12);
+    assert.equal(tree.props.style.gap, 8);
+    assert.equal(brand.props.style.flex, 1);
+    assert.equal(brand.props.style.justifyContent, 'center');
+    assert.equal(balance.props.style.width, menu.props.style.width);
+    assert.equal(balance.props.style.flexShrink, 0);
+    assert.equal(balance.type, 'View');
+    assert.equal(balance.props.accessible, false);
+    assert.equal(balance.props.accessibilityElementsHidden, true);
+    assert.equal(balance.props.importantForAccessibility, 'no-hide-descendants');
+    assert.equal(balance.props.pointerEvents, 'none');
+    assert.equal(balance.props.onPress, undefined);
+    assert.equal(balance.props.accessibilityRole, undefined);
+    assert.equal(children(balance).length, 0);
+    assert.equal(all(tree).filter(node => node.type === 'Pressable').length, 1);
+  }
+});
+
 test('web sidebar keeps complete brand words and wraps the separate artwork', () => {
   const tree = render('Sidebar');
   assert.equal(tree.props.style.minWidth, 'min-content');

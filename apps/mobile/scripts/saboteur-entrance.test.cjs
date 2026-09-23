@@ -194,7 +194,7 @@ for (const presentation of ['classic', 'illustrated']) {
     h.fill('Your name', ' Miner '); h.fill('Room password, optional', ' exact ');
     h.find('CREATE ROOM').onPress(); h.find('Room password, optional').onSubmitEditing(); h.render();
     assert.equal(h.count('createRoom'), 1);
-    assert.deepEqual(h.calls.find(call => call[0] === 'createRoom'), ['createRoom', 'Miner', ' exact ', 'saboteur']);
+    assert.deepEqual(h.calls.find(call => call[0] === 'createRoom'), ['createRoom', 'Miner', ' exact ', 'saboteur', undefined]);
     for (const label of ['CREATING…', 'JOIN WITH CODE', 'HOW TO PLAY']) assert.equal(h.find(label).disabled, true);
     assert.equal(h.find('Your name').editable, false);
     pending.resolve(h.response); await h.flush();
@@ -305,8 +305,9 @@ test('Coup lobby identity uses only decorative identical concealed influences', 
   }
   const lobby = fs.readFileSync(path.join(__dirname, '../app/coup/lobby.tsx'), 'utf8');
   assert.match(lobby, /mark=\{<CoupTableMark \/>\}/);
-  assert.match(lobby, /minPlayers=\{COUP_LIMITS\.base\.min\}/);
-  assert.match(lobby, /variant="base"/);
+  assert.match(lobby, /state\.room\?\.config\.coupVariant \?\? 'base'/);
+  assert.match(lobby, /minPlayers=\{COUP_LIMITS\[variant\]\.min\}/);
+  assert.match(lobby, /variant=\{variant\}/);
 });
 
 test('GameCover reserves a decorative noninteractive full-composition ratio without animation', () => {

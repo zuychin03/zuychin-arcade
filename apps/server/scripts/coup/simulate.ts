@@ -3,6 +3,7 @@
  *   pnpm --filter @zuychin-arcade/server simulate:coup
  */
 import type { CoupActionPayload, CoupCharacter } from '@zuychin-arcade/types';
+import './reformation.test.js';
 import { ACTION_META, charactersForVariant, copiesPerCharacter } from '@zuychin-arcade/types';
 import {
   chooseExchange,

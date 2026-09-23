@@ -5,7 +5,7 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupActionKind, CoupActionType, CoupCharacter } from '@zuychin-arcade/types';
-import { ACTION_META, charactersForVariant } from '@zuychin-arcade/types';
+import { ACTION_META, charactersForVariant, canTargetCoupPlayer } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
 import { getSocket } from '../../hooks/useSocket';
 import { useWebBackGuard } from '../../hooks/useWebBackGuard';
@@ -338,6 +338,7 @@ export default function CoupGameScreen() {
       && player.playerId !== myId
       && !player.eliminated
       && !player.forfeited
+      && (targeting === 'convert' || canTargetCoupPlayer(pub.variant, pub.players, myId, player.playerId))
       && !(targeting === 'steal' && player.coins === 0)
       && !presence?.hasLeft,
     );
@@ -345,7 +346,7 @@ export default function CoupGameScreen() {
   const targetCount = pub.players.filter((player) => canTargetPlayer(player.playerId)).length;
   const hasStealTarget = pub.players.some((player) => {
     const presence = presenceById.get(player.playerId);
-    return player.playerId !== myId && !player.eliminated && !player.forfeited && player.coins > 0 && !presence?.hasLeft;
+    return canTargetCoupPlayer(pub.variant, pub.players, myId, player.playerId) && !player.forfeited && player.coins > 0 && !presence?.hasLeft;
   });
 
   const sendCommand = (action: CoupActionKind, payload: Record<string, unknown>, label: string) => {
@@ -366,12 +367,15 @@ export default function CoupGameScreen() {
     const actor = nameOf(pending.actorId);
     const label = a ? ACTION_LABELS[a]?.label ?? a : '';
     switch (pending.phase) {
+      case 'awaiting_allegiance':
+        return `${nameOf(pending.waitingOn[0])} chooses the starting allegiance. The other seats will alternate sides.`;
       case 'awaiting_action':
         return `${nameOf(pub.currentTurnPlayerId)} is choosing an action…`;
       case 'awaiting_action_challenge':
+        if (a === 'embezzle') return `${actor} claims to hold no Duke and takes the Treasury`;
         return `${actor} claims ${pending.claimedCharacter?.toUpperCase()} - ${label}`;
       case 'awaiting_block':
-        if (a === 'foreign_aid') return `${actor} takes Foreign Aid - anyone may block with the Duke`;
+        if (a === 'foreign_aid') return `${actor} takes Foreign Aid - eligible opponents may block with the Duke`;
         return `${actor} → ${label} on ${nameOf(pending.targetId)} - target may block`;
       case 'awaiting_block_challenge':
         return `${nameOf(pending.blockerId)} claims ${pending.blockCharacter?.toUpperCase()} to block`;
@@ -383,6 +387,8 @@ export default function CoupGameScreen() {
         return `${actor} is exchanging cards with the court…`;
       case 'awaiting_examine':
         return `${actor} is examining target card…`;
+      case 'awaiting_examine_selection':
+        return `${nameOf(pending.targetId)} chooses one hidden influence to show privately to ${actor}`;
       default:
         return '';
     }
@@ -399,6 +405,7 @@ export default function CoupGameScreen() {
       case 'awaiting_lose_influence':
         return 'skull-outline';
       case 'awaiting_exchange':
+      case 'awaiting_examine_selection':
       case 'awaiting_examine':
         return 'cards-outline';
       default:
@@ -417,7 +424,8 @@ export default function CoupGameScreen() {
 
   const myFaceDown = priv.influences.filter((i) => !i.revealed).map((i) => i.character);
   const challengedClaim = pending.blockCharacter ?? pending.claimedCharacter;
-  const canProveChallenge = challengedClaim != null && myFaceDown.includes(challengedClaim);
+  const noDukeClaim = pending.action === 'embezzle' && !pending.blockerId;
+  const canProveChallenge = noDukeClaim ? !myFaceDown.includes('duke') : challengedClaim != null && myFaceDown.includes(challengedClaim);
   const gameOver = pending.phase === 'game_over' || pub.status === 'game_over';
   const iAmHost = room?.players.find((player) => player.playerId === myId)?.isHost ?? false;
 
@@ -442,12 +450,12 @@ export default function CoupGameScreen() {
         showsVerticalScrollIndicator
       >
         <View nativeID="coup-toolbar" style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, flexShrink: 1, maxWidth: '100%' }}><MaterialCommunityIcons name="drama-masks" size={21} color={COUP.crimson} /><Text style={{ flexShrink: 1, fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>COUP</Text></View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, flexShrink: 1, maxWidth: '100%' }}><MaterialCommunityIcons name="drama-masks" size={21} color={COUP.crimson} /><Text style={{ flexShrink: 1, fontFamily: 'Outfit_800ExtraBold', fontSize: 18, ...neonText(COUP.crimson, 10) }}>{pub.variant === 'base' ? 'BASE COUP' : 'REFORMATION + INQUISITOR'}</Text></View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', gap: 12, flexShrink: 1, maxWidth: '100%' }}>
             {pub.variant === 'reformation' && (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <MaterialCommunityIcons name="bank" size={14} color={COUP.gold} />
-                <Text style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.gold, fontSize: 13 }}>{pub.treasuryReserve}</Text>
+                <Text accessibilityLabel={`Treasury Reserve: ${pub.treasuryReserve} coins`} style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.gold, fontSize: 13 }}>Treasury {pub.treasuryReserve}</Text>
               </View>
             )}
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -695,6 +703,12 @@ export default function CoupGameScreen() {
             </Text>
           )}
 
+          {waitingOnMe && pending.phase === 'awaiting_allegiance' && <View style={{ gap: 12 }}>
+            <Text accessibilityRole="header" style={{ color: COUP.gold, fontFamily: 'Outfit_700Bold', fontSize: 18 }}>Choose your allegiance</Text>
+            <Text style={{ color: COUP.text, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24 }}>The other players alternate sides after you. Allegiances restrict attacks, but there is only one winner. If time runs out, you start as Reformist.</Text>
+            <NeonButton label="LOYALIST" color={COUP.blue} disabled={busy} onPress={() => sendCommand('choose_allegiance', { allegiance: 'loyalist' }, 'Choose Loyalist')} />
+            <NeonButton label="REFORMIST" color={COUP.crimson} disabled={busy} onPress={() => sendCommand('choose_allegiance', { allegiance: 'reformist' }, 'Choose Reformist')} />
+          </View>}
           {isMyTurn && targeting == null && (
             <View>
               <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.gold, fontSize: 13, letterSpacing: 1, marginBottom: 8 }}>
@@ -731,8 +745,8 @@ export default function CoupGameScreen() {
                           const disabledSelf = mustCoup || myCoins < 1;
                           const disabledOther = mustCoup || myCoins < 2;
                           return (
-                            <View key="convert-split" style={{ flexDirection: 'row', width: '100%', gap: 6 }}>
-                              <View style={{ flex: 1 }}>
+                            <View key="convert-split" style={{ flexDirection: 'row', flexWrap: 'wrap', width: '100%', gap: 8 }}>
+                              <View style={{ flexGrow: 1, flexBasis: '46%', minWidth: actionMinimumWidth }}>
                                 <NeonButton
                                   label="Convert Self"
                                   color={COUP.gold}
@@ -745,7 +759,7 @@ export default function CoupGameScreen() {
                                   Cost: 1 coin
                                 </Text>
                               </View>
-                              <View style={{ flex: 1 }}>
+                              <View style={{ flexGrow: 1, flexBasis: '46%', minWidth: actionMinimumWidth }}>
                                 <NeonButton
                                   label="Convert Other"
                                   color={COUP.gold}
@@ -786,7 +800,7 @@ export default function CoupGameScreen() {
               <View style={{ flex: 1 }}>
                 <NeonButton
                   label="CHALLENGE"
-                  accessibilityHint="Challenge the character claim. If it is proven, you must lose one influence."
+                  accessibilityHint={noDukeClaim ? 'Challenge the claim that this player has no Duke. If they prove it, you lose one influence.' : 'Challenge the character claim. If it is proven, you must lose one influence.'}
                   color={COUP.crimson}
                   icon={<MaterialCommunityIcons name="flag-outline" size={16} color={COUP.text} />}
                   disabled={busy}
@@ -867,7 +881,7 @@ export default function CoupGameScreen() {
                 YOUR CLAIM WAS CHALLENGED
               </Text>
               <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.text, fontSize: 13, lineHeight: 20 }}>
-                Prove {challengedClaim?.toUpperCase()} to swap that card and make {nameOf(pending.challengerId)} lose influence, or concede and choose one of your influences to lose. Conceding does not reveal whether you held the card.
+                {noDukeClaim ? `Show all your hidden cards to prove you have no Duke. They return to the deck and you receive replacements. ${nameOf(pending.challengerId)} loses influence. Or concede and lose one influence without showing your hand.` : `Prove ${challengedClaim?.toUpperCase()} to swap that card and make ${nameOf(pending.challengerId)} lose influence, or concede and choose one of your influences to lose. Conceding does not reveal whether you held the card.`}
               </Text>
               {!canProveChallenge && (
                 <Text accessibilityRole="alert" style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.gold, fontSize: 12, lineHeight: 18 }}>
@@ -877,8 +891,8 @@ export default function CoupGameScreen() {
               <View style={{ flexDirection: 'row', gap: 10 }}>
                 <View style={{ flex: 1 }}>
                   <NeonButton
-                    label={`PROVE ${challengedClaim?.toUpperCase() ?? 'CLAIM'}`}
-                    accessibilityHint={`Reveal and replace your ${challengedClaim ?? 'claimed'} influence. The challenger must lose one influence.`}
+                    label={noDukeClaim ? 'PROVE NO DUKE' : `PROVE ${challengedClaim?.toUpperCase() ?? 'CLAIM'}`}
+                    accessibilityHint={noDukeClaim ? 'Publicly reveal and replace all hidden cards. The challenger loses one influence.' : `Reveal and replace your ${challengedClaim ?? 'claimed'} influence. The challenger must lose one influence.`}
                     color={COUP.green}
                     disabled={busy || !canProveChallenge}
                     icon={<MaterialCommunityIcons name="cards-outline" size={16} color={COUP.bg} />}
@@ -961,6 +975,20 @@ export default function CoupGameScreen() {
             </>
           )}
 
+          {waitingOnMe && pending.phase === 'awaiting_examine_selection' && <View style={{ gap: 12 }}>
+            <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: COUP.gold, fontSize: 18 }}>Choose an influence to show</Text>
+            <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 16, lineHeight: 24 }}>Only {nameOf(pending.actorId)} sees this card. They may return it or make you replace it. You do not lose influence.</Text>
+            <CardGrid items={myFaceDown} keyExtractor={(c, i) => `${c}-${i}`} minCardWidth={208} maxCardWidth={280} gap={10} textScale={fontScale}
+              renderItem={(c) => <CharacterCard fluid character={c} size="md" disabled={busy} accessibilityLabel={`Show ${c} privately`} accessibilityHint="The Inquisitor may force you to replace this influence" onPress={() => sendCommand('examine_select', { character: c }, 'Show influence privately')} />} />
+          </View>}
+          {waitingOnMe && pending.phase === 'awaiting_examine' && priv.examine && <View style={{ gap: 12 }}>
+            <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: COUP.gold, fontSize: 18 }}>{priv.examine.targetName} showed you this influence</Text>
+            <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 16, lineHeight: 24 }}>This card is private. Return it or make them draw a replacement. Their influence count stays the same.</Text>
+            <CardGrid items={[priv.examine.character]} keyExtractor={(c) => c} minCardWidth={208} maxCardWidth={280} gap={10} textScale={fontScale}
+              renderItem={(c) => <CharacterCard fluid character={c} size="md" accessibilityLabel={`Privately examined ${c}`} />} />
+            <NeonButton label="RETURN CARD" color={COUP.green} disabled={busy} onPress={() => sendCommand('examine', { forceSwap: false }, 'Return examined card')} />
+            <NeonButton label="FORCE REPLACEMENT" color={COUP.crimson} variant="outline" disabled={busy} onPress={() => sendCommand('examine', { forceSwap: true }, 'Replace examined card')} />
+          </View>}
           {!isMyTurn && !waitingOnMe && (
             <Text style={{ fontFamily: 'SpaceMono_400Regular', color: COUP.muted, fontSize: 12, textAlign: 'center' }}>
               {me?.eliminated ? 'You are out. You can keep watching the court.' : `Waiting for ${pending.waitingOn.map(nameOf).join(', ') || nameOf(pub.currentTurnPlayerId)}.`}

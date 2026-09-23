@@ -17,6 +17,7 @@ ios/
 /.pnpm-store/
 
 # Local audit records, planning notes and unpublished identity explorations.
+/COUP_PLAN.md
 /QA_PROGRESS.md
 /QA_AUDIT_REPORT.md
 /docs/design/BRAND_STATUS.md

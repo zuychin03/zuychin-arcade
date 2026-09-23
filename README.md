@@ -74,7 +74,10 @@ pnpm --filter @zuychin-arcade/server dev       # loads apps/server/.env - http:/
 
 Without `SUPABASE_URL`/`SUPABASE_SECRET_KEY` the server runs fine; game results
 are not persisted and `GET /leaderboard` returns a readable unavailable response
-(HTTP 503), distinct from a working leaderboard with no results.
+(HTTP 503, `RANKINGS_DISABLED`), distinct from a working leaderboard
+with no results or a temporary query failure. The rankings page states that
+rankings are currently disabled by the administrator. Players can still create rooms
+and play; connecting storage does not restore results from earlier games.
 
 The server otherwise fails closed unless both a 32-byte `JWT_SECRET` and an
 origin allowlist are configured. `ARCADE_INSECURE_LOCAL_DEV=true` is an explicit
@@ -127,7 +130,7 @@ through a LAN address, add that exact origin (including its port) to
 | `pnpm test:dependencies` | security-update compatibility checks for Metro assets, URL decoding, Xcode IDs and compiler binaries |
 | `pnpm --filter @zuychin-arcade/server dev` | server only, watch mode |
 | `pnpm --filter @zuychin-arcade/server simulate:saboteur` | Saboteur engine simulation test (see below) |
-| `pnpm --filter @zuychin-arcade/server simulate:coup` | Coup engine simulation (1,250 random games, 2–6 players) |
+| `pnpm --filter @zuychin-arcade/server simulate:coup` | Base Coup (1,250 games, 2–6 players) and Reformation (270 games, 2–10 players) |
 | `pnpm --filter @zuychin-arcade/server simulate:<game>` | Engine simulation for any implemented game slug |
 | `pnpm --filter @zuychin-arcade/server smoke:<game>` | Real HTTP + Socket.IO integration suite where provided |
 | `pnpm --filter @zuychin-arcade/server build && pnpm --filter @zuychin-arcade/server start` | production build + run |
@@ -177,10 +180,10 @@ hosted persistence and needs no separately running server. Run it after
 changes to the socket handlers, auth or room store.
 
 **Coup** has parallel scripts: `simulate:coup` (pure engine - drives the
-challenge/block phase machine with random legal inputs across 2–6 players,
+challenge/block phase machine with seeded legal inputs for Base 2–6 and Reformation 2–10 players,
 asserting coin/card conservation, monotonic influence loss, no deadlocks, and a
 single winner) and `smoke:coup` (isolated HTTP/socket regression suite covering
-full games, rematches, lobby authority, challenge and exchange privacy,
+full games, rematches, lobby authority, challenge, exchange and examination privacy,
 reconnect and forfeits). Run both after any change under
 `apps/server/src/game/coup/` or the Coup socket handlers.
 
@@ -275,6 +278,27 @@ is performed by the local export checks.
   [ARCHITECTURE.md → Design decisions](./ARCHITECTURE.md#design-decisions--rule-deviations).
 
 ## Game rules notes
+
+Each game's **How to play** opens an illustrated guide built around its own
+mechanics, followed by the detailed rules. Examples cover connected tunnels,
+dice, trick hierarchy, secret drafting, pursuit, shooting distance, ranked crew
+and shared programming. Coup reuses its character reference with the selected
+version's cards, actions and blocks before players enter a room.
+
+Coup room creation offers **Base Coup (2–6 players)** and **Reformation +
+Inquisitor (2–10 players)**. Base remains the default. The selected version is
+fixed for the room, shown to joining players, and retained for rematches.
+Reformation includes allegiances, conversion, a Treasury Reserve and the
+Inquisitor in place of the Ambassador. It still has one individual winner.
+See the [publisher overview](https://indieboardsandcards.com/our-games/coup-reformation/)
+and [printed expansion rules](https://www.spelhuis.be/Files/7/112000/112353/Attachments/Product/aD1jf4U81u46a97ia1719S97Nm9925v8.pdf).
+
+Coup's digital decision windows last 30 seconds. Expiry selects Reformist during
+allegiance setup, shows the examined player's first hidden influence, or returns
+an inspected card without replacement. Other timed defaults retain the original
+exchange hand, prove a valid claim or concede, and reveal the first hidden card
+when influence must be lost. Explicit leave or expired reconnect grace instead
+forfeits immediately. Base Coup's existing rules and departure policy are unchanged.
 
 Saboteur follows the [AMIGO 2025 base rules, version 4.0](https://blog.amigo-spiele.de/content/ap/rule/04900-GB-AmigoRule.pdf),
 with the digital adaptations below. [Testing and release limits](docs/TESTING.md#evidence-and-release-limits)

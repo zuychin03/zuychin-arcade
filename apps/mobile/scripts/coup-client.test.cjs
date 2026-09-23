@@ -123,6 +123,26 @@ test('matching ack waits for the adopted matching pair', () => {
   h.expire(2500); assert.equal(h.actions.message, null);
 });
 
+for (const [action, payload] of [
+  ['choose_allegiance', { allegiance: 'reformist' }],
+  ['examine_select', { character: 'captain' }],
+  ['examine', { forceSwap: true }],
+]) {
+  test(`Reformation ${action} is revision-fenced and waits for private/public adoption`, () => {
+    const h = actionHarness(); h.pair(8);
+    assert.equal(h.actions.send(action, payload, action, 7), false);
+    assert.equal(h.actions.send(action, payload, action, 8), true);
+    assert.equal(h.calls.at(-1)[0], `coup:${action}`);
+    assert.equal(h.calls.at(-1)[1].expectedRevision, 8);
+    for (const [key, value] of Object.entries(payload)) assert.equal(h.calls.at(-1)[1][key], value);
+    assert.equal(h.actions.send(action, payload, action, 8), false);
+    h.event('coup:action_accepted', { action, revision: 9 });
+    assert.equal(h.actions.pending, true);
+    h.pair(9);
+    assert.equal(h.actions.pending, false);
+  });
+}
+
 test('partial pair blocks synchronously without immediately disabling focused controls', () => {
   const h = actionHarness(); h.pair(3);
   h.store.coupSyncing = true; h.event('game_state', h.snapshot(4));

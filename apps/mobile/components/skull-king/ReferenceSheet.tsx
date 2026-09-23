@@ -1,5 +1,6 @@
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { SKULL_KING } from '../../constants/theme';
+import { SkullKingRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   { title: 'This digital voyage', icon: 'map-outline', entries: [
@@ -28,5 +29,5 @@ const SECTIONS: RuleSection[] = [
 ];
 
 export function SkullKingReferenceSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
-  return <RulesReferenceSheet visible={visible} gameTitle="Skull King" subtitle="Digital Base Voyage · 3–8 players · 10 rounds" icon="pirate" palette={{ background: SKULL_KING.bg, surface: SKULL_KING.surface, panel: SKULL_KING.panel, border: SKULL_KING.border, accent: SKULL_KING.teal, secondary: SKULL_KING.gold, muted: SKULL_KING.muted, text: SKULL_KING.text }} sections={SECTIONS} onClose={onClose} />;
+  return <RulesReferenceSheet visible={visible} gameTitle="Skull King" subtitle="Digital Base Voyage · 3–8 players · 10 rounds" icon="pirate" palette={{ background: SKULL_KING.bg, surface: SKULL_KING.surface, panel: SKULL_KING.panel, border: SKULL_KING.border, accent: SKULL_KING.teal, secondary: SKULL_KING.gold, muted: SKULL_KING.muted, text: SKULL_KING.text }} sections={SECTIONS} onClose={onClose}><SkullKingRulesGuide /></RulesReferenceSheet>;
 }

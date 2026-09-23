@@ -1,6 +1,6 @@
 // Coup (+ Reformation) shared contracts.
 //
-// The contracts reserve two variants; the current selectable release exposes base only:
+// Selectable variants:
 //   'base'        - 5 characters (Duke/Assassin/Captain/Ambassador/Contessa), 2–6 players
 //   'reformation' - adds allegiances, Convert/Embezzle/Treasury, Inquisitor
 //                   replaces Ambassador, 2–10 players
@@ -58,6 +58,8 @@ export interface CoupPlayerState {
 // *between* turns, waiting on other players' challenge/block responses.
 // ---------------------------------------------------------------------------
 export type CoupPhase =
+  | 'awaiting_allegiance'
+  | 'awaiting_examine_selection'
   | 'awaiting_action' // current player chooses an action
   | 'awaiting_action_challenge' // others may challenge the claimed character
   | 'awaiting_block' // eligible blocker(s) may block
@@ -154,7 +156,17 @@ export interface CoupPrivateState {
 // ---------------------------------------------------------------------------
 // SOCKET EVENT PAYLOADS (client → server)
 // ---------------------------------------------------------------------------
-export type CoupActionKind = 'start_game' | 'action' | 'respond' | 'lose_influence' | 'exchange' | 'resolve_challenge';
+export type CoupActionKind = 'start_game' | 'action' | 'respond' | 'lose_influence' | 'exchange' | 'resolve_challenge' | 'choose_allegiance' | 'examine_select' | 'examine';
+
+export interface CoupAllegiancePayload {
+  allegiance: Allegiance;
+  expectedRevision: number;
+}
+
+export interface CoupExamineSelectPayload {
+  character: CoupCharacter;
+  expectedRevision: number;
+}
 
 export interface CoupActionPayload {
   action: CoupActionType;

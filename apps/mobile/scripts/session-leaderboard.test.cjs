@@ -25,7 +25,7 @@ const deferred = () => {
   return { promise, resolve, reject };
 };
 const settle = () => new Promise((resolve) => setImmediate(resolve));
-class ApiError extends Error { constructor(status) { super(`HTTP ${status}`); this.status = status; } }
+class ApiError extends Error { constructor(status, code) { super(`HTTP ${status}`); this.status = status; this.code = code; } }
 const auth = { token: 'synthetic-token', playerId: 'player', roomCode: 'TEST-ROOM', displayName: 'Player' };
 const liveRoom = { players: [{ playerId: auth.playerId, hasLeft: false }], gameId: 'not_alone', status: 'in_game' };
 
@@ -286,6 +286,26 @@ test('leaderboard distinguishes an unavailable service from an empty successful 
   ui.unmount();
 });
 
+test('disabled rankings show only the public administrator notice and recover when enabled', async () => {
+  let configured = false;
+  const ui = harness(leaderboard, { getLeaderboard: async () => {
+    if (!configured) throw new ApiError(503, 'RANKINGS_DISABLED');
+    return [];
+  } });
+  await ui.flush();
+  assert.match(ui.text(), /Rankings disabled/);
+  assert.match(ui.text(), /Rankings are currently disabled by the administrator\./);
+  assert.match(ui.text(), /still create rooms and play/);
+  assert(!/No games recorded|Check your connection|database|storage|configur|supabase/i.test(ui.text()));
+  assert.equal(ui.alert(), undefined);
+  configured = true;
+  ui.button('CHECK STATUS').props.onPress();
+  await ui.flush();
+  assert.match(ui.text(), /No games recorded/);
+  assert(!ui.text().includes('disabled by the administrator'));
+  ui.unmount();
+});
+
 test('leaderboard aborts old tab requests and ignores out-of-order completions', async () => {
   const first = deferred();
   const second = deferred();
@@ -347,6 +367,13 @@ test('API retains HTTP status separately from messages and propagates successful
   }
   const client = api(async () => ({ ok: true, json: async () => liveRoom }));
   assert.equal(await client.getRoom('TEST-ROOM', 'synthetic-token'), liveRoom);
+});
+
+test('API carries the public disabled status without treating all failures as disabled', async () => {
+  const client = api(async () => ({ ok: false, status: 503, json: async () => ({ code: 'RANKINGS_DISABLED', message: 'Rankings are currently disabled by the administrator.' }) }));
+  await assert.rejects(client.getLeaderboard('coup'), error => error instanceof client.ApiError && error.code === 'RANKINGS_DISABLED' && error.status === 503);
+  const malformed = api(async () => ({ ok: false, status: 503, json: async () => ({ code: { private: true } }) }));
+  await assert.rejects(malformed.getLeaderboard('coup'), error => error.code === undefined);
 });
 
 test('API keeps network errors non-authoritative and forwards caller cancellation', async () => {

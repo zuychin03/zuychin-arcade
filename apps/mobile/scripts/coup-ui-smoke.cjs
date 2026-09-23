@@ -82,7 +82,7 @@ async function actor(browser, name, width = 390) {
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   page.on('console', (message) => {
     if (seat.expectedPasswordError && /Failed to load resource.*(?:401|403)/.test(message.text())) return;
-    if (!seat.offline && ['warning', 'error'].includes(message.type()) && !message.text().includes('[Reanimated] Reduced motion')) evidence.issues.push({ name, type: message.type(), text: sanitise(message.text()) });
+    if (!seat.offline && ['warning', 'error'].includes(message.type()) && !message.text().includes('[Reanimated] Reduced motion')) evidence.issues.push({ name, type: message.type(), text: sanitise(message.text()), url: message.location().url });
   });
   page.on('pageerror', (error) => evidence.issues.push({ name, type: 'pageerror', text: sanitise(error.message) }));
   const cdp = await page.createCDPSession(); await cdp.send('Network.enable');
@@ -99,7 +99,7 @@ async function actor(browser, name, width = 390) {
   cdp.on('Network.webSocketFrameSent', ({ response, requestId }) => {
     if (requestId !== seat.socketRequestId) return;
     const data = packet(response.payloadData);
-    if (data && ['coup:action', 'coup:respond', 'coup:lose_influence', 'coup:exchange', 'coup:resolve_challenge', 'start_game'].includes(data[0])) seat.sent.push(data);
+    if (data && ['coup:action', 'coup:respond', 'coup:lose_influence', 'coup:exchange', 'coup:resolve_challenge', 'coup:choose_allegiance', 'coup:examine_select', 'coup:examine', 'start_game'].includes(data[0])) seat.sent.push(data);
   });
   await page.goto(BASE_URL + '/coup', { waitUntil: 'domcontentloaded' });
   await until(() => page.$('input[aria-label="Your name"]'), name + ' landing'); return seat;
@@ -758,5 +758,6 @@ async function main() {
     console.log(JSON.stringify({ evidence: outputDir, passed: evidence.passed ?? false, decisions: evidence.decisions.length, result: evidence.result, issues: evidence.issues }));
   }
 }
-module.exports = { actor, click, input, capture, buttonPattern, paired, until, backStay, evidence, installTextGeometry };
+module.exports = { actor, click, input, capture, buttonPattern, paired, until, backStay, evidence, installTextGeometry,
+  verifyBundle, calibrateTextGeometry, decision, action, setViewport, hiddenGate, leaveSeats, releaseOwnedSeats, sanitise };
 if (require.main === module) main().catch((error) => { console.error(sanitise(error.message)); process.exitCode = 1; });

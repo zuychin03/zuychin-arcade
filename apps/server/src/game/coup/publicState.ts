@@ -10,6 +10,7 @@ import type {
   CoupPublicState,
 } from '@zuychin-arcade/types';
 import type { CoupServerState } from './engine.js';
+import { canTargetCoupPlayer } from '@zuychin-arcade/types';
 
 function aliveCount(chars: { revealed: boolean }[]): number {
   return chars.filter((i) => !i.revealed).length;
@@ -21,12 +22,17 @@ function waitingOn(state: CoupServerState): string[] {
   const alive = state.turnOrder.filter((id) => aliveCount(state.players.get(id)!.influences) > 0);
   const notPassed = (ids: string[]) => ids.filter((id) => !p.passed.has(id));
   switch (p.phase) {
+    case 'awaiting_allegiance':
+      return [p.actorId];
+    case 'awaiting_examine_selection':
+      return p.examineTargetId ? [p.examineTargetId] : [];
     case 'awaiting_action':
       return p.actorId ? [p.actorId] : [];
     case 'awaiting_action_challenge':
       return notPassed(alive.filter((id) => id !== p.actorId));
     case 'awaiting_block':
-      if (p.action === 'foreign_aid') return notPassed(alive.filter((id) => id !== p.actorId));
+      if (p.action === 'foreign_aid') return notPassed(alive.filter((id) =>
+        canTargetCoupPlayer(state.variant, [...state.players.values()], p.actorId, id)));
       if ((p.action === 'assassinate' || p.action === 'steal') && p.targetId) {
         return notPassed([p.targetId].filter((id) => alive.includes(id)));
       }
@@ -112,6 +118,8 @@ export function toPrivateState(state: CoupServerState, playerId: string): CoupPr
     playerId: p.playerId,
     influences: p.influences.map((influence) => ({ ...influence })),
     exchange,
-    examine: null, // Phase 2 (Inquisitor)
+    examine: pend.phase === 'awaiting_examine' && pend.actorId === playerId && pend.examineCharacter && pend.examineTargetId
+      ? { targetId: pend.examineTargetId, targetName: state.players.get(pend.examineTargetId)!.displayName, character: pend.examineCharacter }
+      : null,
   };
 }

@@ -3,7 +3,7 @@ import { Platform, ScrollView, Text, TextInput, View, useWindowDimensions } from
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { router, useFocusEffect } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import type { GameId, JoinRoomResponse } from '@zuychin-arcade/types';
+import type { GameId, JoinRoomResponse, RoomConfig } from '@zuychin-arcade/types';
 import { createRoom, leaveRoom } from '../../lib/api';
 import { clearAuthIfMatches, loadDisplayName, saveAuthIfCurrent, saveDisplayName } from '../../lib/storage';
 import { useGameStore } from '../../store/useGameStore';
@@ -25,6 +25,8 @@ interface Props {
   renderRules: (visible: boolean, onClose: () => void) => ReactNode;
   palette: Palette;
   presentation?: 'classic' | 'illustrated';
+  createConfig?: RoomConfig;
+  renderCreateOptions?: (busy: boolean) => ReactNode;
 }
 
 function IllustratedButton({ label, onPress, color = ARCADE.pink, variant = 'solid', disabled, icon }: ComponentProps<typeof NeonButton>) {
@@ -39,7 +41,7 @@ function IllustratedButton({ label, onPress, color = ARCADE.pink, variant = 'sol
   );
 }
 
-export function RemainingLanding({ gameId, base, title, tagline, tags, createLabel, mark, hero, renderRules, palette, presentation = 'classic' }: Props) {
+export function RemainingLanding({ gameId, base, title, tagline, tags, createLabel, mark, hero, renderRules, palette, presentation = 'classic', createConfig, renderCreateOptions }: Props) {
   const { width, height, fontScale = 1 } = useWindowDimensions();
   const compact = width < 560;
   const illustrated = presentation === 'illustrated';
@@ -95,7 +97,7 @@ export function RemainingLanding({ gameId, base, title, tagline, tags, createLab
     let response: JoinRoomResponse | undefined;
     let adopted = false;
     try {
-      response = await createRoom(displayName, password || undefined, gameId);
+      response = await createRoom(displayName, password || undefined, gameId, createConfig);
       if (!mounted.current || !active.current) return;
       const auth = { token: response.token, playerId: response.playerId, roomCode: response.roomCode, displayName };
       const saved = await saveAuthIfCurrent(auth, () => mounted.current && active.current);
@@ -161,6 +163,7 @@ export function RemainingLanding({ gameId, base, title, tagline, tags, createLab
               </View>
             </View>
             {error ? <Text accessibilityRole="alert" style={{ color: palette.text, fontSize: 14, lineHeight: 20 }}>{error}</Text> : null}
+            {renderCreateOptions?.(busy)}
             <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.accent, fontSize: 12, letterSpacing: 1 }}>YOUR NAME</Text>
             <TextInput ref={nameInput} accessibilityLabel="Your name" autoComplete="nickname" value={name} editable={!busy} onChangeText={(value) => { nameEdited.current = true; setName(value); setError(null); }} maxLength={20} placeholder="Player name" placeholderTextColor={palette.muted} style={input} returnKeyType="next" blurOnSubmit={false} onSubmitEditing={() => passwordInput.current?.focus()} />
             <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.accent, fontSize: 12, letterSpacing: 1 }}>ROOM PASSWORD · OPTIONAL</Text>

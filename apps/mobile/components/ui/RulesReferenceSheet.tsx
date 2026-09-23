@@ -1,4 +1,6 @@
+import { useState, type ReactNode } from 'react';
 import { Modal, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { neonText } from '../../constants/theme';
@@ -35,6 +37,7 @@ interface Props {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   palette: RulesPalette;
   sections: RuleSection[];
+  children?: ReactNode;
   onClose: () => void;
 }
 
@@ -45,12 +48,14 @@ export function RulesReferenceSheet({
   icon,
   palette,
   sections,
+  children,
   onClose,
 }: Props) {
   const reduceMotion = useReducedMotionPreference();
   useWebModalFocus(visible, 'rules-reference-sheet', onClose);
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
+      <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
       <Animated.View
         entering={reduceMotion ? undefined : FadeIn.duration(160)}
         style={{
@@ -78,7 +83,7 @@ export function RulesReferenceSheet({
           entering={reduceMotion ? undefined : FadeInUp.duration(220)}
           style={{
             width: '100%',
-            maxWidth: 520,
+            maxWidth: 900,
             maxHeight: '90%',
             borderRadius: 22,
             borderWidth: 1,
@@ -120,14 +125,10 @@ export function RulesReferenceSheet({
                 style={{
                   fontFamily: 'Outfit_800ExtraBold',
                   fontSize: 17,
-                  letterSpacing: 1,
                   ...neonText(palette.accent, 8),
                 }}
               >
-                {gameTitle.toUpperCase()} · RULEBOOK
-              </Text>
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 11, lineHeight: 17, marginTop: 2 }}>
-                {subtitle}
+                Rulebook
               </Text>
             </View>
             <Pressable
@@ -144,90 +145,42 @@ export function RulesReferenceSheet({
             tabIndex={Platform.OS === 'web' ? 0 : undefined}
             role={Platform.OS === 'web' ? 'region' : undefined}
             accessibilityLabel={`${gameTitle} rules and card reference`}
-            contentContainerStyle={{ padding: 16, gap: 20 }}
+            contentContainerStyle={{ padding: 16, gap: 28 }}
             showsVerticalScrollIndicator={Platform.OS === 'web'}
           >
-            {sections.map((section) => (
-              <View key={section.title} style={{ gap: 10 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}>
-                  <MaterialCommunityIcons name={section.icon} size={15} color={palette.secondary} />
-                  <Text
-                    accessibilityRole="header"
-                    style={{
-                      fontFamily: 'Outfit_800ExtraBold',
-                      color: palette.secondary,
-                      fontSize: 11,
-                      letterSpacing: 2,
-                    }}
-                  >
-                    {section.title.toUpperCase()}
-                  </Text>
-                </View>
-
-                {section.entries.map((entry) => (
-                  <View
-                    key={entry.title}
-                    style={{
-                      flexDirection: 'row',
-                      gap: 11,
-                      borderRadius: 14,
-                      borderWidth: 1,
-                      borderColor: palette.border,
-                      backgroundColor: palette.background,
-                      padding: 11,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: 4,
-                        marginTop: 5,
-                        backgroundColor: palette.accent,
-                        boxShadow: `0 0 7px ${palette.accent}`,
-                      }}
-                    />
-                    <View style={{ flex: 1 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 7 }}>
-                        <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.text, fontSize: 13 }}>
-                          {entry.title}
-                        </Text>
-                        {entry.tag ? (
-                          <View
-                            style={{
-                              borderRadius: 6,
-                              borderWidth: 1,
-                              borderColor: `${palette.secondary}66`,
-                              backgroundColor: `${palette.secondary}18`,
-                              paddingHorizontal: 6,
-                              paddingVertical: 1,
-                            }}
-                          >
-                            <Text style={{ fontFamily: 'SpaceMono_700Bold', color: palette.secondary, fontSize: 10 }}>
-                              {entry.tag.toUpperCase()}
-                            </Text>
-                          </View>
-                        ) : null}
-                      </View>
-                      <Text
-                        style={{
-                          fontFamily: 'SpaceMono_400Regular',
-                          color: palette.muted,
-                          fontSize: 12,
-                          lineHeight: 19,
-                          marginTop: 3,
-                        }}
-                      >
-                        {entry.body}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            ))}
+            <View style={{ gap: 6 }}>
+              <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.accent, fontSize: 24, lineHeight: 32 }}>{gameTitle}</Text>
+              <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.muted, fontSize: 16, lineHeight: 24 }}>{subtitle}</Text>
+            </View>
+            {children}
+            <View style={{ gap: 8 }}>
+              <Text accessibilityRole="header" style={{ color: palette.text, fontFamily: 'Outfit_800ExtraBold', fontSize: 22 }}>Rules in detail</Text>
+              <Text style={{ color: palette.muted, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24 }}>Open a chapter for exact rules, scoring and digital-table differences.</Text>
+              {sections.map((section) => <RuleChapter key={section.title} section={section} palette={palette} />)}
+            </View>
           </ScrollView>
         </Animated.View>
       </Animated.View>
+      </SafeAreaView>
     </Modal>
   );
+}
+
+function RuleChapter({ section, palette }: { section: RuleSection; palette: RulesPalette }) {
+  const [expanded, setExpanded] = useState(false);
+  return <View style={{ borderBottomWidth: 1, borderBottomColor: palette.border, paddingVertical: 8 }}>
+    <Pressable accessibilityRole="button" accessibilityLabel={section.title} accessibilityState={{ expanded }} aria-expanded={Platform.OS === 'web' ? expanded : undefined}
+      onPress={() => setExpanded(value => !value)} style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 }}>
+      <MaterialCommunityIcons name={section.icon} size={20} color={palette.secondary} />
+      <Text style={{ flex: 1, fontFamily: 'Outfit_700Bold', color: palette.text, fontSize: 18, lineHeight: 26 }}>{section.title}</Text>
+      <MaterialCommunityIcons name={expanded ? 'chevron-up' : 'chevron-down'} size={22} color={palette.muted} />
+    </Pressable>
+    {expanded && <View style={{ gap: 20, paddingTop: 8, paddingBottom: 16 }}>
+      {section.entries.map(entry => <View key={entry.title} style={{ gap: 6 }}>
+        <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: palette.secondary, fontSize: 17, lineHeight: 25 }}>{entry.title}</Text>
+        {entry.tag ? <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.muted, fontSize: 14 }}>{entry.tag}</Text> : null}
+        <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.text, fontSize: 16, lineHeight: 25 }}>{entry.body}</Text>
+      </View>)}
+    </View>}
+  </View>;
 }

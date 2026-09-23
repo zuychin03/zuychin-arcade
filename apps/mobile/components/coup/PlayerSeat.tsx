@@ -43,6 +43,7 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, fill, 
   const accessibilityLabel = [
     `${player.displayName}${isMe ? ', you' : ''}`,
     `${player.coins} coin${player.coins === 1 ? '' : 's'}`,
+    player.allegiance ? `${player.allegiance} allegiance` : null,
     `${player.influenceCount} hidden influence${player.influenceCount === 1 ? '' : 's'}`,
     player.revealedCharacters.length > 0 ? `revealed ${player.revealedCharacters.join(', ')}` : null,
     status?.toLowerCase(),
@@ -57,6 +58,9 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, fill, 
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
+        alignSelf: 'flex-start',
+        maxWidth: '100%',
+        marginBottom: 8,
         backgroundColor: player.allegiance === 'loyalist' ? 'rgba(79, 142, 247, 0.12)' : 'rgba(226, 58, 94, 0.12)',
         borderWidth: 1,
         borderColor: player.allegiance === 'loyalist' ? `${COUP.blue}80` : `${COUP.crimson}80`,
@@ -75,6 +79,8 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, fill, 
           fontFamily: 'SpaceMono_700Bold',
           color: player.allegiance === 'loyalist' ? COUP.blue : COUP.crimson,
           fontSize: 9,
+          flexShrink: 1,
+          minWidth: 0,
           letterSpacing: 0.5,
         }}
       >
@@ -141,9 +147,9 @@ export function PlayerSeat({ player, isMe, selectable, waiting, reaction, fill, 
         </View>
       )}
 
+      {factionBadge}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <View style={{ gap: 6, flex: 1, minWidth: 0, marginRight: 8 }}>
-          {factionBadge}
           <Text
             style={{
               fontFamily: 'Outfit_800ExtraBold',

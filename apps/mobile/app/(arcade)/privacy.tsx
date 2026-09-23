@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ARCADE, neonText } from '../../constants/theme';
 
@@ -9,7 +10,7 @@ type SectionProps = {
 function PrivacySection({ title, children }: SectionProps) {
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text accessibilityRole="header" style={styles.sectionTitle}>{title}</Text>
       <Text style={styles.body}>{children}</Text>
     </View>
   );
@@ -22,12 +23,17 @@ export default function PrivacyScreen() {
       contentContainerStyle={styles.content}
       contentInsetAdjustmentBehavior="automatic"
     >
-      <Text style={styles.title}>PRIVACY</Text>
-      <Text style={styles.updated}>IN-APP SUMMARY · 07/09/2026</Text>
+      <Text accessibilityRole="header" style={styles.title}>PRIVACY</Text>
+      <Text style={styles.updated}>Updated 23/09/2026</Text>
+      <Text style={styles.intro}>How Zuychin Arcade uses your information when you play.</Text>
 
       <View style={styles.card}>
         <PrivacySection title="Data used to run a game">
-          The arcade processes your display name, room code, player identifier, signed room-session token, lobby choices, game actions and the public or player-specific state needed to play. If a room password is used, it is sent to the server for room creation or entry. The live server keeps only a salted password hash, not the readable password.
+          You can play with a nickname. The arcade uses your display name, room code, player identifier, room-session token, lobby choices and game actions to run the table and reconnect your seat. If you create or join a password-protected room, the password is sent to the server. The live room stores a salted password hash, not the readable password.
+        </PrivacySection>
+
+        <PrivacySection title="What other players can see">
+          Players in your room can see your display name, connection status and the shared game state. Hidden cards, roles and choices are shown or revealed according to that game’s rules. Where rankings are enabled, your display name, scores and win results may appear on the leaderboard. Avoid putting personal or sensitive information in your display name.
         </PrivacySection>
 
         <PrivacySection title="Saved on this device">
@@ -35,7 +41,7 @@ export default function PrivacyScreen() {
         </PrivacySection>
 
         <PrivacySection title="Server storage and retention">
-          Active rooms and gameplay state are held in server memory and are removed after four hours without activity. Room-session tokens expire after 24 hours. When result storage is configured, a finished game may save the game and room identifiers, rounds, player count, player identifiers, display names, scores and win results for rankings. The server also produces operational request and error logs.
+          Active rooms and gameplay state are held in server memory. Periodic cleanup removes rooms that have been inactive for more than four hours. Room-session tokens expire after 24 hours. Where rankings are enabled, finished games may save game and room identifiers, rounds, player identifiers, display names, scores and win results. Leaving a room or clearing your device data does not delete a result already saved to the server. The server also produces request and error logs to operate and troubleshoot the service.
         </PrivacySection>
 
         <PrivacySection title="Providers and sharing">
@@ -43,15 +49,14 @@ export default function PrivacyScreen() {
         </PrivacySection>
 
         <PrivacySection title="Your choices">
-          You can use a nickname, use a game’s explicit leave control where offered, close the web tab to clear its web session token, and clear app or site data to remove the display name where your platform supports it. Native secure-store values can survive an app reinstall on some platforms, but room tokens expire after 24 hours. Requests about stored ranking results require the publisher contact shown on the official app or website listing.
+          Use the game’s Leave control to end your room session. You can clear app or site data to remove the saved display name where your platform supports it. Web session storage normally clears when its tab closes, although browser session restoration can preserve it. On some native platforms, secure-store values can survive reinstalling the app; room tokens still expire after 24 hours.
         </PrivacySection>
-      </View>
-
-      <View style={styles.releaseNotice}>
-        <Text style={styles.releaseTitle}>RELEASE REQUIREMENT</Text>
-        <Text style={styles.releaseBody}>
-          This engineering summary is not the final legal policy. Before public release, the publisher must provide a hosted privacy-policy URL and verified contact details, and review provider names, hosting regions, retention, age eligibility and user-rights wording for the deployment jurisdictions.
-        </Text>
+        <View style={styles.section}>
+          <Text accessibilityRole="header" style={styles.sectionTitle}>Privacy questions and requests</Text>
+          <Text style={styles.body}>For questions about your information, or to request access, correction or removal of saved leaderboard data, email:</Text>
+          <Link href="mailto:k.duy1202@gmail.com" accessibilityLabel="Email privacy contact k.duy1202@gmail.com" style={styles.contact}>k.duy1202@gmail.com</Link>
+          <Text style={styles.body}>Include your display name, the game and the approximate date so we can locate the result. Never send a room password or session token.</Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -81,8 +86,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: ARCADE.muted,
     fontFamily: 'SpaceMono_700Bold',
-    fontSize: 10,
-    letterSpacing: 1,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  intro: {
+    marginTop: 16,
+    color: ARCADE.text,
+    fontFamily: 'Outfit_400Regular',
+    fontSize: 18,
+    lineHeight: 27,
     textAlign: 'center',
   },
   card: {
@@ -104,29 +116,17 @@ const styles = StyleSheet.create({
   },
   body: {
     color: ARCADE.muted,
-    fontFamily: 'SpaceMono_400Regular',
-    fontSize: 13,
-    lineHeight: 21,
-  },
-  releaseNotice: {
-    gap: 8,
-    marginTop: 18,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: ARCADE.pink,
-    padding: 18,
-    backgroundColor: ARCADE.panel,
-  },
-  releaseTitle: {
-    color: ARCADE.pink,
-    fontFamily: 'SpaceMono_700Bold',
-    fontSize: 11,
-    letterSpacing: 1,
-  },
-  releaseBody: {
-    color: ARCADE.text,
     fontFamily: 'Outfit_400Regular',
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: 16,
+    lineHeight: 25,
+  },
+  contact: {
+    color: ARCADE.cyan,
+    fontFamily: 'Outfit_700Bold',
+    fontSize: 16,
+    lineHeight: 25,
+    minHeight: 48,
+    paddingVertical: 12,
+    textDecorationLine: 'underline',
   },
 });

@@ -1,8 +1,8 @@
 import { SERVER_URL } from '../constants/config';
-import type { GameId, JoinRoomResponse, LeaderboardRow, RoomPublicState } from '@zuychin-arcade/types';
+import type { GameId, JoinRoomResponse, LeaderboardRow, RoomPublicState, RoomConfig } from '@zuychin-arcade/types';
 
 export class ApiError extends Error {
-  constructor(public readonly status: number, message: string) {
+  constructor(public readonly status: number, message: string, public readonly code?: string) {
     super(message);
     this.name = 'ApiError';
   }
@@ -20,13 +20,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     const res = await fetch(`${SERVER_URL}${path}`, { ...init, signal: controller.signal });
     if (!res.ok) {
       let message = `Request failed (${res.status})`;
+      let code: string | undefined;
       try {
-        const body = (await res.json()) as { message?: string };
+        const body = (await res.json()) as { message?: string; code?: string };
         if (typeof body.message === 'string' && body.message.trim()) message = body.message;
+        if (typeof body.code === 'string') code = body.code;
       } catch {
         // Keep the status-based message when the server did not return JSON.
       }
-      throw new ApiError(res.status, message);
+      throw new ApiError(res.status, message, code);
     }
     return await res.json() as T;
   } catch (error) {
@@ -44,11 +46,12 @@ export function createRoom(
   displayName: string,
   password?: string,
   gameId: GameId = 'saboteur',
+  config?: RoomConfig,
 ): Promise<JoinRoomResponse> {
   return request('/rooms/create', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ displayName, password: password || undefined, gameId }),
+    body: JSON.stringify({ displayName, password: password || undefined, gameId, ...(config ? { config } : {}) }),
   });
 }
 

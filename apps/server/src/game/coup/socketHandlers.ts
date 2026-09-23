@@ -1,6 +1,9 @@
 import type { Server, Socket } from 'socket.io';
 import type {
   CoupActionPayload,
+  CoupAllegiancePayload,
+  CoupExaminePayload,
+  CoupExamineSelectPayload,
   CoupActionKind,
   CoupChallengeDecisionPayload,
   CoupExchangePayload,
@@ -12,6 +15,9 @@ import { COUP_LIMITS } from '@zuychin-arcade/types';
 import { getRoomPublicState, roomStore, type ServerRoom } from '../../store/RoomStore.js';
 import {
   chooseExchange,
+  chooseAllegiance,
+  selectExamine,
+  decideExamine,
   declareAction,
   expireWindow,
   forfeitPlayers,
@@ -122,6 +128,22 @@ export function isCoupChallengeDecisionPayload(value: unknown): value is CoupCha
 
 export function isCoupStartPayload(value: unknown): boolean {
   return value === undefined || (isRecord(value) && Object.keys(value).length === 0);
+}
+
+export function isCoupAllegiancePayload(value: unknown): value is CoupAllegiancePayload {
+  return isRecord(value) && hasOnlyKeys(value, ['allegiance', 'expectedRevision'])
+    && hasOwn(value, 'allegiance') && (value.allegiance === 'loyalist' || value.allegiance === 'reformist')
+    && hasOwn(value, 'expectedRevision') && isExpectedRevision(value.expectedRevision);
+}
+
+export function isCoupExamineSelectPayload(value: unknown): value is CoupExamineSelectPayload {
+  return isCoupLoseInfluencePayload(value);
+}
+
+export function isCoupExaminePayload(value: unknown): value is CoupExaminePayload {
+  return isRecord(value) && hasOnlyKeys(value, ['forceSwap', 'expectedRevision'])
+    && hasOwn(value, 'forceSwap') && typeof value.forceSwap === 'boolean'
+    && hasOwn(value, 'expectedRevision') && isExpectedRevision(value.expectedRevision);
 }
 
 function coupState(room: ServerRoom): CoupServerState | null {
@@ -267,6 +289,33 @@ export function recoverDisconnectedCoupPlayers(io: Server, room: ServerRoom): bo
 }
 
 export function registerCoupHandlers(io: Server, socket: Socket): void {
+  socket.on('coup:choose_allegiance', (payload: unknown) => {
+    const ctx = getAuthedRoom(socket);
+    const state = ctx && coupState(ctx.room);
+    if (!ctx || !state) return;
+    if (!isCoupAllegiancePayload(payload)) return socket.emit('action_rejected', { reason: 'Invalid payload' });
+    recoverDisconnectedCoupPlayers(io, ctx.room);
+    applyEngineCall(io, socket, ctx.room, 'choose_allegiance', chooseAllegiance(state, ctx.auth.playerId, payload.allegiance, payload.expectedRevision));
+  });
+
+  socket.on('coup:examine_select', (payload: unknown) => {
+    const ctx = getAuthedRoom(socket);
+    const state = ctx && coupState(ctx.room);
+    if (!ctx || !state) return;
+    if (!isCoupExamineSelectPayload(payload)) return socket.emit('action_rejected', { reason: 'Invalid payload' });
+    recoverDisconnectedCoupPlayers(io, ctx.room);
+    applyEngineCall(io, socket, ctx.room, 'examine_select', selectExamine(state, ctx.auth.playerId, payload.character, payload.expectedRevision));
+  });
+
+  socket.on('coup:examine', (payload: unknown) => {
+    const ctx = getAuthedRoom(socket);
+    const state = ctx && coupState(ctx.room);
+    if (!ctx || !state) return;
+    if (!isCoupExaminePayload(payload)) return socket.emit('action_rejected', { reason: 'Invalid payload' });
+    recoverDisconnectedCoupPlayers(io, ctx.room);
+    applyEngineCall(io, socket, ctx.room, 'examine', decideExamine(state, ctx.auth.playerId, payload.forceSwap, payload.expectedRevision));
+  });
+
   socket.on('start_game', (payload?: unknown) => {
     const ctx = getAuthedRoom(socket);
     if (!ctx) return;

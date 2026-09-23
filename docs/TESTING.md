@@ -57,6 +57,12 @@ Replace `saboteur` with `coup`, `king-of-tokyo`, `skull-king`, `citadels`,
 authoritative engine. Socket smoke scripts use real HTTP and Socket.IO against
 isolated local servers. They do not replace human or browser interaction.
 
+Coup's simulation command runs both Base (2–6 players) and Reformation +
+Inquisitor (2–10). Its socket suite covers complete games and rematches for
+both variants, plus revision fencing and owner-only examination decisions.
+`src/routes/coup-creation.test.ts` verifies creation defaults, version validation,
+room capacity and configuration retained for joins/recovery.
+
 ## Export checks
 
 Set `EXPO_PUBLIC_SERVER_URL` to the intended HTTPS API origin before exporting.
@@ -79,9 +85,11 @@ checkout has passed them. Record the revision, environment and actual outcome
 of each run. An HTTPS URL embedded in a bundle does not prove that the backend
 is reachable or correctly deployed.
 
-Local verification on 23/09/2026 completed the web export and both Android/iOS
-Hermes exports with their configured API-origin guards. No signing, upload or
-device test was performed by those export checks.
+Local verification on 23/09/2026 completed web and Android/iOS Hermes exports
+for the Coup expansion and illustrated rulebooks, with API-origin guards using
+local HTTPS QA configuration. The final public-notice wording was subsequently
+re-exported and browser-checked on web; native exports predate that copy-only
+adjustment. No signing, upload or device test was performed by those checks.
 
 ## Browser and visual checks
 
@@ -93,6 +101,27 @@ Browser runners live under `apps/mobile/scripts/`; game-specific fixture
 servers live under `apps/server/scripts/`. Read the chosen runner's explicit
 environment guards and scenario contract before starting it. There is no
 single flag set that safely launches every campaign.
+
+`apps/mobile/scripts/coup-reformation-ui-smoke.cjs` exercises either Coup version
+through real browser controls. Set `COUP_UI_VARIANT` to `base` or `reformation`,
+`COUP_EVIDENCE_DIR` to a fresh local directory, `COUP_UI_EXCLUSIVE_WINDOW=granted`,
+`COUP_EXPECTED_SHA256` to the freshly exported JavaScript bundle's SHA-256, and
+`QA_BROWSER_CERT_SPKI` to the pin printed by `local-qa-proxy.cjs`. Its defaults use
+the loopback web preview on 8081 and persistence-disabled API on 3213, with the
+client API proxied through local HTTPS 3214. It does not start those services.
+It covers a natural four-seat match, version selection, lobby, new private
+decisions, examination reload, rematch and normal leave, not every possible deal.
+
+`apps/mobile/scripts/rulebooks-ui-smoke.cjs` uses the same evidence-directory,
+exclusive-window, bundle-hash and certificate-pin guards. It opens all nine
+rulebooks from their entrances at phone, narrow-phone 200% CSS text, desktop,
+desktop 200% CSS text and short-landscape sizes. It captures the authored
+examples, expands detailed chapters, checks their web accessibility state,
+and verifies keyboard dismissal and focus return. It also checks the privacy
+contact and the public `RANKINGS_DISABLED` notice against a database-free
+local server. Expected HTTP 503 diagnostics are recorded separately; unrelated
+browser errors remain failures. Review the saved images, not just the receipt.
+Set `RULEBOOKS_SYSTEM_PAGES_ONLY=true` for a focused privacy/rankings check.
 
 - Use loopback-only local services with persistence disabled. Fixture servers
   require their explicit opt-in flags as well as local-development guards.
@@ -120,6 +149,8 @@ runtime data. A new checkout should generate its own evidence.
 
 ## Evidence and release limits
 
+- The shared rulebook toolbar still wraps its title at 320 px with 200% CSS
+  text. This is a known cosmetic issue; the content remains scrollable.
 - Local engine, protocol, component and rendered-web checks cover their declared
   scenarios only. A successful fixture is not an exhaustive rules audit or a
   complete multiplayer lifecycle.

@@ -4,12 +4,22 @@
 
 ### Games
 
+- Added selectable Coup Reformation + Inquisitor rooms for 2–10 players,
+  including allegiance setup, conversion, Treasury embezzlement and private
+  examination. Base Coup remains the default 2–6-player version.
 - Expanded Saboteur and Coup with King of Tokyo, Skull King, Citadels, Not Alone,
   BANG!, Libertalia: Winds of Galecrest and Colt Express, including room setup,
   authoritative engines, private state, gameplay and results.
 
 ### Interface
 
+- Added illustrated, mechanics-specific teaching sections to all nine rulebooks,
+  with Coup's character reference reused before play and expandable detailed
+  chapters for the other games.
+- Centred the mobile header branding between balanced side controls.
+- Replaced internal privacy-page instructions with player-facing data and
+  contact information. Rankings now show a public administrator-disabled notice
+  without exposing internal setup details.
 - Replaced the camera-derived Arcade identity with the Zuychin controller mark
   and generated navigation, launcher and favicon assets.
 - Added game-specific artwork and tactile cards, tiles, tokens and boards across

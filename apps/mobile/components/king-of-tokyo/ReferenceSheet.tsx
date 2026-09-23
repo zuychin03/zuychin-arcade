@@ -1,5 +1,6 @@
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { TOKYO } from '../../constants/theme';
+import { TokyoRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   {
@@ -159,6 +160,6 @@ export function KingOfTokyoReferenceSheet({ visible, onClose }: Props) {
       }}
       sections={SECTIONS}
       onClose={onClose}
-    />
+    ><TokyoRulesGuide /></RulesReferenceSheet>
   );
 }

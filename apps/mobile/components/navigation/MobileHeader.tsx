@@ -26,6 +26,13 @@ export default function MobileHeader({ onMenuPress }: Props) {
         <Text style={styles.title}>ZUYCHIN</Text>
         <Text style={styles.titleSub}>ARCADE</Text>
       </View>
+      <View
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        pointerEvents="none"
+        style={styles.menuButton}
+      />
     </BlurView>
   );
 }

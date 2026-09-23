@@ -36,11 +36,12 @@ async function request(
   }
 }
 
-test('missing persistence is unavailable rather than an empty leaderboard', async () => {
+test('disabled rankings expose only the public notice rather than setup details or an empty leaderboard', async () => {
   const result = await request('/leaderboard');
   assert.equal(result.status, 503);
   assert.equal(result.cache, 'no-store');
-  assert.match(result.body.message, /not available/);
+  assert.deepEqual(result.body, { code: 'RANKINGS_DISABLED', message: 'Rankings are currently disabled by the administrator.' });
+  assert(!/database|storage|configur|connect|supabase/i.test(JSON.stringify(result.body)));
 });
 
 test('invalid or repeated game filters are rejected', async () => {
@@ -62,6 +63,7 @@ test('database errors and thrown transport failures return a retryable safe resp
     const result = await request('/leaderboard', { data: null, error: { message: 'Private database details' } }, throws);
     assert.equal(result.status, 503);
     assert.match(result.body.message, /try again/);
+    assert.equal(result.body.code, undefined);
     assert(!JSON.stringify(result.body).includes('Private database'));
   }
 });

@@ -4,8 +4,7 @@
 // Saboteur (only the current player ever acts), a declared action waits on
 // *other* players to challenge or block. The game therefore lives in a
 // `pending` phase machine and most of the time is spent between turns waiting
-// on responses. Phase 1 implements the BASE variant; reformation-only actions
-// are gated off until Phase 2.
+// on responses.
 //
 // Every entry point returns EngineResult and mutates `state` in place. A single
 // engine call resolves all synchronous chained transitions (e.g. an
@@ -13,6 +12,7 @@
 // returning; the caller emits state once afterwards.
 
 import type {
+  Allegiance,
   CoupActionPayload,
   CoupActionType,
   CoupCharacter,
@@ -25,6 +25,10 @@ import type {
 } from '@zuychin-arcade/types';
 import {
   ACTION_META,
+  ALLEGIANCE_RESTRICTED,
+  CONVERT_SELF_COST,
+  CONVERT_OTHER_COST,
+  canTargetCoupPlayer,
   FOREIGN_AID_GAIN,
   INCOME_GAIN,
   MANDATORY_COUP_AT,
@@ -66,6 +70,7 @@ interface PendingState {
   exchangeKeep: number;
   examineTargetId: string | null;
   examineCharacter: CoupCharacter | null;
+  examineIndex: number | null;
   deadline: number | null;
 }
 
@@ -115,9 +120,7 @@ export function initGame(
         { character: deck.shift()!, revealed: false },
       ],
       coins: startingCoins(n, i === 0),
-      // Reformation alternates allegiances around the table (Phase 2 wires the
-      // host's choice); base has no allegiances.
-      allegiance: variant === 'reformation' ? (i % 2 === 0 ? 'reformist' : 'loyalist') : null,
+      allegiance: null,
       eliminated: false,
       forfeited: false,
     });
@@ -141,6 +144,10 @@ export function initGame(
   };
   log(state, `Game started - ${n} players, ${variant} rules.`);
   log(state, `${nameOf(state, turnOrder[0])} goes first.`);
+  if (variant === 'reformation') {
+    state.pending.phase = 'awaiting_allegiance';
+    armTimer(state);
+  }
   return state;
 }
 
@@ -163,6 +170,7 @@ function freshPending(actorId: string): PendingState {
     exchangeKeep: 0,
     examineTargetId: null,
     examineCharacter: null,
+    examineIndex: null,
     deadline: null,
   };
 }
@@ -222,7 +230,8 @@ function eligibleResponders(state: CoupServerState): string[] {
 
 function eligibleBlockerIds(state: CoupServerState): string[] {
   const { action, actorId, targetId } = state.pending;
-  if (action === 'foreign_aid') return aliveIds(state).filter((id) => id !== actorId);
+  if (action === 'foreign_aid') return aliveIds(state).filter((id) =>
+    canTargetCoupPlayer(state.variant, [...state.players.values()], actorId, id));
   if (action === 'assassinate' || action === 'steal') {
     return targetId && aliveCardCount(state.players.get(targetId)!) > 0 ? [targetId] : [];
   }
@@ -295,33 +304,55 @@ function declareActionUnchecked(
   if (meta.reformationOnly && state.variant !== 'reformation') {
     return fail('That action is only available with Reformation rules');
   }
-  if (meta.reformationOnly) return fail('That action is not available yet'); // Phase 2
+  if (state.variant === 'reformation' && action === 'exchange') return fail('Use Inquisitor Exchange');
 
   if (actor.coins >= MANDATORY_COUP_AT && action !== 'coup') {
     return fail('You have 10 or more coins and must launch a Coup');
   }
-  if (actor.coins < meta.cost) return fail('Not enough coins');
-  if (!meta.needsTarget && payload.targetPlayerId !== undefined) {
+  const cost = action === 'convert'
+    ? (payload.targetPlayerId === undefined || payload.targetPlayerId === playerId ? CONVERT_SELF_COST : CONVERT_OTHER_COST)
+    : meta.cost;
+  if (actor.coins < cost) return fail('Not enough coins');
+  if (!meta.needsTarget && action !== 'convert' && payload.targetPlayerId !== undefined) {
     return fail('This action does not take a target');
   }
 
   let targetId: string | null = null;
-  if (meta.needsTarget) {
-    targetId = typeof payload.targetPlayerId === 'string' ? payload.targetPlayerId : null;
+  if (meta.needsTarget || action === 'convert') {
+    targetId = action === 'convert' && payload.targetPlayerId === undefined ? playerId
+      : typeof payload.targetPlayerId === 'string' ? payload.targetPlayerId : null;
     if (!targetId) return fail('This action needs a target');
-    if (targetId === playerId) return fail('You cannot target yourself');
+    if (targetId === playerId && action !== 'convert') return fail('You cannot target yourself');
     const target = state.players.get(targetId);
     if (!target || aliveCardCount(target) === 0) return fail('Invalid target');
     if (action === 'steal' && target.coins === 0) return fail('Choose a player who has coins');
-    // Allegiance restriction (Reformation) is enforced in Phase 2.
+    if (ALLEGIANCE_RESTRICTED.includes(action)
+      && !canTargetCoupPlayer(state.variant, [...state.players.values()], playerId, targetId)) {
+      return fail('Choose a player of the opposing allegiance');
+    }
   }
 
-  actor.coins -= meta.cost; // pay up front (refunded if a challenge proves a bluff)
+  actor.coins -= cost;
   state.pending = freshPending(playerId);
   state.pending.action = action;
   state.pending.targetId = targetId;
 
   switch (action) {
+    case 'convert': {
+      const target = state.players.get(targetId!)!;
+      target.allegiance = target.allegiance === 'loyalist' ? 'reformist' : 'loyalist';
+      state.treasuryReserve += cost;
+      log(state, `${actor.displayName} paid ${cost} to convert ${target.displayName} to ${target.allegiance}.`);
+      return endTurn(state);
+    }
+    case 'embezzle':
+      log(state, `${actor.displayName} claims no Duke to embezzle the Treasury Reserve.`);
+      return openActionChallenge(state);
+    case 'inquisitor_exchange':
+    case 'inquisitor_examine':
+      state.pending.claimedCharacter = 'inquisitor';
+      log(state, `${actor.displayName} claims Inquisitor to ${action === 'inquisitor_exchange' ? 'exchange' : `examine ${nameOf(state, targetId)}`}.`);
+      return openActionChallenge(state);
     case 'income':
       actor.coins += INCOME_GAIN;
       log(state, `${actor.displayName} took Income (+1).`);
@@ -526,14 +557,24 @@ function resolveChallengeUnchecked(
   const challengerId = pending.challengerId!;
   const challenger = state.players.get(challengerId)!;
   const claim = isBlock ? pending.blockCharacter! : pending.claimedCharacter!;
+  const reverse = !isBlock && pending.action === 'embezzle';
 
   if (prove) {
-    if (!hasCharacter(claimant, claim)) return fail(`You cannot prove ${cap(claim)}`);
+    if (reverse) {
+      if (hasCharacter(claimant, 'duke')) return fail('You cannot prove no Duke');
+      const hidden = claimant.influences.filter(card => !card.revealed);
+      log(state, `${claimant.displayName} proves no Duke by showing ${hidden.map(card => cap(card.character)).join(', ')}. Challenge fails.`);
+      state.deck.push(...hidden.map(card => card.character));
+      state.deck = shuffle(state.deck);
+      for (const card of hidden) card.character = state.deck.shift()!;
+    } else {
+      if (!hasCharacter(claimant, claim)) return fail(`You cannot prove ${cap(claim)}`);
     log(
       state,
       `${challenger.displayName} challenged - ${claimant.displayName} proves ${cap(claim)}. Challenge fails.`,
     );
     reshuffleReveal(state, claimant, claim);
+    }
     pending.challengerId = null;
     pending.challengeKind = null;
     if (isBlock) {
@@ -581,6 +622,19 @@ function resolveActionEffect(state: CoupServerState): EngineResult {
   const target = p.targetId ? state.players.get(p.targetId) : null;
 
   switch (p.action) {
+    case 'embezzle': {
+      const amount = state.treasuryReserve;
+      actor.coins += amount;
+      state.treasuryReserve = 0;
+      log(state, `${actor.displayName} embezzled ${amount} from the Treasury Reserve.`);
+      return endTurn(state);
+    }
+    case 'inquisitor_examine':
+      if (!target || target.eliminated) return endTurn(state);
+      p.phase = 'awaiting_examine_selection';
+      p.examineTargetId = target.playerId;
+      armTimer(state);
+      return OK;
     case 'foreign_aid':
       actor.coins += FOREIGN_AID_GAIN;
       log(state, `${actor.displayName} took Foreign Aid (+2).`);
@@ -604,6 +658,7 @@ function resolveActionEffect(state: CoupServerState): EngineResult {
       return startLoseInfluence(state, target.playerId, 'assassinate', { kind: 'end_turn' });
     }
     case 'exchange':
+    case 'inquisitor_exchange':
       return openExchange(state);
     default:
       return endTurn(state);
@@ -614,7 +669,8 @@ function openExchange(state: CoupServerState): EngineResult {
   const actor = state.players.get(state.pending.actorId)!;
   const keep = aliveCardCount(actor);
   const drawn: CoupCharacter[] = [];
-  for (let i = 0; i < 2 && state.deck.length > 0; i++) drawn.push(state.deck.shift()!);
+  const drawCount = state.pending.action === 'inquisitor_exchange' ? 1 : 2;
+  for (let i = 0; i < drawCount && state.deck.length > 0; i++) drawn.push(state.deck.shift()!);
   const pool = [...actor.influences.filter((i) => !i.revealed).map((i) => i.character), ...drawn];
   state.pending.phase = 'awaiting_exchange';
   state.pending.exchangePool = pool;
@@ -813,6 +869,15 @@ export function expireWindow(state: CoupServerState, expectedRevision: number): 
 
 function expireWindowUnchecked(state: CoupServerState): EngineResult {
   switch (state.pending.phase) {
+    case 'awaiting_allegiance':
+      log(state, 'Allegiance selection timed out; the starting player defaults to Reformist.');
+      return chooseAllegianceUnchecked(state, state.pending.actorId, 'reformist');
+    case 'awaiting_examine_selection': {
+      const target = state.players.get(state.pending.examineTargetId!)!;
+      return selectExamineUnchecked(state, target.playerId, target.influences.find(card => !card.revealed)!.character);
+    }
+    case 'awaiting_examine':
+      return decideExamineUnchecked(state, state.pending.actorId, false);
     case 'awaiting_action_challenge':
       return proceedAfterActionSurvives(state);
     case 'awaiting_block':
@@ -826,7 +891,9 @@ function expireWindowUnchecked(state: CoupServerState): EngineResult {
       return resolveChallengeUnchecked(
         state,
         claimantId,
-        claim !== null && hasCharacter(state.players.get(claimantId)!, claim),
+        state.pending.challengeKind === 'action' && state.pending.action === 'embezzle'
+          ? !hasCharacter(state.players.get(claimantId)!, 'duke')
+          : claim !== null && hasCharacter(state.players.get(claimantId)!, claim),
       );
     }
     case 'awaiting_lose_influence': {
@@ -928,6 +995,14 @@ function forfeitPlayersUnchecked(state: CoupServerState, playerIds: Set<string>)
   }
 
   if (wasActor) {
+    if (phase === 'awaiting_allegiance') {
+      endTurn(state);
+      if (state.status === 'playing') {
+        state.pending.phase = 'awaiting_allegiance';
+        armTimer(state);
+      }
+      return OK;
+    }
     if (phase === 'awaiting_lose_influence' && !wasLoser) {
       // A departure cancels unfinished actions, not an already adjudicated loss.
       state.pending.resume = { kind: 'end_turn' };
@@ -937,6 +1012,11 @@ function forfeitPlayersUnchecked(state: CoupServerState, playerIds: Set<string>)
   }
 
   switch (phase) {
+    case 'awaiting_allegiance':
+      return OK;
+    case 'awaiting_examine_selection':
+    case 'awaiting_examine':
+      return wasTarget ? endTurn(state) : OK;
     case 'awaiting_action':
       return OK;
     case 'awaiting_action_challenge':
@@ -969,6 +1049,67 @@ function forfeitPlayersUnchecked(state: CoupServerState, playerIds: Set<string>)
     default:
       return wasTarget ? endTurn(state) : OK;
   }
+}
+
+export function chooseAllegiance(state: CoupServerState, playerId: string, allegiance: Allegiance, expectedRevision: number): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (allegiance !== 'loyalist' && allegiance !== 'reformist') return fail('Invalid allegiance');
+  return commit(state, chooseAllegianceUnchecked(state, playerId, allegiance));
+}
+
+function chooseAllegianceUnchecked(state: CoupServerState, playerId: string, allegiance: Allegiance): EngineResult {
+  if (state.pending.phase !== 'awaiting_allegiance' || state.pending.actorId !== playerId) return fail('Only the starting player chooses allegiance');
+  const order = [...state.turnOrder.slice(state.currentTurnIndex), ...state.turnOrder.slice(0, state.currentTurnIndex)]
+    .filter(id => !state.players.get(id)!.eliminated);
+  order.forEach((id, index) => {
+    state.players.get(id)!.allegiance = index % 2 === 0 ? allegiance : allegiance === 'loyalist' ? 'reformist' : 'loyalist';
+  });
+  log(state, `${nameOf(state, playerId)} chose ${allegiance}; allegiances alternate around the table.`);
+  state.pending = freshPending(playerId);
+  return OK;
+}
+
+export function selectExamine(state: CoupServerState, playerId: string, character: CoupCharacter, expectedRevision: number): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (!VALID_CHARACTERS.has(character)) return fail('Invalid character');
+  return commit(state, selectExamineUnchecked(state, playerId, character));
+}
+
+function selectExamineUnchecked(state: CoupServerState, playerId: string, character: CoupCharacter): EngineResult {
+  const pending = state.pending;
+  if (pending.phase !== 'awaiting_examine_selection' || pending.examineTargetId !== playerId) return fail('Only the examined player chooses a card');
+  const target = state.players.get(playerId)!;
+  const index = target.influences.findIndex(card => !card.revealed && card.character === character);
+  if (index < 0) return fail('Choose a face-down influence');
+  pending.examineIndex = index;
+  pending.examineCharacter = character;
+  pending.phase = 'awaiting_examine';
+  armTimer(state);
+  return OK;
+}
+
+export function decideExamine(state: CoupServerState, playerId: string, forceSwap: boolean, expectedRevision: number): EngineResult {
+  const staleResult = stale(state, expectedRevision);
+  if (staleResult) return staleResult;
+  if (typeof forceSwap !== 'boolean') return fail('Choose whether to replace the card');
+  return commit(state, decideExamineUnchecked(state, playerId, forceSwap));
+}
+
+function decideExamineUnchecked(state: CoupServerState, playerId: string, forceSwap: boolean): EngineResult {
+  const pending = state.pending;
+  if (pending.phase !== 'awaiting_examine' || pending.actorId !== playerId) return fail('Only the Inquisitor decides');
+  const target = state.players.get(pending.examineTargetId!)!;
+  if (forceSwap) {
+    const card = target.influences[pending.examineIndex!]!;
+    const replacement = state.deck.shift()!;
+    state.deck.push(card.character);
+    state.deck = shuffle(state.deck);
+    card.character = replacement;
+  }
+  log(state, `${nameOf(state, playerId)} ${forceSwap ? 'replaced' : 'returned'} the examined card of ${target.displayName}.`);
+  return endTurn(state);
 }
 
 function challengeClaimantId(state: CoupServerState): string | null {

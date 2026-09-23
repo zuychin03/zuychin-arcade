@@ -2,6 +2,7 @@ import { BANG_CHARACTERS } from '@zuychin-arcade/types';
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { BANG } from '../../constants/theme';
 import { BANG_CARD_DETAILS, BANG_ROLE_GUIDE } from './Card';
+import { BangRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   {
@@ -51,5 +52,5 @@ const SECTIONS: RuleSection[] = [
 export function BangReferenceSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   return <RulesReferenceSheet visible={visible} gameTitle="BANG!" subtitle="Fourth-edition base game · 4–7 players" icon="pistol"
     palette={{ background: BANG.bg, surface: BANG.surface, panel: BANG.panel, border: BANG.border, accent: BANG.gold, secondary: BANG.red, muted: BANG.muted, text: BANG.text }}
-    sections={SECTIONS} onClose={onClose} />;
+    sections={SECTIONS} onClose={onClose}><BangRulesGuide /></RulesReferenceSheet>;
 }

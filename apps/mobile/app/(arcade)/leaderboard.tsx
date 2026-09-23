@@ -3,7 +3,7 @@ import { FlatList, Platform, Pressable, RefreshControl, ScrollView, Text, View }
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { GameId, LeaderboardRow } from '@zuychin-arcade/types';
-import { getLeaderboard } from '../../lib/api';
+import { ApiError, getLeaderboard } from '../../lib/api';
 import { ARCADE, neonText } from '../../constants/theme';
 import { NeonButton } from '../../components/ui/NeonButton';
 
@@ -23,8 +23,8 @@ const TABS: { id: GameId; label: string; metric: 'wins' | 'nuggets' | 'points' |
 
 export default function LeaderboardScreen() {
   const [game, setGame] = useState<GameId>('saboteur');
-  const [board, setBoard] = useState<{ game: GameId; rows: LeaderboardRow[]; error: string | null; loaded: boolean }>({
-    game, rows: [], error: null, loaded: false,
+  const [board, setBoard] = useState<{ game: GameId; rows: LeaderboardRow[]; error: string | null; disabled: boolean; loaded: boolean }>({
+    game, rows: [], error: null, disabled: false, loaded: false,
   });
   const [refreshing, setRefreshing] = useState(false);
   const requestId = useRef(0);
@@ -35,14 +35,15 @@ export default function LeaderboardScreen() {
     const id = ++requestId.current;
     const controller = new AbortController();
     requestController.current = controller;
-    setBoard({ game, rows: [], error: null, loaded: false });
+    setBoard({ game, rows: [], error: null, disabled: false, loaded: false });
     setRefreshing(true);
     try {
       const rows = await getLeaderboard(game, controller.signal);
-      if (id === requestId.current) setBoard({ game, rows, error: null, loaded: true });
-    } catch {
+      if (id === requestId.current) setBoard({ game, rows, error: null, disabled: false, loaded: true });
+    } catch (error) {
       if (id === requestId.current) {
-        setBoard({ game, rows: [], error: 'Scores are unavailable right now. Check your connection and retry.', loaded: true });
+        const disabled = error instanceof ApiError && error.status === 503 && error.code === 'RANKINGS_DISABLED';
+        setBoard({ game, rows: [], disabled, error: disabled ? null : 'Scores are unavailable right now. Check your connection and retry.', loaded: true });
       }
     } finally {
       if (id === requestId.current) {
@@ -61,7 +62,7 @@ export default function LeaderboardScreen() {
     };
   }, [load]);
 
-  const currentBoard = board.game === game ? board : { rows: [], error: null, loaded: false };
+  const currentBoard = board.game === game ? board : { rows: [], error: null, disabled: false, loaded: false };
   const selectedGame = TABS.find((tab) => tab.id === game)!;
   const ranksByWins = selectedGame.metric === 'wins';
 
@@ -74,7 +75,7 @@ export default function LeaderboardScreen() {
         all-time {selectedGame.label} {selectedGame.metric}
       </Text>
 
-      <ScrollView horizontal style={{ flexGrow: 0, marginBottom: 14 }} contentContainerStyle={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingBottom: 6 }} showsHorizontalScrollIndicator>
+      <ScrollView horizontal style={{ flexGrow: 0, flexShrink: 0, marginBottom: 14 }} contentContainerStyle={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingBottom: 6 }} showsHorizontalScrollIndicator>
         {TABS.map((t) => {
           const active = t.id === game;
           return (
@@ -107,7 +108,7 @@ export default function LeaderboardScreen() {
       </ScrollView>
 
       <View style={{ paddingHorizontal: 16, paddingBottom: 14 }}>
-        <NeonButton label={refreshing ? 'LOADING SCORES…' : currentBoard.error ? 'RETRY SCORES' : 'REFRESH SCORES'} color={ARCADE.cyan} variant="outline" disabled={refreshing} onPress={() => { void load(); }} />
+        <NeonButton label={refreshing ? 'LOADING SCORES…' : currentBoard.disabled ? 'CHECK STATUS' : currentBoard.error ? 'RETRY SCORES' : 'REFRESH SCORES'} color={ARCADE.cyan} variant="outline" disabled={refreshing} onPress={() => { void load(); }} />
       </View>
 
       <FlatList
@@ -118,7 +119,12 @@ export default function LeaderboardScreen() {
         }
         contentContainerStyle={{ padding: 16, paddingTop: 4 }}
         ListEmptyComponent={
-          <Text accessibilityRole={currentBoard.error ? 'alert' : undefined} accessibilityLiveRegion="polite" style={{ color: currentBoard.error ? ARCADE.text : ARCADE.muted, fontSize: 16, textAlign: 'center', marginTop: 24, lineHeight: 24 }}>
+          currentBoard.disabled ? <View accessibilityLiveRegion="polite" style={{ alignSelf: 'center', width: '100%', maxWidth: 560, gap: 12, padding: 24, borderRadius: 16, backgroundColor: ARCADE.surface }}>
+            <MaterialCommunityIcons name="shield-lock-outline" size={28} color={ARCADE.cyan} />
+            <Text accessibilityRole="header" style={{ color: ARCADE.text, fontFamily: 'Outfit_800ExtraBold', fontSize: 22 }}>Rankings disabled</Text>
+            <Text style={{ color: ARCADE.text, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 25 }}>Rankings are currently disabled by the administrator.</Text>
+            <Text style={{ color: ARCADE.muted, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 25 }}>You can still create rooms and play games.</Text>
+          </View> : <Text accessibilityRole={currentBoard.error ? 'alert' : undefined} accessibilityLiveRegion="polite" style={{ color: currentBoard.error ? ARCADE.text : ARCADE.muted, fontSize: 16, textAlign: 'center', marginTop: 24, lineHeight: 24 }}>
             {currentBoard.error ?? (currentBoard.loaded ? 'No games recorded yet.\nFinish a game to flash your name in neon!' : 'Loading scores…')}
           </Text>
         }

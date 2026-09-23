@@ -5,7 +5,7 @@
 //   https://indieboardsandcards.com/our-games/coup/
 //   https://rules.dized.com/game/xzsTtI3VTV-2wvos3otxIg
 
-import type { CoupActionType, CoupCharacter, CoupVariant } from './coup';
+import type { Allegiance, CoupActionType, CoupCharacter, CoupVariant } from './coup';
 
 export const STARTING_INFLUENCE = 2;
 
@@ -82,4 +82,18 @@ export const ACTION_META: Record<CoupActionType, CoupActionMeta> = {
 };
 
 /** Actions that may only target a player of the *other* allegiance (Reformation). */
-export const ALLEGIANCE_RESTRICTED: CoupActionType[] = ['coup', 'assassinate', 'steal'];
+export const ALLEGIANCE_RESTRICTED: CoupActionType[] = ['coup', 'assassinate', 'steal', 'inquisitor_examine'];
+
+export function canTargetCoupPlayer(
+  variant: CoupVariant,
+  players: readonly { playerId: string; allegiance: Allegiance | null; eliminated: boolean }[],
+  actorId: string,
+  targetId: string,
+): boolean {
+  const alive = players.filter(player => !player.eliminated);
+  const actor = alive.find(player => player.playerId === actorId);
+  const target = alive.find(player => player.playerId === targetId);
+  if (!actor || !target || actorId === targetId) return false;
+  return variant === 'base' || actor.allegiance !== target.allegiance
+    || alive.every(player => player.allegiance === actor.allegiance);
+}

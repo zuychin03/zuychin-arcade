@@ -42,6 +42,56 @@ test('all six revealed faces mount the correct original art with titlecase and l
   }
 });
 
+test('reference rules belong to the painted face while ordinary cards keep their abilities', () => {
+  const { CharacterCard } = harness();
+  const expected = {
+    duke: 'Tax +3\nBlocks aid', assassin: 'Pay 3 to assassinate', captain: 'Steal 2\nBlocks stealing',
+    ambassador: 'Exchange\nBlocks stealing', contessa: 'Blocks assassination', inquisitor: 'Exchange / examine',
+  };
+  for (const role of roles) for (const size of ['md', 'lg']) {
+    const reference = jsx('Text', { testID: 'reference-rules', children: `Reference action and block for ${role}` });
+    const tree = CharacterCard({ character: role, size, fluid: true, referenceContent: reference });
+    const face = nodes(tree).find(node => node.props.style?.backgroundColor === colours.panel && node.props.style?.overflow === 'hidden');
+    assert(face, `${role}: missing painted face`);
+    assert(nodes(face).includes(reference), `${role}: reference escaped the painted face`);
+    assert.equal(nodes(tree).filter(node => node.props.testID === 'reference-rules').length, 1);
+    assert(!text(tree).includes(expected[role]), `${role}: reference duplicates the ordinary ability`);
+    assert(text(CharacterCard({ character: role, size })).includes(expected[role]), `${role}: gameplay ability disappeared`);
+    for (const hidden of [{ faceDown: true }, { lost: true }]) {
+      const concealed = CharacterCard({ character: role, size, referenceContent: reference, ...hidden });
+      assert(!nodes(concealed).includes(reference), `${role}: hidden or lost card exposes reference content`);
+    }
+  }
+});
+
+test('creation defaults to Base and switches the room config, rules and accessible selection together', () => {
+  let chosen;
+  const { default: Landing } = load('app/coup/index.tsx', {
+    'react': { useState: initial => [chosen ?? initial, value => { chosen = value; }] },
+    'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View' },
+    '../../components/ui/ScalePressable': { ScalePressable: 'Button' },
+    '../../components/remaining/RemainingLanding': { RemainingLanding: 'Landing' },
+    '../../components/coup/CoupArtwork': { CoupMark: 'Mark' },
+    '../../components/ui/GameCover': { GameCover: 'Cover' },
+    '../../components/coup/ReferenceSheet': { ReferenceSheet: 'Rules' },
+    '../../components/coup/palette': { COUP_PALETTE: colours },
+    '../../assets/game-art/coup-hero.webp': 'hero.webp',
+  });
+  let landing = Landing();
+  assert.equal(landing.props.createConfig.coupVariant, 'base');
+  assert.equal(landing.props.renderRules(true, () => {}).props.variant, 'base');
+  let options = nodes(landing.props.renderCreateOptions(false)).filter(node => node.type === 'Button');
+  assert.equal(options[0].props.accessibilityState.selected, true);
+  options[1].props.onPress();
+  landing = Landing();
+  assert.equal(landing.props.createConfig.coupVariant, 'reformation');
+  assert.equal(landing.props.renderRules(true, () => {}).props.variant, 'reformation');
+  assert(landing.props.tags.includes('2–10 PLAYERS'));
+  options = nodes(landing.props.renderCreateOptions(true)).filter(node => node.type === 'Button');
+  assert.equal(options[1].props.accessibilityState.selected, true);
+  assert(options.every(option => option.props.disabled && option.props.accessibilityState.disabled));
+});
+
 test('concealed trees and backs are role-independent and never mount role artwork', () => {
   const { CharacterCard } = harness();
   const baseline = CharacterCard({ faceDown: true, size: 'md', accessibilityLabel: 'Private influence 1, hidden' });
@@ -184,8 +234,11 @@ test('consumers reflow cards while the privacy lifecycle and decision ownership 
   for (const selector of ['priv.influences', 'myFaceDown', 'priv.exchange.pool']) {
     assert(source.includes(`<CardGrid items={${selector}}`));
   }
-  assert.equal((source.match(/minCardWidth=\{208\} maxCardWidth=\{280\} gap=\{10\} textScale=\{fontScale\}/g) ?? []).length, 3);
-  assert.match(reference, /<View key=\{c\} style=\{\{ flexDirection: 'row', flexWrap: 'wrap'/);
+  assert.equal((source.match(/minCardWidth=\{208\} maxCardWidth=\{280\} gap=\{10\} textScale=\{fontScale\}/g) ?? []).length, 5);
+  assert.match(reference, /<CardGrid items=\{charactersForVariant\(variant\)\}/);
+  assert.match(reference, /minCardWidth=\{208\} maxCardWidth=\{280\} textScale=\{fontScale\}/);
+  assert.match(reference, /<CharacterCard character=\{character\} size="md" fluid/);
+  assert(reference.indexOf('<CharacterGallery variant={variant}') < reference.indexOf('{RULES_NOTES.map'));
   assert.match(source, /const isWide = winWidth >= 900/);
   assert.match(source, /const isXWide = winWidth >= 1440/);
   assert.match(source, /width: 380, borderLeftWidth/);
@@ -212,7 +265,7 @@ test('toolbar wraps bounded groups while keeping full labels, targets and handle
     fileName: 'Toolbar.tsx', compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX },
   });
   for (const isXWide of [false, true]) {
-    for (const variant of ['classic', 'reformation']) {
+    for (const variant of ['base', 'reformation']) {
       const exports = {}, calls = [];
       vm.runInNewContext(compiled.outputText, {
         exports, require: () => ({ jsx, jsxs: jsx }), View: 'View', Text: 'Text', Pressable: 'Button',
@@ -243,7 +296,7 @@ test('toolbar wraps bounded groups while keeping full labels, targets and handle
       assert.deepEqual(buttons.map(button => text(button)), isXWide ? ['Leave'] : ['Rules', 'Leave']);
       assert.deepEqual(buttons.map(button => button.props.accessibilityLabel), isXWide ? ['Leave game'] : ['Open rules', 'Leave game']);
       assert.deepEqual(calls, isXWide ? [['leave']] : [['rules', true], ['leave']]);
-      assert.match(text(tree), /COUP.*7/);
+      assert.match(text(tree), variant === 'base' ? /BASE COUP.*7/ : /REFORMATION \+ INQUISITOR.*7/);
       if (variant === 'reformation') assert.match(text(tree), /12/);
     }
   }

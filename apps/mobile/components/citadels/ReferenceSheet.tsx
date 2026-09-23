@@ -1,5 +1,6 @@
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { CITADELS } from '../../constants/theme';
+import { CitadelsRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   {
@@ -107,6 +108,6 @@ export function CitadelsReferenceSheet({ visible, onClose }: { visible: boolean;
       palette={{ background: CITADELS.bg, surface: CITADELS.surface, panel: CITADELS.panel, border: CITADELS.border, accent: CITADELS.royal, secondary: CITADELS.gold, muted: CITADELS.muted, text: CITADELS.text }}
       sections={SECTIONS}
       onClose={onClose}
-    />
+    ><CitadelsRulesGuide /></RulesReferenceSheet>
   );
 }

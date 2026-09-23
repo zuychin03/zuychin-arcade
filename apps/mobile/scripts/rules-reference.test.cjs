@@ -11,10 +11,13 @@ for (const platform of ['web', 'ios', 'android']) {
     const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } }).outputText;
     const jsx = (type, props) => ({ type, props });
     const focusCalls = [];
+    let expanded = false;
     const modules = {
+      react: { useState: () => [expanded, update => { expanded = typeof update === 'function' ? update(expanded) : update; }] },
       'react/jsx-runtime': { jsx, jsxs: jsx },
       'react-native': { Modal: 'Modal', Pressable: 'Pressable', ScrollView: 'ScrollView', Text: 'Text', View: 'View', Platform: { OS: platform } },
       'react-native-reanimated': { default: { View: 'Animated.View' } },
+      'react-native-safe-area-context': { SafeAreaView: 'SafeAreaView' },
       '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
       '../../constants/theme': { neonText: () => ({}) },
       '../../hooks/useReducedMotionPreference': { useReducedMotionPreference: () => true },
@@ -23,7 +26,8 @@ for (const platform of ['web', 'ios', 'android']) {
     const exports = {};
     vm.runInNewContext(compiled, { exports, require: (name) => { assert(name in modules, name); return modules[name]; } }, { filename });
     const onClose = () => {};
-    const tree = exports.RulesReferenceSheet({ visible: true, gameTitle: 'BANG!', subtitle: 'Base rules', icon: 'pistol', palette: {}, sections: [], onClose });
+    const guide = { type: 'AuthoredGuide', props: { children: 'A game-specific example' } };
+    const tree = exports.RulesReferenceSheet({ visible: true, gameTitle: 'BANG!', subtitle: 'Base rules', icon: 'pistol', palette: {}, sections: [{ title: 'Exact rules', icon: 'cards', entries: [{ title: 'An exception', body: 'Complete retained rule text' }] }], children: guide, onClose });
     const nodes = (node) => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).filter(Boolean).flatMap(nodes)];
     const scroll = nodes(tree).find((node) => node.type === 'ScrollView').props;
     assert.equal(scroll.tabIndex, platform === 'web' ? 0 : undefined);
@@ -32,5 +36,21 @@ for (const platform of ['web', 'ios', 'android']) {
     assert.equal(scroll.showsVerticalScrollIndicator, platform === 'web');
     assert.equal(focusCalls[0][0], true);
     assert.equal(focusCalls[0][2], onClose);
+    assert.equal(scroll.children[1], guide);
+    const chapter = nodes(tree).find(node => typeof node.type === 'function');
+    let rendered = chapter.type(chapter.props);
+    let toggle = nodes(rendered).find(node => node.type === 'Pressable');
+    assert.equal(toggle.props.accessibilityState.expanded, false);
+    assert.equal(toggle.props['aria-expanded'], platform === 'web' ? false : undefined);
+    assert.equal(toggle.props.style.minHeight, 48);
+    toggle.props.onPress();
+    rendered = chapter.type(chapter.props);
+    toggle = nodes(rendered).find(node => node.type === 'Pressable');
+    assert.equal(toggle.props.accessibilityState.expanded, true);
+    assert.equal(toggle.props['aria-expanded'], platform === 'web' ? true : undefined);
+    const retainedRule = nodes(rendered).find(node => node.props.children === 'Complete retained rule text');
+    assert.equal(retainedRule.props.style.fontSize, 16);
+    toggle.props.onPress();
+    assert.equal(nodes(chapter.type(chapter.props)).some(node => node.props.children === 'Complete retained rule text'), false);
   });
 }

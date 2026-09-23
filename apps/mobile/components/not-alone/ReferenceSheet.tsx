@@ -1,6 +1,7 @@
 import { NOT_ALONE_MODE_DESCRIPTION } from '@zuychin-arcade/types';
 import { RulesReferenceSheet, type RuleSection } from '../ui/RulesReferenceSheet';
 import { NOT_ALONE } from '../../constants/theme';
+import { NotAloneRulesGuide } from './RulesGuide';
 
 const SECTIONS: RuleSection[] = [
   {
@@ -78,6 +79,6 @@ export function NotAloneReferenceSheet({ visible, onClose }: { visible: boolean;
       palette={{ background: NOT_ALONE.bg, surface: NOT_ALONE.surface, panel: NOT_ALONE.panel, border: NOT_ALONE.border, accent: NOT_ALONE.signal, secondary: NOT_ALONE.amber, muted: NOT_ALONE.muted, text: NOT_ALONE.text }}
       sections={SECTIONS}
       onClose={onClose}
-    />
+    ><NotAloneRulesGuide /></RulesReferenceSheet>
   );
 }

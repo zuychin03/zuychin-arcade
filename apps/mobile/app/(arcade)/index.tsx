@@ -181,7 +181,7 @@ export default function ArcadeHub() {
         coverSource={require('../../assets/game-art/coup-cover.webp')}
         title="COUP"
         icon="drama-masks"
-        players="2–6 players"
+        players="2–10 players"
         subtitle="bluff, challenge & deduce · last influence standing wins"
         accent={COUP.crimson}
         onPress={() => router.push('/coup')}
