@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-vulture_sam.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2311871,
+    "sha256": "5d8b1a4183cd76b482fb00058a1057fce078b9b8b91efbce9c725f44ca57b6b4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-vulture_sam.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17784,
+      "sha256": "05d064c02682f2b8b1d14dc27e7d9ae949afd13400402109df94f04f1a670169"
+    }
+  ],
+  "totalBytes": 17784,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-frenzy.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2657103,
+    "sha256": "f6d5b8e20d48060dfd3acce3a035751ed65c31c17092bf1721e2db99a02f9f50"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-frenzy.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 26154,
+      "sha256": "719b6ca7ec67a251cb957f159a1b7c9bec071e013e33e47223e4149dae6baa65"
+    }
+  ],
+  "totalBytes": 26154,
+  "maxTotalBytes": 614400
+}

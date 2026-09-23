@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-solar_powered.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2418679,
+    "sha256": "c7cdbff88a859322dfe6fc49673ef10e01fc28a889e93b6791e961fd40192a74"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-solar_powered.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22110,
+      "sha256": "7ab4884cc91f5a732d150a18948543856a47233be6fa063b5824a386a71cc2f4"
+    }
+  ],
+  "totalBytes": 22110,
+  "maxTotalBytes": 614400
+}

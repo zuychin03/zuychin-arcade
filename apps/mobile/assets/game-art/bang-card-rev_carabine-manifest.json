@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-rev_carabine.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2205179,
+    "sha256": "1a78e5fbe7650ac468f7e20436995bf0cc89f5607185c30acbf88f981722ab65"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-rev_carabine.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19942,
+      "sha256": "5fdfe0b9738c2b210ed031e421a8aa95b9d77b9bea6dd8b6fd6bd82f1692e3c3"
+    }
+  ],
+  "totalBytes": 19942,
+  "maxTotalBytes": 614400
+}

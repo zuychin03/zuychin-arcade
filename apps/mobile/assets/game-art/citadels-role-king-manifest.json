@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-role-king.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2188578,
+    "sha256": "fd4040003c7f38d54afdeff738a58fe1f82b34fb9de79a28e41845eebd4ab22c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-role-king.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15940,
+      "sha256": "089e1d0804ee46a0ac5fc60d5a4d920519a5cfcefcfd101261351e7170b15924"
+    }
+  ],
+  "totalBytes": 15940,
+  "maxTotalBytes": 614400
+}

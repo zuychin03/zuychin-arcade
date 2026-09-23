@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-plot_twist.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2153977,
+    "sha256": "965d6351b86b15c2a249e784c29f2212e98574941efe462a8bb2bacc6d948dba"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-plot_twist.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17016,
+      "sha256": "74231dbfa471864e2f2c0ec1c9b2f7086bb57f1fa8182200b6b3f56e0a54f59d"
+    }
+  ],
+  "totalBytes": 17016,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-role-saboteur.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2473044,
+    "sha256": "e32f68c14dbd693a842898f19d2315b8c298f0d9102c13721d571a6bc774daed"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-role-saboteur.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18864,
+      "sha256": "3c5aef5e31046e995f65e8c02ec3624716d67f14fc77852a5cbd7fc78d4b266d"
+    }
+  ],
+  "totalBytes": 18864,
+  "maxTotalBytes": 614400
+}

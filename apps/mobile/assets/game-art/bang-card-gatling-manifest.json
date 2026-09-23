@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-gatling.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2292261,
+    "sha256": "ef39513af3b6e0e816e507810efc6d889f980c31b2e37364e616deb2c394d0bc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-gatling.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20408,
+      "sha256": "4a2e80dd7bbf704a30f634a2538bd80e7bb9bb37903813f1de9e84379969aa84"
+    }
+  ],
+  "totalBytes": 20408,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-castle.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2498345,
+    "sha256": "766e695694238d1ef0c9803aa1a927d50528dad35f53fb8c1bc44aa87659b3aa"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-castle.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21982,
+      "sha256": "8aeb3ed1220261e353525b59d3677ad7fc7e94bbdf9717b3368c5265187dbb8f"
+    }
+  ],
+  "totalBytes": 21982,
+  "maxTotalBytes": 614400
+}

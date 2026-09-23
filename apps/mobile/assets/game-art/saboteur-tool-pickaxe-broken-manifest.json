@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-tool-pickaxe-broken.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1583982,
+    "sha256": "ddf6310fb4af8b099b626e36817aae4c5bc621c2586b214b4955172a39587d01"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-tool-pickaxe-broken.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 7212,
+      "sha256": "df4b7abe2370fe40966fe136c101ddf12e9d8d0c094924829cce6cef7b98fa4f"
+    }
+  ],
+  "totalBytes": 7212,
+  "maxTotalBytes": 614400
+}

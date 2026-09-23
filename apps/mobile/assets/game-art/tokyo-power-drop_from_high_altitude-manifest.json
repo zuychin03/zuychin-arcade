@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-drop_from_high_altitude.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2416171,
+    "sha256": "0628ab43d2667cc26ec253e1644c2101e8826b9d8b1fbedd4af6339b808de6dc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-drop_from_high_altitude.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22296,
+      "sha256": "812eead5736f9fbb008fa1ff97270d20725bfc77c8ad8a945ac78469a30bbc7f"
+    }
+  ],
+  "totalBytes": 22296,
+  "maxTotalBytes": 614400
+}

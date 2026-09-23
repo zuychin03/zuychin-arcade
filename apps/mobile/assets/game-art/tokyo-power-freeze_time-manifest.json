@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-freeze_time.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2540792,
+    "sha256": "f5e78aed26b44b5ae8f7ecad89914cd3a73ff25fe6a586c777b6675bac369fa3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-freeze_time.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23798,
+      "sha256": "fc423615a6685494e23bb6bbf5b44a4e17b7ad677683516e2172f1a4317992d7"
+    }
+  ],
+  "totalBytes": 23798,
+  "maxTotalBytes": 614400
+}

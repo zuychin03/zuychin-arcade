@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CoupVariant } from '@zuychin-arcade/types';
 import { charactersForVariant } from '@zuychin-arcade/types';
 import { CharacterCard } from './CharacterCard';
+import { CoupTableArtwork } from './CoupTableArtwork';
 import { CardGrid } from '../ui/CardGrid';
 import { COUP, COUP_CHARACTER_COLOR } from '../../constants/theme';
 import { useWebModalFocus } from '../../hooks/useWebModalFocus';
@@ -112,13 +113,16 @@ function ReferenceBody({
   onClose?: () => void;
   fillHeight?: boolean;
 }) {
+  const { width, fontScale } = useWindowDimensions();
   return (
     <>
       <View
         style={{
           flexDirection: 'row',
+          flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
+          gap: 10,
           paddingHorizontal: 16,
           paddingVertical: 14,
           borderBottomWidth: 1,
@@ -126,13 +130,13 @@ function ReferenceBody({
           backgroundColor: COUP.panel,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, flex: 1 }}><MaterialCommunityIcons name="drama-masks" size={18} color={COUP.crimson} /><Text style={{ flexShrink: 1, fontFamily: 'Outfit_800ExtraBold', fontSize: 16, color: COUP.text }}>{variant === 'base' ? 'Base Coup' : 'Reformation + Inquisitor'} · Reference</Text></View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, flexBasis: 180, flexGrow: 1, flexShrink: 1, maxWidth: '100%', minWidth: Platform.OS === 'web' ? 'min-content' as ViewStyle['minWidth'] : Math.min(200 * fontScale, width - 64) }}><MaterialCommunityIcons name="drama-masks" size={18} color={COUP.crimson} /><Text style={{ flex: 1, minWidth: 0, fontFamily: 'Outfit_800ExtraBold', fontSize: 16, color: COUP.text }}>{variant === 'base' ? 'Base Coup' : 'Reformation + Inquisitor'} · Reference</Text></View>
         {onClose && (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Close rules"
             onPress={onClose}
-            style={{ width: 48, height: 48, alignItems: 'center', justifyContent: 'center', marginVertical: -10, marginRight: -12 }}
+            style={{ width: 48, height: 48, flexShrink: 0, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center' }}
           >
             <MaterialCommunityIcons name="close" size={21} color={COUP.muted} />
           </Pressable>
@@ -224,6 +228,12 @@ function ReferenceBody({
         {variant === 'reformation' && (
           <View style={{ gap: 12 }}>
             <SectionLabel>Reformation</SectionLabel>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+              {(['loyalist', 'reformist', 'treasury'] as const).map(kind => <View key={kind} style={{ flexBasis: 100, flexGrow: 1, flexShrink: 1, minWidth: 0, alignItems: 'center', gap: 8 }}>
+                <View style={{ width: 72, maxWidth: '100%', borderRadius: 10, overflow: 'hidden' }}><CoupTableArtwork kind={kind} /></View>
+                <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 16, lineHeight: 24, textAlign: 'center' }}>{kind === 'loyalist' ? 'Loyalist' : kind === 'reformist' ? 'Reformist' : 'Treasury Reserve'}</Text>
+              </View>)}
+            </View>
             <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.muted, fontSize: 16, lineHeight: 25 }}>
               The starting player chooses Loyalist or Reformist, then the other seats alternate sides. Coup, Assassinate, Steal and Examine may only target the opposing side. You may only Duke-block Foreign Aid from the opposing side. Once every living player shares a side, these restrictions lift. There is no team victory: the last player with influence wins. Convert can change your own side for 1 coin or anyone else’s for 2; those coins go to the Treasury Reserve.
             </Text>

@@ -392,7 +392,7 @@ test('special cards can grow with text and retain complete accessible names', ()
     'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width: 375, fontScale: 1 }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../ui/ScalePressable': { ScalePressable: 'Button' }, '../../constants/theme': { SKULL_KING: {} },
-    '../ui/CardSurface': { CardSurface: 'CardSurface' }, './SkullKingCardArtwork': { SkullKingCardArtwork: 'Artwork' },
+    '../ui/CardSurface': { CardSurface: 'CardSurface' }, './SkullKingCardArtwork': { SkullKingCardArtwork: 'Artwork', SkullKingSuitArtwork: 'SuitArtwork', SkullKingDeckArtwork: 'DeckArtwork' },
     '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textScale: 1, textRef: { current: null }, onTextLayout() {} }) },
   });
   const tree = SkullKingCardView({ card: { id: 'sk', kind: 'skull_king' }, compact: true, onPress() {} });

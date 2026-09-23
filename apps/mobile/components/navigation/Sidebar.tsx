@@ -1,10 +1,11 @@
-import { Platform, View, Text, StyleSheet, Pressable, ScrollView, type ViewStyle } from 'react-native';
+import { Platform, View, Text, StyleSheet, Pressable, ScrollView, useWindowDimensions, type ViewStyle } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { ARCADE } from '../../constants/theme';
 import ZuychinLogo from './ZuychinLogo';
+import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
 type NavItemProps = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -49,13 +50,15 @@ function NavItem({ icon, label, route, isActive }: NavItemProps) {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { fontScale } = useWindowDimensions();
+  const { textRef, onTextLayout, textScale } = useMeasuredTextScale(24, fontScale);
 
   return (
     <BlurView intensity={20} tint="dark" style={styles.sidebar}>
       <View style={styles.logoContainer}>
-        <ZuychinLogo color={ARCADE.pink} height={44} style={{ flexShrink: 0 }} />
+        <ZuychinLogo color={ARCADE.pink} height={44 * textScale} style={{ flexShrink: 0 }} />
         <View style={styles.logoWords}>
-          <Text style={styles.logoText}>ZUYCHIN</Text>
+          <Text ref={textRef} onLayout={onTextLayout} style={styles.logoText}>ZUYCHIN</Text>
           <Text style={styles.logoSub}>ARCADE</Text>
         </View>
       </View>
@@ -85,6 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 16,
     marginBottom: 40,
     gap: 12,

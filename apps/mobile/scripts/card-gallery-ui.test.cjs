@@ -9,6 +9,41 @@ const source = fs.readFileSync(path.join(__dirname, 'card-gallery-ui.cjs'), 'utf
 function measurement() {
   return { authenticated: false, fontReady: true, images: [], width: 1280, height: 844, targets: [0, 1, 2].map(index => ({ id: 'card-' + index, root: { left: index * 210, right: index * 210 + 200, top: 10, height: 400 }, face: { width: 200, height: 400 }, clipping: [], controls: [{ width: 200, height: 400 }] })) };
 }
+
+function walkerFixture(aliases = {}) {
+  const root = path.resolve('gallery-walker-fixture');
+  const tree = { '': ['assets', 'index.html', 'dist', 'node_modules', '.expo'], assets: ['fonts', 'card.webp'], 'assets/fonts': ['font.ttf'], dist: ['ignored.js'], node_modules: ['ignored.js'], '.expo': ['ignored.json'] };
+  const visited = [];
+  const relative = file => path.relative(root, file).split(path.sep).join('/');
+  const mock = {
+    realpathSync(file) { return aliases[relative(file)] || file; },
+    statSync(file) { return { isDirectory: () => Object.hasOwn(tree, relative(file)) }; },
+    readdirSync(file, options) {
+      const key = relative(file); visited.push(key);
+      return options?.withFileTypes ? tree[key].map(name => ({ name, isDirectory: () => false })) : tree[key];
+    },
+  };
+  const definition = source.slice(source.indexOf('function filesIn('), source.indexOf('function sourceHashes('));
+  const walk = vm.runInNewContext(`(${definition})`, { fs: mock, path, assert, Set });
+  return { root, visited, walk };
+}
+
+test('gallery walker uses filesystem directory status when OneDrive Dirents misclassify folders', () => {
+  const fixture = walkerFixture();
+  assert.deepEqual(Array.from(fixture.walk(fixture.root)), ['assets/card.webp', 'assets/fonts/font.ttf', 'index.html'].map(file => path.join(fixture.root, file)).sort());
+  assert.deepEqual(fixture.visited, ['', 'assets', 'assets/fonts']);
+});
+
+test('gallery walker rejects escaping links and directory cycles without following them', () => {
+  const outside = walkerFixture({ assets: path.resolve('outside-gallery') });
+  assert.throws(() => outside.walk(outside.root), /outside scan root/);
+  assert.deepEqual(outside.visited, ['']);
+  const cycleRoot = path.resolve('gallery-walker-fixture');
+  const cycle = walkerFixture({ 'assets/fonts': cycleRoot });
+  assert.throws(() => cycle.walk(cycle.root), /Cyclic gallery directory/);
+  const fileLink = walkerFixture({ 'assets/card.webp': path.resolve('outside.webp') });
+  assert.throws(() => fileLink.walk(fileLink.root), /outside scan root/);
+});
 test('finite gallery plan has nine families and four genuine pointer/text profiles', () => {
   assert.equal(new Set(Object.values(h.BATCHES).flat()).size, 9); assert.equal(h.LIMIT * 3, 216);
   assert.deepEqual(h.PROFILES.map(p => [p.width, p.touch, p.scale]), [[320, true, true], [375, true, true], [1280, false, false], [1280, false, true]]);

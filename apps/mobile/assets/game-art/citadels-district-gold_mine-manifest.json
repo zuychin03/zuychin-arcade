@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-gold_mine.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2524747,
+    "sha256": "860920d6dbee5d5aee497666ca019dfb326792b52cbd9440efe7fb4acf329584"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-gold_mine.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23158,
+      "sha256": "33c72f0130c3e1649fa7ee460d4fd95fec6b7dac542cd6453a117d1af33f5cdc"
+    }
+  ],
+  "totalBytes": 23158,
+  "maxTotalBytes": 614400
+}

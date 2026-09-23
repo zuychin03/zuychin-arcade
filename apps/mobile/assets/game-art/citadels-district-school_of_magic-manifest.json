@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-school_of_magic.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2358849,
+    "sha256": "2ac418c932a918b4b7e48dd91a6455f69dbb6e194f24212f6d52add66cd3c1ec"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-school_of_magic.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19218,
+      "sha256": "c6ac514ab3899d0eccb6089739e7e6fd59cab23a3ed7394615c463bf4fe02e3f"
+    }
+  ],
+  "totalBytes": 19218,
+  "maxTotalBytes": 614400
+}

@@ -12,6 +12,7 @@ const saboteurCardHelpers = {};
 const saboteurCardModules = {
   'react-native': {}, 'react/jsx-runtime': {}, '@expo/vector-icons': {}, 'expo-linear-gradient': {},
   '../../../constants/theme': { ARCADE: {} }, '../../ui/CardSurface': {},
+  './ActionArtwork': {},
 };
 vm.runInNewContext(ts.transpileModule(fs.readFileSync(path.join(__dirname, '../components/saboteur/cards/ActionCardView.tsx'), 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX },

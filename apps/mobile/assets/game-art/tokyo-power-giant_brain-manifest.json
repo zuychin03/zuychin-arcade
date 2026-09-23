@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-giant_brain.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2485713,
+    "sha256": "805c7b9881f95ee77de50f770696dade8afe11a5c7b65602ebe5cd376242ecfe"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-giant_brain.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22410,
+      "sha256": "675acc428ae0765323a90ca49a87afcb042435e418a387672d281412d36f67c3"
+    }
+  ],
+  "totalBytes": 22410,
+  "maxTotalBytes": 614400
+}

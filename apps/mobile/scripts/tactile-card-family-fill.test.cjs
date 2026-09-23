@@ -20,8 +20,10 @@ function load(file, platform = 'web', fontScale = 1) {
     '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textScale: fontScale, textRef: { current: null }, onTextLayout() {} }) },
     './CardArtwork': { BangCardArtwork: 'Artwork', BANG_CARD_EMBLEM: { beer: 'beer' } },
     './PlaceArtwork': { PlaceArtwork: 'Artwork' },
+    './PowerArtwork': { PowerArtwork: 'Artwork' },
     './CitadelsDistrictArtwork': { CitadelsDistrictArtwork: 'Artwork', citadelsDistrictIcons: { unique: 'castle' } },
-    './SkullKingCardArtwork': { SkullKingCardArtwork: 'Artwork' },
+    './CitadelsRoleArtwork': { CitadelsRoleArtwork: 'RoleArtwork' },
+    './SkullKingCardArtwork': { SkullKingCardArtwork: 'Artwork', SkullKingSuitArtwork: 'SuitArtwork', SkullKingDeckArtwork: 'DeckArtwork' },
     '@zuychin-arcade/types': {
       NOT_ALONE_PLACE_BY_ID: { 1: { name: 'The Lair', summary: 'Complete Place rules.', accent: '#abc' } },
       CITADELS_ROLE_BY_ID: { king: { name: 'King', rank: 4, summary: 'Complete role rules.' } },

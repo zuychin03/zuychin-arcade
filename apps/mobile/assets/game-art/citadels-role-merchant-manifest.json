@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-role-merchant.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2770844,
+    "sha256": "9a7526678d716e9afba021d677ad12d51d491bdd1f81d546774931d763f10916"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-role-merchant.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 39918,
+      "sha256": "6cae1acc195fca8df6b717ec76539278e0f357dc41d9cc617e3b6ced6273e81b"
+    }
+  ],
+  "totalBytes": 39918,
+  "maxTotalBytes": 614400
+}

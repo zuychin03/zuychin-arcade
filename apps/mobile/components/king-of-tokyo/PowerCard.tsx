@@ -123,7 +123,7 @@ export function PowerCard({
       </View>
       {compact && heading}
       <View testID={`tokyo-power-art-${card.instanceId}`} style={{ width: '100%', maxWidth: compact ? 144 : 176, alignSelf: 'center', marginTop: 10, borderRadius: 10, overflow: 'hidden' }}>
-        <TokyoPowerArtwork category={definition.category} icon={visual.icon} color={visual.color} />
+        <TokyoPowerArtwork cardId={card.cardId} category={definition.category} icon={visual.icon} color={visual.color} />
       </View>
 
       <Text

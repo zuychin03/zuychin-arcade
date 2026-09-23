@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-market.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2423683,
+    "sha256": "840a438d79f00e589b0426e20bf1b12b901a3aea2ed69d088f8fee40656ade9a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-market.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20568,
+      "sha256": "b36c65a3f6a6790ac8fb09aaaf1eb605e5622e39b8dee6e626284a5dd3599d85"
+    }
+  ],
+  "totalBytes": 20568,
+  "maxTotalBytes": 614400
+}

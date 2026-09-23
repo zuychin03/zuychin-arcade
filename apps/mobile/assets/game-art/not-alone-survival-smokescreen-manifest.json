@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-smokescreen.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2230859,
+    "sha256": "a0a0c3dc8cac05fe07c25b1a714db6ac9382d347b510349d4fa8ee1bd9eea4c4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-smokescreen.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21994,
+      "sha256": "925d12398faaa7e33d85531e04de70a31f714290dcca2affbabfff469ac65074"
+    }
+  ],
+  "totalBytes": 21994,
+  "maxTotalBytes": 614400
+}

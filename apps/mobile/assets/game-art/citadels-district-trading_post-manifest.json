@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-trading_post.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2439257,
+    "sha256": "d2f3762ed37b98fda0bbd7dd51631f0fbcadef8c714e58a023b82c87b7134c02"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-trading_post.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21000,
+      "sha256": "7c880e333180ac6b87a22cc7e92bd8365e57f24bde4b5b69156206b845186c67"
+    }
+  ],
+  "totalBytes": 21000,
+  "maxTotalBytes": 614400
+}

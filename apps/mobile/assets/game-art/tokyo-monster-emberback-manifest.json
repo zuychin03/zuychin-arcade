@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-monster-emberback.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2470943,
+    "sha256": "1b5d9abc1d23efd7185e29dd945c8e6fe29cd94a48dc0a73a20a8203b4a47ffe"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-monster-emberback.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22210,
+      "sha256": "f18be34704f682e15761d54a50ff99611a5fdf2c136f417d88153a2b6bd4a66e"
+    }
+  ],
+  "totalBytes": 22210,
+  "maxTotalBytes": 614400
+}

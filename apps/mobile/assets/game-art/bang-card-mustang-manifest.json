@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-mustang.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2221487,
+    "sha256": "126c75e295c5a3c9b577dd1c28a58a9fe1bfcdf1e173cb394963d1f653b666dc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-mustang.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21126,
+      "sha256": "2f640f899ce0e2c71da6b58f354330366e0f9e3ddef037334440bb55a0c13522"
+    }
+  ],
+  "totalBytes": 21126,
+  "maxTotalBytes": 614400
+}

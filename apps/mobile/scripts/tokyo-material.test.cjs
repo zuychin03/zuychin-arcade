@@ -20,7 +20,7 @@ function load(file, modules) {
 function harness() {
   const definitions = load('../../packages/types/src/king-of-tokyo-cards.ts', {});
   const modules = {
-    react: { useRef: value => ({ current: value }) },
+    react: { useRef: value => ({ current: value }), useState: value => [value, () => {}] },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width: 375, fontScale: 1 }), StyleSheet: { absoluteFill: {} } },
     'react-native-svg': { default: 'Svg', Svg: 'Svg', Circle: 'Circle', Defs: 'Defs', LinearGradient: 'SvgGradient', Line: 'Line', Path: 'Path', Rect: 'Rect', Stop: 'Stop' },
@@ -30,11 +30,13 @@ function harness() {
     '../../constants/theme': { TOKYO, ARCADE: TOKYO },
     '../ui/ScalePressable': { ScalePressable: 'Button' },
     './MonsterAvatar': { MonsterAvatar: 'MonsterAvatar' },
+    '../../assets/game-art/tokyo-arena-backdrop.webp': 'arena.webp',
   };
   modules['../ui/CardSurface'] = load('components/ui/CardSurface.tsx', modules);
   modules['./TokyoPowerArtwork'] = load('components/king-of-tokyo/TokyoPowerArtwork.tsx', {
     ...modules, '../ui/GameCover': { GameCover: 'GameCover' },
     ...Object.fromEntries(categories.map(category => [`../../assets/game-art/tokyo-power-${category}.webp`, category + '.webp'])),
+    ...Object.fromEntries(definitions.KING_OF_TOKYO_POWER_CARDS.map(card => [`../../assets/game-art/tokyo-power-${card.id}.webp`, card.id + '.webp'])),
   });
   return { modules, definitions, ...modules['./TokyoPowerArtwork'],
     ...load('components/king-of-tokyo/TokyoDie.tsx', modules),
@@ -44,11 +46,11 @@ function harness() {
   };
 }
 
-test('every power definition retains exact live text and selects only its category artwork', () => {
+test('every power definition retains exact live text and selects its named artwork', () => {
   const { PowerCard, definitions } = harness();
   for (const definition of definitions.KING_OF_TOKYO_POWER_CARDS) {
     const tree = PowerCard({ card: { cardId: definition.id, instanceId: 'owned-instance', counters: 2 }, compact: true });
-    assert.equal(nodes(tree).find(node => node.type === 'GameCover').props.source, definition.category + '.webp');
+    assert.equal(nodes(tree).find(node => node.type === 'GameCover').props.source, definition.id + '.webp');
     for (const copy of [definition.name, definition.effect, definition.kind.toUpperCase(), definition.category.toUpperCase(), '2 COUNTERS']) assert(text(tree).includes(copy), copy);
     const prose = nodes(tree).find(node => node.type === 'Text' && node.props.children === definition.effect);
     assert.equal(prose.props.style.fontFamily, 'Outfit_400Regular');

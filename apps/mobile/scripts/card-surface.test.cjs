@@ -9,6 +9,7 @@ function load(name, extra = {}) {
   const jsx = (type, props) => ({ type, props });
   const modules = {
     'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', StyleSheet: { absoluteFill: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 } } },
     ...extra,
   };
@@ -83,11 +84,25 @@ test('material colours and radius are caller owned with offset soft contact shad
   assert.equal(face(tree).props.style.backgroundColor, '#112233');
   assert.equal(face(tree).props.style.borderRadius, 5);
   assert.equal(tree.props.children[0].props.style.backgroundColor, '#223344');
-  assert.equal(tree.props.children[0].props.style.boxShadow, '0 3px 6px rgba(0,0,0,0.24)');
+  assert.equal(tree.props.children[0].props.style.boxShadow, '0 5px 10px rgba(0,0,0,0.38)');
+  assert.match(face(tree).props.style.boxShadow, /inset/);
   const bevel = face(tree).props.children[1].props.style[1];
   assert.equal(bevel.borderTopColor, '#334455');
   assert.equal(bevel.borderLeftColor, '#334455');
   assert.equal(bevel.borderWidth, 1);
+});
+
+test('neon material layers stay decorative and never change intrinsic face sizing', () => {
+  for (const selected of [false, true]) {
+    const tree = render({ selected, highlightColor: '#7395FF' });
+    const overlay = face(tree).props.children[1];
+    assert.equal(overlay.props.pointerEvents, 'none');
+    assert.equal(overlay.props.children[0].type, 'Gradient');
+    assert.equal(overlay.props.children[1].props.style.position, 'absolute');
+    assert.equal(face(tree).props.style.height, undefined);
+    assert.equal(face(tree).props.children[0].props.children, 'Readable face');
+    if (selected) assert.match(tree.props.children[0].props.style.boxShadow, /#7395FF/);
+  }
 });
 
 test('selection and disabled visuals do not change face geometry or disable children', () => {

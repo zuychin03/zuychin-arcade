@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-wrong_track.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2673106,
+    "sha256": "0213ec5a42322e4c423c03f095708c413c6c6094e3f7cc0da38d145dc2cb56d3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-wrong_track.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 30594,
+      "sha256": "29cd12dbe7b984e83b7f2cfbe5b45046ee22708763cae7f839e8cb5101acfb35"
+    }
+  ],
+  "totalBytes": 30594,
+  "maxTotalBytes": 614400
+}

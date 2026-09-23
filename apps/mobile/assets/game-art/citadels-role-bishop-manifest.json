@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-role-bishop.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2033053,
+    "sha256": "54f85f19f8eb0d847be31c7c8288c51560c83211b6300160cd636e0b95621295"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-role-bishop.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13478,
+      "sha256": "c13287ea24308bccccbce55d29c6a660c7837a0f6f3a1da7b9dd186f82fb4c64"
+    }
+  ],
+  "totalBytes": 13478,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-bart_cassidy.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2204692,
+    "sha256": "321aab85bd6012ef72729bb812f0ca24afcc85976ae1991b12847b04862a518a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-bart_cassidy.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15988,
+      "sha256": "f4c8b9d7b5b6077aab5cf0319a08b52b95a8abcb0db9adf5fb3019b373c96b51"
+    }
+  ],
+  "totalBytes": 15988,
+  "maxTotalBytes": 614400
+}

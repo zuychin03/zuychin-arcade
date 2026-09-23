@@ -37,6 +37,9 @@ ios/
 /docs/design/SHARED_SHELL_TACTILE_REVIEW.md
 /docs/design/CARD_SIZING_TACTILE_REVIEW.md
 /docs/design/COLT_TACTILE_PLAN.md
+/docs/design/CUSTOM_ARTWORK_SWEEP.md
+/docs/design/game-art/*-display-context-audit.md
+/docs/design/game-art/*-generation.json
 /docs/design/COUP_TOKYO_TACTILE_PLAN.md
 /docs/design/SKULL_CITADELS_TACTILE_PLAN.md
 /docs/design/FINAL_THREE_TACTILE_PLAN.md

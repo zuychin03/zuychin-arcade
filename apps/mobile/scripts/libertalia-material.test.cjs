@@ -29,7 +29,7 @@ function cardModule(platform = 'web', fontScale = 1, width = 375) {
     react: { useState(initial) { const index = cursor++; if (!(index in state)) state[index] = initial; return [state[index], value => { state[index] = typeof value === 'function' ? value(state[index]) : value; }]; } },
     'react-native': { View: 'View', Text: 'Text', Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },
     '../ui/ScalePressable': { ScalePressable: 'Pressable' }, '../ui/CardSurface': { CardSurface: 'CardSurface' },
-    './LibertaliaArtwork': { LibertaliaPhaseArtwork: 'PhaseArtwork' },
+    './LibertaliaCrewArtwork': { LibertaliaCrewArtwork: 'CrewArtwork' },
   });
   return { CrewCard(props) { cursor = 0; return module.CrewCard(props); } };
 }
@@ -55,7 +55,7 @@ test('all forty crew retain exact live rank, name, full rule and every printed p
     assert(copy.some(node => node.props.children === crew.name));
     assert(copy.some(node => node.props.children === crew.summary));
     for (const phase of crew.phases) assert(copy.some(node => node.props.children === phase.toUpperCase()));
-    assert.equal(all.find(node => node.type === 'PhaseArtwork').props.phase, crew.phases[0]);
+    assert.equal(all.find(node => node.type === 'CrewArtwork').props.rank, crew.rank);
     assert.equal(all.filter(node => node.type === 'CardSurface').length, 1);
     assert.equal(all.filter(node => node.type === 'Pressable').length, 0);
     assert(all.some(node => node.props.accessibilityLabel === `${crew.name}, rank ${crew.rank}. Timing: ${crew.phases.join(', ')}. ${crew.summary}`));
@@ -112,6 +112,7 @@ test('fluid cards forward focus without selecting and native dimensions remain p
 test('crew faces carry row stretch through static and actionable wrappers without fixing content height', () => {
   const { CardSurface } = load('components/ui/CardSurface.tsx', {
     'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', StyleSheet: { absoluteFill: {}, create: value => value } },
   });
   const style = node => Object.assign({}, ...[node.props.style].flat(Infinity));
@@ -226,6 +227,7 @@ test('compact loot retains accessible effects and decorative duplicates never ad
 test('loot faces stretch with their row without fixed heights or hidden rule text', () => {
   const { CardSurface } = load('components/ui/CardSurface.tsx', {
     'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', StyleSheet: { absoluteFill: {}, create: value => value } },
   });
   const style = node => Object.assign({}, ...[node.props.style].flat(Infinity));
@@ -295,6 +297,30 @@ test('original loot and phase artworks have exact static mappings and noninterac
     const style = LibertaliaLootArtwork({ kind: 'map', size }).props.style;
     assert.equal(style.width, expected); assert.equal(style.height, expected);
   }
+});
+
+test('forty original crew portraits use exact identities within the unchanged artwork footprint', () => {
+  const assets = Object.fromEntries(definitions.LIBERTALIA_CREW.map(crew => [`../../assets/game-art/libertalia-crew-${String(crew.rank).padStart(2, '0')}.webp`, crew.rank]));
+  const { LibertaliaCrewArtwork } = load('components/libertalia/LibertaliaCrewArtwork.tsx', { ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'Cover' } });
+  for (const crew of definitions.LIBERTALIA_CREW) {
+    const tree = LibertaliaCrewArtwork({ rank: crew.rank });
+    const cover = nodes(tree).find(node => node.type === 'Cover');
+    assert.equal(tree.props.testID, `libertalia-crew-art-${crew.rank}`);
+    assert.equal(tree.props.pointerEvents, 'none');
+    assert.equal(tree.props.accessible, false);
+    assert.equal(tree.props.accessibilityElementsHidden, true);
+    assert.equal(tree.props.importantForAccessibility, 'no-hide-descendants');
+    assert.equal(tree.props.style.width, '100%');
+    assert.equal(tree.props.style.maxWidth, 280);
+    assert.equal(cover.props.source, crew.rank);
+    assert.equal(cover.props.aspectRatio, 1.6);
+    assert.equal(cover.props.backgroundColor, palette.panel);
+    assert.equal(nodes(cover.props.fallback).find(node => node.type === 'Icon').props.name, 'account-outline');
+    const file = path.resolve(__dirname, `../assets/game-art/libertalia-crew-${String(crew.rank).padStart(2, '0')}.webp`);
+    assert(fs.statSync(file).size > 0);
+    assert(fs.statSync(file).size <= 48 * 1024);
+  }
+  for (const rank of [0, 41, -1, 1.5, NaN]) assert.equal(LibertaliaCrewArtwork({ rank }), null);
 });
 
 test('live crew and loot text use loaded fonts and body colours above 4.5 contrast', () => {

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-manor.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2540569,
+    "sha256": "b3c750b45665a531f63acca8e4cce002cb49b09d44d4e56c51ef130363906ee9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-manor.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23846,
+      "sha256": "50ee34a9f992d8719635ee6c493e6a70e2b45783410b510c113ebc2b8484e9cb"
+    }
+  ],
+  "totalBytes": 23846,
+  "maxTotalBytes": 614400
+}

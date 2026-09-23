@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-map_room.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2367417,
+    "sha256": "7d5b45cf7b94e6fe9a69dba9dd8df7e203bb36fa003378e858fa4adb4fa332de"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-map_room.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18652,
+      "sha256": "00a66e99995ebb04ce18a8e8bbc3ec19fb7e094a085b39a56ca93108952c3256"
+    }
+  ],
+  "totalBytes": 18652,
+  "maxTotalBytes": 614400
+}

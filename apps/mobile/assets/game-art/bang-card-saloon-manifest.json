@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-saloon.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2452013,
+    "sha256": "44a7df14d0069e0a4436c15ce12f87bbf7eea217c55993344fa4d4e06cea2a2e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-saloon.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21752,
+      "sha256": "ea2254da474023bd5dc030fe3368d1bd46130229a14902d33ae69fe2a1135fe6"
+    }
+  ],
+  "totalBytes": 21752,
+  "maxTotalBytes": 614400
+}

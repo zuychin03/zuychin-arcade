@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-apartment_building.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2370642,
+    "sha256": "400ec73d5a9a33df7e101e916e2844835076f3b397c174263c96034786cbece1"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-apartment_building.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21230,
+      "sha256": "1d31310d3b6cfba3646fd4b5218798fe2e2fc3613a78e673c54623afc12592e7"
+    }
+  ],
+  "totalBytes": 21230,
+  "maxTotalBytes": 614400
+}

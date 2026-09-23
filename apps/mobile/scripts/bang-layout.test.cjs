@@ -151,7 +151,7 @@ test('public stations show turn and distance only during a live active turn, nev
     const game = { status, activePlayerId: 'a', players }, active = players[0];
     const showTurn = evaluate(variable('showTurn'), { game, active });
     const tree = evaluate(panel.getText(ast), { exports: {}, game, active, showTurn, me: 'b', room: { players: [{ playerId: 'b', isConnected: true }] },
-      Panel: 'Panel', View: 'View', Text: 'Text', RoleBadge: 'RoleBadge', LifeTokens: 'LifeTokens', BANG: { gold: 'gold' },
+      Panel: 'Panel', View: 'View', Text: 'Text', RoleBadge: 'RoleBadge', LifeTokens: 'LifeTokens', BangCharacterArtwork: 'CharacterArtwork', BANG: { gold: 'gold' },
       BANG_CHARACTERS: { bart: { name: 'Bart Cassidy', summary: 'Character ability' } }, styles: new Proxy({}, { get: (_, key) => key }),
       require: () => ({ jsx, jsxs: jsx }) });
     const nodes = walk(tree), text = nodes.filter(node => node.type === 'Text').flatMap(node => [node.props.children].flat(Infinity)).join(' ');

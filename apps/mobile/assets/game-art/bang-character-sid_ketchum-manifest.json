@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-sid_ketchum.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2304808,
+    "sha256": "b7a9c682fe654bb385ab21574ee1250683f43c0ecc8c8978fc68ce004f08b2f0"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-sid_ketchum.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16968,
+      "sha256": "feb0b8099a1dc39d3c93684707051339b5d205fa6e8f7ae76ab6f275f87ebfb3"
+    }
+  ],
+  "totalBytes": 16968,
+  "maxTotalBytes": 614400
+}

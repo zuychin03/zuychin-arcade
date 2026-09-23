@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-smithy.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2374854,
+    "sha256": "958db01c4e26d29ff78a7047da2773abd28d3339f9ea4619afbb864ae5b417a7"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-smithy.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20552,
+      "sha256": "3d914d0be8543dd531d4dab48bf1fa70a796fd286cd56ea7276b88c2e0454283"
+    }
+  ],
+  "totalBytes": 20552,
+  "maxTotalBytes": 614400
+}

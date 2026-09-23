@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-bang.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2615121,
+    "sha256": "8a0b2c13f7abe3d88e6352a2181fa1de1d7e16ad3d1cf287dc07b978bc94b064"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-bang.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22108,
+      "sha256": "c3eb7f834b8f1c85e75f8bd206004ee6817bce500c8d759e663b1036cd1d8c85"
+    }
+  ],
+  "totalBytes": 22108,
+  "maxTotalBytes": 614400
+}

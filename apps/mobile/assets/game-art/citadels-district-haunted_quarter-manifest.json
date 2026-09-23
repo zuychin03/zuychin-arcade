@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-haunted_quarter.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2449361,
+    "sha256": "9fd3b5f7f7d73bb093a392acaab79126448abe29c2d1c72a4900417743d91455"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-haunted_quarter.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19190,
+      "sha256": "5879000646436a7a8b03a8de146b9ad164fc4e39db04c8622e568d5a63f9b0d3"
+    }
+  ],
+  "totalBytes": 19190,
+  "maxTotalBytes": 614400
+}

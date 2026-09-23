@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-mimic.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2431245,
+    "sha256": "15762a38c9591d15e25a04b7c49261e9dab9eab849a28a2643637d463a179ceb"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-mimic.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24930,
+      "sha256": "a69f9408ee87ff138b08316f859fcf0b856f3eb418d4e75ef0a58605391ed2a6"
+    }
+  ],
+  "totalBytes": 24930,
+  "maxTotalBytes": 614400
+}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { SkullKingDeckArtwork } from '../../components/skull-king/SkullKingCardArtwork';
 import {
   AccessibilityInfo,
   BackHandler,
@@ -454,7 +455,10 @@ export default function SkullKingGame() {
                     <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: SKULL_KING.teal, fontSize: 24 }}>{player.totalScore}</Text>
                   </View>
                   <Text style={{ fontFamily: 'SpaceMono_700Bold', color: player.forfeited ? SKULL_KING.coral : active ? SKULL_KING.teal : SKULL_KING.muted, fontSize: 12, lineHeight: 18, marginTop: 3 }}>{status}</Text>
-                  <Text style={{ fontFamily: 'SpaceMono_400Regular', color: SKULL_KING.muted, fontSize: 12, lineHeight: 18, marginTop: 2 }}>{player.forfeited ? 'NO SCORE · CANNOT WIN' : game.bidsRevealed ? `${player.tricksWon} / ${player.bid} TRICKS` : player.bidSubmitted ? 'BID LOCKED' : 'CHOOSING BID…'} · {player.cardCount} {player.cardCount === 1 ? 'CARD' : 'CARDS'}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                    {player.cardCount > 0 ? <View style={{ width: 24, borderRadius: 4, overflow: 'hidden', flexShrink: 0 }}><SkullKingDeckArtwork /></View> : null}
+                    <Text style={{ flex: 1, minWidth: 0, fontFamily: 'SpaceMono_400Regular', color: SKULL_KING.muted, fontSize: 12, lineHeight: 18 }}>{player.forfeited ? 'NO SCORE · CANNOT WIN' : game.bidsRevealed ? `${player.tricksWon} / ${player.bid} TRICKS` : player.bidSubmitted ? 'BID LOCKED' : 'CHOOSING BID…'} · {player.cardCount} {player.cardCount === 1 ? 'CARD' : 'CARDS'}</Text>
+                  </View>
                   {player.exactLastRound !== null ? <Text style={{ fontFamily: 'SpaceMono_700Bold', color: player.exactLastRound ? SKULL_KING.teal : SKULL_KING.coral, fontSize: 12, lineHeight: 18, marginTop: 2 }}>LAST {player.roundScore >= 0 ? '+' : ''}{player.roundScore} · {player.exactLastRound ? 'EXACT' : 'MISSED'}</Text> : null}
                 </View>
               );

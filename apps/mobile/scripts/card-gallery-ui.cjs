@@ -16,7 +16,22 @@ const LIMIT = 72;
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 function filesIn(root) {
-  return fs.readdirSync(root, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? (['dist', 'node_modules', '.expo'].includes(entry.name) ? [] : filesIn(path.join(root, entry.name))) : [path.join(root, entry.name)]).sort();
+  const boundary = fs.realpathSync(root), active = new Set();
+  function walk(directory) {
+    const real = fs.realpathSync(directory);
+    assert(!active.has(real), 'Cyclic gallery directory');
+    active.add(real);
+    const files = fs.readdirSync(directory).flatMap(name => {
+      const file = path.join(directory, name), directoryEntry = fs.statSync(file).isDirectory();
+      if (directoryEntry && ['dist', 'node_modules', '.expo'].includes(name)) return [];
+      const relative = path.relative(boundary, fs.realpathSync(file));
+      assert(relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative), 'Gallery file resolves outside scan root');
+      return directoryEntry ? walk(file) : [file];
+    });
+    active.delete(real);
+    return files;
+  }
+  return walk(root).sort();
 }
 function sourceHashes() {
   const roots = ['apps/mobile/components', 'apps/mobile/hooks', 'apps/mobile/constants', 'apps/mobile/lib', 'apps/mobile/assets', 'packages/types/src', 'apps/mobile/scripts'];

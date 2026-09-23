@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-temple.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2234943,
+    "sha256": "8597ee66248a4628d13c4cfa24d3a6983d43f5ba2d50cd40f1c2614cfc4a35f3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-temple.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16232,
+      "sha256": "cbf15bfc8bddf93213191bf1ed3f1c4b46cc3758c5cc0d8543ea21ec6183319d"
+    }
+  ],
+  "totalBytes": 16232,
+  "maxTotalBytes": 614400
+}

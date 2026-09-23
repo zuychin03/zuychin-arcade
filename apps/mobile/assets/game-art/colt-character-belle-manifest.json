@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-character-belle.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2000639,
+    "sha256": "8500278af7a92f3fb380ae9b60619a1887d14e41519f4f7e12cdc7d0392e0bde"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-character-belle.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 12706,
+      "sha256": "b3f664f792f52135d47a556852f7895e51ba64dd7567817a01c164689d5f3061"
+    }
+  ],
+  "totalBytes": 12706,
+  "maxTotalBytes": 614400
+}

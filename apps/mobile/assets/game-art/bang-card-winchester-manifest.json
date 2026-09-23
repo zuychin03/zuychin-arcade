@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-winchester.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2124080,
+    "sha256": "39d598d560f2a59b468bb6e0900817e1d431d39422d32b9ed8c9070f18a20ae2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-winchester.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19288,
+      "sha256": "c65008592703ae56b0657aa08358a87c56e48792844a88d44a6882a4267f7e50"
+    }
+  ],
+  "totalBytes": 19288,
+  "maxTotalBytes": 614400
+}

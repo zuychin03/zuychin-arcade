@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-dynamite.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2421698,
+    "sha256": "d465c73caba1498e9c98ab039b6be39591b028042eae4e1c135492591ed2ba6b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-dynamite.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24066,
+      "sha256": "be19408ce6ab671b955f33691b568fa3533976706687d985593956a419d81549"
+    }
+  ],
+  "totalBytes": 24066,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-tool-lantern-intact.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1887787,
+    "sha256": "dff7adef8c7ff42a56237b2d4622009bcfd908fae941f5445473b75ab89c8ab3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-tool-lantern-intact.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11596,
+      "sha256": "128f1737fe112cc4a46d2d9bad5a9b0c7ef3135fdf34cd14b12b4ff7444a8c21"
+    }
+  ],
+  "totalBytes": 11596,
+  "maxTotalBytes": 614400
+}

@@ -1,9 +1,10 @@
 import { Text, View, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import type { BangCard } from '@zuychin-arcade/types';
+import { BANG_CHARACTERS, type BangCard, type BangCharacterId } from '@zuychin-arcade/types';
 import { BANG as C } from '../../constants/theme';
 import { BangCardView, BANG_ROLE_GUIDE } from './Card';
 import { CardGrid } from '../ui/CardGrid';
+import { BangCharacterArtwork } from './CharacterArtwork';
 
 const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text } as const;
 const heading = { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: C.gold } as const;
@@ -11,6 +12,7 @@ const examples: BangCard[] = [
   { id: 'rules-bang', name: 'bang', suit: 'hearts', rank: 'A' },
   { id: 'rules-mustang', name: 'mustang', suit: 'hearts', rank: '8' },
 ];
+const characters = Object.entries(BANG_CHARACTERS) as [BangCharacterId, (typeof BANG_CHARACTERS)[BangCharacterId]][];
 
 export function BangRulesGuide() {
   const { fontScale } = useWindowDimensions();
@@ -28,6 +30,16 @@ export function BangRulesGuide() {
           <Text style={body}>{BANG_ROLE_GUIDE[role].goal}</Text>
         </View>)}
       </View>
+    </View>
+    <View style={{ gap: 12 }}>
+      <Text accessibilityRole="header" style={heading}>Meet the frontier characters</Text>
+      <Text style={body}>Characters and their abilities are public. They do not reveal anyone's secret role.</Text>
+      <CardGrid items={characters} keyExtractor={item => item[0]} minCardWidth={240} maxCardWidth={360} textScale={fontScale} gap={16}
+        renderItem={([id, character]) => <View style={{ width: '100%', minWidth: 0, gap: 8 }}>
+          <BangCharacterArtwork character={id} size={96} />
+          <Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{character.name}</Text>
+          <Text style={body}>{character.summary}</Text>
+        </View>} />
     </View>
     <View style={{ gap: 12 }}>
       <Text accessibilityRole="header" style={heading}>Life also limits your hand</Text>

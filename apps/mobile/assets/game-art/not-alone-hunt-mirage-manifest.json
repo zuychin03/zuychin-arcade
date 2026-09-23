@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-mirage.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2122180,
+    "sha256": "1a84362f1c60f6ca08a6a929ff6d2f379cd47b9269b2b59bee409eca91226c75"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-mirage.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19986,
+      "sha256": "09e5d3b3973bb73f32899847ca72ff9ce9155a22102ac564a7b84c18b551776c"
+    }
+  ],
+  "totalBytes": 19986,
+  "maxTotalBytes": 614400
+}

@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LIBERTALIA_CREW } from '@zuychin-arcade/types';
 import { ScalePressable } from '../ui/ScalePressable';
 import { CardSurface } from '../ui/CardSurface';
-import { LibertaliaPhaseArtwork } from './LibertaliaArtwork';
+import { LibertaliaCrewArtwork } from './LibertaliaCrewArtwork';
 import { LIBERTALIA as C } from '../../constants/theme';
 
 interface Props {
@@ -30,7 +30,7 @@ export function CrewCard({ rank, selection, disabled = false, onPress, onFocus, 
   const accent = selection === 'submitted' ? C.gold : C.sky;
   const stateLabel = selection === 'submitted' ? 'Current secret choice.' : selection === 'candidate' ? 'Proposed choice, not submitted.' : '';
   const label = `${crew.name}, rank ${rank}. Timing: ${crew.phases.join(', ')}. ${crew.summary}${stateLabel ? ` ${stateLabel}` : ''}`;
-  const content = <CardSurface fill radius={14} depth={3} faceColor={C.panel} edgeColor={C.bg} highlightColor={selection ? accent : C.border} selected={Boolean(selection)}>
+  const content = <CardSurface fill radius={14} depth={3} faceColor={C.panel} edgeColor={C.bg} highlightColor={selection ? accent : C.sky} selected={Boolean(selection)}>
     <View style={{ padding: 12, gap: 10, minWidth: 0 }}>
       <View testID="libertalia-crew-header" onLayout={event => { const measured = event.nativeEvent.layout.width; if (Number.isFinite(measured) && measured > 0) setHeaderWidth(measured); }} style={{ flexDirection: stackedHeader ? 'column' : 'row', alignItems: 'flex-start', gap: 10, minWidth: 0 }}>
         <View testID="libertalia-crew-metadata" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexShrink: 0, ...(stackedHeader ? { width: '100%' } : {}) }}>
@@ -41,7 +41,7 @@ export function CrewCard({ rank, selection, disabled = false, onPress, onFocus, 
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>{crew.phases.map(phase => <View key={phase} style={{ borderRadius: 6, backgroundColor: C.bg, paddingHorizontal: 7, paddingVertical: 4 }}><Text style={{ fontFamily: 'Outfit_700Bold', color: C.violet, fontSize: 13, lineHeight: 18 }}>{phase.toUpperCase()}</Text></View>)}</View>
     </View>
-    {crew.phases[0] ? <LibertaliaPhaseArtwork phase={crew.phases[0]} /> : null}
+    <LibertaliaCrewArtwork rank={rank} />
     <View style={{ padding: 12, gap: 10, minWidth: 0 }}>
       <Text style={{ fontFamily: 'Outfit_400Regular', color: C.text, fontSize: 15, lineHeight: 22 }}>{crew.summary}</Text>
       {onPress ? <Text style={{ fontFamily: 'Outfit_700Bold', color: disabled && !selection ? C.muted : accent, fontSize: 14, lineHeight: 20 }}>{selection === 'submitted' ? 'CURRENT SECRET CHOICE' : selection === 'candidate' ? 'PROPOSED · CONFIRM TO SUBMIT' : disabled ? 'NOT SELECTABLE NOW' : 'CHOOSE THIS CREW'}</Text> : null}

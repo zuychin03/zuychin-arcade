@@ -58,6 +58,13 @@ test('regular power cards retain their inline title and price layout', () => {
   assert.equal(titlePath.at(-1).props.style.fontSize, 17);
 });
 
+test('power illustration identity does not replace full live rules or printed cost', () => {
+  const tree = render();
+  assert.equal(findPath(tree, node => node.type === 'Artwork').at(-1).props.cardId, 'complete_destruction');
+  assert(findPath(tree, node => node.props?.children === 'A final roll with all six faces gains 9 victory points.'));
+  assert(findPath(tree, node => node.props?.accessibilityLabel === 'Printed cost 3 energy'));
+});
+
 test('compact header layout preserves action semantics and touch size', () => {
   let presses = 0;
   const tree = render({ compact: true, actionLabel: 'BUY · 3 ENERGY', onAction: () => presses++ });

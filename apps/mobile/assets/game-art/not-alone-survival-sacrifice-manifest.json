@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-sacrifice.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2400432,
+    "sha256": "9ccd71fe4a910556f0482b2c18ead89f84ee428a8d0e68816f5e6b49fc7415c8"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-sacrifice.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 26316,
+      "sha256": "a944639db0e3d164380783338d09db782f7920337463b194ef9750b25070667f"
+    }
+  ],
+  "totalBytes": 26316,
+  "maxTotalBytes": 614400
+}

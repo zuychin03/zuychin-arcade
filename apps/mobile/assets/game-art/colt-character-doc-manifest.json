@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-character-doc.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2128430,
+    "sha256": "e0f82233867852812b4ba8b5f5732c9501c6b4066bdbfb508469581fee2fa4e1"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-character-doc.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16262,
+      "sha256": "0e1427ec171a90466f73b499f776f91380e62a70441fb9b46f4d3842ba0be6c8"
+    }
+  ],
+  "totalBytes": 16262,
+  "maxTotalBytes": 614400
+}

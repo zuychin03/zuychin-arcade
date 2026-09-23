@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-herd_culler.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2329295,
+    "sha256": "7edf4ec243ba60199c6b340e63cf40cf9bf10bf0b6e713d31c81af99e98649fa"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-herd_culler.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19986,
+      "sha256": "ae8ab48f1fc97ac4e573222caba6fcd78f2d0fa8f3fefa9638f4c764c854c9dd"
+    }
+  ],
+  "totalBytes": 19986,
+  "maxTotalBytes": 614400
+}

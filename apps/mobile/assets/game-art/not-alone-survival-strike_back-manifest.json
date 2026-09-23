@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-strike_back.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2294116,
+    "sha256": "1a6bcc4302da7cd7e7c5a26df2f6e750b606139c569db8410fa5080d328ec734"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-strike_back.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23726,
+      "sha256": "0796bcc795c2846699f6091e690e7012652377e24a68e31e9325ad5ea45fff1b"
+    }
+  ],
+  "totalBytes": 23726,
+  "maxTotalBytes": 614400
+}

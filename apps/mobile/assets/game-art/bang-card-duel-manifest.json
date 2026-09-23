@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-duel.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2520568,
+    "sha256": "8e7e994fa9fd5cc9710552664e64fec097a1699229cecdaee664392b9ddf4cec"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-duel.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23422,
+      "sha256": "299b6c3d474cc84efbccddc05037bca094b9a6a2fb4516bf287da28f51fc63fe"
+    }
+  ],
+  "totalBytes": 23422,
+  "maxTotalBytes": 614400
+}

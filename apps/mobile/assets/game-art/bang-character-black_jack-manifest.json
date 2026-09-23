@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-black_jack.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2067118,
+    "sha256": "fb3ddcf2e2674dc2f031d223ab3504fc90ffcd2e5bb0d93091c8ef7b7676eb30"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-black_jack.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14356,
+      "sha256": "f01de6e7a319d0207803c6649303bd8bdee9722174ed354e735b9599ab7fdb28"
+    }
+  ],
+  "totalBytes": 14356,
+  "maxTotalBytes": 614400
+}

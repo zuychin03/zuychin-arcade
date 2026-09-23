@@ -1,6 +1,7 @@
 import { Platform, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { CardSurface } from '../ui/CardSurface';
 import { CitadelsDistrictArtwork, citadelsDistrictIcons } from './CitadelsDistrictArtwork';
+import { CitadelsRoleArtwork } from './CitadelsRoleArtwork';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CitadelsDistrictCard, CitadelsRole } from '@zuychin-arcade/types';
 import { CITADELS_ROLE_BY_ID } from '@zuychin-arcade/types';
@@ -68,7 +69,7 @@ export function CitadelsDistrictView({ card, compact = false, disabled = false, 
           </View>
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: CITADELS.text, fontSize: compact ? 16 : 18, lineHeight: compact ? 22 : 24 }}>{card.name}</Text>
           <View testID={`citadels-district-art-${card.id}`} style={{ width: '100%', borderRadius: 10, overflow: 'hidden' }}>
-            <CitadelsDistrictArtwork category={card.color} color={color} compact={compact} />
+            <CitadelsDistrictArtwork templateId={card.templateId} category={card.color} color={color} compact={compact} />
           </View>
           {card.effectText ? <Text style={{ fontFamily: 'Outfit_400Regular', color: CITADELS.text, fontSize: compact ? 14 : 15, lineHeight: compact ? 20 : 22 }}>{card.effectText}</Text> : null}
           {selected ? <SelectionCue color={color} /> : null}
@@ -80,28 +81,9 @@ export function CitadelsDistrictView({ card, compact = false, disabled = false, 
   return onPress ? <ScalePressable disabled={disabled} accessibilityLabel={accessibilityLabel} accessibilityState={{ selected, disabled }} onPress={onPress} style={{ ...sizing, minHeight: 48 }}>{content}</ScalePressable> : content;
 }
 
-const ROLE_ICON: Record<CitadelsRole, keyof typeof MaterialCommunityIcons.glyphMap> = {
-  assassin: 'knife-military',
-  thief: 'hand-coin-outline',
-  magician: 'magic-staff',
-  king: 'crown',
-  bishop: 'chess-bishop',
-  merchant: 'storefront-outline',
-  architect: 'compass-outline',
-  warlord: 'shield-sword-outline',
-};
-
-function RoleInsignia({ role, color }: { role: CitadelsRole; color: string }) {
-  return <View testID={`citadels-role-insignia-${role}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ minHeight: 112, alignItems: 'center', justifyContent: 'center', padding: 12 }}>
-    <View style={{ position: 'absolute', width: 104, height: 20, bottom: 8, borderRadius: 12, backgroundColor: CITADELS.bg, boxShadow: '0 4px 7px rgba(0,0,0,0.3)' }} />
-    <View style={{ width: 84, height: 84, borderRadius: 24, backgroundColor: `${color}18`, borderWidth: 2, borderColor: `${color}88`, borderBottomWidth: 5, alignItems: 'center', justifyContent: 'center', transform: [{ rotate: '-5deg' }], boxShadow: '0 4px 7px rgba(0,0,0,0.25)' }}>
-      <MaterialCommunityIcons name={ROLE_ICON[role]} size={46} color={color} accessible={false} />
-    </View>
-  </View>;
-}
-
 interface RoleProps {
   role: CitadelsRole;
+  fill?: boolean;
   compact?: boolean;
   disabled?: boolean;
   selected?: boolean;
@@ -109,18 +91,18 @@ interface RoleProps {
   actionLabel?: string;
 }
 
-export function CitadelsRoleCard({ role, compact = false, disabled = false, selected = false, onPress, actionLabel }: RoleProps) {
+export function CitadelsRoleCard({ role, fill = false, compact = false, disabled = false, selected = false, onPress, actionLabel }: RoleProps) {
   const sizing = useCardSizing('role', compact);
   const info = CITADELS_ROLE_BY_ID[role];
   const color = role === 'king' ? CITADELS.gold : role === 'warlord' || role === 'assassin' ? CITADELS.crimson : role === 'merchant' ? CITADELS.emerald : CITADELS.royal;
   const description = `${info.name}, rank ${info.rank}. ${info.summary}`;
   const accessibilityLabel = actionLabel ? `${actionLabel}. ${description}` : description;
   const content = (
-    <View testID={`citadels-role-card-${role}`} accessible={!onPress} accessibilityLabel={!onPress ? accessibilityLabel : undefined} style={{ ...sizing, ...(onPress ? { flexGrow: 1 } : {}), transform: [{ translateY: selected ? -4 : 0 }] }}>
+    <View testID={`citadels-role-card-${role}`} accessible={!onPress} accessibilityLabel={!onPress ? accessibilityLabel : undefined} style={{ ...sizing, ...(onPress || fill ? { flexGrow: 1 } : {}), transform: [{ translateY: selected ? -4 : 0 }] }}>
       <CardSurface fill width="100%" radius={14} faceColor={CITADELS.surface} edgeColor={CITADELS.bg} highlightColor={selected ? color : `${color}88`} depth={3} selected={selected} disabled={disabled}>
         <View style={{ padding: 12, gap: 10 }}>
           <Text style={{ fontFamily: 'SpaceMono_700Bold', color, fontSize: 18, lineHeight: 24 }}>Rank {info.rank}</Text>
-          <RoleInsignia role={role} color={color} />
+          <CitadelsRoleArtwork role={role} color={color} />
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: CITADELS.text, fontSize: 18, lineHeight: 24, textAlign: 'center' }}>{info.name}</Text>
           <Text style={{ fontFamily: 'Outfit_400Regular', color: CITADELS.text, fontSize: compact ? 14 : 15, lineHeight: compact ? 20 : 22 }}>{info.summary}</Text>
           {selected ? <SelectionCue color={color} /> : null}

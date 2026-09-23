@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-laboratory.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2313368,
+    "sha256": "1a32a2926a0eeb6a67ecae1b6c82562e94612b4aa327865bad3f03a85abd5e5d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-laboratory.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19236,
+      "sha256": "aae802d97c7988c3f88dc89cc513bdd69208f21bb692f50b13c12959259671cb"
+    }
+  ],
+  "totalBytes": 19236,
+  "maxTotalBytes": 614400
+}

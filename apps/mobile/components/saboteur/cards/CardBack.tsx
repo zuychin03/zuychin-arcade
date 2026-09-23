@@ -2,6 +2,9 @@ import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CardSurface } from '../../ui/CardSurface';
+import { GameCover } from '../../ui/GameCover';
+
+const artwork = require('../../../assets/game-art/saboteur-deck-back.webp');
 
 interface Props {
   width?: number;
@@ -38,7 +41,9 @@ export function CardBack({ width = 44, height = 66, icon = 'pickaxe', depth = 3 
           justifyContent: 'center',
         }}
       >
-        <MaterialCommunityIcons name={icon} size={minDim * 0.38} color="#E6BE81" />
+        <GameCover source={artwork} aspectRatio={1} rimColor="#BC9261" backgroundColor="#31212B" fallback={
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name={icon} size={minDim * 0.38} color="#E6BE81" /></View>
+        } />
       </View>
     </LinearGradient>
     </CardSurface>

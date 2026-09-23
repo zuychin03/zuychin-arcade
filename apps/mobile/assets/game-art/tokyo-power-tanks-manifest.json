@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-tanks.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2474692,
+    "sha256": "0d4180fd62d4f2a266da7d3b84a372d9f204dfcb646fc22ea16dcf20f115edd2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-tanks.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21910,
+      "sha256": "49ad461f9a55bac3f480265afd0d8612e6c3780e4c85616cce5ef4f0081f8481"
+    }
+  ],
+  "totalBytes": 21910,
+  "maxTotalBytes": 614400
+}

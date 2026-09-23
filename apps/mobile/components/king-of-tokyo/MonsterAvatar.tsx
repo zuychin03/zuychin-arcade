@@ -1,4 +1,5 @@
-import { View } from 'react-native';
+import { useState } from 'react';
+import { Image, View } from 'react-native';
 import Svg, { Circle, Defs, Ellipse, G, LinearGradient, Line, Path, Polygon, Rect, Stop } from 'react-native-svg';
 import { TOKYO, neonBox } from '../../constants/theme';
 
@@ -9,6 +10,15 @@ const MONSTER_PROFILES = [
   { name: 'Abyssal', accent: '#2EE6FF', secondary: '#4F8EF7' },
   { name: 'Scrap Sentinel', accent: '#F4C04E', secondary: '#8BFF52' },
   { name: 'Riftfang', accent: '#FF5A67', secondary: '#D78BFF' },
+] as const;
+
+const MONSTER_PORTRAITS = [
+  require('../../assets/game-art/tokyo-monster-voltclaw.webp'),
+  require('../../assets/game-art/tokyo-monster-emberback.webp'),
+  require('../../assets/game-art/tokyo-monster-prism-moth.webp'),
+  require('../../assets/game-art/tokyo-monster-abyssal.webp'),
+  require('../../assets/game-art/tokyo-monster-scrap-sentinel.webp'),
+  require('../../assets/game-art/tokyo-monster-riftfang.webp'),
 ] as const;
 
 function hashSeed(seed: string): number {
@@ -37,22 +47,23 @@ interface Props {
   profileIndex?: number;
 }
 
-/** Original kaiju emblems drawn only with react-native-svg primitives. */
 export function MonsterAvatar({ seed, size = 54, active = false, eliminated = false, profileIndex: assignedIndex }: Props) {
   const variant = profileIndex(seed, assignedIndex);
+  const [failedPortraits, setFailedPortraits] = useState<ReadonlySet<number>>(() => new Set());
   const profile = MONSTER_PROFILES[variant];
   const gradientId = `monster-${variant}`;
   const glow = active ? profile.accent : TOKYO.border;
 
   return (
     <View
+      pointerEvents="none"
       accessibilityLabel={`${profile.name} monster emblem${eliminated ? ', eliminated' : ''}`}
       style={[
         { width: size, height: size, borderRadius: size / 2 },
         active ? neonBox(`${profile.accent}88`, Math.max(8, size * 0.2)) : null,
       ]}
     >
-      <Svg width={size} height={size} viewBox="0 0 100 100">
+      <Svg accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" width={size} height={size} viewBox="0 0 100 100">
         <Defs>
           <LinearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
             <Stop offset="0" stopColor={profile.accent} stopOpacity="0.34" />
@@ -130,6 +141,19 @@ export function MonsterAvatar({ seed, size = 54, active = false, eliminated = fa
 
         <Path d="M13 83 H87" stroke={profile.secondary} strokeOpacity="0.5" strokeWidth="2" />
         <Path d="M17 83 V76 H23 V81 H29 V73 H34 V83 M66 83 V75 H72 V79 H78 V70 H84 V83" fill="none" stroke={profile.secondary} strokeOpacity="0.55" strokeWidth="2" />
+      </Svg>
+      {!failedPortraits.has(variant) && <Image
+        key={variant}
+        source={MONSTER_PORTRAITS[variant]}
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        resizeMode="contain"
+        onError={() => setFailedPortraits(previous => new Set(previous).add(variant))}
+        style={{ position: 'absolute', top: size * 0.06, left: size * 0.06, width: size * 0.88, height: size * 0.88, borderRadius: size / 2 }}
+      />}
+      <Svg accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" width={size} height={size} viewBox="0 0 100 100" style={{ position: 'absolute' }}>
+        <Circle cx="50" cy="50" r="47" fill="none" stroke={glow} strokeWidth={active ? 4 : 2.5} />
         {eliminated && (
           <G>
             <Circle cx="50" cy="50" r="46" fill="#07130F" opacity="0.72" />

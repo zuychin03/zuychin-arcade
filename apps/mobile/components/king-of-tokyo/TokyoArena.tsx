@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import { useState } from 'react';
+import { Image, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Svg, { Circle, Defs, LinearGradient, Line, Path, Rect, Stop } from 'react-native-svg';
 import type { KingOfTokyoPublicPlayer } from '@zuychin-arcade/types';
@@ -35,6 +36,7 @@ function ZoneOccupant({ player, profileIndex, label, active }: { player?: KingOf
 }
 
 export function TokyoArena({ players, currentPlayerId, capacity, compact = false }: Props) {
+  const [backdropFailed, setBackdropFailed] = useState(false);
   const city = players.find((player) => player.tokyoZone === 'tokyo_city');
   const bay = players.find((player) => player.tokyoZone === 'tokyo_bay');
   const cityProfileIndex = city ? players.findIndex((player) => player.playerId === city.playerId) : undefined;
@@ -81,6 +83,16 @@ export function TokyoArena({ players, currentPlayerId, capacity, compact = false
         <Line x1="24" y1="200" x2="190" y2="200" stroke={TOKYO.lime} strokeOpacity="0.45" strokeWidth="2" />
         <Line x1="230" y1="200" x2="396" y2="200" stroke={TOKYO.cyan} strokeOpacity="0.45" strokeWidth="2" />
       </Svg>
+      {!backdropFailed && <View pointerEvents="none" style={{ position: 'absolute', width: '100%', height: '100%' }}><Image
+        testID="tokyo-arena-backdrop"
+        source={require('../../assets/game-art/tokyo-arena-backdrop.webp')}
+        resizeMode="contain"
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        onError={() => setBackdropFailed(true)}
+        style={{ width: '100%', height: '100%', opacity: 0.55 }}
+      /></View>}
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12, paddingTop: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>

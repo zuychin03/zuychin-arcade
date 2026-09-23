@@ -4,6 +4,7 @@ import type { ActionCard, ActionSubtype } from '@zuychin-arcade/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ARCADE } from '../../../constants/theme';
 import { CardSurface } from '../../ui/CardSurface';
+import { ActionArtwork } from './ActionArtwork';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -83,7 +84,7 @@ export function ActionCardView({ card, width = 56, height = 84, fill = false }: 
           justifyContent: 'center',
         }}
       >
-        <View style={{ flexDirection: 'row', gap: 1 }}>{data.icons.map((icon) => <MaterialCommunityIcons key={icon} name={icon} size={minDim * (data.icons.length > 1 ? 0.22 : 0.32)} color={data.color} />)}</View>
+        <ActionArtwork subtype={card.subtype} size={minDim * 0.55} icons={data.icons} color={data.color} />
         {isSabotage && (
           <MaterialCommunityIcons name={isSabotage ? 'alert-circle' : 'wrench'} size={minDim * 0.2} color={isSabotage ? ARCADE.red : '#16A34A'} style={{ position: 'absolute', right: -2, bottom: -2 }} />
         )}

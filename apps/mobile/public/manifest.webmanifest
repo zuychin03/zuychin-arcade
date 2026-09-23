@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "Zuychin Arcade",
+  "short_name": "Zuychin Arcade",
+  "description": "Play social tabletop games with friends in private online rooms.",
+  "lang": "en-AU",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0B0716",
+  "theme_color": "#0B0716",
+  "categories": ["games", "entertainment"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

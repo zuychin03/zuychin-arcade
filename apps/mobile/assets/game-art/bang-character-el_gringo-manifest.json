@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-el_gringo.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2183747,
+    "sha256": "d30101891d0a6830ebbeaa0c164e29b1eb08e1c16b68c2e05775cf311af7105d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-el_gringo.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13924,
+      "sha256": "317937227c355618de103787cc61e22f050816c03b42ce880d564cf40c4cdebc"
+    }
+  ],
+  "totalBytes": 13924,
+  "maxTotalBytes": 614400
+}

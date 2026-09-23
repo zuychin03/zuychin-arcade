@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { SkullKingCard } from '@zuychin-arcade/types';
 import { SKULL_KING } from '../../constants/theme';
 import { SkullKingCardView } from './SkullKingCard';
+import { useIntrinsicCardHeight } from '../../hooks/useIntrinsicCardHeight';
+import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
 const TRICK: SkullKingCard[] = [
   { id: 'rules-led', kind: 'number', suit: 'green', rank: 12 },
@@ -14,12 +16,15 @@ const CHARACTERS: SkullKingCard[] = [
 ];
 
 export function SkullKingRulesGuide() {
+  const { width, fontScale } = useWindowDimensions();
+  const { textRef, onTextLayout, textScale } = useMeasuredTextScale(16, fontScale);
+  const faces = useIntrinsicCardHeight([...TRICK, ...CHARACTERS].map(card => card.id), `rules:${width}:${textScale}`);
   return <View testID="skull-rules-guide" style={s.guide}>
     <View style={s.section}>
       <Text accessibilityRole="header" style={s.title}>Predict your tricks, not your points</Text>
-      <Text style={s.body}>A trick is one card from each captain. Bid secretly before the round. These example cards show how to read a trick.</Text>
+      <Text ref={textRef} onLayout={onTextLayout} style={s.body}>A trick is one card from each captain. Bid secretly before the round. These example cards show how to read a trick.</Text>
       <View style={s.cards}>
-        {TRICK.map((card, index) => <View key={card.id} style={s.example}><SkullKingCardView card={card} compact /><Text style={s.caption}>{index === 0 ? 'Green leads' : 'Black trump wins'}</Text></View>)}
+        {TRICK.map((card, index) => <View key={card.id} style={s.example}><SkullKingCardView card={card} compact faceSizing={faces.forCard(card.id)} /><Text style={s.caption}>{index === 0 ? 'Green leads' : 'Black trump wins'}</Text></View>)}
       </View>
       <Text style={s.body}>Follow the led numbered suit if you can, or play a special card. Black trumps the other suits. Without trump or specials, the highest card of the led suit wins.</Text>
     </View>
@@ -29,7 +34,7 @@ export function SkullKingRulesGuide() {
       <Text style={s.body}>These three characters beat numbered cards, but they do not form a simple strongest-to-weakest ladder.</Text>
       <View style={s.characters}>
         {CHARACTERS.map((card, index) => <View key={card.id} style={s.characterRow}>
-          <SkullKingCardView card={card} compact />
+          <SkullKingCardView card={card} compact faceSizing={faces.forCard(card.id)} />
           <Text style={[s.body, s.explanation]}>{[
             'Pirate beats Mermaid. The first Pirate wins a Pirate tie.',
             'Skull King beats Pirates.',

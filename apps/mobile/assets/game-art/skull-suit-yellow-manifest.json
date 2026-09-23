@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/skull-suit-yellow.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1988162,
+    "sha256": "0eb8ebba21695cc0878bc762b8750a53e6f5cc11c3db75159510b7bba102509e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "skull-suit-yellow.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13892,
+      "sha256": "32315afe5ad02b995433c87c2758864ea7b3f388fe097a2777c18e04327a356d"
+    }
+  ],
+  "totalBytes": 13892,
+  "maxTotalBytes": 614400
+}

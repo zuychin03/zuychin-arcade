@@ -14,6 +14,31 @@ const artwork = {
   weapon: require('../../assets/game-art/bang-card-weapon.webp'),
 };
 
+const identities = {
+  bang: require('../../assets/game-art/bang-card-bang.webp'),
+  missed: require('../../assets/game-art/bang-card-missed.webp'),
+  beer: require('../../assets/game-art/bang-card-beer.webp'),
+  saloon: require('../../assets/game-art/bang-card-saloon.webp'),
+  stagecoach: require('../../assets/game-art/bang-card-stagecoach.webp'),
+  wells_fargo: require('../../assets/game-art/bang-card-wells_fargo.webp'),
+  general_store: require('../../assets/game-art/bang-card-general_store.webp'),
+  panic: require('../../assets/game-art/bang-card-panic.webp'),
+  cat_balou: require('../../assets/game-art/bang-card-cat_balou.webp'),
+  gatling: require('../../assets/game-art/bang-card-gatling.webp'),
+  indians: require('../../assets/game-art/bang-card-indians.webp'),
+  duel: require('../../assets/game-art/bang-card-duel.webp'),
+  barrel: require('../../assets/game-art/bang-card-barrel.webp'),
+  dynamite: require('../../assets/game-art/bang-card-dynamite.webp'),
+  scope: require('../../assets/game-art/bang-card-scope.webp'),
+  mustang: require('../../assets/game-art/bang-card-mustang.webp'),
+  jail: require('../../assets/game-art/bang-card-jail.webp'),
+  volcanic: require('../../assets/game-art/bang-card-volcanic.webp'),
+  schofield: require('../../assets/game-art/bang-card-schofield.webp'),
+  remington: require('../../assets/game-art/bang-card-remington.webp'),
+  rev_carabine: require('../../assets/game-art/bang-card-rev_carabine.webp'),
+  winchester: require('../../assets/game-art/bang-card-winchester.webp'),
+} satisfies Record<BangCardName, number>;
+
 export const BANG_CARD_ART_FAMILY: Record<BangCardName, keyof typeof artwork> = {
   bang: 'attack', gatling: 'attack', indians: 'attack', duel: 'attack',
   missed: 'response', beer: 'recovery', saloon: 'recovery',
@@ -34,10 +59,10 @@ export const BANG_CARD_EMBLEM: Record<BangCardName, keyof typeof MaterialCommuni
 
 export function BangCardArtwork({ name }: { name: BangCardName }) {
   return <View testID={`bang-card-art-${name}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 260, alignSelf: 'center' }}>
-    <GameCover source={artwork[BANG_CARD_ART_FAMILY[name]]} aspectRatio={1.6} backgroundColor={BANG.panel} fallback={
+    <GameCover source={identities[name]} aspectRatio={1.6} backgroundColor={BANG.panel} rimColor={BANG.gold} fallback={<GameCover source={artwork[BANG_CARD_ART_FAMILY[name]]} aspectRatio={1.6} backgroundColor={BANG.panel} rimColor={BANG.gold} fallback={
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BANG.panel }}>
         <MaterialCommunityIcons name={BANG_CARD_EMBLEM[name]} size={48} color={BANG.sand} accessible={false} />
       </View>
-    } />
+    } />} />
   </View>;
 }

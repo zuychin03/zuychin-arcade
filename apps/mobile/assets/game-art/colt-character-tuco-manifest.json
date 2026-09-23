@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-character-tuco.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2246007,
+    "sha256": "b9c09cf80657780b1b1f893d228ae46ca7480af3ebc4c64ea6315d364c06345d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-character-tuco.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18558,
+      "sha256": "a0d345b0d92e4f0fe5a7b67afdbb517aa05a94c2f630076c0ab244a994c3137c"
+    }
+  ],
+  "totalBytes": 18558,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-jesse_jones.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2029637,
+    "sha256": "93ba276a118e3b9cd7ba18ac639f88c98bde2dfc853dc91b239029f4d6b6dbae"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-jesse_jones.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11624,
+      "sha256": "a0a10d1aed02163586447617c9c10bc37cf2bbf217e07c091b96e079f57cb877"
+    }
+  ],
+  "totalBytes": 11624,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-factory.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2406803,
+    "sha256": "a3cc7a2f9c11801bd7a9cb0e8e946a7b1815793352f852e7244a9e2da9fa4e4b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-factory.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20604,
+      "sha256": "0cfe205fb91d1d21c5091f4488ebec83807f2e44cd242e60d524d0b25830a14b"
+    }
+  ],
+  "totalBytes": 20604,
+  "maxTotalBytes": 614400
+}

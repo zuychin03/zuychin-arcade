@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-poison_spit.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2228782,
+    "sha256": "cf49754bc622546ed8212e59d7e31182edc2d6b29fb7458925d1678a3264511a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-poison_spit.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16338,
+      "sha256": "888a2ebc0713f309f1658d2399a58f6392722f84c778391806be4a0d331827ed"
+    }
+  ],
+  "totalBytes": 16338,
+  "maxTotalBytes": 614400
+}

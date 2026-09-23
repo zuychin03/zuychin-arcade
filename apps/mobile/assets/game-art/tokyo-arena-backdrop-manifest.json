@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-arena-backdrop.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2151440,
+    "sha256": "e9118fe5cd83229be7cb67b7f10dc117b3b942a90e46905cd7b7504129a5a1ea"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-arena-backdrop.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 180,
+      "bytes": 9748,
+      "sha256": "c4f5cd70da982d6d56389cbe9d481b53f7fb8ca899f0ab80ce3722e9caa8805d"
+    }
+  ],
+  "totalBytes": 9748,
+  "maxTotalBytes": 614400
+}

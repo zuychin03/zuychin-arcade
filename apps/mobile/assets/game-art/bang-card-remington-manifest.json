@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-remington.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2144246,
+    "sha256": "892ff9ebe319d2946df01e16c480fb0fe36528af55971cdcffccb8ab0635b1e0"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-remington.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16486,
+      "sha256": "968e14d29d055408e4f1afc92694b39d8b8779544e950511e9c0634c98264236"
+    }
+  ],
+  "totalBytes": 16486,
+  "maxTotalBytes": 614400
+}

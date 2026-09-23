@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/skull-deck-back.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 3831445,
+    "sha256": "ef797bed5bc0af77e9fddbb197b60cbc154be744286b310ce95737399d095894"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "skull-deck-back.webp",
+      "width": 256,
+      "maxBytes": 49152,
+      "height": 384,
+      "bytes": 47776,
+      "sha256": "a6127f6a09a0f1526d95e1642142892f7475b9b162eb5c7a99f55090538722b4"
+    }
+  ],
+  "totalBytes": 47776,
+  "maxTotalBytes": 614400
+}

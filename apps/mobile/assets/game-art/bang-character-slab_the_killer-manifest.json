@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-slab_the_killer.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2141926,
+    "sha256": "42332eba2ed2cdb11231b0aaebec254d95a1eb64fdfbc5ed124a629872f0aa0b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-slab_the_killer.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 11964,
+      "sha256": "abb8cb0c4d8e11d180829dced3b14ce038d99f903d1db889d23f5d72a1908015"
+    }
+  ],
+  "totalBytes": 11964,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-evacuation_orders.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2554317,
+    "sha256": "275be0806dd1e7845e532448686447582c06536f791a54add521cbb03be962fd"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-evacuation_orders.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 25518,
+      "sha256": "701bb142f5ae5a10b8d7a9f49ca6d3eef9af0f5721add43c50fd9bdc8709ed4e"
+    }
+  ],
+  "totalBytes": 25518,
+  "maxTotalBytes": 614400
+}

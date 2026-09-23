@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/libertalia-crew-10.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2416368,
+    "sha256": "29dd8a6a5a45007a3b3caa0a9e37b934732a7dee37dff5ced802a7218f71c16f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "libertalia-crew-10.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20452,
+      "sha256": "dfee9bbe47ebb4ed7836da6937f6931b758de6ad4f0c19eb3dc848a035e5f4c2"
+    }
+  ],
+  "totalBytes": 20452,
+  "maxTotalBytes": 614400
+}

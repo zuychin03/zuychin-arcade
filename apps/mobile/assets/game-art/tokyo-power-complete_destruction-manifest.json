@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-complete_destruction.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2494170,
+    "sha256": "ef46d0c5be98eec5b855274047698c05ccec9cf9c32d0da835267c63e4d8e3e4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-complete_destruction.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22520,
+      "sha256": "4c4274963a88611abc6f78d006e89fd6cc7ce15b508758e595a8d4e2975370af"
+    }
+  ],
+  "totalBytes": 22520,
+  "maxTotalBytes": 614400
+}

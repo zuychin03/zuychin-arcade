@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-interference.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2360934,
+    "sha256": "9c7be34c39ab484419bcdff469730891510e4971cd3d094b70a2d192d5311883"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-interference.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 25732,
+      "sha256": "2668e41726156f11706be77cc47614693d86cf509429232b7158dea635915aea"
+    }
+  ],
+  "totalBytes": 25732,
+  "maxTotalBytes": 614400
+}

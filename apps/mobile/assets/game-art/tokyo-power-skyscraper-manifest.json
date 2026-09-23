@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-skyscraper.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2032884,
+    "sha256": "26c9eafb940202ee8e890f9c6bcee726fdaf37da18e43e022d165123ef8ff141"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-skyscraper.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14202,
+      "sha256": "d03ef6e6a88534362aca0c60337400b6d418360c0192a68c2dd500d9a801a5bb"
+    }
+  ],
+  "totalBytes": 14202,
+  "maxTotalBytes": 614400
+}

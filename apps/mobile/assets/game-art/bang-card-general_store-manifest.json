@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-general_store.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2411196,
+    "sha256": "4641fe15afb873c35678e8317a9a4259190c55cfb7737d4d3ec151b83af3a62e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-general_store.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20172,
+      "sha256": "5e6c42bab8bce2657171120124750a77f37d412b1b04da5a345b272d40d40001"
+    }
+  ],
+  "totalBytes": 20172,
+  "maxTotalBytes": 614400
+}

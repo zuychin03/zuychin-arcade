@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-willy_the_kid.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2126427,
+    "sha256": "2575bab0518eb9ff13e4bf77d894b66c5f57fc56d32ece6bb7b9b7c8e235dc0c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-willy_the_kid.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 12558,
+      "sha256": "c8852171854c99f69f825d44155ecb074d54f00a7b18a87f2bd7d78be715910d"
+    }
+  ],
+  "totalBytes": 12558,
+  "maxTotalBytes": 614400
+}

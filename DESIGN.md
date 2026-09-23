@@ -16,7 +16,7 @@ The existing navigation shell and route ownership remain. No new global footer o
 
 ## Colour and typography
 
-`apps/mobile/constants/theme.ts` remains authoritative for cross-platform colour tokens. The Arcade dark-violet shell supports the existing per-game palettes. Use accents to identify games and action states, not as constant neon borders or text glows. Preserve purple Not Alone and spectral-white Skull King.
+`apps/mobile/constants/theme.ts` remains authoritative for cross-platform colour tokens. The Arcade dark-violet shell supports the existing per-game palettes. Cards have luminous, per-game edge accents and recessed illustrations, with stronger lighting for selection. Keep rules text free of glows and preserve purple Not Alone and spectral-white Skull King.
 
 Use the installed Outfit family for display and readable body copy. Reserve Space Mono for codes, scores and short data labels. Headings are upright; rules and descriptions must not become tiny tracked uppercase text.
 
@@ -26,7 +26,7 @@ React Native style values and the existing NativeWind configuration remain the i
 
 - Original generated miniature scenes introduce games in the library and entrance. Keep prompt/source/hash provenance with optimised assets.
 - Actual paths, cards, dice, counters and selectable targets stay code-native and reflect current state.
-- Cards use bounded edge thickness, contact shadows and directional highlights. Board slots read as recessed spaces.
+- Cards use bounded edge thickness, contact shadows, bevels and directional highlights. Their illustration well shares the card's lighting rather than reading as a flat pasted image. Board slots read as recessed spaces.
 - Decoration is noninteractive and excluded from the accessibility tree. Essential text remains live text.
 - Preserve full scene composition where practical. Provide a bounded image footprint and a useful fallback on load failure.
 - No new WebGL dependency, constant floating decoration or generic glow replacing material depth.
@@ -38,6 +38,12 @@ Use a four-point spacing rhythm for new layouts, comfortable 16 px body copy, at
 Controls need visible keyboard focus, pressed feedback, disabled/loading behaviour and recoverable error states where applicable. Do not hide content behind delayed entrance animations. Preserve form focus order, double-submit prevention and leave/recovery semantics.
 
 Motion explains a state change or direct interaction. Reduced motion removes spatial travel and repeating effects. Visible state must never depend on an animation finishing.
+
+## Installed web app utilities
+
+Installation and update controls belong in a library-only utility strip, using the existing Arcade palette and at least 48 px control heights. Browser-specific installation help appears inline. Keep these utilities out of gameplay; an update must not interrupt a room or another active Arcade tab.
+
+The offline recovery page states that multiplayer needs a network connection and provides a retry action. It may explain that the app checks the previous seat after reconnecting, but must not promise that the seat or room remains available.
 
 ## Verification contract
 

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-vortex.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2322623,
+    "sha256": "0d39071d3e2380e341255d277e7cf75a7b1b79fd838c6b72166fb6b242deb8d0"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-vortex.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24574,
+      "sha256": "bbaa741275ba249dcbf8bf68945e856d8f4040a325cf40b7b34e50ee104972d6"
+    }
+  ],
+  "totalBytes": 24574,
+  "maxTotalBytes": 614400
+}

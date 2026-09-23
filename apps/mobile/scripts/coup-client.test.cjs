@@ -216,7 +216,7 @@ const cardModules = {
   'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width: 375, fontScale: 1 }) },
   'expo-linear-gradient': { LinearGradient: 'Gradient' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
   '../ui/ScalePressable': { ScalePressable: 'Button' },
-  '../ui/CardSurface': { CardSurface: 'CardSurface' }, './CoupCharacterArtwork': { CoupCharacterArtwork: 'Artwork' },
+  '../ui/CardSurface': { CardSurface: 'CardSurface' }, './CoupCharacterArtwork': { CoupCharacterArtwork: 'Artwork' }, './CoupTableArtwork': { CoupTableArtwork: 'TableArtwork' },
   '../../constants/theme': { COUP: {}, COUP_CHARACTER_COLOR: { ambassador: '#abcdef' } },
 };
 

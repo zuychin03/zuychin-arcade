@@ -193,6 +193,35 @@ and check the generated output for the configured API origin. A successful
 export proves bundling, not signed builds, physical-device behaviour or a
 working production backend.
 
+### Installable web app (PWA)
+
+The web export includes a manifest, the approved controller/Z launcher icons,
+an offline recovery page and a versioned service worker. Serve the complete
+export at the root of an HTTPS origin. The standard `export:web` command builds
+the worker after Expo finishes; a raw `expo export` needs the additional
+`node scripts/build-pwa.cjs <export-directory>` step from `apps/mobile`.
+
+Players can use **Install Arcade** in the library when their browser supports
+an install prompt, or follow **Add Arcade to your device** for browser-menu
+instructions. iPhone and iPad users can use Share, Add to Home Screen. Native
+iOS and Android builds remain available from the same codebase.
+
+This is an online-first PWA, not an offline multiplayer mode. Only public
+build assets and the connection-recovery page are cached. Room responses,
+credentials, private hands and API traffic are never stored by the service
+worker. Artwork is cached on demand, not downloaded in full at installation.
+An update waits for explicit approval from the library and safe responses
+from every open Arcade tab. Finish or leave rooms and return to the library
+in all tabs before updating. An active match is never automatically reloaded.
+
+Hosting must serve `/service-worker.js` as JavaScript with revalidation
+(`Cache-Control: no-cache`), not rewrite it to the app HTML. Also revalidate
+HTML and `/manifest.webmanifest`; fingerprinted assets may use long-lived
+immutable caching. Keep the export's `/offline.html` and `/icons/` files intact.
+Test installation and background/reconnect behaviour on real target devices
+before release. Browser automation and platform exports do not prove those
+device behaviours.
+
 ## Deployment (not yet done)
 
 **Server - Render**
@@ -276,6 +305,20 @@ is performed by the local export checks.
 - Several digital rule adaptations are **deliberate** -
   do not "fix" them back. See the notes below and
   [ARCHITECTURE.md → Design decisions](./ARCHITECTURE.md#design-decisions--rule-deviations).
+
+## Custom game artwork
+
+The nine games include 252 individual illustrations in addition to the original
+shared scenes and category artwork. Named cards and characters, uniform hidden
+card backs, faction seals and board scenery use original generated artwork.
+Rules, costs, ranks, paths and interaction states remain live interface elements.
+Card faces combine directional bevels, recessed illustrations and game-specific
+neon accents without requiring a 3D rendering engine.
+
+Runtime WebP images are stored in `apps/mobile/assets/game-art`; source PNGs,
+prompts and the identity catalogue are in `docs/design/game-art`. The encoding
+pipeline records content hashes, preserves the full composition and enforces
+per-image and per-family byte budgets. Internal generation receipts stay local.
 
 ## Game rules notes
 

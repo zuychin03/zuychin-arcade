@@ -56,7 +56,7 @@ export function BangHand({ cards, textScale = 1, renderCard }: Props) {
   const [contentWidth, setContentWidth] = useState(0);
   const [offset, setOffset] = useState(0);
   const scale = Math.max(1, Number.isFinite(fontScale) ? fontScale : 1, Number.isFinite(textScale) ? textScale : 1);
-  const horizontal = cards.length > 2 && viewport < 600 * scale;
+  const horizontal = viewport < 600 * scale;
   const identity = JSON.stringify(cards.map(card => card.id));
   const maximum = Math.max(0, contentWidth - viewport);
   const cardWidth = bangHandWidth(viewport, fontScale, Platform.OS === 'web');
@@ -86,7 +86,7 @@ export function BangHand({ cards, textScale = 1, renderCard }: Props) {
   if (!cards.length) return null;
   return <View testID="bang-hand-cards" onLayout={event => setViewport(event.nativeEvent.layout.width)} style={styles.root}>
     {horizontal ? <>
-      <View style={styles.toolbar}>
+      {cards.length > 1 ? <View style={styles.toolbar}>
         <Text testID="bang-hand-position" accessibilityLiveRegion="polite" style={styles.position}>Card {current} of {cards.length} · swipe or browse</Text>
         <View style={styles.controls}>
           {([-1, 1] as const).map(direction => {
@@ -97,7 +97,7 @@ export function BangHand({ cards, textScale = 1, renderCard }: Props) {
             </Pressable>;
           })}
         </View>
-      </View>
+      </View> : null}
       <ScrollView ref={rail} testID="bang-hand-rail" horizontal showsHorizontalScrollIndicator
         onLayout={event => setViewport(event.nativeEvent.layout.width)} onContentSizeChange={next => setContentWidth(next)}
         onScroll={event => { offsetRef.current = event.nativeEvent.contentOffset.x; setOffset(offsetRef.current); }} scrollEventThrottle={32}

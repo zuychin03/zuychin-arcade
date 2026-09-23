@@ -1,0 +1,215 @@
+{
+  "tool": "built-in imagegen",
+  "assets": [
+    {
+      "key": "not-alone-survival-adrenaline",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: adrenaline. Subject: Close-up of a compact expedition stimulant injector with a bright amber fluid chamber and thick worn glove reaching for its grip; urgency without text.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-adrenaline.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-amplifier",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: amplifier. Subject: A portable rescue-signal amplifier, folded dish antenna and glowing cyan resonator coil mounted on a small purple rock ledge.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-amplifier.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-detector",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: detector. Subject: A rugged handheld alien-life detector with a luminous mint circular glass sensor, unmarked physical knobs and a tiny sample of violet crystal beside it; no screen graphics.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-detector.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-dodge",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: dodge. Subject: A single helmeted explorer leaning sharply aside as a long alien claw sweeps past overhead, dynamic readable pose, miniature rocky base.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-dodge.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-double_back",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: double back. Subject: A helmeted explorer turning back through their own footprints on a curved purple rock ledge; one clear returning gesture, no arrows.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-double_back.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-drone",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: drone. Subject: A small weathered four-rotor expedition scouting drone hovering above a purple stone, cyan camera eye and folded mechanical legs.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-drone.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-gate",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: gate. Subject: A compact ancient alien stone arch opening onto a luminous violet passage, weathered expedition cable crossing its base; no visible destination map.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-gate.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-hologram",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: hologram. Subject: A small expedition projector casting a translucent cyan decoy explorer silhouette above a dark purple rock pedestal, miniature physical craft.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-hologram.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-ingenuity",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: ingenuity. Subject: Gloved explorer hands improvising a beacon repair from a brass coil and scavenged off-white battery, a single warm lamp coming alive.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-ingenuity.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-sacrifice",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: sacrifice. Subject: A discarded expedition backpack with a pulsing amber lure clipped on, deliberately left in violet undergrowth while a small explorer silhouette retreats far behind.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-sacrifice.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-sixth_sense",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: sixth sense. Subject: A helmeted explorer touching the side of their helmet, subtle cyan reflected light reveals a safe opening between violet rocks behind them, a calm alert pose.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-sixth_sense.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-smokescreen",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: smokescreen. Subject: A squat expedition smoke canister releasing dense pale lavender smoke that conceals a small rocky passage, warm amber nozzle, no people.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-smokescreen.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-strike_back",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: strike back. Subject: A helmeted explorer bracing a bright cyan handheld pulse emitter toward a retreating shadowy alien limb, non-gory defensive action on violet rocks.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-strike_back.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-vortex",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: vortex. Subject: A contained swirling violet-blue spatial vortex above a worn expedition field generator, a few small pebbles suspended around it, no arrows or symbols.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-vortex.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-survival-wrong_track",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: wrong track. Subject: An expedition boot print trail deliberately veering between violet rocks while a compact decoy beacon rests off to the side; no arrows, maps or labels.",
+      "repositorySource": "docs/design/game-art/not-alone-survival-wrong_track.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-anticipation",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: anticipation. Subject: An original violet alien predator crouched still behind a rock lip, luminous pale eyes fixed on empty ground ahead, tense patient pose.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-anticipation.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-ascendancy",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: ascendancy. Subject: A tall crownlike violet alien growth looming over a tiny abandoned expedition pack; imposing organic form, no humanoid ruler or symbols.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-ascendancy.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-cataclysm",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: cataclysm. Subject: A violet rock shelf fracturing into large falling chunks above a small damaged expedition antenna, dramatic physical miniature collapse.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-cataclysm.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-clone",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: clone. Subject: Two matching original alien silhouettes emerging side-by-side from one split violet cocoon, pale cyan eyes, clear twin forms, not game tokens.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-clone.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-despair",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: despair. Subject: A lone helmeted explorer seated with lowered head beside a dark broken beacon, huge shadow falling across purple rocks; restrained sombre atmosphere.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-despair.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-detour",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: detour. Subject: A twisted violet alien root blocking a direct narrow trail and forcing a small explorer toward a curving side passage; no map or arrows.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-detour.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-fierceness",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: fierceness. Subject: Close portrait of an original purple alien predator snarling with broad angular chitin plates and bright amber eyes, intimidating but no gore.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-fierceness.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-flashback",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: flashback. Subject: A fossil-like purple alien memory crystal projecting a faint ghostly echo of a predator head above it, layered translucent miniature material.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-flashback.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-forbidden_zone",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: forbidden zone. Subject: A dense wall of dark violet thornlike alien spines enclosing an empty rocky opening, faint magenta bioluminescence, no signage.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-forbidden_zone.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-force_field",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: force field. Subject: A pale violet translucent energy dome enclosing a weathered rock island with a stranded expedition beacon, no grid or UI marks.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-force_field.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-interference",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: interference. Subject: An expedition radio antenna tangled in living violet tendrils, cyan electrical sparks disrupted into uneven flickers, no screen text.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-interference.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-mirage",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: mirage. Subject: A glowing false off-white shelter reflected in a violet crystal pool, its distorted lower reflection reveals an alien organic shape.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-mirage.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-mutation",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: mutation. Subject: An original violet alien limb transforming from smooth tendril into broad plated claw, one continuous shape with pale mint veins.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-mutation.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-persecution",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: persecution. Subject: A small helmeted explorer hurrying along a purple ledge with a looming alien claw shadow pursuing close behind; readable chase silhouette.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-persecution.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-phobia",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: phobia. Subject: A helmet visor reflecting an exaggerated violet alien eye looming from darkness, close-up physical miniature helmet, fear through reflection.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-phobia.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-scream",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: scream. Subject: Original violet alien head with a wide open mouth emitting visible pale lavender pressure ripples, chitin ridges, no lettering and no gore.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-scream.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-stasis",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: stasis. Subject: A small expedition rescue beacon trapped inside a faceted violet crystal shell, frozen suspended dust, quiet cold light.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-stasis.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-toxin",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: toxin. Subject: A bulbous violet alien plant dripping luminous greenish mint toxin onto a cracked expedition filter, clearly botanical hazard, no labels.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-toxin.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-tracking",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: tracking. Subject: An original alien claw examining a deep fresh expedition boot print in violet dust, pale cyan sensory tendrils close to the print.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-tracking.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    },
+    {
+      "key": "not-alone-hunt-virus",
+      "prompt": "Use case: stylized-concept. One square ORIGINAL sci-fi tabletop card illustration, no text or UI. Tactile handcrafted miniature diorama photographed with soft upper-left light and violet atmospheric fill. Purple alien planet, dark aubergine background, weathered off-white expedition technology, violet rock and sparse magenta plants, small cyan/mint or warm amber accents. One clear focal idea with bold silhouette recognisable at100px, full subject inside10 percent margins. Physical resin, chipped metal and rock textures, restrained cinematic depth. No lettering, numbers, card frame, phase icons, rules, actual board state, counters, logos, watermarks, gore or existing franchise likeness. Card identity: virus. Subject: A compact alien spore cluster with branching violet filaments spreading across a weathered off-white expedition module, mint glowing nodes.",
+      "repositorySource": "docs/design/game-art/not-alone-hunt-virus.png",
+      "inspection": "Accepted after original visual inspection: distinct subject, purple miniature art, no text/UI or game state."
+    }
+  ]
+}

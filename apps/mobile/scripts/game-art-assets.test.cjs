@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const { imageSize } = require('image-size');
+const { catalogue, queuedAssets, queuedGames, assetStatus, requireProduced, checkFamilyBudget } = require('./generate-game-art.cjs');
 const { notAlonePlaceNames, notAlonePlaceMaxTotalBytes, bangCardNames, bangCardMaxTotalBytes, libertaliaLootNames, libertaliaLootMaxTotalBytes } = require('./generate-game-art.cjs');
 const { libertaliaPhaseNames, libertaliaPhaseMaxTotalBytes } = require('./generate-game-art.cjs');
 const { coltActionNames, coltActionMaxTotalBytes, coupCharacterNames, coupCharacterMaxTotalBytes, tokyoPowerNames, tokyoPowerMaxTotalBytes, skullSpecialNames, skullSpecialMaxTotalBytes, citadelsDistrictNames, citadelsDistrictMaxTotalBytes, dimensions, encoding, games, hash, maxTotalBytes, outputDirectory, parseArguments, repoRoot, sourceFile, specs } = require('./generate-game-art.cjs');
@@ -72,6 +73,10 @@ test('CLI requires an explicit local Sharp module and rejects ambiguous argument
 test('each additional game has independently bounded, content-addressed full-composition assets', () => {
   for (const [game, config] of Object.entries(games)) {
     if (game === 'saboteur') continue;
+    if (Object.hasOwn(queuedGames, game) && !fs.existsSync(path.join(directory, config.manifestFile))) {
+      for (const spec of config.specs) assert(!fs.existsSync(path.join(directory, spec.file)), `Unmanifested output: ${spec.file}`);
+      continue;
+    }
     const png = fs.readFileSync(path.join(repoRoot, config.sourceFile));
     const record = JSON.parse(fs.readFileSync(path.join(directory, config.manifestFile), 'utf8'));
     const actual = imageSize(png);
@@ -99,6 +104,78 @@ test('each additional game has independently bounded, content-addressed full-com
     assert.equal(record.totalBytes, total);
     assert.equal(record.maxTotalBytes, maxTotalBytes);
     assert(total <= maxTotalBytes);
+    if (config.square) assert.deepEqual([actual.width, actual.height], [actual.width, actual.width]);
+  }
+});
+
+test('the explicit 252-asset sweep queue preserves all 77 original outputs without collisions', () => {
+  assert.equal(queuedAssets.length, 252);
+  assert.equal(new Set(queuedAssets.map(asset => asset.id)).size, 252);
+  assert.equal(Object.entries(games).filter(([id]) => !Object.hasOwn(queuedGames, id)).flatMap(([, config]) => config.specs).length, 77);
+  const outputNames = Object.values(games).flatMap(config => config.specs.map(spec => spec.file));
+  assert.equal(new Set(outputNames).size, outputNames.length);
+  for (const asset of queuedAssets) {
+    assert.match(asset.id, /^[a-z0-9_-]+$/);
+    assert.equal(asset.source, `docs/design/game-art/${asset.id}.png`);
+    assert.equal(asset.output, `${outputDirectory}/${asset.id}.webp`);
+    assert.equal(asset.manifest, `${outputDirectory}/${asset.id}-manifest.json`);
+    assert.equal(parseArguments(['--game', asset.id, '--sharp-module', '.']).game, asset.id);
+  }
+});
+
+test('requested missing artwork fails explicitly while pending registration is allowed', () => {
+  const absentRoot = path.join(repoRoot, '__nonexistent_artwork_test_root__');
+  assert(!fs.existsSync(absentRoot));
+  assert.equal(assetStatus('libertalia-crew-01', absentRoot), 'pending');
+  assert.throws(() => requireProduced('libertalia-crew-01', absentRoot), /Requested artwork is missing or incomplete/);
+  assert.throws(() => assetStatus('unregistered-art'), /Unknown game artwork/);
+  for (const asset of queuedAssets) {
+    if (assetStatus(asset.id) === 'produced') assert.doesNotThrow(() => requireProduced(asset.id));
+  }
+});
+
+test('all 252 approved artwork identities have complete sources, outputs and manifests', () => {
+  assert.equal(queuedAssets.length, 252);
+  for (const asset of queuedAssets) {
+    assert.equal(assetStatus(asset.id), 'produced', `Incomplete approved artwork: ${asset.id}`);
+    assert.doesNotThrow(() => requireProduced(asset.id));
+  }
+});
+
+test('identity artwork inventory matches authoritative card and character definitions', () => {
+  const read = file => fs.readFileSync(path.join(repoRoot, 'packages/types/src', file), 'utf8');
+  const identities = family => catalogue.families.find(item => item.family === family).assets.map(asset => asset.identity);
+  const matches = (text, pattern) => [...text.matchAll(pattern)].map(match => match[1]);
+  const union = (file, name) => matches(read(file).match(new RegExp(`export type ${name} =([\\s\\S]*?);`))[1], /'([^']+)'/g);
+  assert.deepEqual(identities('tokyo-power'), matches(read('king-of-tokyo-cards.ts'), /id: '([^']+)'/g));
+  assert.deepEqual(identities('citadels-role'), matches(read('citadels-constants.ts'), /role: '([^']+)'/g));
+  assert.deepEqual(identities('citadels-district'), matches(read('citadels-constants.ts'), /(?:standard|unique)\('([^']+)'/g));
+  assert.deepEqual(identities('bang-character'), union('bang.ts', 'BangCharacterId'));
+  assert.deepEqual(identities('bang-card'), union('bang.ts', 'BangCardName'));
+  assert.deepEqual(identities('colt-character'), union('colt-express.ts', 'ColtCharacter'));
+  assert.deepEqual(identities('not-alone-survival'), union('not-alone.ts', 'NotAloneSurvivalCardId'));
+  assert.deepEqual(identities('not-alone-hunt'), union('not-alone.ts', 'NotAloneHuntCardId'));
+});
+
+test('produced queue families obey distinct-content and manifest byte budgets', () => {
+  for (const family of catalogue.families) {
+    const digests = new Set();
+    let total = 0;
+    for (const asset of family.assets) {
+      if (!fs.existsSync(path.join(repoRoot, asset.manifest))) continue;
+      requireProduced(asset.id);
+      const record = JSON.parse(fs.readFileSync(path.join(repoRoot, asset.manifest), 'utf8'));
+      const bytes = fs.readFileSync(path.join(repoRoot, asset.output));
+      assert(!digests.has(hash(bytes)), `Repeated artwork within ${family.family}`);
+      digests.add(hash(bytes));
+      const config = games[asset.id];
+      assert.equal(imageSize(bytes).width, config.specs[0].width);
+      if (config.square) assert.equal(imageSize(bytes).height, config.specs[0].width);
+      total += record.totalBytes;
+      checkFamilyBudget(asset.id, record);
+    }
+    assert(total <= family.maxTotalBytes);
+    assert.throws(() => checkFamilyBudget(family.assets[0].id, { totalBytes: family.maxTotalBytes + 1 }), /family byte budget/);
   }
 });
 

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-barrel.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2537151,
+    "sha256": "8c535aaa6e1bcb3a3404983c1443c9fb20c0c1f2d249ed07551d35386447d3f7"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-barrel.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21464,
+      "sha256": "abc34358d57b97c02db4f85b37e9495d148f54e0d09e4e07c2061071c44046c4"
+    }
+  ],
+  "totalBytes": 21464,
+  "maxTotalBytes": 614400
+}

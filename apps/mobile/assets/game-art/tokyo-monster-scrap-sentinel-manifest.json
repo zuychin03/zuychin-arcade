@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-monster-scrap-sentinel.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2492085,
+    "sha256": "40ddca95d1446aecdd3fed3d5a7886b498e5dca48f1fa5d85f75d3af7736735a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-monster-scrap-sentinel.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20080,
+      "sha256": "df2b1b13364fcc0649e2f39684cbe8a629a1f73b6a986a935e0b251a28197eab"
+    }
+  ],
+  "totalBytes": 20080,
+  "maxTotalBytes": 614400
+}

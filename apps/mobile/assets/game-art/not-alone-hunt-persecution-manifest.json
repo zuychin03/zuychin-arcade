@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-persecution.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2163309,
+    "sha256": "2286f3c0dd45623c1b1668fbb30f598a888b92e7cb00e9265fbac76eca387dd2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-persecution.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22172,
+      "sha256": "59efaf361f27a0de11acf8518e77addf960af0bf8461526e851b2aa7f8eee2b9"
+    }
+  ],
+  "totalBytes": 22172,
+  "maxTotalBytes": 614400
+}

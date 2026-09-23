@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-tool-lantern-broken.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1854809,
+    "sha256": "49aa48577ab0e835e21b6c38919d4fd498cc62fbecbf421eeee69d4475d323bb"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-tool-lantern-broken.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 12014,
+      "sha256": "c87b480c97c728a273a95535037751bc920af8f4043d3b006c10d98927b53b26"
+    }
+  ],
+  "totalBytes": 12014,
+  "maxTotalBytes": 614400
+}

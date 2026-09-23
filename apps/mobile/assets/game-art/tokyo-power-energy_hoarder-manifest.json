@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-energy_hoarder.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2295338,
+    "sha256": "491bab35ed0bad0963fa2930284a057a68ffdd585d3d6ac04970432305f870dd"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-energy_hoarder.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22120,
+      "sha256": "d6d8c82e81e840ad7956bd62d546cdf1f34de3546aef55c8adac914a446e515a"
+    }
+  ],
+  "totalBytes": 22120,
+  "maxTotalBytes": 614400
+}

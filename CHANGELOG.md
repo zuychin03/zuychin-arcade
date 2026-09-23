@@ -13,6 +13,16 @@
 
 ### Interface
 
+- Added an online-first installable PWA with controller/Z home-screen icons,
+  browser installation guidance, offline recovery and room-safe update controls.
+- Added 252 custom illustrations across all nine games, including individual
+  characters, named cards, card backs, faction seals and board scenery.
+- Refined card faces with directional bevels, recessed artwork and neon edges;
+  kept readable rules and interactive state separate from the illustrations.
+- Stacked smaller ARCADE beneath ZUYCHIN beside the controller logo, centred
+  the full header lockup and left-aligned sidebar branding.
+- Corrected Citadels role heights, count-dependent hand widths, enlarged-text
+  rulebook headers, Colt Express roof alignment and wrapped character-choice faces.
 - Added illustrated, mechanics-specific teaching sections to all nine rulebooks,
   with Coup's character reference reused before play and expandable detailed
   chapters for the other games.

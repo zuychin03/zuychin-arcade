@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-battery_monster.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2482457,
+    "sha256": "776efc3f0dc0f86c2f0f655c3148ad5bf5bb8d2a141eaf6a232c3bbd9536a5ea"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-battery_monster.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23242,
+      "sha256": "a22bcd419962e4e7d4f18eaf811b7fb4b50c474a216e3e94dc453756ca90dfd6"
+    }
+  ],
+  "totalBytes": 23242,
+  "maxTotalBytes": 614400
+}

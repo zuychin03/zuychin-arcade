@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-flame_thrower.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2373151,
+    "sha256": "4fa671cd2f07be3931a05c5de6f87a6fd3e2caf3edd3bf6b4412e78ba7270732"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-flame_thrower.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20222,
+      "sha256": "f81bdf096de6bf712d752a4a5a4bed73bb1f7fb5b2a022546ddace7ba478865a"
+    }
+  ],
+  "totalBytes": 20222,
+  "maxTotalBytes": 614400
+}

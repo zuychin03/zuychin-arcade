@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-town_hall.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2561548,
+    "sha256": "5d15fc39360533e48ae45906fee9c3a4e68fdf97cee8ec809c7b9efa12694475"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-town_hall.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20190,
+      "sha256": "7c5b7918317919e8beec53691b10720f62ca01ffd77381fa16ecb0129e9ff29c"
+    }
+  ],
+  "totalBytes": 20190,
+  "maxTotalBytes": 614400
+}

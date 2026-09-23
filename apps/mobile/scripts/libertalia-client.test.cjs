@@ -566,7 +566,7 @@ function crewCardForTest(props, definitions = crewDefinitions) {
     'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width: 375, fontScale: 1 }) },
     '@zuychin-arcade/types': { LIBERTALIA_CREW: definitions }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../ui/ScalePressable': { ScalePressable: 'Button' },
-    '../ui/CardSurface': { CardSurface: 'CardSurface' }, './LibertaliaArtwork': { LibertaliaPhaseArtwork: 'PhaseArt' },
+    '../ui/CardSurface': { CardSurface: 'CardSurface' }, './LibertaliaCrewArtwork': { LibertaliaCrewArtwork: 'CrewArt' },
     '../../constants/theme': { LIBERTALIA: { gold: 'gold', sky: 'sky', border: 'border' } },
   }).CrewCard({ onPress() {}, ...props });
 }

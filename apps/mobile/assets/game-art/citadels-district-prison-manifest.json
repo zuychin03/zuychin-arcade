@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-prison.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2392567,
+    "sha256": "13aaf882b3b8226d00b81a64106fccde36cd543b53efebd0115a0678ecf1df42"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-prison.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19402,
+      "sha256": "a7a0b2c0efbd8856f5be55988e349af1020804d02637f0d529a4bc2a3ed0b7de"
+    }
+  ],
+  "totalBytes": 19402,
+  "maxTotalBytes": 614400
+}

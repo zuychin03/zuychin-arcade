@@ -28,6 +28,7 @@ function loadNavigation(component, platform, pathname = '/') {
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': {
       Platform: { OS: platform }, View: 'View', Text: 'Text', Pressable: 'Pressable', ScrollView: 'ScrollView',
+      useWindowDimensions: () => ({ width: 375, fontScale: 1 }),
       StyleSheet: { create: value => value, absoluteFill: {} },
       BackHandler: { addEventListener: (event, callback) => {
         const subscription = { event, callback, removed: false, remove() { this.removed = true; } };
@@ -46,6 +47,7 @@ function loadNavigation(component, platform, pathname = '/') {
     './ZuychinLogo': { __esModule: true, default: 'Logo' },
     '../../hooks/useWebModalFocus': { useWebModalFocus: (...args) => modalCalls.push(args) },
     '../../hooks/useReducedMotionPreference': { useReducedMotionPreference: () => true },
+    '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textScale: 1, textRef: {}, onTextLayout() {} }) },
   };
   const exports = {};
   vm.runInNewContext(compiled, { exports, require: name => {
@@ -95,12 +97,16 @@ for (const platform of ['web', 'ios', 'android']) {
     assert(close.props.style.minHeight >= 48);
     assert.equal(close.props.style.flexShrink, 0);
     const header = scroll.props.children[0];
-    const controls = header.props.children[0];
-    const words = header.props.children[1];
+    const controls = header.props.children;
+    const brand = controls.props.children[0];
+    const words = brand.props.children[1];
     assert.equal(header.props.style.flexDirection, undefined);
     assert.equal(controls.props.style.flexDirection, 'row');
     assert.equal(controls.props.style.justifyContent, 'space-between');
-    assert.equal(allNodes(controls).filter(node => node.type === 'Text').length, 0);
+    assert.equal(brand.props.style.justifyContent, 'flex-start');
+    assert.equal(brand.props.style.flexDirection, 'row');
+    assert.equal(brand.props.children[0].props.height, 32);
+    assert.equal(allNodes(words).filter(node => node.type === 'Text').reduce((sum, node) => sum + node.props.style.lineHeight, 0), 32);
     assert.equal(words.props.style.minWidth, 0);
     assert.equal(words.props.style.flexShrink, 0);
     assert.deepEqual(allNodes(words).filter(node => node.type === 'Text').map(node => node.props.children), ['ZUYCHIN', 'ARCADE']);

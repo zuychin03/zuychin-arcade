@@ -11,7 +11,8 @@ function render(name, props = {}, platform = 'web') {
   const jsx = (type, props) => typeof type === 'function' ? type(props) : { type, props };
   const modules = {
     'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { View: 'View', Text: 'Text', Pressable: 'Pressable', ScrollView: 'ScrollView', Platform: { OS: platform }, StyleSheet: { create: value => value } },
+    'react-native': { View: 'View', Text: 'Text', Pressable: 'Pressable', ScrollView: 'ScrollView', useWindowDimensions: () => ({ width: 375, fontScale: 1 }), Platform: { OS: platform }, StyleSheet: { create: value => value } },
+    '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textScale: 1, textRef: {}, onTextLayout() {} }) },
     'expo-blur': { BlurView: 'BlurView' },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     'expo-router': { useRouter: () => ({ push() {} }), usePathname: () => '/' },
@@ -21,7 +22,9 @@ function render(name, props = {}, platform = 'web') {
   };
   const exports = {};
   vm.runInNewContext(code, { exports, require(name) { assert(name in modules, name); return modules[name]; } });
-  return exports.default(props);
+  const tree = exports.default(props);
+  for (const node of all(tree)) if (Array.isArray(node.props.style)) node.props.style = Object.assign({}, ...node.props.style);
+  return tree;
 }
 function children(node) { return [node.props?.children].flat(Infinity).filter(value => value && typeof value === 'object'); }
 function all(node) { return [node, ...children(node).flatMap(all)]; }
@@ -35,13 +38,13 @@ test('mobile header grows with wrapped branding without borrowing menu space', (
   assert.equal(brand.props.style.flexWrap, 'wrap');
   assert.equal(brand.props.style.minWidth, 0);
   assert.equal(brand.props.style.paddingRight, undefined);
-  for (const label of children(brand).filter(node => node.type === 'Text')) {
+  for (const label of all(brand).filter(node => node.type === 'Text')) {
     assert.equal(label.props.style.maxWidth, '100%');
     assert.equal(label.props.numberOfLines, undefined);
     assert.equal(label.props.adjustsFontSizeToFit, undefined);
     assert.notEqual(label.props.allowFontScaling, false);
   }
-  assert.equal(children(brand).find(node => node.type === 'Logo').props.height, 30);
+  assert.equal(children(brand).find(node => node.type === 'Logo').props.height, 32);
 });
 
 test('mobile menu keeps an independent 48px target and its actual callback', () => {
@@ -52,6 +55,23 @@ test('mobile menu keeps an independent 48px target and its actual callback', () 
   assert(menu.props.style.minHeight >= 48);
   assert.equal(menu.props.style.flexShrink, 0);
   menu.props.onPress(); assert.equal(presses, 1);
+});
+
+test('stacked header wordmark matches logo height with smaller ARCADE beneath ZUYCHIN', () => {
+  for (const platform of ['web', 'ios', 'android']) {
+    const words = all(render('MobileHeader', {}, platform)).filter(node => node.type === 'Text');
+    assert.equal(words.length, 2);
+    assert.deepEqual(words.map(node => node.props.children), ['ZUYCHIN', 'ARCADE']);
+    assert.equal(words[0].props.style.fontSize, 18);
+    assert.equal(words[1].props.style.fontSize, 10);
+    assert.equal(words[0].props.style.lineHeight + words[1].props.style.lineHeight, 32);
+    const tree = render('MobileHeader', {}, platform);
+    const brand = all(tree).find(node => node.props.testID === 'header-brand-lockup');
+    assert.equal(brand.props.style.flexDirection, 'row');
+    assert.equal(children(brand)[0].type, 'Logo');
+    assert.equal(children(brand)[1].props.testID, 'header-brand-words');
+    assert.equal(children(brand)[1].props.style.flexDirection, undefined);
+  }
 });
 
 test('mobile branding is centred between equal, non-shrinking side slots', () => {

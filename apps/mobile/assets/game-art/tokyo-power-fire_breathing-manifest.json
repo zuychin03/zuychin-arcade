@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-fire_breathing.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2482636,
+    "sha256": "46e3eef349b3ef16ec8f8e3b2db65035761044000995a56b8ecf9ab245eb8b1b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-fire_breathing.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23494,
+      "sha256": "0acdd8def2e6911f99cf9b98973aa12b81e513348ab6f2cf5bd8c7df7a3dd235"
+    }
+  ],
+  "totalBytes": 23494,
+  "maxTotalBytes": 614400
+}

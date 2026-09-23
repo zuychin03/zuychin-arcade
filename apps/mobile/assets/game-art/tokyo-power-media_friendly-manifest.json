@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-media_friendly.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2326284,
+    "sha256": "ef2ad28df831d5f1e8c955e6a8f7e15125cd6dd4275ca732f1a9eb1df2bd5d1b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-media_friendly.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20840,
+      "sha256": "1ac743223494a798a2e1314feaa32c15ec3d31733f1ff675df71b2504c0ae66a"
+    }
+  ],
+  "totalBytes": 20840,
+  "maxTotalBytes": 614400
+}

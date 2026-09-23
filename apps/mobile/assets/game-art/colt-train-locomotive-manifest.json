@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-train-locomotive.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2307692,
+    "sha256": "e40a724527f1e62db4256a2fccb3b00acdb05f8209b158d2cc3ae86f4edf3e94"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-train-locomotive.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 213,
+      "bytes": 10976,
+      "sha256": "5626bd0871361abc670e62b0f78a36bdc10cf81bc85f561713fa958752786874"
+    }
+  ],
+  "totalBytes": 10976,
+  "maxTotalBytes": 614400
+}

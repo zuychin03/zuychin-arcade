@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-vast_storm.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2485459,
+    "sha256": "3f58be1be22412dac939e2f56b4cfd6fbd4ff82643281c0efb179c6c5687d56f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-vast_storm.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22714,
+      "sha256": "68996d4f4022b7dc7c8ec800aafca3dfbf834fbb41db824b211d2059b73678ef"
+    }
+  ],
+  "totalBytes": 22714,
+  "maxTotalBytes": 614400
+}

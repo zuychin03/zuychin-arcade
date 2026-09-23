@@ -13,6 +13,10 @@ const rasterSpecs = [
   { file: 'assets/android-icon-foreground.png', size: 1024, fraction: 0.52, color: PINK },
   { file: 'assets/android-icon-monochrome.png', size: 1024, fraction: 0.52, color: '#FFFFFF' },
   { file: 'assets/favicon.png', size: 64, fraction: 0.86, color: PINK, background: BACKGROUND, micro: true },
+  { file: 'public/icons/icon-192.png', size: 192, fraction: 0.86, color: PINK, background: BACKGROUND },
+  { file: 'public/icons/icon-512.png', size: 512, fraction: 0.86, color: PINK, background: BACKGROUND },
+  { file: 'public/icons/maskable-512.png', size: 512, fraction: 0.62, color: PINK, background: BACKGROUND },
+  { file: 'public/icons/apple-touch-icon.png', size: 180, fraction: 0.86, color: PINK, background: BACKGROUND },
 ];
 
 function parseMaster(source) {
@@ -80,6 +84,7 @@ async function main(args) {
   const master = parseMaster(fs.readFileSync(masterPath, 'utf8'));
   // The entire mark rectangle fits the central 66dp-diameter circle on a 108dp layer.
   assert(Math.hypot(0.52, 0.52 / master.aspect) <= 66 / 108, 'Adaptive artwork rectangle exceeds safe circle');
+  assert(Math.hypot(0.62, 0.62 / master.aspect) <= 0.8, 'PWA artwork rectangle exceeds maskable safe circle');
   const artifacts = {};
   const micro = microMaster(master);
   for (const spec of rasterSpecs) {

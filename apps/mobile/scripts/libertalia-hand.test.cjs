@@ -86,25 +86,25 @@ test('browse and focus geometry clamps endpoints and ignores invalid measurement
   assert.equal(position(860, [0, 295, 590, 885], 4), 4);
 });
 
-test('empty and one/two-card hands remain simple; measured desktop grids collapse only at the text-aware threshold', () => {
+test('hand layout and widths depend on viewport, not remaining card count', () => {
   for (const count of [0, 1, 2, 3, 6]) {
     const instance = harness(), props = { ranks: cards(count) };
     const tree = instance.render(props);
     assert.equal(handCards(tree).length, count);
-    assert.equal(nodes(tree).filter(node => node.type === 'ScrollView').length, count > 2 ? 1 : 0);
-    assert.equal(buttons(tree).length, count > 2 ? 2 : 0);
+    assert.equal(nodes(tree).filter(node => node.type === 'ScrollView').length, count ? 1 : 0);
+    assert.equal(buttons(tree).length, count > 1 ? 2 : 0);
     if (!count) assert.equal(tree, null);
     if (count === 1 || count === 2) {
-      assert.equal(find(tree, 'libertalia-hand-grid').props.style.flexWrap, 'wrap');
-      assert(handCards(tree).every(card => card.props.onFocus === undefined && card.props.fluid === true));
+      assert(find(tree, 'libertalia-hand-rail'));
+      assert(handCards(tree).every(card => typeof card.props.onFocus === 'function' && card.props.fluid === true));
     }
   }
-  for (const textScale of [1, 1.5, 2]) for (const viewport of [256, 311, 599, 600, 900, 1200]) {
+  for (const count of [1, 2, 3, 6]) for (const textScale of [1, 1.5, 2]) for (const viewport of [256, 311, 500, 599, 600, 900, 1200]) {
     const instance = harness({ width: 1280 });
-    const tree = measure(instance, { ranks: cards(6), textScale }, viewport);
+    const tree = measure(instance, { ranks: cards(count), textScale }, viewport);
     assert.equal(Boolean(find(tree, 'libertalia-hand-rail')), viewport < 600 * textScale);
     assert.equal(Boolean(find(tree, 'libertalia-hand-grid')), viewport >= 600 * textScale);
-    assert.equal(handCards(tree).length, 6);
+    assert.equal(handCards(tree).length, count);
   }
   assert(find(measure(harness({ width: 1280, fontScale: 2, platform: 'ios' }), { ranks: cards(6) }, 900), 'libertalia-hand-rail'));
 });

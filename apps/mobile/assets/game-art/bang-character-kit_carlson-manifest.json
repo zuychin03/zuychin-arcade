@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-kit_carlson.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2055347,
+    "sha256": "9564352153b319c21a5a7bc32415e4e177fd2fc8699e663201c2e76f17ff5fc2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-kit_carlson.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13332,
+      "sha256": "602d3dc49c9733cca73f25183ab2282c351250f129eae0ed19e55aa585804c0d"
+    }
+  ],
+  "totalBytes": 13332,
+  "maxTotalBytes": 614400
+}

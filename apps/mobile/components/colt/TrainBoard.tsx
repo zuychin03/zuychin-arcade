@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { COLT_CHARACTERS, type ColtCharacter, type ColtLootType, type ColtPublicLoot, type ColtPublicState } from '@zuychin-arcade/types';
 import { NeonButton } from '../ui/NeonButton';
 import { COLT as C } from '../../constants/theme';
 import { coltCarName } from './decision';
+import { TrainArtwork } from './TrainArtwork';
+import { useIntrinsicCardHeight } from '../../hooks/useIntrinsicCardHeight';
 
 const decoration = { accessible: false, accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' as const, pointerEvents: 'none' as const };
 const pieceColours: Record<ColtCharacter, string> = { ghost: C.text, doc: C.cyan, tuco: C.gold, django: C.ember, cheyenne: C.red, belle: '#C9AFE8' };
@@ -50,12 +52,14 @@ export function TrainBoard({ game, playerId }: { game: ColtPublicState; playerId
   const [offset, setOffset] = useState(0), [viewport, setViewport] = useState(0), [contentWidth, setContentWidth] = useState(0);
   const maximum = Math.max(0, contentWidth - viewport);
   const carWidth = viewport > 0 ? Math.max(216, Math.min(320, viewport - 12)) : 252;
+  const { fontScale } = useWindowDimensions();
   const occupants = game.players.filter(p => p.setupComplete && game.turnOrder.includes(p.playerId)).flatMap(p => p.positions.flatMap((position, bandit) => {
     const characterId = p.characters[bandit]!;
     const character = COLT_CHARACTERS[characterId];
     if (!character || !position || !Number.isInteger(position.carIndex) || position.carIndex < 0 || position.carIndex >= game.trainCars || !['roof', 'inside'].includes(position.level)) return [];
     return [{ p, position, bandit, character, characterId }];
   }));
+  const roofHeights = useIntrinsicCardHeight(Array.from({ length: game.trainCars }, (_, car) => String(car)), JSON.stringify([carWidth, fontScale, playerId, occupants, game.lootBySpace]));
   const browse = (direction: number) => { const next = Math.max(0, Math.min(maximum, offset + direction * (carWidth + 20))); setOffset(next); scroll.current?.scrollTo({ x: next, animated: false }); };
   return <View style={{ gap: 12 }}>
     <Text style={{ ...text, color: C.muted }}>{game.trainCars} cars, caboose to locomotive. Swipe, scroll or use the car controls to inspect both levels.</Text>
@@ -63,13 +67,16 @@ export function TrainBoard({ game, playerId }: { game: ColtPublicState; playerId
     <ScrollView ref={scroll} horizontal showsHorizontalScrollIndicator onLayout={event => setViewport(event.nativeEvent.layout.width)} onContentSizeChange={width => setContentWidth(width)} onScroll={event => setOffset(event.nativeEvent.contentOffset.x)} scrollEventThrottle={80} contentContainerStyle={{ gap: 20, paddingHorizontal: 6, paddingTop: 8, paddingBottom: 12, alignItems: 'stretch' }}>
       {Array.from({ length: game.trainCars }, (_, car) => {
         const locomotive = car === game.trainCars - 1;
+        const roofSizing = roofHeights.forCard(String(car));
         return <View key={car} style={{ width: carWidth, flexShrink: 0 }}>
           <View {...decoration} style={{ height: 20, paddingHorizontal: 20, flexDirection: 'row', justifyContent: locomotive ? 'flex-end' : 'center', alignItems: 'flex-end' }}>
             {locomotive ? <View style={{ width: 27, height: 20, backgroundColor: C.border, borderTopWidth: 5, borderTopColor: C.muted, borderTopLeftRadius: 3, borderTopRightRadius: 3 }} /> : car === 0 ? <View style={{ width: 58, height: 14, borderTopLeftRadius: 5, borderTopRightRadius: 5, backgroundColor: C.border, borderTopWidth: 3, borderTopColor: C.muted }} /> : null}
           </View>
           <View style={{ flexGrow: 1, borderTopLeftRadius: 22, borderTopRightRadius: locomotive ? 8 : 22, borderBottomLeftRadius: 6, borderBottomRightRadius: 6, backgroundColor: '#303747', borderTopWidth: 3, borderTopColor: '#697489', borderBottomWidth: 6, borderBottomColor: '#10131A', boxShadow: '0 5px 8px rgba(0,0,0,0.3)' }}>
             <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: C.gold, fontSize: 17, lineHeight: 24, paddingHorizontal: 14, paddingVertical: 12 }}>{coltCarName(car, game.trainCars).toUpperCase()}</Text>
-            {(['roof', 'inside'] as const).map(level => <View key={level} style={{ padding: 12, gap: 10, minHeight: 132, ...(level === 'inside' ? { flexGrow: 1, marginHorizontal: 8, marginBottom: 8, borderRadius: 4, borderTopWidth: 5, borderTopColor: '#10131A', backgroundColor: '#151A24' } : { borderBottomWidth: 5, borderBottomColor: '#596173' }) }}>
+            <View {...decoration} style={{ marginHorizontal: 8, marginBottom: 8, borderRadius: 8, overflow: 'hidden' }}><TrainArtwork kind={locomotive ? 'locomotive' : car === 0 ? 'caboose' : 'carriage'} /></View>
+            {(['roof', 'inside'] as const).map(level => <View key={level} testID={`colt-space-${car}-${level}`} style={{ minHeight: level === 'roof' ? Math.max(132, roofSizing.minimumHeight + 5) : 132, ...(level === 'inside' ? { flexGrow: 1, marginHorizontal: 8, marginBottom: 8, borderRadius: 4, borderTopWidth: 5, borderTopColor: '#10131A', backgroundColor: '#151A24' } : { borderBottomWidth: 5, borderBottomColor: '#596173' }) }}>
+              <View key={level === 'roof' ? roofSizing.measurementKey : level} onLayout={level === 'roof' ? event => roofSizing.onMeasure(event.nativeEvent.layout.height) : undefined} style={{ padding: 12, gap: 10 }}>
               <Text style={{ fontFamily: 'Outfit_700Bold', color: level === 'roof' ? C.cyan : C.gold, fontSize: 14, lineHeight: 21 }}>{level.toUpperCase()}</Text>
               {level === 'inside' && car === game.marshalCar ? <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}><BanditPiece marshal /><Text style={{ ...text, flex: 1, minWidth: 0, fontFamily: 'Outfit_700Bold', color: C.gold }}>MARSHAL INSIDE</Text></View> : null}
               {occupants.filter(x => x.position.carIndex === car && x.position.level === level).map(({ p, bandit, character, characterId }) => <View key={`${p.playerId}:${bandit}`} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -79,6 +86,7 @@ export function TrainBoard({ game, playerId }: { game: ColtPublicState; playerId
               <View style={{ gap: 4, paddingTop: 4 }}>
                 {spaceLoot(game.lootBySpace[`${car}:${level}`] ?? []).map(loot => <View key={`${loot.type}:${loot.value ?? 'hidden'}`} style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}><LootPiece kind={loot.type} /><Text style={{ ...text, flex: 1, minWidth: 0 }}>{loot.type} × {loot.count}{loot.value === null ? ' · hidden value' : ` · $${loot.value} each`}</Text></View>)}
                 {!game.lootBySpace[`${car}:${level}`]?.length ? <Text style={{ ...text, color: C.muted }}>No loot</Text> : null}
+              </View>
               </View>
             </View>)}
             {car < game.trainCars - 1 ? <View {...decoration} style={{ position: 'absolute', right: -21, bottom: 10, width: 22, height: 8, borderRadius: 3, backgroundColor: '#596173', borderTopWidth: 2, borderTopColor: C.muted, borderBottomWidth: 2, borderBottomColor: '#10131A' }} /> : null}

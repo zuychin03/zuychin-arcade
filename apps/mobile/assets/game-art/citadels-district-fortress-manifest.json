@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-fortress.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2432102,
+    "sha256": "1ec62d570d6f100be8b73f4e93e6fbf90ceca08181fcced69a0f36c0058a3195"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-fortress.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19376,
+      "sha256": "9d76ce8a3a9995dc58c706e87bdfcf4715f0e46652d9f163f199190b6d80f143"
+    }
+  ],
+  "totalBytes": 19376,
+  "maxTotalBytes": 614400
+}

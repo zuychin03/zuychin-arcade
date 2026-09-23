@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-stretchy.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2129206,
+    "sha256": "6894f83538e38de697da2671b13f419e300039c3f5dfcffe74a7431ff2d7928a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-stretchy.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16972,
+      "sha256": "0245a3f2db9fcb3c8f2860201447667fbb453def94cbd754f51e11c022983956"
+    }
+  ],
+  "totalBytes": 16972,
+  "maxTotalBytes": 614400
+}

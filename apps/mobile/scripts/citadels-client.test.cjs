@@ -313,6 +313,7 @@ test('unique district explanations and names remain complete at large text sizes
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '@zuychin-arcade/types': { CITADELS_ROLE_BY_ID: {} },
     '../ui/ScalePressable': { ScalePressable: 'Button' }, '../../constants/theme': { CITADELS: {} },
     '../ui/CardSurface': { CardSurface: 'CardSurface' }, './CitadelsDistrictArtwork': { CitadelsDistrictArtwork: 'Artwork', citadelsDistrictIcons: { unique: 'star-four-points-outline' } },
+    './CitadelsRoleArtwork': { CitadelsRoleArtwork: 'RoleArtwork' },
   });
   const text = 'A complete long unique district explanation that must not be truncated.';
   const tree = CitadelsDistrictView({ card: { id: 'u', name: 'Imperial Treasury', cost: 5, color: 'unique', effectText: text }, compact: true, onPress() {} });

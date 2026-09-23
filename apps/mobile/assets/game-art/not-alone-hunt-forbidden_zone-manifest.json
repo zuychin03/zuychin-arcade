@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-forbidden_zone.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2672772,
+    "sha256": "72e03028cc9541ecea48067772a6eccf54a6f9e3a3b173f4cc52aad290dc7164"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-forbidden_zone.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 29268,
+      "sha256": "2693bef11bdde60c13b47be6ac077ad590b0dbe400faf0a182558eb8166da908"
+    }
+  ],
+  "totalBytes": 29268,
+  "maxTotalBytes": 614400
+}

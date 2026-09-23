@@ -4,7 +4,7 @@ import type { SkullKingCard as Card, SkullKingPlayedCard } from '@zuychin-arcade
 import { ScalePressable } from '../ui/ScalePressable';
 import { SKULL_KING } from '../../constants/theme';
 import { CardSurface } from '../ui/CardSurface';
-import { SkullKingCardArtwork } from './SkullKingCardArtwork';
+import { SkullKingCardArtwork, SkullKingSuitArtwork } from './SkullKingCardArtwork';
 import type { IntrinsicCardFaceSizing } from '../../hooks/useIntrinsicCardHeight';
 import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
@@ -69,7 +69,7 @@ export function SkullKingCardView({
               <MaterialCommunityIcons name={card.suit === 'black' ? 'cards-spade' : 'water'} size={20} color={color} accessible={false} />
             </View>
             <View style={{ flexGrow: 1, minHeight: compact ? 76 : 100, paddingVertical: 8, alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 10, backgroundColor: SKULL_KING.surface }}>
-              <MaterialCommunityIcons name={card.suit === 'black' ? 'cards-spade' : 'water'} size={36} color={color} accessible={false} />
+              <View style={{ width: compact ? 56 : 64, maxWidth: '100%' }}><SkullKingSuitArtwork suit={card.suit!} color={color} /></View>
               <Text style={{ fontFamily: 'SpaceMono_700Bold', color: SKULL_KING.text, fontSize: 32, lineHeight: 40 }}>{card.rank}</Text>
             </View>
             <Text style={{ fontFamily: 'Outfit_700Bold', color, fontSize: 14, lineHeight: 19, textAlign: 'center' }}>{card.suit!.toUpperCase()}</Text>

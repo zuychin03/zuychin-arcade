@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-lucky_duke.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2196861,
+    "sha256": "d2332f71a0510d9e95f54bb10c97b492f48cb061a7193559c56ada9d469f0588"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-lucky_duke.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14594,
+      "sha256": "9adefaad9a2e1fcf486caf13867bb4985129983d80bfa67cde53b1a4bbcee76c"
+    }
+  ],
+  "totalBytes": 14594,
+  "maxTotalBytes": 614400
+}

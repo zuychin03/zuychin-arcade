@@ -20,11 +20,13 @@ function load(file, modules) {
 }
 function harness({ platform = 'web', width = 375, fontScale = 1 } = {}) {
   const native = { View: 'View', Text: 'Text', Image: 'Image', Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }), StyleSheet: { absoluteFill: {} } };
-  const modules = { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { COUP: colours, ARCADE: colours, COUP_CHARACTER_COLOR: Object.fromEntries(roles.map(role => [role, colours.gold])) }, '../ui/ScalePressable': { ScalePressable: 'Button' } };
+  const modules = { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, 'expo-linear-gradient': { LinearGradient: 'Gradient' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { COUP: colours, ARCADE: colours, COUP_CHARACTER_COLOR: Object.fromEntries(roles.map(role => [role, colours.gold])) }, '../ui/ScalePressable': { ScalePressable: 'Button' } };
   const surface = load('components/ui/CardSurface.tsx', modules);
   const assets = Object.fromEntries(roles.map(role => [`../../assets/game-art/coup-character-${role}.webp`, role + '.webp']));
   const artwork = load('components/coup/CoupCharacterArtwork.tsx', { ...modules, ...assets, '../ui/GameCover': { GameCover: 'GameCover' } });
-  const card = load('components/coup/CharacterCard.tsx', { ...modules, '../ui/CardSurface': surface, './CoupCharacterArtwork': artwork });
+  const tableAssets = Object.fromEntries(['influence-back', 'faction-loyalist', 'faction-reformist', 'treasury'].map(id => [`../../assets/game-art/coup-${id}.webp`, id + '.webp']));
+  const tableArtwork = load('components/coup/CoupTableArtwork.tsx', { ...modules, ...tableAssets, '../ui/GameCover': { GameCover: 'GameCover' } });
+  const card = load('components/coup/CharacterCard.tsx', { ...modules, '../ui/CardSurface': surface, './CoupCharacterArtwork': artwork, './CoupTableArtwork': tableArtwork });
   const seat = load('components/coup/PlayerSeat.tsx', { ...modules, './CharacterCard': card, './Coin': { Coin: 'Coin' } });
   return { ...card, ...seat, ...artwork, modules };
 }
@@ -98,8 +100,8 @@ test('concealed trees and backs are role-independent and never mount role artwor
   for (const character of roles) {
     const tree = CharacterCard({ character, faceDown: true, size: 'md', accessibilityLabel: 'Private influence 1, hidden' });
     assert.equal(JSON.stringify(tree), JSON.stringify(baseline));
-    assert(!nodes(tree).some(node => node.type === 'GameCover'));
-    assert.doesNotMatch(JSON.stringify(tree), /\.webp|Tax|Exchange|assassinat|ambassador|inquisitor/);
+    assert.deepEqual(nodes(tree).filter(node => node.type === 'GameCover').map(node => node.props.source), ['influence-back.webp']);
+    assert.doesNotMatch(JSON.stringify(tree), /Tax|Exchange|assassinat|ambassador|inquisitor|coup-character/);
   }
 });
 
@@ -202,7 +204,7 @@ test('comparable influence faces and backs fill their row without stretching com
         if (!disabled) { tree.props.onPress(); assert.equal(calls, 1); }
       } else assert.equal(tree.props.accessibilityRole, 'image');
       if (faceDown) {
-        assert(!nodes(tree).some(node => node.type === 'GameCover'));
+        assert.deepEqual(nodes(tree).filter(node => node.type === 'GameCover').map(node => node.props.source), ['influence-back.webp']);
         assert.equal(tree.props.accessibilityLabel, 'Hidden influence');
       } else if (size !== 'xs') {
         assert(text(tree).includes(character[0].toUpperCase() + character.slice(1)));
@@ -218,13 +220,13 @@ test('lost faces stay readable with explicit status and compact public seats use
   const { CharacterCard, PlayerSeat } = harness();
   const lost = CharacterCard({ character: 'duke', lost: true, size: 'md' });
   assert.match(text(lost), /Duke.*Revealed · lost/);
-  assert(!nodes(lost).some(node => node.props.style?.opacity < 1));
+  assert(!nodes(lost).some(node => !node.props.accessibilityElementsHidden && node.props.style?.opacity < 1));
   const player = { displayName: 'Long player display name', coins: 11, influenceCount: 1, revealedCharacters: ['duke'], eliminated: false, isCurrentTurn: true };
   const seat = PlayerSeat({ player, isMe: false, selectable: true, onSelect() {} });
   assert.equal(seat.type, 'Button');
   assert.equal(seat.props.accessibilityHint, 'Select this player as the action target');
   assert.match(text(seat), /Current turn.*Choose target.*Lost: duke/);
-  assert.deepEqual(nodes(seat).filter(node => node.type === 'GameCover').map(node => node.props.source), ['duke.webp']);
+  assert.deepEqual(nodes(seat).filter(node => node.type === 'GameCover').map(node => node.props.source), ['influence-back.webp', 'duke.webp']);
   assert.equal(nodes(seat).find(node => node.type === 'Coin').props.amount, 11);
   assert.equal(JSON.stringify(seat), JSON.stringify(PlayerSeat({ player: { ...player, influences: ['assassin'], privateRole: 'ambassador' }, isMe: false, selectable: true, onSelect() {} })));
 });
@@ -269,7 +271,7 @@ test('toolbar wraps bounded groups while keeping full labels, targets and handle
       const exports = {}, calls = [];
       vm.runInNewContext(compiled.outputText, {
         exports, require: () => ({ jsx, jsxs: jsx }), View: 'View', Text: 'Text', Pressable: 'Button',
-        MaterialCommunityIcons: 'Icon', COUP: colours, neonText: () => ({}), isXWide,
+        MaterialCommunityIcons: 'Icon', CoupTableArtwork: 'TableArtwork', COUP: colours, neonText: () => ({}), isXWide,
         pub: { variant, treasuryReserve: 12, deckSize: 7 },
         setShowRef: value => calls.push(['rules', value]), onRequestLeave: () => calls.push(['leave']),
       });

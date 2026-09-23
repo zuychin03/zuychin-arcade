@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-role-magician.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2123976,
+    "sha256": "a393057286b871eadcb0b9e004db9ccffd4f8df63f09ca0b6d959b8e0e9f2624"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-role-magician.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13786,
+      "sha256": "e8bb0be4ba09335e0e4d7fa6cbccc0a09c00c5e41cd24024fe2155c035628beb"
+    }
+  ],
+  "totalBytes": 13786,
+  "maxTotalBytes": 614400
+}

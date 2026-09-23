@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-detour.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2836760,
+    "sha256": "4ab43befa301b545071865be0a52c6c3ffbe804fba8531b305bb3ec723d186f2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-detour.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 32362,
+      "sha256": "03596614fcade3454d5873761660d379bc095a2ed57bdff56127bd03c2dd2f63"
+    }
+  ],
+  "totalBytes": 32362,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-tracking.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2432638,
+    "sha256": "d56ad63d7967502247a527ea0ad4d60425fb9aac2501e9795bc7e26cd3e63fce"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-tracking.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 28736,
+      "sha256": "8a26884dac398056538793f2935f633601502a2f0657c819cade4fed29358cab"
+    }
+  ],
+  "totalBytes": 28736,
+  "maxTotalBytes": 614400
+}

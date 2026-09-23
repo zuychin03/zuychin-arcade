@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-herbivore.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2654983,
+    "sha256": "a15857c14653f5dc1303849a0a7f1fed2f0b9a5add80b6659de9cd81083bb438"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-herbivore.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 26798,
+      "sha256": "1425d9b501ebadccbb0c47a62970c8cf62a324f99e95a7477478f45eaeb86928"
+    }
+  ],
+  "totalBytes": 26798,
+  "maxTotalBytes": 614400
+}

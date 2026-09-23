@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-harbor.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2253966,
+    "sha256": "02ef3f0568c8375ab63b25dedd7ccde5d9327a6c900f6acc058718c2b1b217ee"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-harbor.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 16296,
+      "sha256": "a88dfc31a0379bda3e0c92782b7407b8a3d73bb59d9a0b1e5ab06e33e7c8c00a"
+    }
+  ],
+  "totalBytes": 16296,
+  "maxTotalBytes": 614400
+}

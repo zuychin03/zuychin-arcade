@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-dodge.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2293905,
+    "sha256": "ddb03133708eddc6516fa4f8aafbd4bf9a07dedb1257e02ee9ed51b50872d069"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-dodge.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22006,
+      "sha256": "995b707ab77badae3a3bc288604a383a991d7ab463253034f73358856eb6226d"
+    }
+  ],
+  "totalBytes": 22006,
+  "maxTotalBytes": 614400
+}

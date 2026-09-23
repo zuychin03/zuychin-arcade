@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-missed.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2444802,
+    "sha256": "ec043399e40dc41ed2ec84642e8adf622884b3fee277fee04527162fee991df6"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-missed.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18740,
+      "sha256": "dcb950f09da9c17a4a189b29e69b7b9f09132201a840ac82185b2925269e3514"
+    }
+  ],
+  "totalBytes": 18740,
+  "maxTotalBytes": 614400
+}

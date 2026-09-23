@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-tavern.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2413114,
+    "sha256": "a21fa8cf519834cc9994ac5f2a84754c8f05ff66e81a5cbdaecc4825e768f7eb"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-tavern.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21244,
+      "sha256": "635f9789cc6e17b5db2ced29cd2f33c04fcf93a36aa1ebfb5ee11c2b7ec5ccc3"
+    }
+  ],
+  "totalBytes": 21244,
+  "maxTotalBytes": 614400
+}

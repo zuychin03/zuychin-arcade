@@ -13,6 +13,7 @@ import { CardGrid } from '../../components/ui/CardGrid';
 import { GameRecovery } from '../../components/ui/GameRecovery';
 import { BangCardView, BANG_CARD_DETAILS, BANG_ROLE_GUIDE } from '../../components/bang/Card';
 import { BANG_CARD_EMBLEM } from '../../components/bang/CardArtwork';
+import { BangCharacterArtwork } from '../../components/bang/CharacterArtwork';
 import { BangHand } from '../../components/bang/Hand';
 import { BangReferenceSheet } from '../../components/bang/ReferenceSheet';
 import { useBangActions } from '../../components/bang/useBangActions';
@@ -314,7 +315,7 @@ export default function BangGame() {
       {game.status !== 'game_over' ? <View style={styles.identity}>
         <RoleBadge role={priv.role} />
         <Text style={styles.sectionTitle}>Your {priv.role === 'sheriff' ? 'public' : 'secret'} role: {role.name}</Text><Text style={styles.body}>{role.goal}</Text>
-        <View style={styles.characterStation}><Text style={styles.playerName}>{character.name}</Text><LifeTokens health={mine.health} maximum={mine.maxHealth} /><Text style={styles.body}>{character.summary}</Text></View>
+        <View style={styles.characterStation}><BangCharacterArtwork character={mine.character} /><Text style={styles.playerName}>{character.name}</Text><LifeTokens health={mine.health} maximum={mine.maxHealth} /><Text style={styles.body}>{character.summary}</Text></View>
         {priv.canPlay ? <Text style={styles.small}>Weapon range {priv.weaponRange} · {priv.bangsRemaining === null ? 'Unlimited BANG!' : `${priv.bangsRemaining} BANG! remaining this turn`}</Text> : null}
       </View> : null}
       <View nativeID="bang-decision-area" onLayout={event => { decisionAnchors.current.decision = event.nativeEvent.layout.y; updateDecisionY(); }} style={styles.decisionArea}>
@@ -378,7 +379,7 @@ export default function BangGame() {
           <Text style={styles.playerName}>{index + 1}. {player.displayName}{player.playerId === me ? ' (you)' : ''}</Text>
           <RoleBadge role={player.role} playerId={player.playerId} />
           {showTurn && player.alive && player.playerId === game.activePlayerId ? <Text style={styles.small}>TAKING TURN</Text> : null}
-          <View style={styles.characterStation}><Text style={styles.playerName}>{BANG_CHARACTERS[player.character].name}</Text><Text style={styles.body}>{BANG_CHARACTERS[player.character].summary}</Text></View>
+          <View style={styles.characterStation}><BangCharacterArtwork character={player.character} size={72} /><Text style={styles.playerName}>{BANG_CHARACTERS[player.character].name}</Text><Text style={styles.body}>{BANG_CHARACTERS[player.character].summary}</Text></View>
           <LifeTokens health={player.health} maximum={player.maxHealth} />
           <Text style={styles.body}>{player.forfeited ? 'Forfeited' : player.alive ? `${player.handCount} cards in hand` : 'Eliminated'}</Text>
           {player.alive ? <Text style={styles.small}>{showTurn ? `${player.playerId === game.activePlayerId ? 'Active seat' : `Distance ${player.distanceFromActive}`} · ` : ''}{room?.players.find((person) => person.playerId === player.playerId)?.isConnected ? 'Connected' : 'Reconnecting'}</Text> : null}

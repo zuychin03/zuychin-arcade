@@ -13,6 +13,7 @@ import { ARCADE } from '../constants/theme';
 import { useFonts as useOutfit, Outfit_400Regular, Outfit_700Bold, Outfit_800ExtraBold } from '@expo-google-fonts/outfit';
 import { useFonts as useSpaceMono, SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';
 import { useReducedMotionPreference } from '../hooks/useReducedMotionPreference';
+import PwaControls from '../components/pwa/PwaControls';
 
 type BootShellProps = {
   error?: string;
@@ -154,6 +155,7 @@ export default function RootLayout() {
         <Stack.Screen name="libertalia" />
         <Stack.Screen name="colt-express" />
       </Stack>
+      <PwaControls />
       <ArcadeDialogHost />
     </View>
   );

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-poison_quills.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2633649,
+    "sha256": "1425582b29d63ea0fbfa33dfdac200fb32e9bc113a0d46cf02ee0d5341d1adde"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-poison_quills.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24182,
+      "sha256": "8a3c7a0b8ba89d38edff3d318bb37c03ecf238e5ef1cb53c841976477a58de7a"
+    }
+  ],
+  "totalBytes": 24182,
+  "maxTotalBytes": 614400
+}

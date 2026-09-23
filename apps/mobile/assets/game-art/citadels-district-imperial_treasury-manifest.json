@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-imperial_treasury.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2489238,
+    "sha256": "68d1253d497270a0316f9c0cc1315b5a4ffa80e75799909a1b72fafb67b2e25c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-imperial_treasury.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21366,
+      "sha256": "8db03dc61d390b2956d81d29feecdd7e663c12eced71e07da53739336d8c9412"
+    }
+  ],
+  "totalBytes": 21366,
+  "maxTotalBytes": 614400
+}

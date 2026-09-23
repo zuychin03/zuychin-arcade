@@ -4,6 +4,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 const test = require('node:test');
 const ts = require('typescript');
+const bangConstants = {};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync(path.join(__dirname, '../../../packages/types/src/bang-constants.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, { exports: bangConstants });
 
 const jsx = (type, props) => typeof type === 'function' ? type(props) : { type, props };
 const nodes = node => Array.isArray(node) ? node.flatMap(nodes) : node && typeof node === 'object' ? [node, ...nodes(node.props?.children)] : [];
@@ -16,6 +18,8 @@ function render(game, name, fontScale, measuredScale = fontScale) {
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { Text: 'Text', View: 'View', useWindowDimensions: () => ({ width: 320, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
+    '@zuychin-arcade/types': { BANG_CHARACTERS: bangConstants.BANG_CHARACTERS },
+    './CharacterArtwork': { BangCharacterArtwork: 'CharacterArtwork' },
     '../../constants/theme': { BANG: colours, LIBERTALIA: colours, COLT: colours },
     '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: (baseFontSize, nativeScale) => {
       assert.equal(baseFontSize, 16);
@@ -56,6 +60,7 @@ test('BANG explains teams, life-linked hand limit and distance with actual stati
   assert.match(text(tree), /at most three cards/);
   assert.match(text(tree), /Panic! still requires distance 1/);
   assert.deepEqual(nodes(tree).filter(node => node.type === 'BangCardView').map(node => node.props.card.name), ['bang', 'mustang']);
+  assert.deepEqual(nodes(tree).filter(node => node.type === 'CharacterArtwork').map(node => node.props.character).sort(), Object.keys(bangConstants.BANG_CHARACTERS).sort());
 });
 
 test('Libertalia distinguishes rank direction, night persistence and three voyages', () => {

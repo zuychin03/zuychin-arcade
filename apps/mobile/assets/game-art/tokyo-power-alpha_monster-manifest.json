@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-alpha_monster.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2435471,
+    "sha256": "029bdca3db12569ded0b8c742a646598cd1672f8fd953053662c7659c7c8c001"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-alpha_monster.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22298,
+      "sha256": "a296b7723c87fbb9a08ff8b9d920bd67a429a94ca639bb08636db246075ebaa3"
+    }
+  ],
+  "totalBytes": 22298,
+  "maxTotalBytes": 614400
+}

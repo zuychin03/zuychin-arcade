@@ -15,5 +15,5 @@ const sources = {
 const icons: Record<CoupCharacter, keyof typeof MaterialCommunityIcons.glyphMap> = { duke: 'crown', assassin: 'sword', captain: 'anchor', ambassador: 'handshake', contessa: 'shield-crown', inquisitor: 'magnify' };
 
 export function CoupCharacterArtwork({ character }: { character: CoupCharacter }) {
-  return <GameCover source={sources[character]} aspectRatio={1} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name={icons[character]} size={32} color={COUP_CHARACTER_COLOR[character]} /></View>} />;
+  return <GameCover source={sources[character]} rimColor={COUP_CHARACTER_COLOR[character]} aspectRatio={1} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name={icons[character]} size={32} color={COUP_CHARACTER_COLOR[character]} /></View>} />;
 }

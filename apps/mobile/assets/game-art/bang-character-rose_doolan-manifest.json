@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-rose_doolan.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2219516,
+    "sha256": "847764f78af4860541cebcabe9221add61c25ee0b40b72a06f752d0d6c216ad5"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-rose_doolan.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 14656,
+      "sha256": "fd5ee802fd5d9a4ac7b8ff783d7187d332c150c4334ebda8fcd3505aeaa4d452"
+    }
+  ],
+  "totalBytes": 14656,
+  "maxTotalBytes": 614400
+}

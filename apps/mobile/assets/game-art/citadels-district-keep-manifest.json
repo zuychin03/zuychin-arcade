@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-keep.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2555078,
+    "sha256": "4cf4fd5a2b745c9feb43671dbd58248a2251b69828f8d0a69bf28c46e5ec8a9d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-keep.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18410,
+      "sha256": "13b79722efcba59404ddebbc47bba7a7942c33a9f36cb894577dc961c746f770"
+    }
+  ],
+  "totalBytes": 18410,
+  "maxTotalBytes": 614400
+}

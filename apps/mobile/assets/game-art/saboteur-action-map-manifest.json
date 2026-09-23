@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-action-map.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2132802,
+    "sha256": "765fd4fb02b0987fb6bba3cdfc6544fc299c9135d3344490d733d04e94ffb288"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-action-map.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15074,
+      "sha256": "df41ec6944b97d908fa3f808eb0a9e1dd4b05d177633f5936d8a24e55f51bb31"
+    }
+  ],
+  "totalBytes": 15074,
+  "maxTotalBytes": 614400
+}

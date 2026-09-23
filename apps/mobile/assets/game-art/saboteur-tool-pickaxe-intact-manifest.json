@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/saboteur-tool-pickaxe-intact.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1617990,
+    "sha256": "c5f28bedab10a2878ad0d01571c302808154ad7c8270a1384d3fcf774b9a855f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "saboteur-tool-pickaxe-intact.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 6942,
+      "sha256": "530f90dc6862273ace74aa9e71226065f31c53543a68ebcd07fcbfa676801159"
+    }
+  ],
+  "totalBytes": 6942,
+  "maxTotalBytes": 614400
+}

@@ -55,7 +55,7 @@ export function LibertaliaHand({ ranks, textScale = 1, renderCard }: Props) {
   const [contentWidth, setContentWidth] = useState(0);
   const [offset, setOffset] = useState(0);
   const scale = Math.max(1, Number.isFinite(fontScale) ? fontScale : 1, Number.isFinite(textScale) ? textScale : 1);
-  const horizontal = ranks.length > 2 && viewport < 600 * scale;
+  const horizontal = viewport < 600 * scale;
   const identity = JSON.stringify(ranks);
   const maximum = Math.max(0, contentWidth - viewport);
   const cardWidth = libertaliaHandWidth(viewport, fontScale, Platform.OS === 'web');
@@ -85,7 +85,7 @@ export function LibertaliaHand({ ranks, textScale = 1, renderCard }: Props) {
   if (!ranks.length) return null;
   return <View testID="libertalia-hand-ranks" onLayout={event => setViewport(event.nativeEvent.layout.width)} style={styles.root}>
     {horizontal ? <>
-      <View style={styles.toolbar}>
+      {ranks.length > 1 ? <View style={styles.toolbar}>
         <Text testID="libertalia-hand-position" accessibilityLiveRegion="polite" style={styles.position}>Crew {current} of {ranks.length} · swipe or browse</Text>
         <View style={styles.controls}>
           {([-1, 1] as const).map(direction => {
@@ -96,7 +96,7 @@ export function LibertaliaHand({ ranks, textScale = 1, renderCard }: Props) {
             </Pressable>;
           })}
         </View>
-      </View>
+      </View> : null}
       <ScrollView ref={rail} testID="libertalia-hand-rail" horizontal showsHorizontalScrollIndicator
         onLayout={event => setViewport(event.nativeEvent.layout.width)} onContentSizeChange={next => setContentWidth(next)}
         onScroll={event => { offsetRef.current = event.nativeEvent.contentOffset.x; setOffset(offsetRef.current); }} scrollEventThrottle={32}

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BackHandler, Platform, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { BackHandler, Platform, View, Text, StyleSheet, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { Easing, SlideInLeft, SlideOutLeft, FadeIn, FadeOut } from 'react-native-reanimated';
@@ -7,6 +7,7 @@ import { ARCADE } from '../../constants/theme';
 import ZuychinLogo from './ZuychinLogo';
 import { useWebModalFocus } from '../../hooks/useWebModalFocus';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
+import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
 const DRAWER_ID = 'arcade-mobile-navigation';
 
@@ -46,6 +47,8 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const reduceMotion = useReducedMotionPreference();
+  const { fontScale } = useWindowDimensions();
+  const { textRef, onTextLayout, textScale } = useMeasuredTextScale(18, fontScale);
   useWebModalFocus(isOpen, DRAWER_ID, onClose);
 
   useEffect(() => {
@@ -87,7 +90,13 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
         <ScrollView style={styles.scroll}>
           <View style={styles.drawerHeader}>
             <View style={styles.headerControls}>
-              <ZuychinLogo color={ARCADE.pink} height={44} style={{ flexShrink: 0 }} />
+              <View testID="drawer-brand-lockup" style={styles.brandLockup}>
+                <ZuychinLogo color={ARCADE.pink} height={32 * textScale} style={{ flexShrink: 0 }} />
+                <View style={styles.logoWords}>
+                  <Text ref={textRef} onLayout={onTextLayout} style={styles.logoText}>ZUYCHIN</Text>
+                  <Text style={styles.logoSub}>ARCADE</Text>
+                </View>
+              </View>
               <Pressable
                 accessibilityLabel="Close navigation menu"
                 accessibilityRole="button"
@@ -97,10 +106,6 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
               >
                 <MaterialCommunityIcons name="close" size={24} color={ARCADE.text} />
               </Pressable>
-            </View>
-            <View style={styles.logoWords}>
-              <Text style={styles.logoText}>ZUYCHIN</Text>
-              <Text style={styles.logoSub}>ARCADE</Text>
             </View>
           </View>
 
@@ -144,8 +149,17 @@ const styles = StyleSheet.create({
   headerControls: {
     minWidth: 0,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 8,
+  },
+  brandLockup: {
+    maxWidth: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     gap: 8,
   },
   logoWords: {
@@ -162,17 +176,17 @@ const styles = StyleSheet.create({
   },
   logoText: {
     color: ARCADE.text,
-    fontSize: 24,
+    fontSize: 18,
     fontFamily: 'Outfit_800ExtraBold',
-    letterSpacing: 2,
-    lineHeight: 28,
+    letterSpacing: 1,
+    lineHeight: 20,
   },
   logoSub: {
     color: ARCADE.cyan,
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'SpaceMono_700Bold',
-    letterSpacing: 4,
-    lineHeight: 16,
+    letterSpacing: 1,
+    lineHeight: 12,
   },
   navContainer: {
     paddingBottom: 16,

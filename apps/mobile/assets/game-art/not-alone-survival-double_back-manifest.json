@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-double_back.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2267920,
+    "sha256": "04a098b44656c39b6ddf19c99a7a01d395efecdc5238fe74ccab6bdfa139e215"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-double_back.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22934,
+      "sha256": "037881e3abd677df97eb933ba9a57315b4b907032decf7e31579412559631bff"
+    }
+  ],
+  "totalBytes": 22934,
+  "maxTotalBytes": 614400
+}

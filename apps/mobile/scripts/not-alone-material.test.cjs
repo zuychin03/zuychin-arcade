@@ -34,7 +34,12 @@ function harness({ platform = 'web', fontScale = 1, width = 375, actualSurface =
     window: { getComputedStyle: node => { assert.equal(node, textRef.current); return { fontSize: `${measuredFont}px` }; } },
   });
   for (const name of placeNames) modules[`../../assets/game-art/not-alone-place-${name}.webp`] = name;
+  modules['expo-linear-gradient'] = { LinearGradient: 'Gradient' };
   modules['../ui/CardSurface'] = actualSurface ? load('components/ui/CardSurface.tsx', modules) : { CardSurface: 'Surface' };
+  for (const [family, cards] of [['survival', definitions.NOT_ALONE_SURVIVAL_CARDS], ['hunt', definitions.NOT_ALONE_HUNT_CARDS]]) {
+    for (const card of cards) modules[`../../assets/game-art/not-alone-${family}-${card.id}.webp`] = `${family}-${card.id}`;
+  }
+  modules['./PowerArtwork'] = load('components/not-alone/PowerArtwork.tsx', modules);
   modules['./PlaceArtwork'] = load('components/not-alone/PlaceArtwork.tsx', modules);
   return { ...load('components/not-alone/PlaceCard.tsx', modules), ...load('components/not-alone/CardChip.tsx', modules), modules, setMeasuredFont: value => { measuredFont = value; }, setWidth: value => { width = value; } };
 }
@@ -203,7 +208,7 @@ test('private CardChip keeps all three exact labels, hints, enabled states and c
     assert.equal(button.props.disabled, disabled); assert.equal(button.props.accessibilityState.disabled, disabled); assert.equal(button.props.onPress, onPress); assert(button.props.style.minHeight >= 48);
     assert.equal(nodes(tree).filter(node => node.type === 'Text' && text(node) === action).length, 1);
     assert(text(tree).includes(title)); assert(text(tree).includes(body)); assert(!text(tree).includes('forbidden_zone'));
-    assert(!nodes(tree).some(node => node.type === 'Cover'));
+    assert.equal(nodes(tree).find(node => node.type === 'Cover').props.source, 'hunt-forbidden_zone');
     assert.equal(nodes(tree).find(node => node.type === 'Surface').props.disabled, undefined);
   }
 });
@@ -218,6 +223,56 @@ test('every canonical Hunt and Survival card keeps complete title, phase and pro
     const copy = nodes(tree).filter(node => node.type === 'Text');
     assert(copy.every(node => node.props.style.fontSize >= 14 && node.props.style.lineHeight >= 20 && node.props.numberOfLines === undefined && node.props.allowFontScaling !== false && node.props.style.height === undefined));
   }
+});
+
+test('all 35 power identities preserve complete copy, bounded decorative artwork and canonical source receipts', () => {
+  const { CardChip, modules } = harness();
+  const seen = new Set();
+  for (const [family, cards] of [['survival', definitions.NOT_ALONE_SURVIVAL_CARDS], ['hunt', definitions.NOT_ALONE_HUNT_CARDS]]) {
+    for (const card of cards) {
+      const tree = CardChip({ cardId: card.id, title: card.name, body: card.summary, color: NOT_ALONE.signal, disabled: false, needsOptions: true, onPress() {} });
+      const art = nodes(tree).find(node => node.props.testID === `not-alone-power-art-${card.id}`);
+      assert.equal(art.props.style.maxWidth, 144);
+      assert.equal(art.props.pointerEvents, 'none');
+      assert.equal(art.props.accessibilityElementsHidden, true);
+      const cover = nodes(art).find(node => node.type === 'Cover');
+      assert.equal(cover.props.source, `${family}-${card.id}`);
+      assert.equal(cover.props.aspectRatio, 1);
+      assert.equal(cover.props.rimColor, NOT_ALONE.signal);
+      assert(text(tree).includes(card.summary));
+      assert.equal(nodes(tree).filter(node => node.type === 'Button').length, 1);
+      assert(nodes(tree).filter(node => node.type === 'Text').every(node => node.props.numberOfLines === undefined));
+      seen.add(cover.props.source);
+      const key = `not-alone-${family}-${card.id}`;
+      const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/game-art', `${key}-manifest.json`), 'utf8'));
+      assert.equal(manifest.source.file, `docs/design/game-art/${key}.png`);
+      assert(manifest.outputs[0].bytes <= 48 * 1024);
+    }
+  }
+  assert.equal(seen.size, 35);
+  const unknown = modules['./PowerArtwork'].PowerArtwork({ cardId: 'unknown', color: NOT_ALONE.signal });
+  assert(!nodes(unknown).some(node => node.type === 'Cover'));
+  assert(nodes(unknown).some(node => node.props.name === 'cards-outline'));
+});
+
+test('public rules examples reuse exact power identities and measure the ten-Place catalogue independently', () => {
+  const { modules, NotAlonePlaceCard } = harness();
+  modules['./PlaceCard'] = { NotAlonePlaceCard };
+  const measuredIds = [];
+  modules['../../hooks/useIntrinsicCardHeight'] = { useIntrinsicCardHeight(ids) {
+    assert.equal(ids.length, 10);
+    return { forCard(id) { measuredIds.push(id); return { minimumHeight: 480, measurementKey: 'rules', onMeasure() {} }; } };
+  } };
+  const { NotAloneRulesGuide } = load('components/not-alone/RulesGuide.tsx', modules);
+  const tree = NotAloneRulesGuide();
+  assert.equal(measuredIds.length, 10);
+  const covers = nodes(tree).filter(node => node.type === 'Cover');
+  for (const [source, card] of [['survival-dodge', definitions.NOT_ALONE_SURVIVAL_BY_ID.dodge], ['hunt-clone', definitions.NOT_ALONE_HUNT_BY_ID.clone]]) {
+    assert.equal(covers.filter(node => node.props.source === source).length, 1);
+    assert(text(tree).includes(card.summary));
+  }
+  assert(text(tree).includes('Public examples only, not anyone’s hand.'));
+  assert(!nodes(tree).some(node => node.type === 'Button'));
 });
 
 test('shared GameCover fences retired Place errors and exposes only decorative fallback for the current source', () => {

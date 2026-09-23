@@ -19,6 +19,7 @@ import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreferen
 import { useWebModalFocus } from '../../hooks/useWebModalFocus';
 import { PlayerSeat } from '../../components/coup/PlayerSeat';
 import { CharacterCard } from '../../components/coup/CharacterCard';
+import { CoupTableArtwork } from '../../components/coup/CoupTableArtwork';
 import { CardGrid } from '../../components/ui/CardGrid';
 import { GameLog } from '../../components/coup/GameLog';
 import { Countdown } from '../../components/coup/Countdown';
@@ -454,7 +455,7 @@ export default function CoupGameScreen() {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', gap: 12, flexShrink: 1, maxWidth: '100%' }}>
             {pub.variant === 'reformation' && (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <MaterialCommunityIcons name="bank" size={14} color={COUP.gold} />
+                <View style={{ width: 28, borderRadius: 5, overflow: 'hidden' }}><CoupTableArtwork kind="treasury" /></View>
                 <Text accessibilityLabel={`Treasury Reserve: ${pub.treasuryReserve} coins`} style={{ fontFamily: 'SpaceMono_700Bold', color: COUP.gold, fontSize: 13 }}>Treasury {pub.treasuryReserve}</Text>
               </View>
             )}
@@ -706,8 +707,10 @@ export default function CoupGameScreen() {
           {waitingOnMe && pending.phase === 'awaiting_allegiance' && <View style={{ gap: 12 }}>
             <Text accessibilityRole="header" style={{ color: COUP.gold, fontFamily: 'Outfit_700Bold', fontSize: 18 }}>Choose your allegiance</Text>
             <Text style={{ color: COUP.text, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24 }}>The other players alternate sides after you. Allegiances restrict attacks, but there is only one winner. If time runs out, you start as Reformist.</Text>
-            <NeonButton label="LOYALIST" color={COUP.blue} disabled={busy} onPress={() => sendCommand('choose_allegiance', { allegiance: 'loyalist' }, 'Choose Loyalist')} />
-            <NeonButton label="REFORMIST" color={COUP.crimson} disabled={busy} onPress={() => sendCommand('choose_allegiance', { allegiance: 'reformist' }, 'Choose Reformist')} />
+            {(['loyalist', 'reformist'] as const).map(allegiance => <View key={allegiance} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <View style={{ width: 44, borderRadius: 8, overflow: 'hidden' }}><CoupTableArtwork kind={allegiance} /></View>
+              <View style={{ flex: 1, minWidth: 0 }}><NeonButton label={allegiance.toUpperCase()} color={allegiance === 'loyalist' ? COUP.blue : COUP.crimson} disabled={busy} onPress={() => sendCommand('choose_allegiance', { allegiance }, allegiance === 'loyalist' ? 'Choose Loyalist' : 'Choose Reformist')} /></View>
+            </View>)}
           </View>}
           {isMyTurn && targeting == null && (
             <View>

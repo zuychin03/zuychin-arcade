@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-nova_breath.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2229235,
+    "sha256": "f71cd26b4ca199f1788c9c2d5fa64a5cb27e707f8dceea8a6d4dd7aa629de810"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-nova_breath.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18128,
+      "sha256": "736c5bcbc4122df48c892fa73fda8bcb28741445e9c92d03ff7e2459f509a9bc"
+    }
+  ],
+  "totalBytes": 18128,
+  "maxTotalBytes": 614400
+}

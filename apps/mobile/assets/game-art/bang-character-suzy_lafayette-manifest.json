@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-suzy_lafayette.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2060755,
+    "sha256": "c01016390c9f681fc3ba4ab55de4690a9e3e86c4a623c26019698ee64df95747"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-suzy_lafayette.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 12628,
+      "sha256": "f66d3156c44dc6ecc64f5b62b872245709e6ccba4768eeeb5cc14e9eac1b6415"
+    }
+  ],
+  "totalBytes": 12628,
+  "maxTotalBytes": 614400
+}

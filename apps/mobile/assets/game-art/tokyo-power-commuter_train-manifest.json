@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-commuter_train.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2461460,
+    "sha256": "6c68d7095f9fa731f786f8efcd034c22db698ba89d32f6c9bd0c0803a41c9e98"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-commuter_train.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24676,
+      "sha256": "8edf98bebf9222232947c2c7100a8406e739dd581220313390295f68f0e86fc6"
+    }
+  ],
+  "totalBytes": 24676,
+  "maxTotalBytes": 614400
+}

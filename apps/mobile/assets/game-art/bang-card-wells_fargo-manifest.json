@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-wells_fargo.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2409455,
+    "sha256": "60e1f0523d2b3da4150655851801ee7f2615c6526f8d05af4bd6ce2cf55c34d9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-wells_fargo.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23846,
+      "sha256": "1024b65681ad9ef0b9cad92d5aa5e9033d41f1a7541a7628dcf0f3ddca94ba4d"
+    }
+  ],
+  "totalBytes": 23846,
+  "maxTotalBytes": 614400
+}

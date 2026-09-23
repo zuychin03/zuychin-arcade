@@ -1,9 +1,8 @@
 import { useState, type ReactNode } from 'react';
-import { Modal, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { neonText } from '../../constants/theme';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
 import { useWebModalFocus } from '../../hooks/useWebModalFocus';
 
@@ -52,6 +51,7 @@ export function RulesReferenceSheet({
   onClose,
 }: Props) {
   const reduceMotion = useReducedMotionPreference();
+  const { fontScale } = useWindowDimensions();
   useWebModalFocus(visible, 'rules-reference-sheet', onClose);
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
@@ -96,6 +96,7 @@ export function RulesReferenceSheet({
           <View
             style={{
               flexDirection: 'row',
+              flexWrap: 'wrap',
               alignItems: 'center',
               gap: 11,
               paddingHorizontal: 16,
@@ -109,6 +110,7 @@ export function RulesReferenceSheet({
               style={{
                 width: 38,
                 height: 38,
+                flexShrink: 0,
                 borderRadius: 12,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -119,13 +121,13 @@ export function RulesReferenceSheet({
             >
               <MaterialCommunityIcons name={icon} size={21} color={palette.accent} />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flexGrow: 1, flexShrink: 1, maxWidth: '100%', minWidth: Platform.OS === 'web' ? 'min-content' as ViewStyle['minWidth'] : 90 * fontScale }}>
               <Text
                 accessibilityRole="header"
                 style={{
                   fontFamily: 'Outfit_800ExtraBold',
                   fontSize: 17,
-                  ...neonText(palette.accent, 8),
+                  color: palette.accent,
                 }}
               >
                 Rulebook
@@ -135,7 +137,7 @@ export function RulesReferenceSheet({
               accessibilityRole="button"
               accessibilityLabel="Close rules"
               onPress={onClose}
-              style={{ width: 48, height: 48, alignItems: 'center', justifyContent: 'center' }}
+              style={{ width: 48, height: 48, flexShrink: 0, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center' }}
             >
               <MaterialCommunityIcons name="close" size={22} color={palette.muted} />
             </Pressable>

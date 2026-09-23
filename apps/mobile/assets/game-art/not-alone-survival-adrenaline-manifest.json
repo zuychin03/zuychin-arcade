@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-adrenaline.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2459274,
+    "sha256": "622a131545b61e8b0652b69f7a73409e41e9545dc2b45379542a1072231570b6"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-adrenaline.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 27894,
+      "sha256": "3782609e99a4d857b8c68cd9b74237837a55fe8b1e5b8b107494c7c5389d8948"
+    }
+  ],
+  "totalBytes": 27894,
+  "maxTotalBytes": 614400
+}

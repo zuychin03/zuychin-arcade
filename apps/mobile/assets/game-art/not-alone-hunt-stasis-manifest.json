@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-stasis.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2305380,
+    "sha256": "3614df1e2f814469f41754853e1bc0fb900d168456e42a059b7a2ee8c7e9ce03"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-stasis.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20668,
+      "sha256": "b5d80af6f933a03147948ef7bf2af4012ef0aa64b3efddf44ba79976f93f92bf"
+    }
+  ],
+  "totalBytes": 20668,
+  "maxTotalBytes": 614400
+}

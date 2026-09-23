@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-scope.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2161582,
+    "sha256": "ebd3efaedf9c2f5c031345a498342fa550aa9352e8f1b4651f455d7db8a203ea"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-scope.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19710,
+      "sha256": "156e97d20ee8c8f27c4df4cd0437871fbef7b212e06304cc7a5dab3ad65b12f1"
+    }
+  ],
+  "totalBytes": 19710,
+  "maxTotalBytes": 614400
+}

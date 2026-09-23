@@ -22,17 +22,21 @@ const definitions = load('../../packages/types/src/citadels-constants.ts', {});
 function harness({ platform = 'web', fontScale = 1, width = 375 } = {}) {
   const modules = {
     'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', StyleSheet: { absoluteFill: {} }, Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '@zuychin-arcade/types': definitions,
     '../../constants/theme': { CITADELS, ARCADE: CITADELS }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/GameCover': { GameCover: 'Cover' },
   };
   for (const color of ['noble', 'religious', 'trade', 'military', 'unique']) modules[`../../assets/game-art/citadels-district-${color}.webp`] = color;
+  for (const { templateId } of definitions.CITADELS_DISTRICT_MANIFEST) modules[`../../assets/game-art/citadels-district-${templateId}.webp`] = templateId;
+  for (const { role } of definitions.CITADELS_ROLES) modules[`../../assets/game-art/citadels-role-${role}.webp`] = role;
   modules['../ui/CardSurface'] = load('components/ui/CardSurface.tsx', modules);
   modules['./CitadelsDistrictArtwork'] = load('components/citadels/CitadelsDistrictArtwork.tsx', modules);
+  modules['./CitadelsRoleArtwork'] = load('components/citadels/CitadelsRoleArtwork.tsx', modules);
   return { ...load('components/citadels/CitadelsCard.tsx', modules), modules };
 }
 
-test('every canonical district preserves printed identity, gold and complete Outfit effect alongside category art', () => {
+test('every canonical district preserves printed identity, gold and complete Outfit effect alongside individual art', () => {
   const { CitadelsDistrictView } = harness();
   for (const template of definitions.CITADELS_DISTRICT_MANIFEST) {
     const card = { ...template, id: 'instance-' + template.templateId };
@@ -42,7 +46,9 @@ test('every canonical district preserves printed identity, gold and complete Out
     assert.equal(tree.props.accessibilityLabel, `${card.name}, ${card.cost} gold, ${card.color} district.${card.effectText ? ' ' + card.effectText : ''}`);
     assert(text(tree).includes(card.name)); assert(text(tree).includes(String(card.cost)));
     const cover = nodes(tree).find(node => node.type === 'Cover');
-    assert.equal(cover.props.source, card.color); assert.equal(cover.props.aspectRatio, 1.1);
+    assert.equal(cover.props.source, card.templateId); assert.equal(cover.props.aspectRatio, 1.1);
+    assert.equal(cover.props.fallback.props.source, card.color);
+    assert.equal(cover.props.fallback.props.aspectRatio, 1.1);
     assert(nodes(tree).some(node => node.props.testID === 'citadels-district-art-' + card.id));
     if (card.effectText) {
       const effect = nodes(tree).find(node => node.type === 'Text' && node.props.children === card.effectText);
@@ -52,12 +58,14 @@ test('every canonical district preserves printed identity, gold and complete Out
   }
 });
 
-test('Haunted Quarter and School of Magic keep unique art despite income and diversity exceptions', () => {
+test('Haunted Quarter and School of Magic retain exact identity and unique category despite rule exceptions', () => {
   const { CitadelsDistrictView } = harness();
   for (const templateId of ['haunted_quarter', 'school_of_magic']) {
     const card = { ...definitions.CITADELS_DISTRICT_MANIFEST.find(card => card.templateId === templateId), id: templateId };
     const tree = CitadelsDistrictView({ card, actionLabel: 'BUILD · 1 GOLD' });
-    assert.equal(nodes(tree).find(node => node.type === 'Cover').props.source, 'unique');
+    const cover = nodes(tree).find(node => node.type === 'Cover');
+    assert.equal(cover.props.source, templateId);
+    assert.equal(cover.props.fallback.props.source, 'unique');
     assert(text(tree).includes(card.effectText)); assert(text(tree).includes('BUILD · 1 GOLD'));
     assert(tree.props.accessibilityLabel.includes(`${card.cost} gold, unique district.`));
     assert.equal(nodes(tree).find(node => node.type === 'Cover').props.aspectRatio, 1);
@@ -81,7 +89,19 @@ test('whole-card action labels, disabled state and non-colour selection remain e
   assert.equal(count, 2);
 });
 
-test('all eight roles retain real rank, name and summary with substantial code-native identity pieces', () => {
+test('unknown district identities retain category imagery and a final vector fallback', () => {
+  const { CitadelsDistrictView } = harness();
+  for (const templateId of ['future-district', '__proto__', 'constructor']) {
+    const tree = CitadelsDistrictView({ card: { id: 'future', templateId, name: 'Future district', cost: 3, color: 'trade' } });
+    const cover = nodes(tree).find(node => node.type === 'Cover');
+    assert.equal(cover.props.source, 'trade');
+    assert.equal(cover.props.aspectRatio, 1);
+    assert(nodes(cover.props.fallback).some(node => node.type === 'Icon' && node.props.name === 'storefront-outline'));
+    assert(text(tree).includes('Future district'));
+  }
+});
+
+test('all eight portraits retain real rank, name, summary, bounded footprint and role-specific fallback', () => {
   const { CitadelsRoleCard } = harness();
   const icons = ['knife-military', 'hand-coin-outline', 'magic-staff', 'crown', 'chess-bishop', 'storefront-outline', 'compass-outline', 'shield-sword-outline'];
   for (const [index, info] of definitions.CITADELS_ROLES.entries()) {
@@ -89,13 +109,33 @@ test('all eight roles retain real rank, name and summary with substantial code-n
     assert.equal(tree.props.testID, 'citadels-role-card-' + info.role);
     assert.equal(tree.props.accessibilityLabel, `LOCKED · PRIVATE. ${info.name}, rank ${info.rank}. ${info.summary}`);
     assert(text(tree).includes('Rank ' + info.rank)); assert(text(tree).includes(info.name)); assert(text(tree).includes(info.summary));
-    const icon = nodes(tree).find(node => node.type === 'Icon' && node.props.name === icons[index]);
+    const cover = nodes(tree).find(node => node.type === 'Cover');
+    assert.equal(cover.props.source, info.role); assert.equal(cover.props.aspectRatio, 1);
+    const icon = nodes(cover.props.fallback).find(node => node.type === 'Icon' && node.props.name === icons[index]);
     assert(icon.props.size >= 46);
     const insignia = nodes(tree).find(node => node.props.testID === 'citadels-role-insignia-' + info.role);
     assert.equal(insignia.props.accessibilityElementsHidden, true); assert.equal(insignia.props.pointerEvents, 'none');
-    assert(!nodes(tree).some(node => node.type === 'Cover'));
+    assert.equal(insignia.props.style.minHeight, 112);
+    assert.equal(insignia.props.children.props.style.width, '100%');
+    assert.equal(insignia.props.children.props.style.maxWidth, 168);
+    assert.equal(cover.props.rimColor, icon.props.color);
     const rank = nodes(tree).find(node => node.type === 'Text' && text(node).startsWith('Rank '));
     assert.equal(rank.props.style.position, undefined);
+  }
+});
+
+test('all role faces fill stretched display wrappers without imposing a fixed text height', () => {
+  for (const platform of ['web', 'ios', 'android']) for (const fontScale of [1, 2]) {
+    const { CitadelsRoleCard } = harness({ platform, fontScale, width: 320 });
+    for (const info of definitions.CITADELS_ROLES) for (const interactive of [false, true]) {
+      const tree = CitadelsRoleCard({ role: info.role, fill: true, onPress: interactive ? () => {} : undefined });
+      const face = nodes(tree).find(node => node.props.testID === `citadels-role-card-${info.role}`);
+      assert.equal(face.props.style.flexGrow, 1);
+      assert.equal(face.props.style.alignSelf, 'stretch');
+      assert.equal(face.props.style.height, undefined);
+      assert(text(face).includes(info.summary));
+      assert(nodes(face).filter(node => node.type === 'Text').every(node => node.props.numberOfLines === undefined));
+    }
   }
 });
 

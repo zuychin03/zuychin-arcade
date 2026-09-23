@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-friend_of_children.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2506708,
+    "sha256": "648ecf90338e8c9123f17ca27dbb4a06329ac723c4b35bcef03489975bfe82aa"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-friend_of_children.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 23154,
+      "sha256": "cf29f18618eeba6c7013b73d718548f99423dd8c7f27871c8772f611dcd95e0d"
+    }
+  ],
+  "totalBytes": 23154,
+  "maxTotalBytes": 614400
+}

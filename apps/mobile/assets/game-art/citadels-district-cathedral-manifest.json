@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-cathedral.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2274760,
+    "sha256": "6d3656d059b40c50a50c6deede64a452e87f716323b4c2f53a04e0065e2f506c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-cathedral.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17656,
+      "sha256": "ccac5271d320d1451f23dc9eb79b54a708d600e24bad8de753af716e0c8899a0"
+    }
+  ],
+  "totalBytes": 17656,
+  "maxTotalBytes": 614400
+}

@@ -27,6 +27,13 @@ function harness(width = 320, reduced = false) {
     vm.runInNewContext(code, { exports, requestAnimationFrame: () => 1, cancelAnimationFrame() {}, require(id) {
       if (id in modules) return modules[id];
       if (id.endsWith('/CardSurface')) return { CardSurface: surface };
+      if (id.endsWith('/GameCover')) return { GameCover: 'GameCover' };
+      if (id.endsWith('/OverlayFrame')) return { OverlayFrame: 'OverlayFrame' };
+      if (id.endsWith('.webp')) {
+        const asset = path.resolve(path.dirname(filename), id);
+        assert(fs.existsSync(asset), asset);
+        return asset;
+      }
       if (id.endsWith('/GlowPulse')) return { GlowPulse: 'GlowPulse' };
       if (id.endsWith('/NeonButton')) return { NeonButton: 'NeonButton' };
       if (id.endsWith('/useReducedMotionPreference')) return { useReducedMotionPreference: () => reduced };
@@ -228,7 +235,9 @@ test('all action faces keep their labels and distinct tool affordances on the ma
       assert.equal(labelNode.props.numberOfLines, undefined);
     }
     assert(nodes(tree).some(n => n.type === 'Text' && n.props.children === label));
-    assert(nodes(tree).some(n => n.type === 'Icon'));
+    const art = nodes(tree, true).filter(n => n.type === 'GameCover');
+    assert(art.length > 0);
+    assert(art.every(n => nodes(n.props.fallback).some(fallback => fallback.type === 'Icon')));
   }
 });
 
@@ -237,9 +246,66 @@ test('mine back preserves its concealed icon without tiny decorative branding', 
   const tree = CardBack({ width: 54, height: 79, depth: 1, icon: 'help' });
   assert.equal(tree.type, 'CardSurface');
   assert.equal(tree.props.depth, 1);
-  assert(nodes(tree).some(n => n.type === 'Icon' && n.props.name === 'help'));
+  const art = nodes(tree).find(n => n.type === 'GameCover');
+  assert.equal(path.basename(art.props.source), 'saboteur-deck-back.webp');
+  assert(nodes(art.props.fallback).some(n => n.type === 'Icon' && n.props.name === 'help'));
   assert(!nodes(tree).some(n => n.type === 'Text'));
   for (const n of nodes(tree).filter(n => n.props.accessibilityElementsHidden)) assert.equal(n.props.pointerEvents, 'none');
+});
+
+test('eleven action subtypes select exact tool states and compose dual repairs inside the original footprint', () => {
+  const { ActionCardView } = harness().load('cards/ActionCardView');
+  const expected = {
+    sabotage_lantern: ['tool-lantern-broken'], sabotage_cart: ['tool-cart-broken'], sabotage_pickaxe: ['tool-pickaxe-broken'],
+    repair_lantern: ['tool-lantern-intact'], repair_cart: ['tool-cart-intact'], repair_pickaxe: ['tool-pickaxe-intact'],
+    repair_lantern_cart: ['tool-lantern-intact', 'tool-cart-intact'],
+    repair_lantern_pickaxe: ['tool-lantern-intact', 'tool-pickaxe-intact'],
+    repair_cart_pickaxe: ['tool-cart-intact', 'tool-pickaxe-intact'],
+    map: ['action-map'], rockfall: ['action-rockfall'],
+  };
+  for (const width of [56, 76, 96, 152]) for (const [subtype, files] of Object.entries(expected)) {
+    const tree = ActionCardView({ card: { subtype }, width, height: width * 1.5 });
+    const artNode = nodes(tree).find(n => n.type?.name === 'ActionArtwork');
+    assert.equal(artNode.props.size, width * 0.55);
+    const art = artNode.type(artNode.props);
+    assert.equal(art.props.style.width, width * 0.55);
+    assert.equal(art.props.style.height, width * 0.55);
+    assert.equal(art.props.accessibilityElementsHidden, true);
+    assert.equal(art.props.pointerEvents, 'none');
+    const covers = nodes(art).filter(n => n.type === 'GameCover');
+    assert.deepEqual(covers.map(n => path.basename(n.props.source)), files.map(file => `saboteur-${file}.webp`));
+    assert(covers.every(n => n.props.aspectRatio === 1));
+    const badge = nodes(tree).find(n => n.type === 'Icon');
+    if (subtype.startsWith('sabotage_')) assert.equal(badge.props.name, 'alert-circle');
+    if (subtype.startsWith('repair_')) assert.equal(badge.props.name, 'wrench');
+  }
+});
+
+test('all concealed backs share one image and private role portraits retain the private reveal and dismiss action', () => {
+  const h = harness();
+  const { CardBack } = h.load('cards/CardBack');
+  for (const icon of ['pickaxe', 'help']) {
+    const cover = nodes(CardBack({ icon })).find(n => n.type === 'GameCover');
+    assert.equal(path.basename(cover.props.source), 'saboteur-deck-back.webp');
+  }
+  const { RoleRevealOverlay } = h.load('overlays/RoleRevealOverlay');
+  for (const role of ['miner', 'saboteur']) {
+    let dismissed = 0;
+    const tree = RoleRevealOverlay({ role, round: 2, onDismiss: () => dismissed++ });
+    assert.equal(tree.props.id, 'saboteur-secret-role');
+    assert.equal(tree.props.label, 'Your secret role');
+    const cover = nodes(tree).find(n => n.type === 'GameCover');
+    assert.equal(path.basename(cover.props.source), `saboteur-role-${role}.webp`);
+    const portrait = nodes(tree).find(n => n.type === 'View');
+    assert.equal(portrait.props.style.width, 76);
+    assert.equal(portrait.props.style.height, 76);
+    nodes(tree).find(n => n.type === 'NeonButton').props.onPress();
+    assert.equal(dismissed, 1);
+    assert(nodes(tree).some(n => n.type === 'Text' && n.props.children === role.toUpperCase()));
+  }
+  const rules = fs.readFileSync(path.resolve(__dirname, '../components/saboteur/RulesGuide.tsx'), 'utf8');
+  assert.match(rules, /import \{ ActionCardView \} from '\.\/cards\/ActionCardView'/);
+  assert.doesNotMatch(rules, /saboteur-role-|roleArtwork/);
 });
 
 test('hand selection remains owned by existing pressable and honours reduced motion', () => {

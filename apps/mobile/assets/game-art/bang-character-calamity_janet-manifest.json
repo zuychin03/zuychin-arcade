@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-calamity_janet.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2253312,
+    "sha256": "d3b68414ca9415f0e4ac0f6a85c14d7cfac9480fde02cfef1ba50bd571213659"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-calamity_janet.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17118,
+      "sha256": "84590f1d5c1758192a2d37a3fa972cd4fbcb8e2d28fad263cf61d9d5688529d9"
+    }
+  ],
+  "totalBytes": 17118,
+  "maxTotalBytes": 614400
+}

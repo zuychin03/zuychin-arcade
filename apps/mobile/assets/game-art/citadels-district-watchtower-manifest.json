@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-watchtower.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1981868,
+    "sha256": "648af968782282108b6a1104e274d776b6ed99858d03c6b5b0674ed28f186050"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-watchtower.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 8872,
+      "sha256": "7043004e044d74d75b8695e8d32c0da242c8d1a0baca3b6bc2505c2ec04e1cb6"
+    }
+  ],
+  "totalBytes": 8872,
+  "maxTotalBytes": 614400
+}

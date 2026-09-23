@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-barracks.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2530370,
+    "sha256": "3efee325b43cbaf0ac7a37af8875cad690225b8113f5c059f0fd6b7ec31dfc49"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-barracks.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20134,
+      "sha256": "71e8635414c533858d4ff00e311901e02b2c3e089e6a97119c60c5d64aeab508"
+    }
+  ],
+  "totalBytes": 20134,
+  "maxTotalBytes": 614400
+}

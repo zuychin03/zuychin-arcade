@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-great_wall.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2274581,
+    "sha256": "c75f8c5294562f60107893c6427108bf35c38b57660895dc221162fbc17411f8"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-great_wall.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17220,
+      "sha256": "f146283bfdfa5a043033635eea751442ca3f34641ea5b214d947e43a140c5e3e"
+    }
+  ],
+  "totalBytes": 17220,
+  "maxTotalBytes": 614400
+}

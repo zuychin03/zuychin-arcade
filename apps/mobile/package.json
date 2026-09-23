@@ -52,7 +52,7 @@
     "web": "expo start --web",
     "build": "pnpm run export:web",
     "eas-build-pre-install": "node scripts/validate-env.cjs --production",
-    "export:web": "pnpm run validate:env:production && expo export --clear --platform web && node scripts/validate-export-env.cjs dist",
+    "export:web": "pnpm run validate:env:production && expo export --clear --platform web && node scripts/validate-export-env.cjs dist && node scripts/build-pwa.cjs dist",
     "export:native": "pnpm run validate:env:production && expo export --clear --platform android --output-dir .expo-export-android && node scripts/validate-export-env.cjs .expo-export-android && expo export --clear --platform ios --output-dir .expo-export-ios && node scripts/validate-export-env.cjs .expo-export-ios",
     "lint": "expo lint",
     "smoke:saboteur-ui": "node scripts/saboteur-ui-smoke.cjs",

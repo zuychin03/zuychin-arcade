@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-character-jourdonnais.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2201593,
+    "sha256": "305695dcaa2aa3d08bda82d856287cfcdd47dbc2c2613c2fdaa2c0826a6837bd"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-character-jourdonnais.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 15644,
+      "sha256": "6dc2e80079a89f9252fd5bdafab1c56929cfad85faa8115ec78188da7dc8bace"
+    }
+  ],
+  "totalBytes": 15644,
+  "maxTotalBytes": 614400
+}

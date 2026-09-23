@@ -30,6 +30,33 @@ function cardModule(platform = 'web', fontScale = 1, width = 375) {
 }
 const card = { id: 'test-17', name: 'missed', rank: 'Q', suit: 'hearts' };
 
+test('all 16 public character portraits are decorative, bounded and have a vector fallback', () => {
+  const constants = load('../../packages/types/src/bang-constants.ts', {});
+  const ids = Object.keys(constants.BANG_CHARACTERS);
+  const assets = Object.fromEntries(ids.map(id => [`../../assets/game-art/bang-character-${id}.webp`, id]));
+  const { BangCharacterArtwork } = load('components/bang/CharacterArtwork.tsx', {
+    ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'GameCover' },
+  });
+  assert.equal(ids.length, 16);
+  for (const character of ids) for (const size of [72, 96]) {
+    const tree = BangCharacterArtwork({ character, size });
+    assert.equal(tree.props.pointerEvents, 'none');
+    assert.equal(tree.props.accessibilityElementsHidden, true);
+    assert.equal(tree.props.style.width, size);
+    assert.equal(tree.props.style.maxWidth, '100%');
+    const cover = nodes(tree).find(node => node.type === 'GameCover');
+    assert.equal(cover.props.source, character);
+    assert.equal(cover.props.aspectRatio, 1);
+    assert.equal(cover.props.rimColor, palette.gold);
+    assert(nodes(cover.props.fallback).some(node => node.type === 'Icon'));
+  }
+  const route = fs.readFileSync(path.resolve(__dirname, '../app/bang/game.tsx'), 'utf8');
+  assert(route.includes('<BangCharacterArtwork character={mine.character} />'));
+  assert(route.includes('<BangCharacterArtwork character={player.character} size={72} />'));
+  assert(!route.includes('character={player.role}'));
+});
+
+
 test('all 22 printed cards retain complete live prose, exact identity and suits on tactile faces', () => {
   const { BangCardView, BANG_CARD_DETAILS } = cardModule();
   assert.deepEqual(Object.keys(BANG_CARD_DETAILS).sort(), Object.keys(CARD_ART_FAMILY).sort());
@@ -99,8 +126,8 @@ test('every card text face is actually loaded by the app', () => {
   }
 });
 
-test('original family art is selected by printed name with a noninteractive exact-item fallback', () => {
-  const assets = Object.fromEntries([...new Set(Object.values(CARD_ART_FAMILY))].map(family => [`../../assets/game-art/bang-card-${family}.webp`, family]));
+test('exact card art keeps the family and vector fallback without changing geometry', () => {
+  const assets = Object.fromEntries([...new Set([...Object.values(CARD_ART_FAMILY), ...Object.keys(CARD_ART_FAMILY)])].map(family => [`../../assets/game-art/bang-card-${family}.webp`, family]));
   const { BangCardArtwork, BANG_CARD_ART_FAMILY, BANG_CARD_EMBLEM } = load('components/bang/CardArtwork.tsx', {
     ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'GameCover' },
   });
@@ -112,10 +139,12 @@ test('original family art is selected by printed name with a noninteractive exac
     assert.equal(tree.props.accessibilityElementsHidden, true);
     assert.equal(tree.props.importantForAccessibility, 'no-hide-descendants');
     const cover = nodes(tree).find(node => node.type === 'GameCover');
-    assert.equal(cover.props.source, family);
+    assert.equal(cover.props.source, name);
+    assert.equal(cover.props.rimColor, palette.gold);
     assert.equal(cover.props.aspectRatio, 1.6);
     assert.equal(cover.props.backgroundColor, palette.panel);
-    assert.equal(nodes(cover.props.fallback).find(node => node.type === 'Icon').props.name, BANG_CARD_EMBLEM[name]);
+    assert.equal(cover.props.fallback.props.source, family);
+    assert.equal(nodes(cover.props.fallback.props.fallback).find(node => node.type === 'Icon').props.name, BANG_CARD_EMBLEM[name]);
   }
 });
 
@@ -135,7 +164,7 @@ test('shared artwork surface supports brown letterboxing without changing other 
   let failed = null;
   const ref = { current: null }, fallback = { type: 'Fallback' };
   const { GameCover } = load('components/ui/GameCover.tsx', {
-    ...common, react: { useRef: () => ref, useState: () => [failed, next => { failed = next; }] },
+    ...common, 'expo-linear-gradient': { LinearGradient: 'Gradient' }, react: { useRef: () => ref, useState: () => [failed, next => { failed = next; }] },
     'react-native': { View: 'View', Image: 'Image', StyleSheet: { absoluteFill: {} } },
     '../../constants/theme': { ARCADE: { surface: '#161028' } },
   });
@@ -143,12 +172,13 @@ test('shared artwork surface supports brown letterboxing without changing other 
   assert.equal(normal.props.style.backgroundColor, '#161028');
   let themed = GameCover({ source: 11, backgroundColor: palette.panel, fallback });
   assert.equal(themed.props.style.backgroundColor, palette.panel);
-  assert.equal(themed.props.children.props.resizeMode, 'contain');
-  themed.props.children.props.onError();
+  const image = nodes(themed).find(node => node.type === 'Image');
+  assert.equal(image.props.resizeMode, 'contain');
+  image.props.onError();
   themed = GameCover({ source: 11, backgroundColor: palette.panel, fallback });
-  assert.equal(themed.props.children, fallback);
+  assert(nodes(themed).includes(fallback));
   assert.equal(themed.props.style.backgroundColor, palette.panel);
-  assert.equal(GameCover({ source: 12, fallback }).props.children.type, 'Image');
+  assert(nodes(GameCover({ source: 12, fallback })).some(node => node.type === 'Image'));
 });
 
 test('illustrated entrance keeps actual create/join and rule ownership with approved cover fallback', () => {

@@ -1,6 +1,8 @@
-import { Text, View } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
+import { useIntrinsicCardHeight } from '../../hooks/useIntrinsicCardHeight';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { NOT_ALONE_PLACES } from '@zuychin-arcade/types';
+import { NOT_ALONE_PLACES, NOT_ALONE_SURVIVAL_BY_ID, NOT_ALONE_HUNT_BY_ID } from '@zuychin-arcade/types';
+import { PowerArtwork } from './PowerArtwork';
 import { NotAlonePlaceCard } from './PlaceCard';
 import { CardSurface } from '../ui/CardSurface';
 import { NOT_ALONE as C } from '../../constants/theme';
@@ -9,6 +11,8 @@ const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 25, co
 const heading = { fontFamily: 'Outfit_800ExtraBold', fontSize: 23, lineHeight: 30, color: C.signal } as const;
 
 export function NotAloneRulesGuide() {
+  const { width, fontScale } = useWindowDimensions();
+  const placeFaces = useIntrinsicCardHeight(NOT_ALONE_PLACES.map(place => String(place.id)), `${width}:${fontScale}`);
   return <View testID="not-alone-rules-guide" style={{ gap: 24, minWidth: 0 }}>
     <View style={{ gap: 10 }}>
       <Text accessibilityRole="header" style={heading}>One planet. Two opposing goals.</Text>
@@ -62,10 +66,25 @@ export function NotAloneRulesGuide() {
       <Text style={body}>Will is not elimination: losing your last Will during Reckoning advances Assimilation again, restores three Will and returns your discarded Places. Before locking a destination, Resist trades Will for selected discards; Give Up restores all three Will and every discard but advances Assimilation.</Text>
     </View>
     <View style={{ gap: 12 }}>
+      <Text accessibilityRole="header" style={heading}>Two kinds of power cards</Text>
+      <Text style={body}>Public examples only, not anyone’s hand. Card timing and effects stay printed below the illustration.</Text>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16, alignItems: 'stretch' }}>
+        {[{ card: NOT_ALONE_SURVIVAL_BY_ID.dodge, kind: 'Survival', color: C.signal }, { card: NOT_ALONE_HUNT_BY_ID.clone, kind: 'Hunt', color: C.creature }].map(({ card, kind, color }) => <View key={card.id} style={{ flexBasis: 240, flexGrow: 1, minWidth: 0 }}>
+          <CardSurface fill radius={14} depth={3} faceColor={C.surface} edgeColor={C.bg} highlightColor={color}>
+            <View style={{ padding: 12, gap: 12 }}>
+              <Text style={{ ...body, color, fontFamily: 'Outfit_700Bold' }}>{card.name} · {kind} · P{card.phase}</Text>
+              <PowerArtwork cardId={card.id} color={color} />
+              <Text style={body}>{card.summary}</Text>
+            </View>
+          </CardSurface>
+        </View>)}
+      </View>
+    </View>
+    <View style={{ gap: 12 }}>
       <Text accessibilityRole="header" style={heading}>Learn the ten Places</Text>
       <Text style={body}>An open card catalogue, not your hand. The Rover explores advanced Places from the shared reserve; possessing a Place and resolving its power are different things.</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16, justifyContent: 'center' }}>
-        {NOT_ALONE_PLACES.map(place => <NotAlonePlaceCard key={place.id} placeId={place.id} />)}
+        {NOT_ALONE_PLACES.map(place => <NotAlonePlaceCard key={place.id} placeId={place.id} faceSizing={placeFaces.forCard(String(place.id))} />)}
       </View>
     </View>
   </View>;

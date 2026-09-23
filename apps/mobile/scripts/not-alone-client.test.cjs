@@ -443,6 +443,7 @@ test('card copy and actual handlers share option classification and preserve dis
   assert.equal((game.match(/notAloneSurvivalNeedsOptions\(cardId\)/g) || []).length, 2);
   const jsx = (type, props) => ({ type, props });
   const { CardChip } = load('CardChip.tsx', {
+    './PowerArtwork': { PowerArtwork: 'artwork' },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'view', Text: 'text' },
     '@expo/vector-icons': { MaterialCommunityIcons: 'icon' },

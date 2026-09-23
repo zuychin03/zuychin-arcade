@@ -1,0 +1,1902 @@
+{
+  "schemaVersion": 1,
+  "description": "Explicit original artwork sweep queue. Registration is not production evidence; status is derived from source, output and provenance manifest availability.",
+  "families": [
+    {
+      "family": "libertalia-crew",
+      "maxTotalBytes": 1966080,
+      "assets": [
+        {
+          "id": "libertalia-crew-01",
+          "identity": "01",
+          "source": "docs/design/game-art/libertalia-crew-01.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-01.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-01-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-02",
+          "identity": "02",
+          "source": "docs/design/game-art/libertalia-crew-02.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-02.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-02-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-03",
+          "identity": "03",
+          "source": "docs/design/game-art/libertalia-crew-03.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-03.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-03-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-04",
+          "identity": "04",
+          "source": "docs/design/game-art/libertalia-crew-04.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-04.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-04-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-05",
+          "identity": "05",
+          "source": "docs/design/game-art/libertalia-crew-05.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-05.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-05-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-06",
+          "identity": "06",
+          "source": "docs/design/game-art/libertalia-crew-06.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-06.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-06-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-07",
+          "identity": "07",
+          "source": "docs/design/game-art/libertalia-crew-07.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-07.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-07-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-08",
+          "identity": "08",
+          "source": "docs/design/game-art/libertalia-crew-08.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-08.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-08-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-09",
+          "identity": "09",
+          "source": "docs/design/game-art/libertalia-crew-09.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-09.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-09-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-10",
+          "identity": "10",
+          "source": "docs/design/game-art/libertalia-crew-10.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-10.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-10-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-11",
+          "identity": "11",
+          "source": "docs/design/game-art/libertalia-crew-11.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-11.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-11-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-12",
+          "identity": "12",
+          "source": "docs/design/game-art/libertalia-crew-12.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-12.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-12-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-13",
+          "identity": "13",
+          "source": "docs/design/game-art/libertalia-crew-13.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-13.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-13-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-14",
+          "identity": "14",
+          "source": "docs/design/game-art/libertalia-crew-14.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-14.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-14-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-15",
+          "identity": "15",
+          "source": "docs/design/game-art/libertalia-crew-15.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-15.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-15-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-16",
+          "identity": "16",
+          "source": "docs/design/game-art/libertalia-crew-16.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-16.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-16-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-17",
+          "identity": "17",
+          "source": "docs/design/game-art/libertalia-crew-17.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-17.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-17-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-18",
+          "identity": "18",
+          "source": "docs/design/game-art/libertalia-crew-18.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-18.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-18-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-19",
+          "identity": "19",
+          "source": "docs/design/game-art/libertalia-crew-19.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-19.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-19-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-20",
+          "identity": "20",
+          "source": "docs/design/game-art/libertalia-crew-20.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-20.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-20-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-21",
+          "identity": "21",
+          "source": "docs/design/game-art/libertalia-crew-21.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-21.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-21-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-22",
+          "identity": "22",
+          "source": "docs/design/game-art/libertalia-crew-22.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-22.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-22-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-23",
+          "identity": "23",
+          "source": "docs/design/game-art/libertalia-crew-23.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-23.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-23-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-24",
+          "identity": "24",
+          "source": "docs/design/game-art/libertalia-crew-24.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-24.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-24-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-25",
+          "identity": "25",
+          "source": "docs/design/game-art/libertalia-crew-25.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-25.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-25-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-26",
+          "identity": "26",
+          "source": "docs/design/game-art/libertalia-crew-26.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-26.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-26-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-27",
+          "identity": "27",
+          "source": "docs/design/game-art/libertalia-crew-27.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-27.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-27-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-28",
+          "identity": "28",
+          "source": "docs/design/game-art/libertalia-crew-28.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-28.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-28-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-29",
+          "identity": "29",
+          "source": "docs/design/game-art/libertalia-crew-29.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-29.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-29-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-30",
+          "identity": "30",
+          "source": "docs/design/game-art/libertalia-crew-30.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-30.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-30-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-31",
+          "identity": "31",
+          "source": "docs/design/game-art/libertalia-crew-31.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-31.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-31-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-32",
+          "identity": "32",
+          "source": "docs/design/game-art/libertalia-crew-32.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-32.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-32-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-33",
+          "identity": "33",
+          "source": "docs/design/game-art/libertalia-crew-33.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-33.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-33-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-34",
+          "identity": "34",
+          "source": "docs/design/game-art/libertalia-crew-34.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-34.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-34-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-35",
+          "identity": "35",
+          "source": "docs/design/game-art/libertalia-crew-35.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-35.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-35-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-36",
+          "identity": "36",
+          "source": "docs/design/game-art/libertalia-crew-36.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-36.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-36-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-37",
+          "identity": "37",
+          "source": "docs/design/game-art/libertalia-crew-37.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-37.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-37-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-38",
+          "identity": "38",
+          "source": "docs/design/game-art/libertalia-crew-38.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-38.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-38-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-39",
+          "identity": "39",
+          "source": "docs/design/game-art/libertalia-crew-39.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-39.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-39-manifest.json"
+        },
+        {
+          "id": "libertalia-crew-40",
+          "identity": "40",
+          "source": "docs/design/game-art/libertalia-crew-40.png",
+          "output": "apps/mobile/assets/game-art/libertalia-crew-40.webp",
+          "manifest": "apps/mobile/assets/game-art/libertalia-crew-40-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "citadels-role",
+      "maxTotalBytes": 393216,
+      "assets": [
+        {
+          "id": "citadels-role-assassin",
+          "identity": "assassin",
+          "source": "docs/design/game-art/citadels-role-assassin.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-assassin.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-assassin-manifest.json"
+        },
+        {
+          "id": "citadels-role-thief",
+          "identity": "thief",
+          "source": "docs/design/game-art/citadels-role-thief.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-thief.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-thief-manifest.json"
+        },
+        {
+          "id": "citadels-role-magician",
+          "identity": "magician",
+          "source": "docs/design/game-art/citadels-role-magician.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-magician.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-magician-manifest.json"
+        },
+        {
+          "id": "citadels-role-king",
+          "identity": "king",
+          "source": "docs/design/game-art/citadels-role-king.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-king.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-king-manifest.json"
+        },
+        {
+          "id": "citadels-role-bishop",
+          "identity": "bishop",
+          "source": "docs/design/game-art/citadels-role-bishop.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-bishop.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-bishop-manifest.json"
+        },
+        {
+          "id": "citadels-role-merchant",
+          "identity": "merchant",
+          "source": "docs/design/game-art/citadels-role-merchant.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-merchant.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-merchant-manifest.json"
+        },
+        {
+          "id": "citadels-role-architect",
+          "identity": "architect",
+          "source": "docs/design/game-art/citadels-role-architect.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-architect.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-architect-manifest.json"
+        },
+        {
+          "id": "citadels-role-warlord",
+          "identity": "warlord",
+          "source": "docs/design/game-art/citadels-role-warlord.png",
+          "output": "apps/mobile/assets/game-art/citadels-role-warlord.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-role-warlord-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "citadels-district",
+      "maxTotalBytes": 1523712,
+      "assets": [
+        {
+          "id": "citadels-district-manor",
+          "identity": "manor",
+          "source": "docs/design/game-art/citadels-district-manor.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-manor.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-manor-manifest.json"
+        },
+        {
+          "id": "citadels-district-castle",
+          "identity": "castle",
+          "source": "docs/design/game-art/citadels-district-castle.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-castle.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-castle-manifest.json"
+        },
+        {
+          "id": "citadels-district-palace",
+          "identity": "palace",
+          "source": "docs/design/game-art/citadels-district-palace.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-palace.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-palace-manifest.json"
+        },
+        {
+          "id": "citadels-district-temple",
+          "identity": "temple",
+          "source": "docs/design/game-art/citadels-district-temple.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-temple.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-temple-manifest.json"
+        },
+        {
+          "id": "citadels-district-church",
+          "identity": "church",
+          "source": "docs/design/game-art/citadels-district-church.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-church.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-church-manifest.json"
+        },
+        {
+          "id": "citadels-district-monastery",
+          "identity": "monastery",
+          "source": "docs/design/game-art/citadels-district-monastery.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-monastery.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-monastery-manifest.json"
+        },
+        {
+          "id": "citadels-district-cathedral",
+          "identity": "cathedral",
+          "source": "docs/design/game-art/citadels-district-cathedral.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-cathedral.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-cathedral-manifest.json"
+        },
+        {
+          "id": "citadels-district-tavern",
+          "identity": "tavern",
+          "source": "docs/design/game-art/citadels-district-tavern.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-tavern.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-tavern-manifest.json"
+        },
+        {
+          "id": "citadels-district-market",
+          "identity": "market",
+          "source": "docs/design/game-art/citadels-district-market.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-market.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-market-manifest.json"
+        },
+        {
+          "id": "citadels-district-trading_post",
+          "identity": "trading_post",
+          "source": "docs/design/game-art/citadels-district-trading_post.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-trading_post.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-trading_post-manifest.json"
+        },
+        {
+          "id": "citadels-district-docks",
+          "identity": "docks",
+          "source": "docs/design/game-art/citadels-district-docks.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-docks.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-docks-manifest.json"
+        },
+        {
+          "id": "citadels-district-harbor",
+          "identity": "harbor",
+          "source": "docs/design/game-art/citadels-district-harbor.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-harbor.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-harbor-manifest.json"
+        },
+        {
+          "id": "citadels-district-town_hall",
+          "identity": "town_hall",
+          "source": "docs/design/game-art/citadels-district-town_hall.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-town_hall.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-town_hall-manifest.json"
+        },
+        {
+          "id": "citadels-district-watchtower",
+          "identity": "watchtower",
+          "source": "docs/design/game-art/citadels-district-watchtower.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-watchtower.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-watchtower-manifest.json"
+        },
+        {
+          "id": "citadels-district-prison",
+          "identity": "prison",
+          "source": "docs/design/game-art/citadels-district-prison.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-prison.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-prison-manifest.json"
+        },
+        {
+          "id": "citadels-district-barracks",
+          "identity": "barracks",
+          "source": "docs/design/game-art/citadels-district-barracks.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-barracks.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-barracks-manifest.json"
+        },
+        {
+          "id": "citadels-district-fortress",
+          "identity": "fortress",
+          "source": "docs/design/game-art/citadels-district-fortress.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-fortress.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-fortress-manifest.json"
+        },
+        {
+          "id": "citadels-district-haunted_quarter",
+          "identity": "haunted_quarter",
+          "source": "docs/design/game-art/citadels-district-haunted_quarter.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-haunted_quarter.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-haunted_quarter-manifest.json"
+        },
+        {
+          "id": "citadels-district-keep",
+          "identity": "keep",
+          "source": "docs/design/game-art/citadels-district-keep.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-keep.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-keep-manifest.json"
+        },
+        {
+          "id": "citadels-district-imperial_treasury",
+          "identity": "imperial_treasury",
+          "source": "docs/design/game-art/citadels-district-imperial_treasury.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-imperial_treasury.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-imperial_treasury-manifest.json"
+        },
+        {
+          "id": "citadels-district-map_room",
+          "identity": "map_room",
+          "source": "docs/design/game-art/citadels-district-map_room.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-map_room.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-map_room-manifest.json"
+        },
+        {
+          "id": "citadels-district-laboratory",
+          "identity": "laboratory",
+          "source": "docs/design/game-art/citadels-district-laboratory.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-laboratory.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-laboratory-manifest.json"
+        },
+        {
+          "id": "citadels-district-observatory",
+          "identity": "observatory",
+          "source": "docs/design/game-art/citadels-district-observatory.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-observatory.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-observatory-manifest.json"
+        },
+        {
+          "id": "citadels-district-smithy",
+          "identity": "smithy",
+          "source": "docs/design/game-art/citadels-district-smithy.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-smithy.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-smithy-manifest.json"
+        },
+        {
+          "id": "citadels-district-library",
+          "identity": "library",
+          "source": "docs/design/game-art/citadels-district-library.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-library.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-library-manifest.json"
+        },
+        {
+          "id": "citadels-district-school_of_magic",
+          "identity": "school_of_magic",
+          "source": "docs/design/game-art/citadels-district-school_of_magic.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-school_of_magic.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-school_of_magic-manifest.json"
+        },
+        {
+          "id": "citadels-district-dragon_gate",
+          "identity": "dragon_gate",
+          "source": "docs/design/game-art/citadels-district-dragon_gate.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-dragon_gate.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-dragon_gate-manifest.json"
+        },
+        {
+          "id": "citadels-district-great_wall",
+          "identity": "great_wall",
+          "source": "docs/design/game-art/citadels-district-great_wall.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-great_wall.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-great_wall-manifest.json"
+        },
+        {
+          "id": "citadels-district-factory",
+          "identity": "factory",
+          "source": "docs/design/game-art/citadels-district-factory.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-factory.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-factory-manifest.json"
+        },
+        {
+          "id": "citadels-district-gold_mine",
+          "identity": "gold_mine",
+          "source": "docs/design/game-art/citadels-district-gold_mine.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-gold_mine.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-gold_mine-manifest.json"
+        },
+        {
+          "id": "citadels-district-wishing_well",
+          "identity": "wishing_well",
+          "source": "docs/design/game-art/citadels-district-wishing_well.png",
+          "output": "apps/mobile/assets/game-art/citadels-district-wishing_well.webp",
+          "manifest": "apps/mobile/assets/game-art/citadels-district-wishing_well-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "bang-character",
+      "maxTotalBytes": 786432,
+      "assets": [
+        {
+          "id": "bang-character-bart_cassidy",
+          "identity": "bart_cassidy",
+          "source": "docs/design/game-art/bang-character-bart_cassidy.png",
+          "output": "apps/mobile/assets/game-art/bang-character-bart_cassidy.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-bart_cassidy-manifest.json"
+        },
+        {
+          "id": "bang-character-black_jack",
+          "identity": "black_jack",
+          "source": "docs/design/game-art/bang-character-black_jack.png",
+          "output": "apps/mobile/assets/game-art/bang-character-black_jack.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-black_jack-manifest.json"
+        },
+        {
+          "id": "bang-character-calamity_janet",
+          "identity": "calamity_janet",
+          "source": "docs/design/game-art/bang-character-calamity_janet.png",
+          "output": "apps/mobile/assets/game-art/bang-character-calamity_janet.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-calamity_janet-manifest.json"
+        },
+        {
+          "id": "bang-character-el_gringo",
+          "identity": "el_gringo",
+          "source": "docs/design/game-art/bang-character-el_gringo.png",
+          "output": "apps/mobile/assets/game-art/bang-character-el_gringo.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-el_gringo-manifest.json"
+        },
+        {
+          "id": "bang-character-jesse_jones",
+          "identity": "jesse_jones",
+          "source": "docs/design/game-art/bang-character-jesse_jones.png",
+          "output": "apps/mobile/assets/game-art/bang-character-jesse_jones.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-jesse_jones-manifest.json"
+        },
+        {
+          "id": "bang-character-jourdonnais",
+          "identity": "jourdonnais",
+          "source": "docs/design/game-art/bang-character-jourdonnais.png",
+          "output": "apps/mobile/assets/game-art/bang-character-jourdonnais.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-jourdonnais-manifest.json"
+        },
+        {
+          "id": "bang-character-kit_carlson",
+          "identity": "kit_carlson",
+          "source": "docs/design/game-art/bang-character-kit_carlson.png",
+          "output": "apps/mobile/assets/game-art/bang-character-kit_carlson.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-kit_carlson-manifest.json"
+        },
+        {
+          "id": "bang-character-lucky_duke",
+          "identity": "lucky_duke",
+          "source": "docs/design/game-art/bang-character-lucky_duke.png",
+          "output": "apps/mobile/assets/game-art/bang-character-lucky_duke.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-lucky_duke-manifest.json"
+        },
+        {
+          "id": "bang-character-paul_regret",
+          "identity": "paul_regret",
+          "source": "docs/design/game-art/bang-character-paul_regret.png",
+          "output": "apps/mobile/assets/game-art/bang-character-paul_regret.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-paul_regret-manifest.json"
+        },
+        {
+          "id": "bang-character-pedro_ramirez",
+          "identity": "pedro_ramirez",
+          "source": "docs/design/game-art/bang-character-pedro_ramirez.png",
+          "output": "apps/mobile/assets/game-art/bang-character-pedro_ramirez.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-pedro_ramirez-manifest.json"
+        },
+        {
+          "id": "bang-character-rose_doolan",
+          "identity": "rose_doolan",
+          "source": "docs/design/game-art/bang-character-rose_doolan.png",
+          "output": "apps/mobile/assets/game-art/bang-character-rose_doolan.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-rose_doolan-manifest.json"
+        },
+        {
+          "id": "bang-character-sid_ketchum",
+          "identity": "sid_ketchum",
+          "source": "docs/design/game-art/bang-character-sid_ketchum.png",
+          "output": "apps/mobile/assets/game-art/bang-character-sid_ketchum.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-sid_ketchum-manifest.json"
+        },
+        {
+          "id": "bang-character-slab_the_killer",
+          "identity": "slab_the_killer",
+          "source": "docs/design/game-art/bang-character-slab_the_killer.png",
+          "output": "apps/mobile/assets/game-art/bang-character-slab_the_killer.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-slab_the_killer-manifest.json"
+        },
+        {
+          "id": "bang-character-suzy_lafayette",
+          "identity": "suzy_lafayette",
+          "source": "docs/design/game-art/bang-character-suzy_lafayette.png",
+          "output": "apps/mobile/assets/game-art/bang-character-suzy_lafayette.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-suzy_lafayette-manifest.json"
+        },
+        {
+          "id": "bang-character-vulture_sam",
+          "identity": "vulture_sam",
+          "source": "docs/design/game-art/bang-character-vulture_sam.png",
+          "output": "apps/mobile/assets/game-art/bang-character-vulture_sam.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-vulture_sam-manifest.json"
+        },
+        {
+          "id": "bang-character-willy_the_kid",
+          "identity": "willy_the_kid",
+          "source": "docs/design/game-art/bang-character-willy_the_kid.png",
+          "output": "apps/mobile/assets/game-art/bang-character-willy_the_kid.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-character-willy_the_kid-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "bang-card",
+      "maxTotalBytes": 1081344,
+      "assets": [
+        {
+          "id": "bang-card-bang",
+          "identity": "bang",
+          "source": "docs/design/game-art/bang-card-bang.png",
+          "output": "apps/mobile/assets/game-art/bang-card-bang.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-bang-manifest.json"
+        },
+        {
+          "id": "bang-card-missed",
+          "identity": "missed",
+          "source": "docs/design/game-art/bang-card-missed.png",
+          "output": "apps/mobile/assets/game-art/bang-card-missed.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-missed-manifest.json"
+        },
+        {
+          "id": "bang-card-beer",
+          "identity": "beer",
+          "source": "docs/design/game-art/bang-card-beer.png",
+          "output": "apps/mobile/assets/game-art/bang-card-beer.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-beer-manifest.json"
+        },
+        {
+          "id": "bang-card-saloon",
+          "identity": "saloon",
+          "source": "docs/design/game-art/bang-card-saloon.png",
+          "output": "apps/mobile/assets/game-art/bang-card-saloon.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-saloon-manifest.json"
+        },
+        {
+          "id": "bang-card-stagecoach",
+          "identity": "stagecoach",
+          "source": "docs/design/game-art/bang-card-stagecoach.png",
+          "output": "apps/mobile/assets/game-art/bang-card-stagecoach.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-stagecoach-manifest.json"
+        },
+        {
+          "id": "bang-card-wells_fargo",
+          "identity": "wells_fargo",
+          "source": "docs/design/game-art/bang-card-wells_fargo.png",
+          "output": "apps/mobile/assets/game-art/bang-card-wells_fargo.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-wells_fargo-manifest.json"
+        },
+        {
+          "id": "bang-card-general_store",
+          "identity": "general_store",
+          "source": "docs/design/game-art/bang-card-general_store.png",
+          "output": "apps/mobile/assets/game-art/bang-card-general_store.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-general_store-manifest.json"
+        },
+        {
+          "id": "bang-card-panic",
+          "identity": "panic",
+          "source": "docs/design/game-art/bang-card-panic.png",
+          "output": "apps/mobile/assets/game-art/bang-card-panic.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-panic-manifest.json"
+        },
+        {
+          "id": "bang-card-cat_balou",
+          "identity": "cat_balou",
+          "source": "docs/design/game-art/bang-card-cat_balou.png",
+          "output": "apps/mobile/assets/game-art/bang-card-cat_balou.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-cat_balou-manifest.json"
+        },
+        {
+          "id": "bang-card-gatling",
+          "identity": "gatling",
+          "source": "docs/design/game-art/bang-card-gatling.png",
+          "output": "apps/mobile/assets/game-art/bang-card-gatling.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-gatling-manifest.json"
+        },
+        {
+          "id": "bang-card-indians",
+          "identity": "indians",
+          "source": "docs/design/game-art/bang-card-indians.png",
+          "output": "apps/mobile/assets/game-art/bang-card-indians.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-indians-manifest.json"
+        },
+        {
+          "id": "bang-card-duel",
+          "identity": "duel",
+          "source": "docs/design/game-art/bang-card-duel.png",
+          "output": "apps/mobile/assets/game-art/bang-card-duel.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-duel-manifest.json"
+        },
+        {
+          "id": "bang-card-barrel",
+          "identity": "barrel",
+          "source": "docs/design/game-art/bang-card-barrel.png",
+          "output": "apps/mobile/assets/game-art/bang-card-barrel.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-barrel-manifest.json"
+        },
+        {
+          "id": "bang-card-dynamite",
+          "identity": "dynamite",
+          "source": "docs/design/game-art/bang-card-dynamite.png",
+          "output": "apps/mobile/assets/game-art/bang-card-dynamite.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-dynamite-manifest.json"
+        },
+        {
+          "id": "bang-card-scope",
+          "identity": "scope",
+          "source": "docs/design/game-art/bang-card-scope.png",
+          "output": "apps/mobile/assets/game-art/bang-card-scope.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-scope-manifest.json"
+        },
+        {
+          "id": "bang-card-mustang",
+          "identity": "mustang",
+          "source": "docs/design/game-art/bang-card-mustang.png",
+          "output": "apps/mobile/assets/game-art/bang-card-mustang.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-mustang-manifest.json"
+        },
+        {
+          "id": "bang-card-jail",
+          "identity": "jail",
+          "source": "docs/design/game-art/bang-card-jail.png",
+          "output": "apps/mobile/assets/game-art/bang-card-jail.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-jail-manifest.json"
+        },
+        {
+          "id": "bang-card-volcanic",
+          "identity": "volcanic",
+          "source": "docs/design/game-art/bang-card-volcanic.png",
+          "output": "apps/mobile/assets/game-art/bang-card-volcanic.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-volcanic-manifest.json"
+        },
+        {
+          "id": "bang-card-schofield",
+          "identity": "schofield",
+          "source": "docs/design/game-art/bang-card-schofield.png",
+          "output": "apps/mobile/assets/game-art/bang-card-schofield.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-schofield-manifest.json"
+        },
+        {
+          "id": "bang-card-remington",
+          "identity": "remington",
+          "source": "docs/design/game-art/bang-card-remington.png",
+          "output": "apps/mobile/assets/game-art/bang-card-remington.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-remington-manifest.json"
+        },
+        {
+          "id": "bang-card-rev_carabine",
+          "identity": "rev_carabine",
+          "source": "docs/design/game-art/bang-card-rev_carabine.png",
+          "output": "apps/mobile/assets/game-art/bang-card-rev_carabine.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-rev_carabine-manifest.json"
+        },
+        {
+          "id": "bang-card-winchester",
+          "identity": "winchester",
+          "source": "docs/design/game-art/bang-card-winchester.png",
+          "output": "apps/mobile/assets/game-art/bang-card-winchester.webp",
+          "manifest": "apps/mobile/assets/game-art/bang-card-winchester-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "tokyo-monster",
+      "maxTotalBytes": 294912,
+      "assets": [
+        {
+          "id": "tokyo-monster-voltclaw",
+          "identity": "voltclaw",
+          "source": "docs/design/game-art/tokyo-monster-voltclaw.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-voltclaw.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-voltclaw-manifest.json"
+        },
+        {
+          "id": "tokyo-monster-emberback",
+          "identity": "emberback",
+          "source": "docs/design/game-art/tokyo-monster-emberback.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-emberback.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-emberback-manifest.json"
+        },
+        {
+          "id": "tokyo-monster-prism-moth",
+          "identity": "prism-moth",
+          "source": "docs/design/game-art/tokyo-monster-prism-moth.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-prism-moth.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-prism-moth-manifest.json"
+        },
+        {
+          "id": "tokyo-monster-abyssal",
+          "identity": "abyssal",
+          "source": "docs/design/game-art/tokyo-monster-abyssal.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-abyssal.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-abyssal-manifest.json"
+        },
+        {
+          "id": "tokyo-monster-scrap-sentinel",
+          "identity": "scrap-sentinel",
+          "source": "docs/design/game-art/tokyo-monster-scrap-sentinel.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-scrap-sentinel.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-scrap-sentinel-manifest.json"
+        },
+        {
+          "id": "tokyo-monster-riftfang",
+          "identity": "riftfang",
+          "source": "docs/design/game-art/tokyo-monster-riftfang.png",
+          "output": "apps/mobile/assets/game-art/tokyo-monster-riftfang.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-monster-riftfang-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "tokyo-power",
+      "maxTotalBytes": 3145728,
+      "assets": [
+        {
+          "id": "tokyo-power-apartment_building",
+          "identity": "apartment_building",
+          "source": "docs/design/game-art/tokyo-power-apartment_building.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-apartment_building.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-apartment_building-manifest.json"
+        },
+        {
+          "id": "tokyo-power-commuter_train",
+          "identity": "commuter_train",
+          "source": "docs/design/game-art/tokyo-power-commuter_train.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-commuter_train.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-commuter_train-manifest.json"
+        },
+        {
+          "id": "tokyo-power-corner_store",
+          "identity": "corner_store",
+          "source": "docs/design/game-art/tokyo-power-corner_store.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-corner_store.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-corner_store-manifest.json"
+        },
+        {
+          "id": "tokyo-power-drop_from_high_altitude",
+          "identity": "drop_from_high_altitude",
+          "source": "docs/design/game-art/tokyo-power-drop_from_high_altitude.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-drop_from_high_altitude.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-drop_from_high_altitude-manifest.json"
+        },
+        {
+          "id": "tokyo-power-energize",
+          "identity": "energize",
+          "source": "docs/design/game-art/tokyo-power-energize.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-energize.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-energize-manifest.json"
+        },
+        {
+          "id": "tokyo-power-evacuation_orders",
+          "identity": "evacuation_orders",
+          "source": "docs/design/game-art/tokyo-power-evacuation_orders.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-evacuation_orders.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-evacuation_orders-manifest.json"
+        },
+        {
+          "id": "tokyo-power-flame_thrower",
+          "identity": "flame_thrower",
+          "source": "docs/design/game-art/tokyo-power-flame_thrower.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-flame_thrower.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-flame_thrower-manifest.json"
+        },
+        {
+          "id": "tokyo-power-frenzy",
+          "identity": "frenzy",
+          "source": "docs/design/game-art/tokyo-power-frenzy.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-frenzy.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-frenzy-manifest.json"
+        },
+        {
+          "id": "tokyo-power-gas_refinery",
+          "identity": "gas_refinery",
+          "source": "docs/design/game-art/tokyo-power-gas_refinery.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-gas_refinery.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-gas_refinery-manifest.json"
+        },
+        {
+          "id": "tokyo-power-heal",
+          "identity": "heal",
+          "source": "docs/design/game-art/tokyo-power-heal.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-heal.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-heal-manifest.json"
+        },
+        {
+          "id": "tokyo-power-high_altitude_bombing",
+          "identity": "high_altitude_bombing",
+          "source": "docs/design/game-art/tokyo-power-high_altitude_bombing.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-high_altitude_bombing.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-high_altitude_bombing-manifest.json"
+        },
+        {
+          "id": "tokyo-power-jet_fighters",
+          "identity": "jet_fighters",
+          "source": "docs/design/game-art/tokyo-power-jet_fighters.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-jet_fighters.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-jet_fighters-manifest.json"
+        },
+        {
+          "id": "tokyo-power-national_guard",
+          "identity": "national_guard",
+          "source": "docs/design/game-art/tokyo-power-national_guard.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-national_guard.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-national_guard-manifest.json"
+        },
+        {
+          "id": "tokyo-power-nuclear_power_plant",
+          "identity": "nuclear_power_plant",
+          "source": "docs/design/game-art/tokyo-power-nuclear_power_plant.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-nuclear_power_plant.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-nuclear_power_plant-manifest.json"
+        },
+        {
+          "id": "tokyo-power-skyscraper",
+          "identity": "skyscraper",
+          "source": "docs/design/game-art/tokyo-power-skyscraper.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-skyscraper.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-skyscraper-manifest.json"
+        },
+        {
+          "id": "tokyo-power-tanks",
+          "identity": "tanks",
+          "source": "docs/design/game-art/tokyo-power-tanks.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-tanks.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-tanks-manifest.json"
+        },
+        {
+          "id": "tokyo-power-vast_storm",
+          "identity": "vast_storm",
+          "source": "docs/design/game-art/tokyo-power-vast_storm.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-vast_storm.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-vast_storm-manifest.json"
+        },
+        {
+          "id": "tokyo-power-acid_attack",
+          "identity": "acid_attack",
+          "source": "docs/design/game-art/tokyo-power-acid_attack.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-acid_attack.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-acid_attack-manifest.json"
+        },
+        {
+          "id": "tokyo-power-alien_origin",
+          "identity": "alien_origin",
+          "source": "docs/design/game-art/tokyo-power-alien_origin.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-alien_origin.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-alien_origin-manifest.json"
+        },
+        {
+          "id": "tokyo-power-alpha_monster",
+          "identity": "alpha_monster",
+          "source": "docs/design/game-art/tokyo-power-alpha_monster.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-alpha_monster.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-alpha_monster-manifest.json"
+        },
+        {
+          "id": "tokyo-power-armor_plating",
+          "identity": "armor_plating",
+          "source": "docs/design/game-art/tokyo-power-armor_plating.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-armor_plating.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-armor_plating-manifest.json"
+        },
+        {
+          "id": "tokyo-power-background_dweller",
+          "identity": "background_dweller",
+          "source": "docs/design/game-art/tokyo-power-background_dweller.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-background_dweller.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-background_dweller-manifest.json"
+        },
+        {
+          "id": "tokyo-power-burrowing",
+          "identity": "burrowing",
+          "source": "docs/design/game-art/tokyo-power-burrowing.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-burrowing.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-burrowing-manifest.json"
+        },
+        {
+          "id": "tokyo-power-camouflage",
+          "identity": "camouflage",
+          "source": "docs/design/game-art/tokyo-power-camouflage.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-camouflage.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-camouflage-manifest.json"
+        },
+        {
+          "id": "tokyo-power-complete_destruction",
+          "identity": "complete_destruction",
+          "source": "docs/design/game-art/tokyo-power-complete_destruction.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-complete_destruction.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-complete_destruction-manifest.json"
+        },
+        {
+          "id": "tokyo-power-media_friendly",
+          "identity": "media_friendly",
+          "source": "docs/design/game-art/tokyo-power-media_friendly.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-media_friendly.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-media_friendly-manifest.json"
+        },
+        {
+          "id": "tokyo-power-eater_of_the_dead",
+          "identity": "eater_of_the_dead",
+          "source": "docs/design/game-art/tokyo-power-eater_of_the_dead.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-eater_of_the_dead.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-eater_of_the_dead-manifest.json"
+        },
+        {
+          "id": "tokyo-power-energy_hoarder",
+          "identity": "energy_hoarder",
+          "source": "docs/design/game-art/tokyo-power-energy_hoarder.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-energy_hoarder.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-energy_hoarder-manifest.json"
+        },
+        {
+          "id": "tokyo-power-even_bigger",
+          "identity": "even_bigger",
+          "source": "docs/design/game-art/tokyo-power-even_bigger.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-even_bigger.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-even_bigger-manifest.json"
+        },
+        {
+          "id": "tokyo-power-extra_head",
+          "identity": "extra_head",
+          "source": "docs/design/game-art/tokyo-power-extra_head.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-extra_head.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-extra_head-manifest.json"
+        },
+        {
+          "id": "tokyo-power-fire_breathing",
+          "identity": "fire_breathing",
+          "source": "docs/design/game-art/tokyo-power-fire_breathing.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-fire_breathing.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-fire_breathing-manifest.json"
+        },
+        {
+          "id": "tokyo-power-freeze_time",
+          "identity": "freeze_time",
+          "source": "docs/design/game-art/tokyo-power-freeze_time.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-freeze_time.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-freeze_time-manifest.json"
+        },
+        {
+          "id": "tokyo-power-friend_of_children",
+          "identity": "friend_of_children",
+          "source": "docs/design/game-art/tokyo-power-friend_of_children.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-friend_of_children.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-friend_of_children-manifest.json"
+        },
+        {
+          "id": "tokyo-power-giant_brain",
+          "identity": "giant_brain",
+          "source": "docs/design/game-art/tokyo-power-giant_brain.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-giant_brain.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-giant_brain-manifest.json"
+        },
+        {
+          "id": "tokyo-power-gourmet",
+          "identity": "gourmet",
+          "source": "docs/design/game-art/tokyo-power-gourmet.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-gourmet.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-gourmet-manifest.json"
+        },
+        {
+          "id": "tokyo-power-healing_ray",
+          "identity": "healing_ray",
+          "source": "docs/design/game-art/tokyo-power-healing_ray.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-healing_ray.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-healing_ray-manifest.json"
+        },
+        {
+          "id": "tokyo-power-herbivore",
+          "identity": "herbivore",
+          "source": "docs/design/game-art/tokyo-power-herbivore.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-herbivore.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-herbivore-manifest.json"
+        },
+        {
+          "id": "tokyo-power-herd_culler",
+          "identity": "herd_culler",
+          "source": "docs/design/game-art/tokyo-power-herd_culler.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-herd_culler.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-herd_culler-manifest.json"
+        },
+        {
+          "id": "tokyo-power-it_has_a_child",
+          "identity": "it_has_a_child",
+          "source": "docs/design/game-art/tokyo-power-it_has_a_child.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-it_has_a_child.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-it_has_a_child-manifest.json"
+        },
+        {
+          "id": "tokyo-power-jets",
+          "identity": "jets",
+          "source": "docs/design/game-art/tokyo-power-jets.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-jets.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-jets-manifest.json"
+        },
+        {
+          "id": "tokyo-power-made_in_a_lab",
+          "identity": "made_in_a_lab",
+          "source": "docs/design/game-art/tokyo-power-made_in_a_lab.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-made_in_a_lab.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-made_in_a_lab-manifest.json"
+        },
+        {
+          "id": "tokyo-power-metamorph",
+          "identity": "metamorph",
+          "source": "docs/design/game-art/tokyo-power-metamorph.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-metamorph.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-metamorph-manifest.json"
+        },
+        {
+          "id": "tokyo-power-mimic",
+          "identity": "mimic",
+          "source": "docs/design/game-art/tokyo-power-mimic.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-mimic.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-mimic-manifest.json"
+        },
+        {
+          "id": "tokyo-power-battery_monster",
+          "identity": "battery_monster",
+          "source": "docs/design/game-art/tokyo-power-battery_monster.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-battery_monster.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-battery_monster-manifest.json"
+        },
+        {
+          "id": "tokyo-power-nova_breath",
+          "identity": "nova_breath",
+          "source": "docs/design/game-art/tokyo-power-nova_breath.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-nova_breath.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-nova_breath-manifest.json"
+        },
+        {
+          "id": "tokyo-power-detritivore",
+          "identity": "detritivore",
+          "source": "docs/design/game-art/tokyo-power-detritivore.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-detritivore.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-detritivore-manifest.json"
+        },
+        {
+          "id": "tokyo-power-opportunist",
+          "identity": "opportunist",
+          "source": "docs/design/game-art/tokyo-power-opportunist.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-opportunist.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-opportunist-manifest.json"
+        },
+        {
+          "id": "tokyo-power-parasitic_tentacles",
+          "identity": "parasitic_tentacles",
+          "source": "docs/design/game-art/tokyo-power-parasitic_tentacles.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-parasitic_tentacles.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-parasitic_tentacles-manifest.json"
+        },
+        {
+          "id": "tokyo-power-plot_twist",
+          "identity": "plot_twist",
+          "source": "docs/design/game-art/tokyo-power-plot_twist.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-plot_twist.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-plot_twist-manifest.json"
+        },
+        {
+          "id": "tokyo-power-poison_quills",
+          "identity": "poison_quills",
+          "source": "docs/design/game-art/tokyo-power-poison_quills.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-poison_quills.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-poison_quills-manifest.json"
+        },
+        {
+          "id": "tokyo-power-poison_spit",
+          "identity": "poison_spit",
+          "source": "docs/design/game-art/tokyo-power-poison_spit.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-poison_spit.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-poison_spit-manifest.json"
+        },
+        {
+          "id": "tokyo-power-psychic_probe",
+          "identity": "psychic_probe",
+          "source": "docs/design/game-art/tokyo-power-psychic_probe.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-psychic_probe.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-psychic_probe-manifest.json"
+        },
+        {
+          "id": "tokyo-power-rapid_healing",
+          "identity": "rapid_healing",
+          "source": "docs/design/game-art/tokyo-power-rapid_healing.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-rapid_healing.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-rapid_healing-manifest.json"
+        },
+        {
+          "id": "tokyo-power-regeneration",
+          "identity": "regeneration",
+          "source": "docs/design/game-art/tokyo-power-regeneration.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-regeneration.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-regeneration-manifest.json"
+        },
+        {
+          "id": "tokyo-power-rooting_for_underdog",
+          "identity": "rooting_for_underdog",
+          "source": "docs/design/game-art/tokyo-power-rooting_for_underdog.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-rooting_for_underdog.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-rooting_for_underdog-manifest.json"
+        },
+        {
+          "id": "tokyo-power-shrink_ray",
+          "identity": "shrink_ray",
+          "source": "docs/design/game-art/tokyo-power-shrink_ray.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-shrink_ray.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-shrink_ray-manifest.json"
+        },
+        {
+          "id": "tokyo-power-smoke_cloud",
+          "identity": "smoke_cloud",
+          "source": "docs/design/game-art/tokyo-power-smoke_cloud.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-smoke_cloud.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-smoke_cloud-manifest.json"
+        },
+        {
+          "id": "tokyo-power-solar_powered",
+          "identity": "solar_powered",
+          "source": "docs/design/game-art/tokyo-power-solar_powered.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-solar_powered.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-solar_powered-manifest.json"
+        },
+        {
+          "id": "tokyo-power-spiked_tail",
+          "identity": "spiked_tail",
+          "source": "docs/design/game-art/tokyo-power-spiked_tail.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-spiked_tail.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-spiked_tail-manifest.json"
+        },
+        {
+          "id": "tokyo-power-stretchy",
+          "identity": "stretchy",
+          "source": "docs/design/game-art/tokyo-power-stretchy.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-stretchy.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-stretchy-manifest.json"
+        },
+        {
+          "id": "tokyo-power-energy_drink",
+          "identity": "energy_drink",
+          "source": "docs/design/game-art/tokyo-power-energy_drink.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-energy_drink.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-energy_drink-manifest.json"
+        },
+        {
+          "id": "tokyo-power-urbavore",
+          "identity": "urbavore",
+          "source": "docs/design/game-art/tokyo-power-urbavore.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-urbavore.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-urbavore-manifest.json"
+        },
+        {
+          "id": "tokyo-power-making_it_stronger",
+          "identity": "making_it_stronger",
+          "source": "docs/design/game-art/tokyo-power-making_it_stronger.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-making_it_stronger.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-making_it_stronger-manifest.json"
+        },
+        {
+          "id": "tokyo-power-wings",
+          "identity": "wings",
+          "source": "docs/design/game-art/tokyo-power-wings.png",
+          "output": "apps/mobile/assets/game-art/tokyo-power-wings.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-power-wings-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "colt-character",
+      "maxTotalBytes": 294912,
+      "assets": [
+        {
+          "id": "colt-character-ghost",
+          "identity": "ghost",
+          "source": "docs/design/game-art/colt-character-ghost.png",
+          "output": "apps/mobile/assets/game-art/colt-character-ghost.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-ghost-manifest.json"
+        },
+        {
+          "id": "colt-character-doc",
+          "identity": "doc",
+          "source": "docs/design/game-art/colt-character-doc.png",
+          "output": "apps/mobile/assets/game-art/colt-character-doc.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-doc-manifest.json"
+        },
+        {
+          "id": "colt-character-tuco",
+          "identity": "tuco",
+          "source": "docs/design/game-art/colt-character-tuco.png",
+          "output": "apps/mobile/assets/game-art/colt-character-tuco.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-tuco-manifest.json"
+        },
+        {
+          "id": "colt-character-django",
+          "identity": "django",
+          "source": "docs/design/game-art/colt-character-django.png",
+          "output": "apps/mobile/assets/game-art/colt-character-django.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-django-manifest.json"
+        },
+        {
+          "id": "colt-character-cheyenne",
+          "identity": "cheyenne",
+          "source": "docs/design/game-art/colt-character-cheyenne.png",
+          "output": "apps/mobile/assets/game-art/colt-character-cheyenne.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-cheyenne-manifest.json"
+        },
+        {
+          "id": "colt-character-belle",
+          "identity": "belle",
+          "source": "docs/design/game-art/colt-character-belle.png",
+          "output": "apps/mobile/assets/game-art/colt-character-belle.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-character-belle-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "colt-train",
+      "aspect": "source",
+      "maxTotalBytes": 147456,
+      "assets": [
+        {
+          "id": "colt-train-locomotive",
+          "identity": "locomotive",
+          "source": "docs/design/game-art/colt-train-locomotive.png",
+          "output": "apps/mobile/assets/game-art/colt-train-locomotive.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-train-locomotive-manifest.json"
+        },
+        {
+          "id": "colt-train-carriage",
+          "identity": "carriage",
+          "source": "docs/design/game-art/colt-train-carriage.png",
+          "output": "apps/mobile/assets/game-art/colt-train-carriage.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-train-carriage-manifest.json"
+        },
+        {
+          "id": "colt-train-caboose",
+          "identity": "caboose",
+          "source": "docs/design/game-art/colt-train-caboose.png",
+          "output": "apps/mobile/assets/game-art/colt-train-caboose.webp",
+          "manifest": "apps/mobile/assets/game-art/colt-train-caboose-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "saboteur-tool",
+      "maxTotalBytes": 294912,
+      "assets": [
+        {
+          "id": "saboteur-tool-pickaxe-intact",
+          "identity": "pickaxe-intact",
+          "source": "docs/design/game-art/saboteur-tool-pickaxe-intact.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-pickaxe-intact.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-pickaxe-intact-manifest.json"
+        },
+        {
+          "id": "saboteur-tool-pickaxe-broken",
+          "identity": "pickaxe-broken",
+          "source": "docs/design/game-art/saboteur-tool-pickaxe-broken.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-pickaxe-broken.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-pickaxe-broken-manifest.json"
+        },
+        {
+          "id": "saboteur-tool-lantern-intact",
+          "identity": "lantern-intact",
+          "source": "docs/design/game-art/saboteur-tool-lantern-intact.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-lantern-intact.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-lantern-intact-manifest.json"
+        },
+        {
+          "id": "saboteur-tool-lantern-broken",
+          "identity": "lantern-broken",
+          "source": "docs/design/game-art/saboteur-tool-lantern-broken.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-lantern-broken.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-lantern-broken-manifest.json"
+        },
+        {
+          "id": "saboteur-tool-cart-intact",
+          "identity": "cart-intact",
+          "source": "docs/design/game-art/saboteur-tool-cart-intact.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-cart-intact.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-cart-intact-manifest.json"
+        },
+        {
+          "id": "saboteur-tool-cart-broken",
+          "identity": "cart-broken",
+          "source": "docs/design/game-art/saboteur-tool-cart-broken.png",
+          "output": "apps/mobile/assets/game-art/saboteur-tool-cart-broken.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-tool-cart-broken-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "saboteur-action",
+      "maxTotalBytes": 98304,
+      "assets": [
+        {
+          "id": "saboteur-action-map",
+          "identity": "map",
+          "source": "docs/design/game-art/saboteur-action-map.png",
+          "output": "apps/mobile/assets/game-art/saboteur-action-map.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-action-map-manifest.json"
+        },
+        {
+          "id": "saboteur-action-rockfall",
+          "identity": "rockfall",
+          "source": "docs/design/game-art/saboteur-action-rockfall.png",
+          "output": "apps/mobile/assets/game-art/saboteur-action-rockfall.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-action-rockfall-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "saboteur-role",
+      "maxTotalBytes": 98304,
+      "assets": [
+        {
+          "id": "saboteur-role-miner",
+          "identity": "miner",
+          "source": "docs/design/game-art/saboteur-role-miner.png",
+          "output": "apps/mobile/assets/game-art/saboteur-role-miner.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-role-miner-manifest.json"
+        },
+        {
+          "id": "saboteur-role-saboteur",
+          "identity": "saboteur",
+          "source": "docs/design/game-art/saboteur-role-saboteur.png",
+          "output": "apps/mobile/assets/game-art/saboteur-role-saboteur.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-role-saboteur-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "saboteur-deck",
+      "aspect": "source",
+      "maxTotalBytes": 49152,
+      "assets": [
+        {
+          "id": "saboteur-deck-back",
+          "identity": "back",
+          "source": "docs/design/game-art/saboteur-deck-back.png",
+          "output": "apps/mobile/assets/game-art/saboteur-deck-back.webp",
+          "manifest": "apps/mobile/assets/game-art/saboteur-deck-back-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "not-alone-survival",
+      "maxTotalBytes": 737280,
+      "assets": [
+        {
+          "id": "not-alone-survival-adrenaline",
+          "identity": "adrenaline",
+          "source": "docs/design/game-art/not-alone-survival-adrenaline.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-adrenaline.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-adrenaline-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-amplifier",
+          "identity": "amplifier",
+          "source": "docs/design/game-art/not-alone-survival-amplifier.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-amplifier.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-amplifier-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-detector",
+          "identity": "detector",
+          "source": "docs/design/game-art/not-alone-survival-detector.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-detector.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-detector-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-dodge",
+          "identity": "dodge",
+          "source": "docs/design/game-art/not-alone-survival-dodge.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-dodge.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-dodge-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-double_back",
+          "identity": "double_back",
+          "source": "docs/design/game-art/not-alone-survival-double_back.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-double_back.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-double_back-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-drone",
+          "identity": "drone",
+          "source": "docs/design/game-art/not-alone-survival-drone.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-drone.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-drone-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-gate",
+          "identity": "gate",
+          "source": "docs/design/game-art/not-alone-survival-gate.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-gate.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-gate-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-hologram",
+          "identity": "hologram",
+          "source": "docs/design/game-art/not-alone-survival-hologram.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-hologram.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-hologram-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-ingenuity",
+          "identity": "ingenuity",
+          "source": "docs/design/game-art/not-alone-survival-ingenuity.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-ingenuity.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-ingenuity-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-sacrifice",
+          "identity": "sacrifice",
+          "source": "docs/design/game-art/not-alone-survival-sacrifice.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-sacrifice.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-sacrifice-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-sixth_sense",
+          "identity": "sixth_sense",
+          "source": "docs/design/game-art/not-alone-survival-sixth_sense.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-sixth_sense.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-sixth_sense-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-smokescreen",
+          "identity": "smokescreen",
+          "source": "docs/design/game-art/not-alone-survival-smokescreen.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-smokescreen.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-smokescreen-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-strike_back",
+          "identity": "strike_back",
+          "source": "docs/design/game-art/not-alone-survival-strike_back.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-strike_back.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-strike_back-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-vortex",
+          "identity": "vortex",
+          "source": "docs/design/game-art/not-alone-survival-vortex.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-vortex.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-vortex-manifest.json"
+        },
+        {
+          "id": "not-alone-survival-wrong_track",
+          "identity": "wrong_track",
+          "source": "docs/design/game-art/not-alone-survival-wrong_track.png",
+          "output": "apps/mobile/assets/game-art/not-alone-survival-wrong_track.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-survival-wrong_track-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "not-alone-hunt",
+      "maxTotalBytes": 983040,
+      "assets": [
+        {
+          "id": "not-alone-hunt-anticipation",
+          "identity": "anticipation",
+          "source": "docs/design/game-art/not-alone-hunt-anticipation.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-anticipation.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-anticipation-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-ascendancy",
+          "identity": "ascendancy",
+          "source": "docs/design/game-art/not-alone-hunt-ascendancy.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-ascendancy.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-ascendancy-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-cataclysm",
+          "identity": "cataclysm",
+          "source": "docs/design/game-art/not-alone-hunt-cataclysm.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-cataclysm.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-cataclysm-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-clone",
+          "identity": "clone",
+          "source": "docs/design/game-art/not-alone-hunt-clone.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-clone.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-clone-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-despair",
+          "identity": "despair",
+          "source": "docs/design/game-art/not-alone-hunt-despair.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-despair.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-despair-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-detour",
+          "identity": "detour",
+          "source": "docs/design/game-art/not-alone-hunt-detour.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-detour.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-detour-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-fierceness",
+          "identity": "fierceness",
+          "source": "docs/design/game-art/not-alone-hunt-fierceness.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-fierceness.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-fierceness-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-flashback",
+          "identity": "flashback",
+          "source": "docs/design/game-art/not-alone-hunt-flashback.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-flashback.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-flashback-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-forbidden_zone",
+          "identity": "forbidden_zone",
+          "source": "docs/design/game-art/not-alone-hunt-forbidden_zone.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-forbidden_zone.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-forbidden_zone-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-force_field",
+          "identity": "force_field",
+          "source": "docs/design/game-art/not-alone-hunt-force_field.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-force_field.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-force_field-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-interference",
+          "identity": "interference",
+          "source": "docs/design/game-art/not-alone-hunt-interference.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-interference.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-interference-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-mirage",
+          "identity": "mirage",
+          "source": "docs/design/game-art/not-alone-hunt-mirage.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-mirage.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-mirage-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-mutation",
+          "identity": "mutation",
+          "source": "docs/design/game-art/not-alone-hunt-mutation.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-mutation.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-mutation-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-persecution",
+          "identity": "persecution",
+          "source": "docs/design/game-art/not-alone-hunt-persecution.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-persecution.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-persecution-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-phobia",
+          "identity": "phobia",
+          "source": "docs/design/game-art/not-alone-hunt-phobia.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-phobia.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-phobia-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-scream",
+          "identity": "scream",
+          "source": "docs/design/game-art/not-alone-hunt-scream.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-scream.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-scream-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-stasis",
+          "identity": "stasis",
+          "source": "docs/design/game-art/not-alone-hunt-stasis.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-stasis.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-stasis-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-toxin",
+          "identity": "toxin",
+          "source": "docs/design/game-art/not-alone-hunt-toxin.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-toxin.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-toxin-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-tracking",
+          "identity": "tracking",
+          "source": "docs/design/game-art/not-alone-hunt-tracking.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-tracking.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-tracking-manifest.json"
+        },
+        {
+          "id": "not-alone-hunt-virus",
+          "identity": "virus",
+          "source": "docs/design/game-art/not-alone-hunt-virus.png",
+          "output": "apps/mobile/assets/game-art/not-alone-hunt-virus.webp",
+          "manifest": "apps/mobile/assets/game-art/not-alone-hunt-virus-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "skull-suit",
+      "maxTotalBytes": 196608,
+      "assets": [
+        {
+          "id": "skull-suit-green",
+          "identity": "green",
+          "source": "docs/design/game-art/skull-suit-green.png",
+          "output": "apps/mobile/assets/game-art/skull-suit-green.webp",
+          "manifest": "apps/mobile/assets/game-art/skull-suit-green-manifest.json"
+        },
+        {
+          "id": "skull-suit-purple",
+          "identity": "purple",
+          "source": "docs/design/game-art/skull-suit-purple.png",
+          "output": "apps/mobile/assets/game-art/skull-suit-purple.webp",
+          "manifest": "apps/mobile/assets/game-art/skull-suit-purple-manifest.json"
+        },
+        {
+          "id": "skull-suit-yellow",
+          "identity": "yellow",
+          "source": "docs/design/game-art/skull-suit-yellow.png",
+          "output": "apps/mobile/assets/game-art/skull-suit-yellow.webp",
+          "manifest": "apps/mobile/assets/game-art/skull-suit-yellow-manifest.json"
+        },
+        {
+          "id": "skull-suit-black",
+          "identity": "black",
+          "source": "docs/design/game-art/skull-suit-black.png",
+          "output": "apps/mobile/assets/game-art/skull-suit-black.webp",
+          "manifest": "apps/mobile/assets/game-art/skull-suit-black-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "skull-deck",
+      "aspect": "source",
+      "maxTotalBytes": 49152,
+      "assets": [
+        {
+          "id": "skull-deck-back",
+          "identity": "back",
+          "width": 256,
+          "source": "docs/design/game-art/skull-deck-back.png",
+          "output": "apps/mobile/assets/game-art/skull-deck-back.webp",
+          "manifest": "apps/mobile/assets/game-art/skull-deck-back-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "coup-influence",
+      "aspect": "source",
+      "maxTotalBytes": 49152,
+      "assets": [
+        {
+          "id": "coup-influence-back",
+          "identity": "back",
+          "source": "docs/design/game-art/coup-influence-back.png",
+          "output": "apps/mobile/assets/game-art/coup-influence-back.webp",
+          "manifest": "apps/mobile/assets/game-art/coup-influence-back-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "coup-faction",
+      "maxTotalBytes": 98304,
+      "assets": [
+        {
+          "id": "coup-faction-loyalist",
+          "identity": "loyalist",
+          "source": "docs/design/game-art/coup-faction-loyalist.png",
+          "output": "apps/mobile/assets/game-art/coup-faction-loyalist.webp",
+          "manifest": "apps/mobile/assets/game-art/coup-faction-loyalist-manifest.json"
+        },
+        {
+          "id": "coup-faction-reformist",
+          "identity": "reformist",
+          "source": "docs/design/game-art/coup-faction-reformist.png",
+          "output": "apps/mobile/assets/game-art/coup-faction-reformist.webp",
+          "manifest": "apps/mobile/assets/game-art/coup-faction-reformist-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "coup",
+      "maxTotalBytes": 49152,
+      "assets": [
+        {
+          "id": "coup-treasury",
+          "identity": "treasury",
+          "source": "docs/design/game-art/coup-treasury.png",
+          "output": "apps/mobile/assets/game-art/coup-treasury.webp",
+          "manifest": "apps/mobile/assets/game-art/coup-treasury-manifest.json"
+        }
+      ]
+    },
+    {
+      "family": "tokyo-arena",
+      "aspect": "source",
+      "maxTotalBytes": 49152,
+      "assets": [
+        {
+          "id": "tokyo-arena-backdrop",
+          "identity": "backdrop",
+          "source": "docs/design/game-art/tokyo-arena-backdrop.png",
+          "output": "apps/mobile/assets/game-art/tokyo-arena-backdrop.webp",
+          "manifest": "apps/mobile/assets/game-art/tokyo-arena-backdrop-manifest.json"
+        }
+      ]
+    }
+  ]
+}

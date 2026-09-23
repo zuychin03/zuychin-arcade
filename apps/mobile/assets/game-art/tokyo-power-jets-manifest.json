@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-jets.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2443727,
+    "sha256": "c13fe2da9f5ff7771c7310f51eccf40db9cc6cdf6b5479759a17d567579770a8"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-jets.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20898,
+      "sha256": "4b0c1b11abc48901ff88f4b60757dc6629201e4676fe0709cfd1a0debc7ff85d"
+    }
+  ],
+  "totalBytes": 20898,
+  "maxTotalBytes": 614400
+}

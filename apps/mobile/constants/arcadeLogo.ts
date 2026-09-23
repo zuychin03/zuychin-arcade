@@ -5,5 +5,9 @@ export const ARCADE_LOGO_ASSET_SHA256 = {
   "assets/icon.png": "fd261145a173627ec05b302d90803fca717398dde017cc21347d23465f19f039",
   "assets/android-icon-foreground.png": "02cb7143a0f1040e33989075087089d4bb6c38d7ee6557580918e998811d7330",
   "assets/android-icon-monochrome.png": "1336024c3361dd3d7d9681950629946882b2ad79ff18723375bbb1e0a10124e6",
-  "assets/favicon.png": "55de203c9f313c49d41d087c3d3dc98d947650d2ca5c8c8a6f17754773364e57"
+  "assets/favicon.png": "55de203c9f313c49d41d087c3d3dc98d947650d2ca5c8c8a6f17754773364e57",
+  "public/icons/icon-192.png": "8020cd067d354933f5d2dab838b5208acbde2b52d487dcfe720571cb9c666635",
+  "public/icons/icon-512.png": "18905475cb77584fc8fdeb0e23e8e234f2aaf9ea5577bb4125bee297778a0c7c",
+  "public/icons/maskable-512.png": "64c0778bd2c529b292ab4f61efe27fde624ad7f775115f543381591441480476",
+  "public/icons/apple-touch-icon.png": "2a24873cc457f1aa3d34213ed79a1343b2a21ecab9bb6aae2b793125fc9c30e1"
 } as const;

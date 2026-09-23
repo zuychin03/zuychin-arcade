@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-eater_of_the_dead.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2330286,
+    "sha256": "559eda07236fb478896b28ef89ee5fac1b0b8a9d30a86c9121c3b3b9be0766ef"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-eater_of_the_dead.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18036,
+      "sha256": "6810a943bd6c9f260033845d67169ba7c840b3372f4041a901494ed76a08a8ba"
+    }
+  ],
+  "totalBytes": 18036,
+  "maxTotalBytes": 614400
+}

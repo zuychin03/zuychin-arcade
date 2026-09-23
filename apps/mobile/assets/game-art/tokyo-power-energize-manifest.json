@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-energize.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2527807,
+    "sha256": "6ec599e4b71495ed9559dcbd299714c5d41f9e77c1a92a50e5a884b0954e1344"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-energize.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24798,
+      "sha256": "03f44d3eba66f9b235056a203ec7fe8d4c4a980e565fd883e2be71aba857a6d5"
+    }
+  ],
+  "totalBytes": 24798,
+  "maxTotalBytes": 614400
+}

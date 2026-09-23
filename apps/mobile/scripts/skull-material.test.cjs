@@ -22,6 +22,7 @@ function harness({ platform = 'web', fontScale = 1, width = 375, measuredScale =
   const onTextLayout = () => {};
   const modules = {
     'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', StyleSheet: { absoluteFill: {} }, Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../constants/theme': { SKULL_KING, ARCADE: SKULL_KING },
@@ -33,6 +34,8 @@ function harness({ platform = 'web', fontScale = 1, width = 375, measuredScale =
     } },
   };
   for (const kind of ['pirate', 'tigress', 'skull_king', 'mermaid', 'escape']) modules[`../../assets/game-art/skull-special-${kind}.webp`] = kind;
+  for (const suit of ['green', 'purple', 'yellow', 'black']) modules[`../../assets/game-art/skull-suit-${suit}.webp`] = `suit-${suit}`;
+  modules['../../assets/game-art/skull-deck-back.webp'] = 'uniform-back';
   modules['../ui/CardSurface'] = load('components/ui/CardSurface.tsx', modules);
   modules['./SkullKingCardArtwork'] = load('components/skull-king/SkullKingCardArtwork.tsx', modules);
   return { ...load('components/skull-king/SkullKingCard.tsx', modules), modules, measuredCalls, textRef, onTextLayout };
@@ -53,13 +56,14 @@ test('all five special faces use their own prominent original artwork and live n
   }
 });
 
-test('numbered cards keep exact ranks and all four suit identities without raster art', () => {
+test('numbered cards retain every live rank and map all four suit illustrations exactly', () => {
   const { SkullKingCardView } = harness();
-  for (const suit of ['green', 'purple', 'yellow', 'black']) for (const rank of [1, 14]) {
+  for (const suit of ['green', 'purple', 'yellow', 'black']) for (const rank of Array.from({ length: 14 }, (_, index) => index + 1)) {
     const tree = SkullKingCardView({ card: { id: 'number', kind: 'number', suit, rank } });
     assert.equal(tree.props.accessibilityLabel, `${suit} ${rank}`);
     assert(text(tree).includes(String(rank))); assert(text(tree).includes(suit.toUpperCase()));
-    assert(!nodes(tree).some(n => n.type === 'Cover'));
+    assert.equal(nodes(tree).find(n => n.type === 'Cover').props.source, `suit-${suit}`);
+    assert.equal(nodes(tree).find(n => n.type === 'Cover').props.aspectRatio, 1);
     assert(nodes(tree).some(n => n.type === 'Icon' && n.props.name === (suit === 'black' ? 'cards-spade' : 'water')));
   }
 });
@@ -83,6 +87,22 @@ test('selected, disabled and Tigress mode retain exact action and accessible sem
     assert.equal(tree.props.accessibilityLabel, `Tigress as ${mode}`); assert(text(tree).includes(`AS ${mode.toUpperCase()}`));
     assert.equal(nodes(tree).find(n => n.type === 'Cover').props.source, 'tigress');
   }
+});
+
+test('hidden card artwork is one decorative back independent of any card identity', () => {
+  const { modules } = harness();
+  const { SkullKingDeckArtwork } = modules['./SkullKingCardArtwork'];
+  for (const card of [{ kind: 'number', suit: 'black', rank: 14 }, { kind: 'pirate' }, { kind: 'escape' }]) {
+    const tree = SkullKingDeckArtwork({ card });
+    assert.equal(tree.type, 'Cover');
+    assert.equal(tree.props.source, 'uniform-back');
+    assert.equal(tree.props.aspectRatio, 2 / 3);
+    assert.equal(text(tree), '');
+    assert.equal(tree.props.onPress, undefined);
+  }
+  const source = fs.readFileSync(path.join(__dirname, '../app/skull-king/game.tsx'), 'utf8');
+  assert.match(source, /player\.cardCount > 0[^\n]*<SkullKingDeckArtwork \/>/);
+  assert.doesNotMatch(source, /<SkullKingDeckArtwork\s+[^/>]*\w+=/);
 });
 
 test('card width and height grow without fixed column flex-basis, truncation or font suppression', () => {

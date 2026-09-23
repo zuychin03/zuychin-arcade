@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-high_altitude_bombing.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2270933,
+    "sha256": "e3af5c6395c4f830166f2e2279ad014e8b646cf86cee2d88bd5f7cac30db292f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-high_altitude_bombing.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19524,
+      "sha256": "634a663c3488baa75f8c4832b2375ffdb770736e4726f1840ff7efa532feb4d8"
+    }
+  ],
+  "totalBytes": 19524,
+  "maxTotalBytes": 614400
+}

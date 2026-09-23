@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-monster-abyssal.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2317234,
+    "sha256": "307e2db86d60d1c76b30bcfa1a97ade61de3276ea26c825e4caf38bc146a78a3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-monster-abyssal.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 18144,
+      "sha256": "0ad9147f067ceb8f0c77dd31ac896c210a7988024896e2dd4aea41635fa5ef1d"
+    }
+  ],
+  "totalBytes": 18144,
+  "maxTotalBytes": 614400
+}

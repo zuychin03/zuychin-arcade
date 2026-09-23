@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-district-docks.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2353620,
+    "sha256": "0a07ee3d8c10c161ec63192afcf3ca46fb022b9a4d476d76381a618076381f51"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-district-docks.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19468,
+      "sha256": "827d2eb6577383c78841ac1c71a6b32da64d983dde4f390f08f1639aa4277983"
+    }
+  ],
+  "totalBytes": 19468,
+  "maxTotalBytes": 614400
+}

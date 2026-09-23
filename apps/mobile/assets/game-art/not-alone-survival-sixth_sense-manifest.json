@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-sixth_sense.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2570878,
+    "sha256": "979af2b66089d7e69af145ad437ece1d2dd454b3e64e9ef319f700cd0a53798a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-sixth_sense.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 28394,
+      "sha256": "8ec664aa77e1b77897f18b2191b88fce8777e7efb83c12ded0ebac0bd4701488"
+    }
+  ],
+  "totalBytes": 28394,
+  "maxTotalBytes": 614400
+}

@@ -8,7 +8,7 @@ const ts = require('typescript');
 const theme = { bg: '#0C0D12', surface: '#171A24', panel: '#232837', border: '#424B61', ember: '#FF8A48', gold: '#F4C458', cyan: '#62D6E8', red: '#FF5E68', muted: '#9CA6B8', text: '#F8F6EE' };
 const jsx = (type, props, key) => typeof type === 'function' ? type(props) : { type, props, key };
 const native = { Text: 'Text', View: 'View', Image: 'Image', StyleSheet: { absoluteFill: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 } } };
-const baseModules = { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../../constants/theme': { COLT: theme } };
+const baseModules = { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, 'expo-linear-gradient': { LinearGradient: 'Gradient' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../../constants/theme': { COLT: theme } };
 function load(relative, modules = {}) {
   const filename = path.join(__dirname, '../components', relative);
   const exports = {};
@@ -21,10 +21,16 @@ function load(relative, modules = {}) {
 const help = load('colt/decision.ts', { '@zuychin-arcade/types': {} });
 const material = load('ui/CardSurface.tsx');
 let failedArtwork = null;
+const currentSource = { current: null };
+const cover = load('ui/GameCover.tsx', { react: { useState: () => [failedArtwork, value => { failedArtwork = value; }], useRef: () => currentSource }, '../../constants/theme': { ARCADE: theme } });
 const assetMocks = Object.fromEntries(['move', 'floor', 'rob', 'shoot', 'punch', 'marshal', 'bullet'].map(action => [`../../assets/game-art/colt-action-${action}.webp`, action]));
-const artwork = load('colt/ActionArtwork.tsx', { react: { useState: () => [failedArtwork, value => { failedArtwork = value; }] }, ...assetMocks });
+const artwork = load('colt/ActionArtwork.tsx', { '../ui/GameCover': cover, ...assetMocks });
+const portraitAssets = Object.fromEntries(['ghost', 'doc', 'tuco', 'django', 'cheyenne', 'belle'].map(id => [`../../assets/game-art/colt-character-${id}.webp`, `portrait-${id}`]));
+const portraits = load('colt/ColtCharacterArtwork.tsx', { '../ui/GameCover': cover, ...portraitAssets });
+const trainAssets = Object.fromEntries(['locomotive', 'carriage', 'caboose'].map(id => [`../../assets/game-art/colt-train-${id}.webp`, `train-${id}`]));
+const trains = load('colt/TrainArtwork.tsx', { '../ui/GameCover': cover, ...trainAssets });
 const { ActionCard, coltActionIcons } = load('colt/ActionCard.tsx', { '../ui/CardSurface': material, './decision': help, './ActionArtwork': artwork });
-const { CharacterChoice, TeamChoice } = load('colt/CharacterChoice.tsx', { '../ui/CardSurface': material, './TrainBoard': { BanditPiece: 'BanditPiece' } });
+const { CharacterChoice, TeamChoice } = load('colt/CharacterChoice.tsx', { '../ui/CardSurface': material, './ColtCharacterArtwork': portraits });
 const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(nodes)];
 const content = node => Array.isArray(node) ? node.map(content).join('') : node && typeof node === 'object' ? content(node.props?.children) : node == null || node === false ? '' : String(node);
 const button = tree => nodes(tree).find(n => n.type === 'Button');
@@ -50,22 +56,53 @@ test('every action retains complete help, owner, stable anchor and immediate sub
 });
 
 test('failed artwork falls back to the installed action glyph, and a different action recovers', () => {
-  nodes(artwork.ActionArtwork({ action: 'shoot' })).find(n => n.type === 'Image').props.onError();
+  const old = nodes(artwork.ActionArtwork({ action: 'move' })).find(n => n.type === 'Image');
+  const active = nodes(artwork.ActionArtwork({ action: 'shoot' })).find(n => n.type === 'Image');
+  old.props.onError();
+  assert.equal(failedArtwork, null);
+  active.props.onError();
   const fallback = nodes(artwork.ActionArtwork({ action: 'shoot' })).find(n => n.type === 'Icon');
   assert.equal(fallback.props.name, coltActionIcons.shoot);
   assert(nodes(artwork.ActionArtwork({ action: 'move' })).some(n => n.type === 'Image'));
   failedArtwork = null;
 });
 
-test('a paired team is one legal choice with two identity pieces and both actual powers', () => {
+test('a paired team is one legal choice with two exact portraits and both actual powers', () => {
   const characters = [{ name: 'Ghost', summary: 'Ghost power' }, { name: 'Doc', summary: 'Doc power' }];
   let calls = 0;
   const tree = TeamChoice({ characters, disabled: false, onPress() { calls++; } });
   assert.equal(nodes(tree).filter(n => n.type === 'Button').length, 1);
-  assert.equal(nodes(tree).filter(n => n.type === 'BanditPiece').length, 2);
+  assert.deepEqual(nodes(tree).filter(n => n.type === 'Image').map(n => n.props.source), ['portrait-ghost', 'portrait-doc']);
   assert.equal(button(tree).props.accessibilityLabel, 'CHOOSE GHOST & DOC');
   assert.match(button(tree).props.accessibilityHint, /Ghost power.*Doc power/);
   button(tree).props.onPress(); assert.equal(calls, 1);
+});
+
+test('all six portraits map case-insensitively and unknown identities retain a neutral fallback', () => {
+  for (const id of ['ghost', 'doc', 'tuco', 'django', 'cheyenne', 'belle']) {
+    const tree = portraits.ColtCharacterArtwork({ name: id.toUpperCase(), color: theme.gold });
+    assert.equal(nodes(tree).find(n => n.type === 'Image').props.source, `portrait-${id}`);
+    assert.equal(tree.props.style.aspectRatio, 1);
+    assert.equal(tree.props.accessibilityElementsHidden, true);
+  }
+  for (const name of ['Unknown', '__proto__', 'constructor']) {
+    const tree = portraits.ColtCharacterArtwork({ name, color: theme.gold });
+    assert(!nodes(tree).some(n => n.type === 'Image'));
+    assert(nodes(tree).some(n => n.type === 'Icon' && n.props.name === 'account-outline'));
+  }
+});
+
+test('all three train identities preserve the full 3:2 artwork and recover with a train glyph', () => {
+  for (const kind of ['locomotive', 'carriage', 'caboose']) {
+    const tree = trains.TrainArtwork({ kind });
+    assert.equal(tree.props.style.aspectRatio, 1.5);
+    assert.equal(tree.props.pointerEvents, 'none');
+    const image = nodes(tree).find(n => n.type === 'Image');
+    assert.equal(image.props.source, `train-${kind}`);
+    image.props.onError();
+    assert(nodes(trains.TrainArtwork({ kind })).some(n => n.type === 'Icon' && n.props.name === 'train'));
+    failedArtwork = null;
+  }
 });
 
 test('Cover configuration and reserve keep distinct semantics, including a reservable bullet', () => {
@@ -128,7 +165,27 @@ test('disabled choices remain readable and do not gain secondary artwork actions
       assert.equal(item.props.pointerEvents, 'none');
       assert.equal(item.props.importantForAccessibility, 'no-hide-descendants');
     }
-    assert(!nodes(tree).some(n => n.props.style?.opacity < 1));
+    const checkReadable = (node, hidden = false) => {
+      if (!node || typeof node !== 'object') return;
+      const decorative = hidden || node.props.accessibilityElementsHidden;
+      if (!decorative) assert(!(node.props.style?.opacity < 1));
+      for (const child of [node.props.children].flat(Infinity)) checkReadable(child, decorative);
+    };
+    checkReadable(tree);
+  }
+});
+
+test('character choice labels stay inside the painted face when enlarged text wraps', () => {
+  const { COLT_CHARACTERS } = load('../../../packages/types/src/colt-express-constants.ts');
+  for (const character of Object.values(COLT_CHARACTERS)) for (const disabled of [false, true]) {
+    const tree = CharacterChoice({ character, disabled, onPress() {} });
+    const face = nodes(tree).find(node => node.props.testID === 'card-surface-face');
+    const label = disabled ? 'CHOICE UNAVAILABLE' : 'CHOOSE ' + character.name.toUpperCase();
+    const footer = nodes(face).find(node => node.type === 'Text' && node.props.children === label);
+    assert(footer, 'The footer must not subtract from the painted face height');
+    assert.equal(footer.props.style.marginTop, 'auto');
+    assert.equal(footer.props.numberOfLines, undefined);
+    assert.equal(nodes(tree).filter(node => node.type === 'Text' && node.props.children === label).length, 1);
   }
 });
 

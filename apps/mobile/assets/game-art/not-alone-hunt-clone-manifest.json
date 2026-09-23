@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-hunt-clone.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2498186,
+    "sha256": "f0dd5d85c6c3a8773b0f35e56255e010dd0250498712820297cb46df08ba6a34"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-hunt-clone.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 26816,
+      "sha256": "78e6bf622a542279b948387d22bebd1a43dce81f5f9ec6eb19ecca0ee9b70414"
+    }
+  ],
+  "totalBytes": 26816,
+  "maxTotalBytes": 614400
+}

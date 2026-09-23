@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-character-ghost.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2286859,
+    "sha256": "eefa5ec4f296f9992fcb35a534efbc310e2d7396f27831fe01a90570982f27fc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-character-ghost.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17902,
+      "sha256": "92ed517243966c79807cf934d5c139b85251b9036d83252a22ad1a935842ef0e"
+    }
+  ],
+  "totalBytes": 17902,
+  "maxTotalBytes": 614400
+}

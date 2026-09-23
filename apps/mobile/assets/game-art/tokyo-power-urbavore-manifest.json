@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-urbavore.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2466288,
+    "sha256": "37a21861aeb693a1f23e1c500bb0da8a7224e869143f1f360d73ce9f2ccb28fd"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-urbavore.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 22454,
+      "sha256": "8ab3527c3169f08b755aab689638d21c5ff66b45d029aee453ec1e7fc28d2e64"
+    }
+  ],
+  "totalBytes": 22454,
+  "maxTotalBytes": 614400
+}

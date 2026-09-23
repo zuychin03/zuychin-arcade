@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/citadels-role-architect.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2071281,
+    "sha256": "0ee489671ed4414ef7ba63e8e9329de17b4c8fe156f0d6a24b75a1290cece13f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "citadels-role-architect.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 13162,
+      "sha256": "3deea2223c86ae0085b42a748c98f55c36d3e18359ec77b15210fb2fb660fae1"
+    }
+  ],
+  "totalBytes": 13162,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-character-django.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2270634,
+    "sha256": "874157fe8c71653dee0e95be15ab5bb35a57504cf29646bef1deee263f135a50"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-character-django.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 17174,
+      "sha256": "53c1f8c9dd5ce08fe9a9a18046de7cb7eb0266a8a28d32a0bdf41383cc1d34bc"
+    }
+  ],
+  "totalBytes": 17174,
+  "maxTotalBytes": 614400
+}

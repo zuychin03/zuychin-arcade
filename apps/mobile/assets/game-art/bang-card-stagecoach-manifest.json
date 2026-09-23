@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/bang-card-stagecoach.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2465627,
+    "sha256": "2fe5740337d5b9ffb47d9f5196834475929291ff281f1b197a4dd50d93f768a3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "bang-card-stagecoach.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 20580,
+      "sha256": "d75947597cefd754e6169befd05acd74e87bc5b5de379ae70778e1a74cfe25f0"
+    }
+  ],
+  "totalBytes": 20580,
+  "maxTotalBytes": 614400
+}

@@ -16,6 +16,10 @@ function render(game, name, textScale = 1) {
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../constants/theme': { ARCADE: palette, MINE: palette, TOKYO: palette, SKULL_KING: palette },
     '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textScale, textRef: null, onTextLayout() {} }) },
+    '../../hooks/useIntrinsicCardHeight': { useIntrinsicCardHeight: (ids, key) => ({ forCard: id => {
+      assert(ids.includes(id));
+      return { minimumHeight: 220, measurementKey: key, onMeasure() {} };
+    } }) },
     './cards/PathCardView': { PathCardView: 'PathCard' },
     './cards/ActionCardView': { ActionCardView: 'ActionCard' },
     './TokyoDie': { TokyoDie: 'Die' },
@@ -77,6 +81,7 @@ test('Skull King demonstrates trump and the three-way Mermaid exception with aut
   const cards = nodes.filter(n => n.type === 'SkullCard');
   assert.deepEqual(cards.map(n => n.props.card.kind), ['number', 'number', 'pirate', 'skull_king', 'mermaid']);
   assert.ok(cards.every(n => !n.props.onPress));
+  assert.ok(cards.every(n => n.props.faceSizing.minimumHeight === 220 && n.props.faceSizing.measurementKey === 'rules:320:1'));
   assert.equal(cards[1].props.card.suit, 'black');
   assert.match(text, /all three appear, the first Mermaid wins/);
   assert.match(text, /3 × 20 = \+60/);

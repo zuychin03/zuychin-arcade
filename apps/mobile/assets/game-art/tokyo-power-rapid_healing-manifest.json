@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-rapid_healing.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2233310,
+    "sha256": "3c1b62c72767d609617c426e84ddf2ff89b947d037a889b962b740c66ba808a7"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-rapid_healing.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19746,
+      "sha256": "2b37113977cfba68952a838e9bba2ce1806fa7112624c2564dec5d432732d506"
+    }
+  ],
+  "totalBytes": 19746,
+  "maxTotalBytes": 614400
+}

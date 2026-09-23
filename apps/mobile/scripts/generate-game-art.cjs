@@ -31,6 +31,14 @@ const libertaliaLootNames = Object.freeze(['map', 'barrel', 'amulet', 'chest', '
 const libertaliaLootMaxTotalBytes = 224 * 1024;
 const libertaliaPhaseNames = Object.freeze(['daytime', 'dusk', 'night', 'anchor']);
 const libertaliaPhaseMaxTotalBytes = 160 * 1024;
+const catalogue = require('../../../docs/design/game-art/custom-artwork-catalogue.json');
+const queuedAssets = catalogue.families.flatMap(family => family.assets);
+const queuedGames = Object.fromEntries(catalogue.families.flatMap(family => family.assets.map(asset => [asset.id, {
+  sourceFile: asset.source,
+  specs: [{ file: path.basename(asset.output), width: asset.width ?? family.width ?? 320, maxBytes: asset.maxBytes ?? 48 * 1024 }],
+  manifestFile: path.basename(asset.manifest),
+  square: (asset.aspect ?? family.aspect ?? 'square') === 'square',
+}])));
 const games = Object.freeze({
   saboteur: { sourceFile, specs, manifestFile: 'manifest.json' },
   colt: {
@@ -142,7 +150,39 @@ const games = Object.freeze({
     specs: [{ file: `libertalia-phase-${phase}.webp`, width: 320, maxBytes: 48 * 1024 }],
     manifestFile: `libertalia-phase-${phase}-manifest.json`,
   }])),
+  ...queuedGames,
 });
+
+function assetStatus(game, root = repoRoot) {
+  assert(Object.hasOwn(games, game), `Unknown game artwork: ${game}`);
+  const config = games[game];
+  const files = [config.sourceFile, `${outputDirectory}/${config.manifestFile}`, ...config.specs.map(spec => `${outputDirectory}/${spec.file}`)];
+  const present = files.map(file => fs.existsSync(path.join(root, file)));
+  return present.every(Boolean) ? 'produced' : present.slice(1).some(Boolean) ? 'incomplete' : present[0] ? 'source-ready' : 'pending';
+}
+
+function catalogueStatus() {
+  return catalogue.families.map(family => ({
+    family: family.family,
+    maxTotalBytes: family.maxTotalBytes,
+    assets: family.assets.map(asset => ({ id: asset.id, status: assetStatus(asset.id) })),
+  }));
+}
+
+function requireProduced(game, root = repoRoot) {
+  assert.equal(assetStatus(game, root), 'produced', `Requested artwork is missing or incomplete: ${game}`);
+}
+
+function checkFamilyBudget(game, manifest, root = repoRoot) {
+  const family = catalogue.families.find(item => item.assets.some(asset => asset.id === game));
+  if (!family) return;
+  const total = family.assets.reduce((sum, asset) => {
+    if (asset.id === game) return sum + manifest.totalBytes;
+    const file = path.join(root, asset.manifest);
+    return sum + (fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')).totalBytes : 0);
+  }, 0);
+  assert(total <= family.maxTotalBytes, `${family.family} exceeds its family byte budget`);
+}
 
 function hash(bytes) { return createHash('sha256').update(bytes).digest('hex'); }
 
@@ -176,6 +216,7 @@ async function renderArtifacts(sharp, source, game = 'saboteur') {
   const metadata = await sharp(source).metadata();
   assert(metadata.format === 'png' && (metadata.pages ?? 1) === 1, 'Source must be a static PNG');
   assert(!metadata.orientation || metadata.orientation === 1, 'Source must have normal orientation');
+  if (config.square) assert.equal(metadata.width, metadata.height, 'Catalogue artwork must be square; cropping is not permitted');
   const artifacts = {};
   const outputs = [];
   for (const spec of config.specs) {
@@ -206,9 +247,16 @@ async function renderArtifacts(sharp, source, game = 'saboteur') {
 }
 
 async function main(args) {
+  if (args.length === 1 && args[0] === '--status') {
+    console.log(JSON.stringify(catalogueStatus(), null, 2));
+    return;
+  }
   const { sharpModule, check, game } = parseArguments(args);
+  if (check) requireProduced(game);
+  assert(fs.existsSync(path.join(repoRoot, games[game].sourceFile)), `Requested artwork source is missing: ${game}`);
   const source = fs.readFileSync(path.join(repoRoot, games[game].sourceFile));
   const { artifacts, manifest } = await renderArtifacts(require(sharpModule), source, game);
+  checkFamilyBudget(game, manifest);
   const directory = path.join(repoRoot, outputDirectory);
   if (!check) fs.mkdirSync(directory, { recursive: true });
   for (const [file, bytes] of Object.entries(artifacts)) {
@@ -223,3 +271,4 @@ async function main(args) {
 
 module.exports = { coltActionNames, coltActionMaxTotalBytes, coupCharacterNames, coupCharacterMaxTotalBytes, tokyoPowerNames, tokyoPowerMaxTotalBytes, skullSpecialNames, skullSpecialMaxTotalBytes, citadelsDistrictNames, citadelsDistrictMaxTotalBytes, notAlonePlaceNames, notAlonePlaceMaxTotalBytes, bangCardNames, bangCardMaxTotalBytes, libertaliaLootNames, libertaliaLootMaxTotalBytes, libertaliaPhaseNames, libertaliaPhaseMaxTotalBytes, dimensions, encoding, games, hash, maxTotalBytes, outputDirectory, parseArguments, renderArtifacts, repoRoot, sourceFile, specs };
 if (require.main === module) main(process.argv.slice(2)).catch(error => { console.error(error.message); process.exitCode = 1; });
+Object.assign(module.exports, { catalogue, queuedAssets, queuedGames, assetStatus, requireProduced, checkFamilyBudget, catalogueStatus });

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-rooting_for_underdog.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2193689,
+    "sha256": "92960929c2127fe3aa195dd459f01e040dbe7cfa473fef3f6a43c22d24c2caba"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-rooting_for_underdog.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 19542,
+      "sha256": "0c5d5bf522b4d35ed3210f6d7a00aa11c91911f2db23cf3b0c588ae25036f8df"
+    }
+  ],
+  "totalBytes": 19542,
+  "maxTotalBytes": 614400
+}

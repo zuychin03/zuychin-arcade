@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/colt-train-caboose.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2212418,
+    "sha256": "01ea9cbf124f1e1d6552a020ee483b3f6616597ff6b3f0b9f76e0a4cbb0dd2d3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "colt-train-caboose.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 213,
+      "bytes": 11590,
+      "sha256": "7073ea1b711acb2abf106fe4cf6a1f58a5a1c879450a9a59d83bd5313cca2b22"
+    }
+  ],
+  "totalBytes": 11590,
+  "maxTotalBytes": 614400
+}

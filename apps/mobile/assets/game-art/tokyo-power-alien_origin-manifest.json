@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-alien_origin.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2458121,
+    "sha256": "e5bc06943e0d2577b674f9efa5186f6ec5835f60e678f39f86a06da6fce15ed9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-alien_origin.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21804,
+      "sha256": "cb6eabfe340957471cd43d1e10fa96d725cfb80a79ec2c68c12060bd77b9eb25"
+    }
+  ],
+  "totalBytes": 21804,
+  "maxTotalBytes": 614400
+}

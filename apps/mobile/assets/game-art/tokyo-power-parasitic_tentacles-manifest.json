@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-parasitic_tentacles.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2478481,
+    "sha256": "03becddefdec404bf4c73a4730d5ce15ad6d38150a06414eedf15e9a136c2a9e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-parasitic_tentacles.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21948,
+      "sha256": "13256eba6fed762567b83025cab96251c898f33140e33920206e92bad301e2fa"
+    }
+  ],
+  "totalBytes": 21948,
+  "maxTotalBytes": 614400
+}

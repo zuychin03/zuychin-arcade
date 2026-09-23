@@ -453,7 +453,7 @@ test('retained start-new-room result control cannot forfeit a rematch', () => {
 });
 function component(file, props) {
   const jsx = (type, props) => ({ type, props });
-  const mod = load(file, { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/CardSurface': { CardSurface: 'CardSurface' }, './ActionArtwork': { ActionArtwork: 'ActionArtwork', coltActionIcons: {} }, './TrainBoard': { BanditPiece: 'BanditPiece' }, '../../constants/theme': { COLT: {} }, './decision': load('decision.ts', {}) });
+const mod = load(file, { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/CardSurface': { CardSurface: 'CardSurface' }, './ActionArtwork': { ActionArtwork: 'ActionArtwork', coltActionIcons: {} }, './TrainBoard': { BanditPiece: 'BanditPiece' }, './ColtCharacterArtwork': { ColtCharacterArtwork: 'Portrait' }, '../../constants/theme': { COLT: {} }, './decision': load('decision.ts', {}) });
   return Object.values(mod).find(value => typeof value === 'function')(props);
 }
 const descendants = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(5).flatMap(descendants)];
@@ -495,15 +495,52 @@ test('actual result and roster text use singular bullet only for one', () => {
   }
 });
 function trainBoard(game) {
+  return trainBoardHarness().render(game);
+}
+function trainBoardHarness() {
   const jsx = (type, props) => ({ type, props });
-  return load('TrainBoard.tsx', {
-    react: { useRef: value => ({ current: value }), useState: value => [value, () => {}] },
-    'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View', ScrollView: 'Scroll' },
+  const hooks = []; let cursor = 0, fontScale = 1;
+  const react = {
+    useRef(value) { const index = cursor++; hooks[index] ??= { current: value }; return hooks[index]; },
+    useState(value) { const index = cursor++; hooks[index] ??= { value }; return [hooks[index].value, next => { hooks[index].value = typeof next === 'function' ? next(hooks[index].value) : next; }]; },
+  };
+  const { TrainBoard } = load('TrainBoard.tsx', {
+    react,
+    '../../hooks/useIntrinsicCardHeight': load('../../hooks/useIntrinsicCardHeight.ts', { react }),
+    'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Text: 'Text', View: 'View', ScrollView: 'Scroll', useWindowDimensions: () => ({ fontScale }) },
     '@zuychin-arcade/types': { COLT_CHARACTERS: { ghost: { name: 'Ghost' }, doc: { name: 'Doc' } } },
-    '../ui/NeonButton': { NeonButton: 'Button' }, '../../constants/theme': { COLT: {} }, './decision': load('decision.ts', {}),
-  }).TrainBoard({ game, playerId: 'one' });
+    '../ui/NeonButton': { NeonButton: 'Button' }, './TrainArtwork': { TrainArtwork: 'TrainArtwork' }, '../../constants/theme': { COLT: {} }, './decision': load('decision.ts', {}),
+  });
+  return { render(game, scale = 1) { cursor = 0; fontScale = scale; return TrainBoard({ game, playerId: 'one' }); } };
 }
 const unplacedTrain = players => ({ status: 'game_over', phase: 'game_over', trainCars: 3, marshalCar: 2, turnOrder: players.map(p => p.playerId), players, lootBySpace: {} });
+test('train roof dividers share intrinsic heights, shrink, and reject stale width, scale and content measurements', () => {
+  const h = trainBoardHarness(); let game = unplacedTrain([]);
+  const roofs = tree => descendants(tree).filter(node => /colt-space-\d+-roof/.test(node.props.testID));
+  const measure = (roof, height) => roof.props.children.props.onLayout({ nativeEvent: { layout: { height } } });
+  let tree = h.render(game);
+  const stale = roofs(tree)[0];
+  measure(stale, 240); tree = h.render(game);
+  assert(roofs(tree).every(node => node.props.style.minHeight === 245));
+  measure(roofs(tree)[0], 140); tree = h.render(game);
+  assert(roofs(tree).every(node => node.props.style.minHeight === 145));
+  for (const change of ['width', 'scale', 'content']) {
+    const old = roofs(tree)[0];
+    if (change === 'width') descendants(tree).find(node => node.type === 'Scroll').props.onLayout({ nativeEvent: { layout: { width: 320 } } });
+    if (change === 'content') game = { ...game, lootBySpace: { '1:roof': [{ type: 'purse', value: null }] } };
+    tree = h.render(game, change === 'scale' ? 2 : 1);
+    assert(roofs(tree).every(node => node.props.style.minHeight === 132));
+    measure(old, 999);
+    tree = h.render(game, change === 'scale' ? 2 : 1);
+    assert(roofs(tree).every(node => node.props.style.minHeight === 132));
+    for (const roof of roofs(tree)) {
+      assert.equal(roof.props.style.height, undefined);
+      assert.equal(roof.props.children.props.style.minHeight, undefined);
+      assert.equal(roof.props.children.props.style.flexGrow, undefined);
+    }
+  }
+  assert.match(JSON.stringify(tree), /hidden value/);
+});
 for (const winner of [true, false]) test(`train renders ${winner ? 'one-survivor' : 'no-winner'} setup terminal without inventing unchosen bandits`, () => {
   const players = ['one', 'two', 'three'].map((playerId, i) => ({ playerId, displayName: `Seat ${i}`, characters: [], characterChosen: false, setupComplete: false, positions: [{ carIndex: 0, level: 'inside' }], lootCounts: [1], forfeited: !winner || i !== 0 }));
   let tree;

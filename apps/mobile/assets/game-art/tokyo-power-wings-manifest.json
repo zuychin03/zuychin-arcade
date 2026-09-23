@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/tokyo-power-wings.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2595059,
+    "sha256": "1d2d044c7831186d6f266552c217d5aab226cfaadd3696256e47e52721cefe52"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "tokyo-power-wings.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 24572,
+      "sha256": "61c83d7b7403ea6bc16595b9fbcfdf5d8d2c231bf2bc4fda1b335b4d7275bb0e"
+    }
+  ],
+  "totalBytes": 24572,
+  "maxTotalBytes": 614400
+}

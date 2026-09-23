@@ -1,10 +1,10 @@
+import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScalePressable } from '../ui/ScalePressable';
 import { CardSurface } from '../ui/CardSurface';
 import { COLT as C } from '../../constants/theme';
-import type { ColtCharacter } from '@zuychin-arcade/types';
-import { BanditPiece } from './TrainBoard';
+import { ColtCharacterArtwork } from './ColtCharacterArtwork';
 
 const characterEmblems: Record<string, { icon: keyof typeof MaterialCommunityIcons.glyphMap; colour: string }> = {
   Ghost: { icon: 'cards-outline', colour: C.text },
@@ -15,25 +15,24 @@ const characterEmblems: Record<string, { icon: keyof typeof MaterialCommunityIco
   Belle: { icon: 'account-switch-outline', colour: '#C9AFE8' },
 };
 
-function CharacterFace({ character }: { character: { name: string; summary: string } }) {
+function CharacterFace({ character, footer }: { character: { name: string; summary: string }; footer?: ReactNode }) {
   const emblem: (typeof characterEmblems)[string] = characterEmblems[character.name] ?? { icon: 'account-outline', colour: C.gold };
-  return <CardSurface radius={12} faceColor={C.panel} edgeColor="#10131B" highlightColor={emblem.colour} depth={3}>
+  return <CardSurface fill radius={12} faceColor={C.panel} edgeColor="#10131B" highlightColor={emblem.colour} depth={3}>
     <View style={{ padding: 16, gap: 12 }}>
-      <View accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ minHeight: 112, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 26, backgroundColor: C.surface, borderRadius: 8 }}>
-        <View style={{ width: 60, height: 90, alignItems: 'center', justifyContent: 'center' }}><View style={{ transform: [{ scale: 1.65 }] }}><BanditPiece character={character.name.toLowerCase() as ColtCharacter} /></View></View>
-        <MaterialCommunityIcons name={emblem.icon} size={42} color={emblem.colour} />
+      <View accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 176, alignSelf: 'center', borderRadius: 8, overflow: 'hidden' }}>
+        <ColtCharacterArtwork name={character.name} color={emblem.colour} />
       </View>
-      <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 20, lineHeight: 26, color: C.text }}>{character.name.toUpperCase()}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><MaterialCommunityIcons name={emblem.icon} size={24} color={emblem.colour} accessible={false} /><Text style={{ flex: 1, minWidth: 0, fontFamily: 'Outfit_800ExtraBold', fontSize: 20, lineHeight: 26, color: C.text }}>{character.name.toUpperCase()}</Text></View>
       <Text style={{ fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text }}>{character.summary}</Text>
     </View>
+    {footer}
   </CardSurface>;
 }
 
 export function CharacterChoice({ character, disabled, onPress }: { character: { name: string; summary: string }; disabled: boolean; onPress: () => void }) {
   return <ScalePressable accessibilityLabel={`Choose ${character.name}. ${character.summary}`} accessibilityHint="Confirms this character for your robbery." accessibilityState={{ disabled }} disabled={disabled} onPress={onPress}
-    style={{ minHeight: 48, minWidth: 0, borderRadius: 12, marginBottom: 4 }}>
-    <CharacterFace character={character} />
-    <Text style={{ padding: 12, fontFamily: 'Outfit_700Bold', fontSize: 14, lineHeight: 21, color: disabled ? C.muted : C.ember }}>{disabled ? 'CHOICE UNAVAILABLE' : 'CHOOSE ' + character.name.toUpperCase()}</Text>
+    style={{ minHeight: 48, minWidth: 0, flexGrow: 1, borderRadius: 12, marginBottom: 4 }}>
+    <CharacterFace character={character} footer={<Text style={{ marginTop: 'auto', padding: 12, fontFamily: 'Outfit_700Bold', fontSize: 14, lineHeight: 21, color: disabled ? C.muted : C.ember }}>{disabled ? 'CHOICE UNAVAILABLE' : 'CHOOSE ' + character.name.toUpperCase()}</Text>} />
   </ScalePressable>;
 }
 

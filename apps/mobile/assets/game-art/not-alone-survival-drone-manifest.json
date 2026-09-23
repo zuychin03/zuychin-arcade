@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/not-alone-survival-drone.png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 2246891,
+    "sha256": "b099a5c5c71ecf38f2b1855fdb42f310a4732f5cf49201323a9cc99b64d0d36e"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "not-alone-survival-drone.webp",
+      "width": 320,
+      "maxBytes": 49152,
+      "height": 320,
+      "bytes": 21016,
+      "sha256": "e7cfaeec78d1cb0032a8984f11f1ea2b98bee21607c08ac62bc339c1c0920fc8"
+    }
+  ],
+  "totalBytes": 21016,
+  "maxTotalBytes": 614400
+}
