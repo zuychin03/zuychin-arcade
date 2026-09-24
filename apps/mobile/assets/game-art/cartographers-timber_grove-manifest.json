@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-timber_grove.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3646068,
+    "sha256": "b0dc6f19d409a566290be154de9c2c00511dc1b93a977aadb7f8338463647b06"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-timber_grove.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 83914,
+      "sha256": "562c60f78e1b232799a395031d208760781c3c04ce391762cfecad66dde15184"
+    }
+  ],
+  "totalBytes": 83914,
+  "maxTotalBytes": 614400
+}

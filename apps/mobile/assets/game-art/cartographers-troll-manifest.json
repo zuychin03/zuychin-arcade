@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-troll.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3493323,
+    "sha256": "75ef69e87e219d24053a94cc6b1fac415660a74901deeaf12bf34a8410aacff2"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-troll.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 83360,
+      "sha256": "790f613ea874aabe12e51e43d1b6386965658d52f8621ded31b3277914929475"
+    }
+  ],
+  "totalBytes": 83360,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-lookout.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2436812,
+    "sha256": "1836f5133048d3f303798684ac35071cf6a2ac83ddc9e9208f0f1829063ef8a3"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-lookout.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 56116,
+      "sha256": "f89ec359cc3918dccb2c1d5eab9a1f535ce25167d498d0f4d0af1b3ea7f0018a"
+    }
+  ],
+  "totalBytes": 56116,
+  "maxTotalBytes": 614400
+}

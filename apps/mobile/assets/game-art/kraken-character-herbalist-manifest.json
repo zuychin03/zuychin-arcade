@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-herbalist.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2817869,
+    "sha256": "465b858318f5a334feb5ffec7d3d9d559bf4ce29d1c15d6db893dba94ffd4f79"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 78,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-herbalist.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 64712,
+      "sha256": "fe57823e8fad23106a781f2cb6348138b5fa0de72bd4d5bfaa1b1ca436512e4b"
+    }
+  ],
+  "totalBytes": 64712,
+  "maxTotalBytes": 614400
+}

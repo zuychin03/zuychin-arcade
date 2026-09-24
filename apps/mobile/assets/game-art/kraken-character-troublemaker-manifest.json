@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-troublemaker.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2373748,
+    "sha256": "b1df4c44dba33184625fa9a7fc0f7dc388deed8aa2e4df843760dbd90598bfef"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-troublemaker.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 56930,
+      "sha256": "a7f19b8bb7c1c70ffe4fbc9674ab651525e562baf2f23cfed3eb068ff844a39a"
+    }
+  ],
+  "totalBytes": 56930,
+  "maxTotalBytes": 614400
+}

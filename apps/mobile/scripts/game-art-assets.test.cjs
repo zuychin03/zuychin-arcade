@@ -6,6 +6,7 @@ const { imageSize } = require('image-size');
 const { catalogue, queuedAssets, queuedGames, assetStatus, requireProduced, checkFamilyBudget } = require('./generate-game-art.cjs');
 const { notAlonePlaceNames, notAlonePlaceMaxTotalBytes, bangCardNames, bangCardMaxTotalBytes, libertaliaLootNames, libertaliaLootMaxTotalBytes } = require('./generate-game-art.cjs');
 const { libertaliaPhaseNames, libertaliaPhaseMaxTotalBytes } = require('./generate-game-art.cjs');
+const { krakenCharacterNames, cartographersArtworkNames } = require('./generate-game-art.cjs');
 const { coltActionNames, coltActionMaxTotalBytes, coupCharacterNames, coupCharacterMaxTotalBytes, tokyoPowerNames, tokyoPowerMaxTotalBytes, skullSpecialNames, skullSpecialMaxTotalBytes, citadelsDistrictNames, citadelsDistrictMaxTotalBytes, dimensions, encoding, games, hash, maxTotalBytes, outputDirectory, parseArguments, repoRoot, sourceFile, specs } = require('./generate-game-art.cjs');
 
 const directory = path.join(repoRoot, outputDirectory);
@@ -111,7 +112,12 @@ test('each additional game has independently bounded, content-addressed full-com
 test('the explicit 252-asset sweep queue preserves all 77 original outputs without collisions', () => {
   assert.equal(queuedAssets.length, 252);
   assert.equal(new Set(queuedAssets.map(asset => asset.id)).size, 252);
-  const expansionAsset = id => /^(dixit-dream-\d{2}|dixit-odyssey|cartographers-heroes|telestrations|feed-the-kraken)$/.test(id) || /^kraken-course-(blue|red|yellow)$/.test(id);
+  const newCardAssets = new Set([
+    ...krakenCharacterNames.map(id => `kraken-character-${id}`),
+    ...cartographersArtworkNames.map(id => `cartographers-${id}`),
+  ]);
+  assert.equal(newCardAssets.size, 44);
+  const expansionAsset = id => newCardAssets.has(id) || /^(dixit-dream-\d{2}|dixit-odyssey|cartographers-heroes|telestrations|feed-the-kraken)$/.test(id) || /^kraken-course-(blue|red|yellow)$/.test(id);
   assert.equal(Object.entries(games).filter(([id]) => !Object.hasOwn(queuedGames, id) && !expansionAsset(id)).flatMap(([, config]) => config.specs).length, 77);
   const outputNames = Object.values(games).flatMap(config => config.specs.map(spec => spec.file));
   assert.equal(new Set(outputNames).size, outputNames.length);

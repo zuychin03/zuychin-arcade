@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-mangrove_swamp.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3584005,
+    "sha256": "0d1aa628fa0d52d22476c6efa26c2b27a50a0ca4c0e578e0c4220a581a525147"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 72,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-mangrove_swamp.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 91710,
+      "sha256": "d3ffdc7b106d4c184d691290c4198cf5bb93dc35d49187ca72f69446cf158980"
+    }
+  ],
+  "totalBytes": 91710,
+  "maxTotalBytes": 614400
+}

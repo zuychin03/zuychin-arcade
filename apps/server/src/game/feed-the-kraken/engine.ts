@@ -80,7 +80,10 @@ export function feedTheKrakenMutinyThreshold(s: FeedTheKrakenServerState): numbe
 }
 function drunkCaptain(s: FeedTheKrakenServerState): string {
   const candidates = clockwise(s, s.captainId).filter((id) => id !== s.captainId && eligibleCaptain(s, id));
-  if (!candidates.length) return alive(s)[0] ?? s.captainId;
+  if (!candidates.length) {
+    if (eligibleCaptain(s, s.captainId)) return s.captainId;
+    throw new Error('No eligible captain remains');
+  }
   const min = Math.min(...candidates.map((id) => s.players[id]!.resume.length));
   const ordered = [...candidates.filter((id) => id !== s.captainId), ...candidates.filter((id) => id === s.captainId)];
   return ordered.find((id) => s.players[id]!.resume.length === min)!;

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-pasture.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3366501,
+    "sha256": "b74d2227c2e557674572d6a448286e1ffbf45e72e6ce63829deccdfa0ad552fc"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-pasture.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 81616,
+      "sha256": "f3fc65542e523e024c56da35d66f47ffe0d94f2fe18cae40990c87fc9ba13b62"
+    }
+  ],
+  "totalBytes": 81616,
+  "maxTotalBytes": 614400
+}

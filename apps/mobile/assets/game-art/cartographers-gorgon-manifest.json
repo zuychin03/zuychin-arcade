@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-gorgon.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3099482,
+    "sha256": "5d566248b25ddc67275c5f6867cbb2a3198d925b9c0ccdbd1221d6e090a855ff"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-gorgon.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 75514,
+      "sha256": "caaaad89ef1c6535f99c7be47e044a3b9f6b142c4e4354362f5c120fb175373c"
+    }
+  ],
+  "totalBytes": 75514,
+  "maxTotalBytes": 614400
+}

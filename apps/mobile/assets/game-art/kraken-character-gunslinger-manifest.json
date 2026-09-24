@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-gunslinger.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2658406,
+    "sha256": "181db5d89dc361c56da9fb6b31735110cfade9cbb8e514cd5ee7c34f2e972abf"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-gunslinger.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 61816,
+      "sha256": "5baed7f14fdf63ef7375ed25b11add88ecb956804dba0fb49a1611683d3d1f4a"
+    }
+  ],
+  "totalBytes": 61816,
+  "maxTotalBytes": 614400
+}

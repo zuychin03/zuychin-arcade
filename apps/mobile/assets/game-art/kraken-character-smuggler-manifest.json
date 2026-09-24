@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-smuggler.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2301210,
+    "sha256": "8ec9a675987f187a90266561152a02dfa03baff7ef5a3a0cec62e8ae14d58656"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-smuggler.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 44972,
+      "sha256": "eb192323b409f93c69a4cc3af6f703f8032b658296420c842fcafccb01d75943"
+    }
+  ],
+  "totalBytes": 44972,
+  "maxTotalBytes": 614400
+}

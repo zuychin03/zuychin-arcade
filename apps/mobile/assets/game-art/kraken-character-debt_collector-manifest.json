@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-debt_collector.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2365147,
+    "sha256": "11e4302adb76dcf8067fb46c8d80d5b45a031dc8505998a781a6d7fe2ab15ba6"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-debt_collector.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 49084,
+      "sha256": "a2f1b4fc5f89b431a319267fbc98e7ee79fb0f34b7f3dbac90950346dfc44c19"
+    }
+  ],
+  "totalBytes": 49084,
+  "maxTotalBytes": 614400
+}

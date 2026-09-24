@@ -1,0 +1,5 @@
+# Kraken character: gunsmith
+
+Generated 24/09/2026 using built-in image_gen, one individual call, original artwork. Full composition retained. Reviewed for individual identity, palette, anatomy and absence of lettering. Gameplay names and abilities remain live UI text.
+
+Use case: stylized-concept. Asset: one original maritime game character portrait, gunsmith. Portrait 2:3 waist-up single adult: an older Black male shipboard gunsmith with round bronze spectacles, soot-streaked leather apron, holding a compact antique flintlock mechanism and a tiny tool, no aiming weapon. Deep midnight teal ship interior or deck, restrained cyan bioluminescent rim light and warm bronze lantern key light. Premium tactile cinematic 3D painterly realism, expressive individual face, credible cloth and worn metal, strong silhouette at thumbnail scale. Dark pirate voyage visual world. Entire head and shoulders visible with safe margins. No lettering, numbers, frame, logo, watermark, montage or additional people. Standalone original artwork, never copy published game characters.

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-archivist.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2268078,
+    "sha256": "a924ae5c33c869cdd7ce60cfffc0652058c7724823c23616cae3d7452ac5ebc4"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-archivist.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 48202,
+      "sha256": "211479e2cbd26043c5387bb9287a13191796e69d6a562a98a789592e1d877789"
+    }
+  ],
+  "totalBytes": 48202,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-objective-general.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3627251,
+    "sha256": "7fe3e414079006daa5dc9067aa031bc662be18151d6afb2c65db62895b3e064c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-objective-general.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 85722,
+      "sha256": "14780fa0af08685b92ca9fa02c154e95849565716dc263c378d3b584d90e208d"
+    }
+  ],
+  "totalBytes": 85722,
+  "maxTotalBytes": 614400
+}

@@ -5,11 +5,14 @@ import { CardSurface } from '../ui/CardSurface';
 import { CARTOGRAPHERS as C } from './palette';
 import { TERRAIN } from './MapBoard';
 import { OBJECTIVE_GUIDES } from './objectives';
+import { CARTOGRAPHERS_OBJECTIVE_ART } from './artwork';
+import { CardArtwork } from './CardArtwork';
 
 const symbols: Record<string, CartographersTerrain> = { F: 'forest', A: 'farm', W: 'water', V: 'village', M: 'mountain' };
 export function ObjectiveCard({ objective, edict, active = false }: { objective: CartographersObjective; edict?: string; active?: boolean }) {
   const guide = OBJECTIVE_GUIDES[objective.id]!;
   return <CardSurface fill selected={active} faceColor={C.panel} edgeColor={C.bg} highlightColor={`${C.accent}88`} radius={12}>
+    <CardArtwork source={CARTOGRAPHERS_OBJECTIVE_ART[objective.category]} />
     <View style={{ padding: 16, gap: 12 }}>
       <Text accessibilityRole="header" style={{ color: C.accent, fontFamily: 'Outfit_700Bold', fontSize: 20 }}>{edict ? `${edict} · ` : ''}{objective.name}</Text>
       <View accessible accessibilityLabel="Pattern guide, not a scored map" style={{ width: 120, alignSelf: 'center' }}>

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-lagoon.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3650075,
+    "sha256": "fe89e3ebfa2f09ff53daeaf6195019df4f955d3d081232a4871b0c5d1f738138"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-lagoon.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 79336,
+      "sha256": "c78803bc1360f3028df723b28e5790671800cda836872f1bca4c0bc39f461e62"
+    }
+  ],
+  "totalBytes": 79336,
+  "maxTotalBytes": 614400
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-negotiator.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2478572,
+    "sha256": "b952077ccb0c4242ed0dff77b4d066d7aa68af0bb546246e620ac95c4b548f7b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-negotiator.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 59256,
+      "sha256": "534e0c6f5e059836060c16f72b8e804b863afc142a0c278f5c6d52d48fc352be"
+    }
+  ],
+  "totalBytes": 59256,
+  "maxTotalBytes": 614400
+}

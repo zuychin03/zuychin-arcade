@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-spiritualist.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2604015,
+    "sha256": "c15aec4b56b44de85b17fe27fcd541bc2d641cfff03657ebeb8bbbbe9c1b1ae7"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-spiritualist.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 64632,
+      "sha256": "9ca1a5eba7733df8bf6bd02a74b8e9ef90dd1f8b5a285ca7b619b10f6e071786"
+    }
+  ],
+  "totalBytes": 64632,
+  "maxTotalBytes": 614400
+}

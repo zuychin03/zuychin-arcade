@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-minstrel.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2521264,
+    "sha256": "f0998e911092f81069dc12f93b44be0c07cefb8de29460a348ce40af52d5fa23"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-minstrel.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 63504,
+      "sha256": "31da156075fc8046304ecd00892eef20bf25f8c00e069ae19b9105e564eab7d9"
+    }
+  ],
+  "totalBytes": 63504,
+  "maxTotalBytes": 614400
+}

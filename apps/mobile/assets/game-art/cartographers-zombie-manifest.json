@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-zombie.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2822192,
+    "sha256": "8ec9abd3c9759d84a9a994d864c065dded3240200f97b72c5ca787fe4094f1df"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-zombie.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 64172,
+      "sha256": "766fc2e6280c639f68e5a387b2de5c66e353d370f10c49de3df33de0147c9e68"
+    }
+  ],
+  "totalBytes": 64172,
+  "maxTotalBytes": 614400
+}

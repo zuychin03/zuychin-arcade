@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-master_strategist.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2439346,
+    "sha256": "f9aa314d25d5a492b45a820d77bdc44c1e54458d4d07a7cadc50b9df0f1c309b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-master_strategist.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 56510,
+      "sha256": "f82dd3cbd90aef4384d7e5f3a278c556645b7ddbcdd805f64593618ffcc52a5c"
+    }
+  ],
+  "totalBytes": 56510,
+  "maxTotalBytes": 614400
+}

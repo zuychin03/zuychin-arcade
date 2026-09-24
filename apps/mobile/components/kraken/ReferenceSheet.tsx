@@ -1,12 +1,13 @@
 import { Modal, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FEED_THE_KRAKEN_CHARACTERS, FEED_THE_KRAKEN_CHARACTER_NAMES as N, FEED_THE_KRAKEN_CHARACTER_SUMMARIES as S } from '@zuychin-arcade/types';
+import { FEED_THE_KRAKEN_CHARACTERS } from '@zuychin-arcade/types';
 import { useWebModalFocus } from '../../hooks/useWebModalFocus';
 import { HelmButton, typography as T } from './Controls';
 import { KRAKEN as C } from './palette';
 import { CardGrid } from '../ui/CardGrid';
 import { NavigationCard } from './NavigationCard';
 import { NavigationFlow } from './NavigationFlow';
+import { CharacterCard } from './CharacterCard';
 export function KrakenReferenceSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { fontScale } = useWindowDimensions();
   useWebModalFocus(visible, 'kraken-rules', onClose);
@@ -28,7 +29,7 @@ export function KrakenReferenceSheet({ visible, onClose }: { visible: boolean; o
       <Text style={T.heading}>Private knowledge</Text><Text style={T.body}>Use the private panel away from other players’ view. Pirate knowledge, leader knowledge and conversion information appear only when the server permits them. Conversion immunity and negative faction clues are public. Do not infer a leader from a waiting screen.</Text>
       <Text style={T.body}>During a cult ritual, every player aboard completes a private step. Some players may have a secret choice; others simply confirm. Nothing settles until everyone has responded. This digital privacy step keeps a missing or ineligible hidden role from being exposed by the waiting screen.</Text>
       <Text style={T.heading}>Character windows</Text><Text style={T.body}>Priority passes clockwise. Use a character only in its offered window, or pass and preserve it. Revealing normally spends the ability; a mentor can restore another revealed character. The app enforces targets and gun limits.</Text>
-      {FEED_THE_KRAKEN_CHARACTERS.map(id => <View key={id} style={{ gap: 6 }}><Text style={T.heading}>{N[id]}</Text><Text style={T.body}>{S[id]}</Text></View>)}
+      <CardGrid items={FEED_THE_KRAKEN_CHARACTERS} keyExtractor={id => id} minCardWidth={210} maxCardWidth={280} textScale={fontScale} renderItem={id => <CharacterCard character={id} />} />
       <Text style={T.heading}>Refusal, reconnecting and leaving</Text><Text style={T.body}>A navigator may refuse and go overboard; the captain appoints a replacement with a fresh navigation draw and no new mutiny. A fed or refusing player can still win with their faction. Leaving explicitly forfeits immediately; a disconnected seat forfeits after the reconnection grace period. Forfeiture cannot trigger a feeding victory and removes that seat’s right to win. The server settles an interrupted committed action without exposing its secret cards. The voyage may continue with fewer players.</Text>
       <Text style={T.muted}>Private local digital prototype. Original code-native chart, no publisher artwork. Clockwise character priority and automated interruption settlement are digital adaptations. Speech restrictions rely on players honouring them outside the app.</Text>
     </ScrollView></View></SafeAreaView></Modal>;

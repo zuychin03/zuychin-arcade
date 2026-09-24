@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-kleptomaniac.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2477930,
+    "sha256": "75dff171318744a9704144638443e08243ca9bbee1036113f193e7c0123f3b09"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-kleptomaniac.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 57376,
+      "sha256": "57ebddba6bb63897f1a6e09d6b3b89ba742d0c2834a288d94ea43b599c129740"
+    }
+  ],
+  "totalBytes": 57376,
+  "maxTotalBytes": 614400
+}

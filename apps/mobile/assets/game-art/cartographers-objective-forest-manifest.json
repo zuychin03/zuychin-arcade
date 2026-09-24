@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-objective-forest.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3513034,
+    "sha256": "243a74471bdc4e5b0e835aed798602798b877f8afffd8dde9d1cafc6897970a5"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-objective-forest.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 82168,
+      "sha256": "ef5aa815615f4851f4a243e5b10a355ca2b967790b265be59018f5f581262cb5"
+    }
+  ],
+  "totalBytes": 82168,
+  "maxTotalBytes": 614400
+}

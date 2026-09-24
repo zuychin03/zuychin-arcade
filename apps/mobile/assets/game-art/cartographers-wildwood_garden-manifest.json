@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-wildwood_garden.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3397685,
+    "sha256": "d4031b6298bd45b84342b8d39753cc3e9b7ac2a3ecf1c46e4b4db9ad01ad56c1"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-wildwood_garden.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 87132,
+      "sha256": "491fa87c8c8df1cb75d9396bf10f8aac7ce57d5ae179f039c39000a6c60ef65b"
+    }
+  ],
+  "totalBytes": 87132,
+  "maxTotalBytes": 614400
+}

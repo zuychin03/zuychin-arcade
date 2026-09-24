@@ -1,0 +1,5 @@
+# Kraken character: herbalist
+
+Generated 24/09/2026 using built-in image_gen, one individual call, original artwork. Full composition retained. Reviewed for individual identity, palette, anatomy and absence of lettering. Gameplay names and abilities remain live UI text.
+
+Use case: stylized-concept. Asset: one original maritime game character portrait, herbalist. Portrait 2:3 waist-up single adult: an elderly woman with warm brown skin and long silver braids, moss-green woven shawl, holding a small bundle of herbs and a blue-glass medicine vial. Deep midnight teal ship interior or deck, restrained cyan bioluminescent rim light and warm bronze lantern key light. Premium tactile cinematic 3D painterly realism, expressive individual face, credible cloth and worn metal, strong silhouette at thumbnail scale. Dark pirate voyage visual world. Entire head and shoulders visible with safe margins. No lettering, numbers, frame, logo, watermark, montage or additional people. Standalone original artwork, never copy published game characters.

@@ -12,6 +12,16 @@ This guide describes the implemented Expo/React Native components, not a separat
 
 Material lighting is local to playing pieces: restrained thickness, directional highlights, contact shadows and recessed board slots. It does not require a WebGL scene or continuous decorative motion.
 
+Kraken character portraits use one original 2:3 composition per character. The
+rulebook shows the complete set; gameplay renders only the local private
+character or a character already present in the public projection. Decorative
+test identifiers and accessibility labels must not disclose concealed identities.
+
+Cartographers has a distinct landscape illustration for each drawing card, plus
+one illustration per scoring category. Its terrain symbols, selectable map cells,
+placement shapes and objective examples remain live graphics below the artwork.
+The art is thematic, not a source of legal placement or scoring information.
+
 ## Consistent painted cards
 
 Compare the visible card face, not merely its outer wrapper. Consistency applies within the same family and role, not between a die, path tile, crew card and power card.

@@ -50,10 +50,12 @@ export default function TelestrationsGame() {
         : isOver ? game.endReason === 'insufficient_players' ? 'Fewer than four players remain. Settled points stay, but no winner is awarded.' : game.scoringMode === 'none' ? 'A shared collection of unexpected stories. No scores or winners.' : `${game.winnerIds.map(name).join(', ')} ${game.winnerIds.length > 1 ? 'share the win' : 'wins'}.`
           : owner ? 'You guide this reveal. Show each page before judging the book.' : `${name(game.revealOwnerId!)} is guiding this reveal.`;
   return <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top', 'bottom', 'left', 'right']}>
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, backgroundColor: C.surface }}>
-      <View style={{ flex: 1, minWidth: 0 }}><Text accessibilityRole="header" style={[T.heading, { color: C.text }]}>Telestrations</Text><Text style={T.muted}>Round {Math.min(3, game.completedRounds + (game.phase === 'round_end' ? 0 : 1))} of 3 · {room.roomCode}</Text></View>
-      <ScalePressable accessibilityLabel="Open Telestrations rules" onPress={() => setRules(true)} style={{ width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="book-open-page-variant-outline" size={24} color={C.accent} /></ScalePressable>
-      <ScalePressable accessibilityLabel="Leave the sketchbooks" onPress={leave.requestLeave} disabled={leave.leaving} style={{ width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="exit-to-app" size={24} color={C.muted} /></ScalePressable>
+    <View testID="game-toolbar" style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: 12, backgroundColor: C.surface }}>
+      <View testID="game-toolbar-title" style={{ flexGrow: 1, flexShrink: 1, flexBasis: 'auto', minWidth: 0, maxWidth: '100%' }}><Text accessibilityRole="header" style={[T.heading, { color: C.text }]}>Telestrations</Text><Text style={T.muted}>Round {Math.min(3, game.completedRounds + (game.phase === 'round_end' ? 0 : 1))} of 3 · {room.roomCode}</Text></View>
+      <View testID="game-toolbar-actions" style={{ flexDirection: 'row', flexShrink: 0, gap: 8 }}>
+        <ScalePressable accessibilityLabel="Open Telestrations rules" onPress={() => setRules(true)} style={{ width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="book-open-page-variant-outline" size={24} color={C.accent} /></ScalePressable>
+        <ScalePressable accessibilityLabel="Leave the sketchbooks" onPress={leave.requestLeave} disabled={leave.leaving} style={{ width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="exit-to-app" size={24} color={C.muted} /></ScalePressable>
+      </View>
     </View>
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'} contentContainerStyle={{ padding: 16, paddingBottom: 32 }}>

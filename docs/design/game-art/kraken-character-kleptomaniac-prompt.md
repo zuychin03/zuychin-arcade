@@ -1,0 +1,5 @@
+# Kraken character: kleptomaniac
+
+Generated 24/09/2026 using built-in image_gen, one individual call, original artwork. Full composition retained. Reviewed for individual identity, palette, anatomy and absence of lettering. Gameplay names and abilities remain live UI text.
+
+Use case: stylized-concept. Asset: one original maritime game character portrait, KLEPTOMANIAC. Portrait 2:3 framing, waist-up single adult sly wiry deckhand with sharp cheekbones, weathered teal hood and salt-worn leather vest, discreetly palming a bronze coin near their belt. Deep midnight teal ship interior, distant defocused sea, restrained cyan bioluminescent rim light and warm bronze lantern key light. Premium tactile cinematic 3D painterly realism, expressive individual face, credible cloth and worn metal, strong clear silhouette at thumbnail scale. Match a dark pirate voyage visual world, no copied publisher characters. Entire head and shoulders visible with generous safe margin. No lettering, numbers, card frame, logo, watermark, montage or additional people. This is a standalone artwork only.

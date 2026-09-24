@@ -53,11 +53,13 @@ export default function CartographersGame() {
     : assignment ? `${mine.assignments.length} assignment${mine.assignments.length === 1 ? '' : 's'} waiting. You are drawing on ${assignment.displayName}’s map.`
       : `${active.filter(player => player.submitted).length}/${active.length} cartographers have settled their assignments.`;
   return <SafeAreaView edges={['top', 'bottom']} style={styles.page}>
-    <View style={styles.toolbar}>
-      <View style={{ flex: 1, minWidth: 0, gap: 4 }}><Text accessibilityRole="header" style={styles.title}>Cartographers Heroes</Text>
+    <View testID="game-toolbar" style={styles.toolbar}>
+      <View testID="game-toolbar-title" style={{ flexGrow: 1, flexShrink: 1, flexBasis: 'auto', minWidth: 0, maxWidth: '100%', gap: 4 }}><Text accessibilityRole="header" style={styles.title}>Cartographers Heroes</Text>
         <Text style={styles.muted}>{over ? 'Results' : `${season.name} · ${game.elapsed}/${game.threshold} time`} · {room.roomCode}</Text></View>
-      <ScalePressable accessibilityLabel="Open Cartographers rules" onPress={() => setRules(true)} style={styles.icon}><MaterialCommunityIcons name="book-open-page-variant-outline" size={24} color={C.accent} /></ScalePressable>
-      <ScalePressable accessibilityLabel="Leave the charting table" disabled={leave.leaving} onPress={leave.requestLeave} style={styles.icon}><MaterialCommunityIcons name="exit-to-app" size={24} color={C.muted} /></ScalePressable>
+      <View testID="game-toolbar-actions" style={{ flexDirection: 'row', flexShrink: 0, gap: 8 }}>
+        <ScalePressable accessibilityLabel="Open Cartographers rules" onPress={() => setRules(true)} style={styles.icon}><MaterialCommunityIcons name="book-open-page-variant-outline" size={24} color={C.accent} /></ScalePressable>
+        <ScalePressable accessibilityLabel="Leave the charting table" disabled={leave.leaving} onPress={leave.requestLeave} style={styles.icon}><MaterialCommunityIcons name="exit-to-app" size={24} color={C.muted} /></ScalePressable>
+      </View>
     </View>
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <View style={styles.content}>
@@ -117,7 +119,7 @@ export default function CartographersGame() {
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: C.bg }, toolbar: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, backgroundColor: C.surface },
+  page: { flex: 1, backgroundColor: C.bg }, toolbar: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: 12, backgroundColor: C.surface },
   title: { color: C.text, fontFamily: 'Outfit_800ExtraBold', fontSize: 20 }, heading: { color: C.accent, fontFamily: 'Outfit_700Bold', fontSize: 24 },
   body: { color: C.text, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24 }, muted: { color: C.muted, fontFamily: 'Outfit_400Regular', fontSize: 14, lineHeight: 21 },
   icon: { width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 12 },

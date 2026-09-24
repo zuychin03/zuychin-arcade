@@ -31,6 +31,17 @@ const libertaliaLootNames = Object.freeze(['map', 'barrel', 'amulet', 'chest', '
 const libertaliaLootMaxTotalBytes = 224 * 1024;
 const libertaliaPhaseNames = Object.freeze(['daytime', 'dusk', 'night', 'anchor']);
 const libertaliaPhaseMaxTotalBytes = 160 * 1024;
+const krakenCharacterNames = Object.freeze([
+  'kleptomaniac', 'troublemaker', 'gunsmith', 'peacemaker', 'gunslinger', 'minstrel', 'boatswain',
+  'herbalist', 'lookout', 'master_strategist', 'smuggler', 'agitator', 'adviser', 'chief_cook',
+  'rabble_rouser', 'archivist', 'mentor', 'spiritualist', 'debt_collector', 'negotiator', 'instigator',
+]);
+const cartographersArtworkNames = Object.freeze([
+  'lagoon', 'pasture', 'settlement', 'timber_grove', 'hillside_terrace', 'frontier_dwelling',
+  'wildwood_garden', 'woodland_crossroads', 'coastal_encampment', 'mangrove_swamp', 'kethras_gates',
+  'dobrik', 'wren', 'freyla', 'dal', 'dragon', 'zombie', 'troll', 'gorgon',
+  'objective-forest', 'objective-village', 'objective-farm-water', 'objective-general',
+]);
 const catalogue = require('../../../docs/design/game-art/custom-artwork-catalogue.json');
 const queuedAssets = catalogue.families.flatMap(family => family.assets);
 const queuedGames = Object.fromEntries(catalogue.families.flatMap(family => family.assets.map(asset => [asset.id, {
@@ -40,6 +51,18 @@ const queuedGames = Object.fromEntries(catalogue.families.flatMap(family => fami
   square: (asset.aspect ?? family.aspect ?? 'square') === 'square',
 }])));
 const games = Object.freeze({
+  ...Object.fromEntries(krakenCharacterNames.map(character => [`kraken-character-${character}`, {
+    sourceFile: `docs/design/game-art/kraken-character-${character}.png`,
+    specs: [{ file: `kraken-character-${character}.webp`, width: 480, maxBytes: 70 * 1024 }],
+    manifestFile: `kraken-character-${character}-manifest.json`,
+    encoding: { quality: character === 'herbalist' ? 78 : 82 },
+  }])),
+  ...Object.fromEntries(cartographersArtworkNames.map(identity => [`cartographers-${identity}`, {
+    sourceFile: `docs/design/game-art/cartographers-${identity}.png`,
+    specs: [{ file: `cartographers-${identity}.webp`, width: 640, maxBytes: 90 * 1024 }],
+    manifestFile: `cartographers-${identity}-manifest.json`,
+    encoding: { quality: identity === 'mangrove_swamp' ? 72 : 76 },
+  }])),
   ...Object.fromEntries(['blue', 'red', 'yellow'].map(colour => [`kraken-course-${colour}`, {
     sourceFile: `docs/design/game-art/kraken-course-${colour}.png`,
     specs: [{ file: `kraken-course-${colour}.webp`, width: 480, maxBytes: 55 * 1024 }],
@@ -315,4 +338,4 @@ async function main(args) {
 
 module.exports = { coltActionNames, coltActionMaxTotalBytes, coupCharacterNames, coupCharacterMaxTotalBytes, tokyoPowerNames, tokyoPowerMaxTotalBytes, skullSpecialNames, skullSpecialMaxTotalBytes, citadelsDistrictNames, citadelsDistrictMaxTotalBytes, notAlonePlaceNames, notAlonePlaceMaxTotalBytes, bangCardNames, bangCardMaxTotalBytes, libertaliaLootNames, libertaliaLootMaxTotalBytes, libertaliaPhaseNames, libertaliaPhaseMaxTotalBytes, dimensions, encoding, games, hash, maxTotalBytes, outputDirectory, parseArguments, renderArtifacts, repoRoot, sourceFile, specs };
 if (require.main === module) main(process.argv.slice(2)).catch(error => { console.error(error.message); process.exitCode = 1; });
-Object.assign(module.exports, { catalogue, queuedAssets, queuedGames, assetStatus, requireProduced, checkFamilyBudget, catalogueStatus });
+Object.assign(module.exports, { catalogue, queuedAssets, queuedGames, assetStatus, requireProduced, checkFamilyBudget, catalogueStatus, krakenCharacterNames, cartographersArtworkNames });

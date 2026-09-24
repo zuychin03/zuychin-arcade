@@ -68,6 +68,7 @@ Focused client checks, from the repository root:
 ```powershell
 node --test --test-concurrency=1 apps/mobile/scripts/dixit-client.test.cjs apps/mobile/scripts/kraken-client.test.cjs apps/mobile/scripts/telestrations-client.test.cjs apps/mobile/scripts/telestrations-review.test.cjs apps/mobile/scripts/cartographers-client.test.cjs
 node --test --test-concurrency=1 apps/mobile/scripts/dixit-artwork.test.cjs apps/mobile/scripts/game-art-assets.test.cjs apps/mobile/scripts/kraken-material.test.cjs apps/mobile/scripts/voyage-map.test.cjs apps/mobile/scripts/font-registration.test.cjs
+node --test --test-concurrency=1 apps/mobile/scripts/kraken-character-art.test.cjs apps/mobile/scripts/cartographers-artwork.test.cjs apps/mobile/scripts/game-toolbar.test.cjs apps/mobile/scripts/typecheck-scope.test.cjs
 ```
 
 The client harnesses exercise real hooks/components with controlled transports.
@@ -228,6 +229,27 @@ physical iOS or Android devices.
 
 ## Evidence and release limits
 
+- The 24/09/2026 artwork and follow-up fixes passed all 1,565 client tests
+  across 106 files, mobile/server TypeScript and scoped lint. All 44 new images
+  have verified source/output hashes, dimensions and byte budgets. The Kraken
+  captain-eligibility fix passed 35 engine tests, 13 HTTP/socket tests and the
+  previously failing natural-action reproduction. An earlier socket timeout
+  passed its isolated and full-suite reruns; its cause was not established.
+- The follow-up web export includes all 64 routes, with server-URL validation
+  and PWA generation passing. Native exports were not repeated for this
+  artwork and layout follow-up; the earlier native receipts below describe
+  their own baseline, not these changes.
+- Its browser checks covered all 44 new image identities in the real rulebooks
+  at 320, 375 and 1280 px, plus 200% CSS text at 320 and 1280 px. Painted
+  same-row card faces had zero measured width/height spread. Deliberately
+  failed images retained complete live copy and stable artwork/card dimensions.
+  The failure fixture bypassed the service worker to establish actual request
+  failure rather than a successful cached response.
+- A fresh three-route create/lobby/gameplay/leave check verified Kraken private
+  portrait visibility and single-copy ability text, both corrected enlarged-text
+  headers, reachable 48 px actions and Telestrations keyboard drawing. All ten
+  seats returned to the hub on exit. This follow-up covers initial decisions,
+  not additional complete browser matches. Physical device testing remains open.
 - The final complete server sweep on 24/09/2026 passed all 917 tests across
   34 files, with no failures, skips or cancellations. This includes the existing
   games and four additions, complete HTTP/socket matches, rematches, privacy,

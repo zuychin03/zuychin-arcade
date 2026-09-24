@@ -3,10 +3,13 @@ import type { CartographersCard } from '@zuychin-arcade/types';
 import { CardSurface } from '../ui/CardSurface';
 import { ShapeDiagram, TERRAIN } from './MapBoard';
 import { CARTOGRAPHERS as C } from './palette';
+import { CARTOGRAPHERS_CARD_ART } from './artwork';
+import { CardArtwork } from './CardArtwork';
 
 export function ExploreCard({ card }: { card: CartographersCard }) {
   const shapes = card.kind === 'explore' ? card.options.map(option => option.cells) : [card.kind === 'hero' ? [{ x: 0, y: 0 }] : card.cells];
   return <CardSurface fill faceColor={C.panel} edgeColor={C.bg} highlightColor={`${C.accent}70`} radius={12}>
+    <CardArtwork source={CARTOGRAPHERS_CARD_ART[card.id]} />
     <View style={{ padding: 16, gap: 12 }}>
       <Text accessibilityRole="header" style={{ color: C.text, fontFamily: 'Outfit_700Bold', fontSize: 20 }}>{card.name}</Text>
       <Text style={{ color: C.muted, fontFamily: 'Outfit_400Regular', fontSize: 16 }}>

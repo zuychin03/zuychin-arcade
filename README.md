@@ -356,17 +356,30 @@ is performed by the local export checks.
 
 ## Custom game artwork
 
-The nine games include 252 individual illustrations in addition to the original
+The original nine games include 252 individual illustrations in addition to the original
 shared scenes and category artwork. Named cards and characters, uniform hidden
 card backs, faction seals and board scenery use original generated artwork.
 Rules, costs, ranks, paths and interaction states remain live interface elements.
 Card faces combine directional bevels, recessed illustrations and game-specific
 neon accents without requiring a 3D rendering engine.
 
+The four additions use their own original cover scenes and game-specific assets:
+
+- Feed the Kraken: 21 individual character portraits in the reference and
+  authorised private/revealed character views, plus three reusable course scenes.
+- Cartographers Heroes: 19 individual drawing-card illustrations and four
+  shared scoring-category scenes. Placement shapes and scoring diagrams remain
+  live graphics, not claims about the geometry shown in the illustrations.
+- Dixit Odyssey: 84 distinct playable dream illustrations.
+- Telestrations: original entrance artwork and player-created drawings, with
+  a clear drawing surface instead of decorative images inside the sketchbook.
+
 Runtime WebP images are stored in `apps/mobile/assets/game-art`; source PNGs,
 prompts and the identity catalogue are in `docs/design/game-art`. The encoding
 pipeline records content hashes, preserves the full composition and enforces
 per-image and per-family byte budgets. Internal generation receipts stay local.
+The [four-game artwork inventory](docs/design/game-art/FOUR_GAMES_ARTWORK.md)
+links each new source, runtime asset and exact generation prompt.
 
 ## Game rules notes
 

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-woodland_crossroads.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3383867,
+    "sha256": "25ddd2d35e79d41335ec09c4a119bf1d090a1b29a60fff15deb7de5a97268bd9"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-woodland_crossroads.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 81088,
+      "sha256": "bf1ebdbbbe5e40b4aa5c048676f5b3ff8858e4e9c047a4ef70e4d0fce4764716"
+    }
+  ],
+  "totalBytes": 81088,
+  "maxTotalBytes": 614400
+}

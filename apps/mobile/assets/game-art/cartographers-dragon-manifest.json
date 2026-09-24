@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-dragon.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3140611,
+    "sha256": "8e79925274f2137cd3327acb1e20b307f9b0dbd9329a26d07f2f456cc82c7e43"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-dragon.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 67744,
+      "sha256": "fa108f8876abb14d43221af87dd64658483955d6207c2863c66e27dd388fe38b"
+    }
+  ],
+  "totalBytes": 67744,
+  "maxTotalBytes": 614400
+}

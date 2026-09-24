@@ -380,6 +380,44 @@ test('sole tongueless survivor cannot be assigned forbidden captaincy', () => {
   assert.equal(s.status, 'game_over'); assert.equal(s.endReason, 'no_participants'); assert.deepEqual(s.winnerIds, []);
 });
 
+test('Chief Cook and Drunk retain the only eligible captain beside a tongueless survivor', () => {
+  for (const effect of ['chief_cook', 'drunk'] as const) {
+    const s = setup(); const captain = s.captainId; const survivor = s.order[0]!;
+    assert.notEqual(captain, survivor);
+    s.players[survivor]!.tongueless = true;
+    for (const id of s.order.filter(id => id !== captain && id !== survivor)) {
+      assert.deepEqual(forfeitFeedTheKrakenPlayer(s, id), { ok: true });
+    }
+    if (effect === 'chief_cook') {
+      s.players[captain]!.character = effect;
+      until(s, () => s.phase === 'priority' && s.pendingPlayerId === captain);
+      act(s, captain, { type: 'character' });
+    } else {
+      currentCard(s, 'drunk');
+      s.phase = 'map_action'; s.window = null; s.mapAction = 'cabin'; s.pendingPlayerId = captain;
+      act(s, captain, { type: 'target', playerId: survivor });
+    }
+    assert.equal(s.captainId, captain); assert.equal(s.status, 'playing');
+    until(s, () => s.phase === 'navigation');
+    assert.ok(s.hands[captain]); assert.equal(s.players[s.captainId]!.tongueless, false);
+    validateFeedTheKrakenState(s);
+  }
+});
+
+test('departing captain skips a tongueless first seat and terminates when its eligible replacement leaves', () => {
+  const s = setup(); const captain = s.captainId; const tongueless = s.order[0]!;
+  const replacement = s.order.find(id => id !== captain && id !== tongueless)!;
+  s.players[tongueless]!.tongueless = true;
+  for (const id of s.order.filter(id => id !== captain && id !== tongueless && id !== replacement)) {
+    assert.deepEqual(forfeitFeedTheKrakenPlayer(s, id), { ok: true });
+  }
+  assert.deepEqual(forfeitFeedTheKrakenPlayer(s, captain), { ok: true });
+  assert.equal(s.captainId, replacement); assert.equal(s.status, 'playing');
+  assert.deepEqual(forfeitFeedTheKrakenPlayer(s, replacement), { ok: true });
+  assert.equal(s.status, 'game_over'); assert.equal(s.endReason, 'no_participants');
+  assert.deepEqual(s.winnerIds, []);
+});
+
 test('one and two aboard continue with printed random missing-office decisions', () => {
   for (const remaining of [1, 2, 3]) {
     const s = setup(); const keep = [s.captainId, ...s.order.filter((id) => id !== s.captainId)].slice(0, remaining);

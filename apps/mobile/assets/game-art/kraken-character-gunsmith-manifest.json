@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-gunsmith.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2531377,
+    "sha256": "f392c70899a573a155ec79c2fddb671dda2b05ba73128b57899921aa16b65f6a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-gunsmith.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 63656,
+      "sha256": "69834f2717d48f9d7b9eed7fc4ef2be8d4a4dc82672bf7c86ff4ab8536f7dee7"
+    }
+  ],
+  "totalBytes": 63656,
+  "maxTotalBytes": 614400
+}

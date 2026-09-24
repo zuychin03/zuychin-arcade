@@ -5,7 +5,7 @@ import { HelmButton, typography as T } from './Controls';
 import { characterTargets, targetSlots } from './decisions';
 import { CardGrid } from '../ui/CardGrid';
 import { NavigationCard } from './NavigationCard';
-export function DecisionPanel({ game, mine, busy, send }: { game: FeedTheKrakenPublicState; mine: FeedTheKrakenPrivateState; busy: boolean; send: (a: FeedTheKrakenAction) => boolean }) {
+export function DecisionPanel({ game, mine, busy, send, showCharacterCopy = true }: { game: FeedTheKrakenPublicState; mine: FeedTheKrakenPrivateState; busy: boolean; send: (a: FeedTheKrakenAction) => boolean; showCharacterCopy?: boolean }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [guns, setGuns] = useState(mine.minimumBid);
   const [allocations, setAllocations] = useState<Record<string, number>>({});
@@ -19,7 +19,7 @@ export function DecisionPanel({ game, mine, busy, send }: { game: FeedTheKrakenP
   if (game.phase === 'priority') {
     const slots = targetSlots(mine.character);
     const legal = slots.every((_, i) => characterTargets(game, mine.character, mine.playerId, i, selected).some(p => p.playerId === selected[i]));
-    return <View style={{ gap: 12 }}><Text style={T.heading}>{N[mine.character]}</Text><Text style={T.body}>{S[mine.character]}</Text>
+    return <View style={{ gap: 12 }}>{showCharacterCopy ? <><Text style={T.heading}>{N[mine.character]}</Text><Text style={T.body}>{S[mine.character]}</Text></> : null}
       <Text style={T.muted}>Window: {game.window?.replaceAll('_', ' ')}. Revealing a character uses its ability. Passing keeps it for later.</Text>
       {mine.canUseCharacter ? <>{slots.map((label, slot) => targets(label, slot, characterTargets(game, mine.character, mine.playerId, slot, selected).map(p => p.playerId)))}{submit('Reveal and use character', { type: 'character', targets: selected }, legal)}</> : <Text style={T.muted}>Your ability is not available in this window.</Text>}
       {submit('Pass this window', { type: 'pass' })}</View>;

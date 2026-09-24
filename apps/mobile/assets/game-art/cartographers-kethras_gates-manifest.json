@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-kethras_gates.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3341502,
+    "sha256": "b1a54694cf07f735979845fbc46fd998714ada3d32ccb353d5dea058ceeb8d88"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-kethras_gates.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 82150,
+      "sha256": "13dd7f4be2c4fd384091d56b3f1b0a61540c25aec7d3c6bbc1b9e3b0406edfee"
+    }
+  ],
+  "totalBytes": 82150,
+  "maxTotalBytes": 614400
+}

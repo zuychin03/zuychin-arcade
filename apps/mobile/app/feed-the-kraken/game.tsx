@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { AppState, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FEED_THE_KRAKEN_CHARACTER_NAMES as N } from '@zuychin-arcade/types';
 import { useGameStore } from '../../store/useGameStore';
 import { GameRecovery } from '../../components/ui/GameRecovery';
 import { CardSurface } from '../../components/ui/CardSurface';
+import { CharacterCard } from '../../components/kraken/CharacterCard';
 import { HelmButton, typography as T } from '../../components/kraken/Controls';
 import { KRAKEN as C } from '../../components/kraken/palette';
 import { VoyageMap } from '../../components/kraken/VoyageMap';
@@ -42,14 +42,15 @@ export default function Game() {
       <View style={{ flex: wide ? 1 : undefined, minWidth: 0, gap: 16 }}>
         {over ? <View style={{ gap: 12 }}><Text style={T.title}>{game.winner ? `${game.winner.toUpperCase()} VICTORY` : 'No winning faction'}</Text><Text style={T.body}>{game.endReason === 'leader_fed' ? 'The cult leader was fed to the Kraken.' : game.endReason === 'no_participants' ? 'No eligible participants remain.' : 'The ship reached its destination.'}</Text><Text style={T.body}>{game.winnerIds.map(name).join(', ') || 'No eligible individual winners.'}</Text>{host ? <HelmButton label="Sail again" disabled={actions.busy || !rematch || leave.leaving} onPress={() => actions.send('start')} /> : null}<Text style={T.muted}>A rematch needs {min}–11 connected seats and the host’s confirmation.</Text></View> : <>
           <HelmButton label={revealed ? 'Hide private information' : 'Open my private panel'} quiet onPress={() => setPrivateKey(revealed ? null : identity)} />
-          {revealed ? <CardSurface radius={16} faceColor={C.surface} edgeColor={C.bg} highlightColor={C.border}><View style={{ padding: 16, gap: 16 }}><Text style={T.heading}>Private · {mine.faction.replaceAll('_', ' ')}</Text><Text style={T.body}>{N[mine.character]} · {mine.ownGuns} guns</Text>{mine.knownPirateIds.length ? <Text style={T.body}>Known pirates: {mine.knownPirateIds.map(name).join(', ')}</Text> : null}{mine.knownLeaderId ? <Text style={T.body}>Known cult leader: {name(mine.knownLeaderId)}</Text> : null}
-            <DecisionPanel key={identity} game={game} mine={mine} busy={actions.busy || leave.leaving || Boolean(me?.forfeited)} send={actions.send} />
+          {revealed ? <CardSurface radius={16} faceColor={C.surface} edgeColor={C.bg} highlightColor={C.border}><View style={{ padding: 16, gap: 16 }}><Text style={T.heading}>Private · {mine.faction.replaceAll('_', ' ')}</Text><Text style={T.body}>{mine.ownGuns} guns</Text>{mine.knownPirateIds.length ? <Text style={T.body}>Known pirates: {mine.knownPirateIds.map(name).join(', ')}</Text> : null}{mine.knownLeaderId ? <Text style={T.body}>Known cult leader: {name(mine.knownLeaderId)}</Text> : null}
+            <CharacterCard character={mine.character} compact />
+            <DecisionPanel key={identity} game={game} mine={mine} busy={actions.busy || leave.leaving || Boolean(me?.forfeited)} send={actions.send} showCharacterCopy={false} />
             {mine.observations.length ? <View style={{ gap: 8 }}><Text style={T.heading}>Your observations</Text>{mine.observations.map((o, i) => <Text key={i} style={T.body}>{o.kind.replaceAll('_', ' ')}{o.playerId ? ` · ${name(o.playerId)}` : ''}{o.faction ? ` · ${o.faction.replaceAll('_', ' ')}` : ''}{o.cards ? ` · ${o.cards.map(c => `${c.colour}/${c.effect}`).join(', ')}` : ''}</Text>)}</View> : null}
           </View></CardSurface> : <Text style={T.body}>{mine.canAct ? 'Your decision is ready. Open your panel privately to act.' : 'Waiting for the crew. Your allegiance stays hidden.'}</Text>}
         </>}
       </View>
     </View>
-    <View style={{ gap: 12 }}><Text style={T.heading}>Crew manifest</Text>{game.players.map(p => <View key={p.playerId} style={{ gap: 6, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.border }}><Text style={T.body}>{p.displayName}{p.playerId === playerId ? ' (you)' : ''} · {p.forfeited ? 'Forfeited' : p.aboard ? 'Aboard' : `Overboard: ${p.departureReason}`}</Text><Text style={T.muted}>{p.guns === null ? 'Guns concealed during bidding' : `${p.guns} guns`}{p.offDuty ? ' · Off duty' : ''}{p.tongueless ? ' · No words or captaincy' : ''}{p.conversionImmune ? ' · Conversion immune' : ''}{p.notFactions.length ? ` · Not ${p.notFactions.join(' / ')}` : ''}</Text>{p.character ? <Text style={T.body}>Revealed character: {N[p.character]}</Text> : null}{over && p.faction ? <Text style={T.body}>Final faction: {p.faction.replaceAll('_', ' ')}</Text> : null}{p.resume.length ? <Text style={T.muted}>Navigation résumé: {p.resume.map(c => `${c.colour}/${c.effect}`).join(' · ')}</Text> : null}</View>)}</View>
+    <View style={{ gap: 12 }}><Text style={T.heading}>Crew manifest</Text>{game.players.map(p => <View key={p.playerId} style={{ gap: 6, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.border }}><Text style={T.body}>{p.displayName}{p.playerId === playerId ? ' (you)' : ''} · {p.forfeited ? 'Forfeited' : p.aboard ? 'Aboard' : `Overboard: ${p.departureReason}`}</Text><Text style={T.muted}>{p.guns === null ? 'Guns concealed during bidding' : `${p.guns} guns`}{p.offDuty ? ' · Off duty' : ''}{p.tongueless ? ' · No words or captaincy' : ''}{p.conversionImmune ? ' · Conversion immune' : ''}{p.notFactions.length ? ` · Not ${p.notFactions.join(' / ')}` : ''}</Text>{p.character ? <CharacterCard character={p.character} compact /> : null}{over && p.faction ? <Text style={T.body}>Final faction: {p.faction.replaceAll('_', ' ')}</Text> : null}{p.resume.length ? <Text style={T.muted}>Navigation résumé: {p.resume.map(c => `${c.colour}/${c.effect}`).join(' · ')}</Text> : null}</View>)}</View>
     <View style={{ gap: 8 }}><Text style={T.heading}>Ship’s log</Text>{game.log.slice(-30).map((entry, i) => <Text key={`${entry.revision}/${i}`} style={T.muted}>{entry.message}</Text>)}</View>
   </View></ScrollView><KrakenReferenceSheet visible={rules} onClose={() => setRules(false)} /></SafeAreaView>;
 }

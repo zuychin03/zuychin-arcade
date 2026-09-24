@@ -15,6 +15,8 @@
   Ritual responses no longer reveal an absent hidden role through phase changes;
   Look-Out shows the inspected top card even while holding a navigation hand.
   Navigator forfeiture consistently settles the committed pair.
+- Fixed Chief Cook and Drunk effects appointing a tongueless Kraken captain
+  when the current captain is the only eligible survivor.
 - Replaced raw Kraken chart coordinates with readable waypoints and named
   destinations; the current position now displays a vessel token.
 - Registered the semibold Outfit face used by Cartographers and added a
@@ -31,6 +33,11 @@
 
 ### Interface
 
+- Added 21 original Kraken character portraits and 23 Cartographers illustrations
+  covering every drawing card and the four scoring categories. Preserved live
+  rules, placement diagrams, private-character boundaries and uncropped artwork.
+- Let Telestrations and Cartographers game-header controls wrap below enlarged
+  titles, retaining readable words and full-size rules/leave buttons.
 - Moved PWA installation and update controls to the bottom of the desktop
   sidebar and mobile navigation drawer, keeping the game library unobstructed.
 - Hide installation controls in standalone mode and after a recognised install,
@@ -66,6 +73,8 @@
 
 ### Reliability and verification
 
+- Excluded generated web/native exports from mobile typechecking, preventing
+  retained minified bundles from exhausting the typecheck heap.
 - Added focused engine, socket and client regressions for the four additions,
   including rematch revision fencing and restored private drawings.
 - Passed all 1,553 mobile and 917 server regressions, final web/Android/iOS

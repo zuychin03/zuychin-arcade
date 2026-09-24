@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-settlement.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3327543,
+    "sha256": "1c3e642e97634a7d9e47dcedb764aa1d888024cc370a25724749b299b9a0216d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-settlement.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 82590,
+      "sha256": "bf4adf1942f3759abbb1e04b1f51100c653d6ad150fc6cef7d3ffe77ee77ad37"
+    }
+  ],
+  "totalBytes": 82590,
+  "maxTotalBytes": 614400
+}

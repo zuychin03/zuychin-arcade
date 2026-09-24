@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-frontier_dwelling.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3515826,
+    "sha256": "14d949e6d2be29b847c2255aba69936afabbc21ccabaa0d146d5a2ac95328b18"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-frontier_dwelling.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 87464,
+      "sha256": "ea3a4b84c5a6cc8221437d4bfb596c6c8531781db6f2ae66997d001fe82bc067"
+    }
+  ],
+  "totalBytes": 87464,
+  "maxTotalBytes": 614400
+}

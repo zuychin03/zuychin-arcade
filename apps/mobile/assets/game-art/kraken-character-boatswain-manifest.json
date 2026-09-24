@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-boatswain.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2722978,
+    "sha256": "29e82c74155e4cc77d7c2bb5db2964da44e5220be525a2d6693689a6238acc34"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-boatswain.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 68828,
+      "sha256": "58fec7163d4efd9bee20792702ab155c76601d44a62c291e6eaffa8cd4e8d52c"
+    }
+  ],
+  "totalBytes": 68828,
+  "maxTotalBytes": 614400
+}

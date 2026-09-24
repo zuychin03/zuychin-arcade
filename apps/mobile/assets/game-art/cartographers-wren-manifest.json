@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-wren.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3254162,
+    "sha256": "34f98c164b13655d23fdb83dbdef8fded6d615ceef4794d06f15923872f7ed7a"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-wren.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 74148,
+      "sha256": "6842faa50af0595cdd85ec409919c2f334895e17a222c0ce5d3b99629fb877b0"
+    }
+  ],
+  "totalBytes": 74148,
+  "maxTotalBytes": 614400
+}

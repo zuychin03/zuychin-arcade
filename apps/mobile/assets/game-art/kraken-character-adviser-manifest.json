@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-adviser.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2571131,
+    "sha256": "3354100013ddb0122dd7efb64a8bbf9a52669da577d3b7b7d3887f2d40479521"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-adviser.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 55442,
+      "sha256": "3e15f3793bee85355918245062b84ce70de9a9de1d2366640e554cec1bcf584e"
+    }
+  ],
+  "totalBytes": 55442,
+  "maxTotalBytes": 614400
+}

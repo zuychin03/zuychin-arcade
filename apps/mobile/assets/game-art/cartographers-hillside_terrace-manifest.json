@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-hillside_terrace.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3239189,
+    "sha256": "e5778802a5f9662b56c3df9e7b2c1be649671d9c4285b9a404c32874d6a06512"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-hillside_terrace.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 76556,
+      "sha256": "ea798c72504866976290e1b5a9cf8f3487cf9545c265d870cceccf9aa59e9c86"
+    }
+  ],
+  "totalBytes": 76556,
+  "maxTotalBytes": 614400
+}

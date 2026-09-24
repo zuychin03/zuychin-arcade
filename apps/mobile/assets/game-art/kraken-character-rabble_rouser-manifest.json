@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-rabble_rouser.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2350378,
+    "sha256": "8a291906aa948020bd0c1ac007165c3f3e53be07c6009377a79c309a8684be6f"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-rabble_rouser.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 46610,
+      "sha256": "c3c64fb77a4c2833a24bc5570889cfe285874b336df0da080f9c97314310bcbf"
+    }
+  ],
+  "totalBytes": 46610,
+  "maxTotalBytes": 614400
+}

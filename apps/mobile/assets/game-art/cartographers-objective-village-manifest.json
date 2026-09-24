@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-objective-village.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3431633,
+    "sha256": "5e424689f5a5f02e14bf7b1b2116fc0d81de564cff42e0f93ff4085eada8e219"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 76,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-objective-village.webp",
+      "width": 640,
+      "maxBytes": 92160,
+      "height": 427,
+      "bytes": 82000,
+      "sha256": "ed04b08eafbac58cfea274207abd10ea0bd3df8399881b2a161fd999a02ab50b"
+    }
+  ],
+  "totalBytes": 82000,
+  "maxTotalBytes": 614400
+}

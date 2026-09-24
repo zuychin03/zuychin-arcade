@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-character-instigator.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2415180,
+    "sha256": "2c1a98245d3ac5c075ac424d13da40f983060ee1d78886214fd1db7a8068356d"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-character-instigator.webp",
+      "width": 480,
+      "maxBytes": 71680,
+      "height": 720,
+      "bytes": 55514,
+      "sha256": "81756ad2c7f20ed3c0d07b65f13de6c6c018eba62c82c6358fbdb3f9fec156e4"
+    }
+  ],
+  "totalBytes": 55514,
+  "maxTotalBytes": 614400
+}
