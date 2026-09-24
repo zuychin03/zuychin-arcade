@@ -162,11 +162,15 @@ node apps/mobile/scripts/pwa-ui-smoke.cjs apps/mobile/dist
 Use a fresh evidence directory for each run. Set `QA_BROWSER_PATH` if Chrome
 is installed somewhere other than the runner's Windows default. The browser
 runner serves the explicit export on a temporary loopback origin. Its busy-tab
-scenario is a labelled route fixture, not a completed multiplayer match.
+scenario is a labelled route fixture, not a completed multiplayer match. Install
+offer and completion events are fixtures, not actual operating-system installs.
 
-Check installation help, keyboard access and update controls in the library
-at phone and desktop widths, including 200% text. Review screenshots and
-confirm that gameplay does not display the utility strip.
+Check installation help, keyboard access and update controls at the bottom of
+the library sidebar and mobile navigation drawer, including 200% text. Confirm
+that the closed drawer and gameplay display no installation controls. Check
+standalone mode, returning installed visits, cross-tab installation events,
+failed prompts, blocked storage and fresh install offers after uninstall.
+Update controls must remain available when the install button is hidden.
 
 With separate browser tabs, verify that an active room, reconnecting session,
 unrestored session or unresponsive client blocks an update. Confirm that
@@ -183,6 +187,11 @@ physical iOS or Android devices.
 
 ## Evidence and release limits
 
+- The 24/09/2026 sidebar/favicon follow-up passed 57 focused regressions,
+  mobile TypeScript, scoped lint, a production web export and 11 headless
+  Chrome checks at phone/desktop widths, including 200% text. The export was
+  isolated from unfinished game work. Install events and busy tabs are test
+  fixtures; physical-device installation remains unverified.
 - The 23/09/2026 artwork/PWA pass completed 534 focused regression tests,
   seven PWA client tests, icon validation, TypeScript and scoped lint checks.
   Web, Android and iOS JavaScript exports succeeded. These are not signed builds.

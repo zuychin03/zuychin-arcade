@@ -201,9 +201,14 @@ export at the root of an HTTPS origin. The standard `export:web` command builds
 the worker after Expo finishes; a raw `expo export` needs the additional
 `node scripts/build-pwa.cjs <export-directory>` step from `apps/mobile`.
 
-Players can use **Install Arcade** in the library when their browser supports
+Players can use **Install Arcade** at the bottom of the library sidebar when their browser supports
 an install prompt, or follow **Add Arcade to your device** for browser-menu
-instructions. iPhone and iPad users can use Share, Add to Home Screen. Native
+instructions. On phones, open the navigation menu to find these controls.
+The install control is hidden in standalone mode and after a recognised install.
+Browsers with native install prompts show it only when installation is offered.
+Browsers without installation detection may not recognise an existing home-screen
+shortcut until it has been opened on the same browser storage profile.
+iPhone and iPad users can use Share, Add to Home Screen. Native
 iOS and Android builds remain available from the same codebase.
 
 This is an online-first PWA, not an offline multiplayer mode. Only public

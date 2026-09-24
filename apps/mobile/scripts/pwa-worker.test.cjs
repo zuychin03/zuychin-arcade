@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const { Buffer } = require('node:buffer');
 const { createHash, webcrypto } = require('node:crypto');
 const test = require('node:test');
-const { buildWorker, PRECACHE } = require('./build-pwa.cjs');
+const { buildWorker, versionFaviconLinks, PRECACHE } = require('./build-pwa.cjs');
 
 const origin = 'https://arcade.example';
 const asset = '/assets/public.0123456789abcdef0123456789abcdef.webp';
@@ -79,6 +79,25 @@ test('version is deterministic and content-sensitive, never affected by route HT
   f.write('index.html', 'private route'); f.write('service-worker.js', first.source);
   assert.equal(buildWorker(f.directory).version, first.version);
   f.write(asset, 'two'); assert.notEqual(buildWorker(f.directory).version, first.version);
+});
+
+test('exported favicon links are content-versioned on every route and stable on rebuild', t => {
+  const f = fixture(t);
+  f.write('favicon.ico', 'controller icon');
+  for (const file of ['index.html', 'coup/game.html']) f.write(file, '<head><link rel="icon" href="/favicon.ico"></head>');
+  f.write('offline.html', '<link rel="icon" href="/icons/icon-192.png">');
+  const first = buildWorker(f.directory);
+  versionFaviconLinks(f.directory, first);
+  const read = file => fs.readFileSync(path.join(f.directory, file), 'utf8');
+  for (const file of ['index.html', 'coup/game.html']) assert(read(file).includes(`/favicon.ico?v=${first.faviconVersion}`));
+  assert.equal(read('offline.html'), '<link rel="icon" href="/icons/icon-192.png">');
+  const html = read('index.html'); versionFaviconLinks(f.directory, buildWorker(f.directory));
+  assert.equal(read('index.html'), html);
+  f.write('favicon.ico', 'updated controller icon');
+  const next = buildWorker(f.directory); assert.notEqual(next.faviconVersion, first.faviconVersion);
+  versionFaviconLinks(f.directory, next);
+  assert(read('index.html').includes(`/favicon.ico?v=${next.faviconVersion}`));
+  assert(!read('index.html').includes(first.faviconVersion));
 });
 
 test('build traverses directories even when enumeration loses directory metadata', t => {

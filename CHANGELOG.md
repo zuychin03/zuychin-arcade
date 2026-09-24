@@ -13,6 +13,13 @@
 
 ### Interface
 
+- Moved PWA installation and update controls to the bottom of the desktop
+  sidebar and mobile navigation drawer, keeping the game library unobstructed.
+- Hide installation controls in standalone mode and after a recognised install,
+  including returning visits and other tabs. Native browser install offers
+  restore the option after an uninstall.
+- Restored the complete controller/Z favicon and versioned its exported URL
+  so browser tabs refresh the corrected artwork.
 - Added an online-first installable PWA with controller/Z home-screen icons,
   browser installation guidance, offline recovery and room-safe update controls.
 - Added 252 custom illustrations across all nine games, including individual

@@ -41,7 +41,9 @@ Motion explains a state change or direct interaction. Reduced motion removes spa
 
 ## Installed web app utilities
 
-Installation and update controls belong in a library-only utility strip, using the existing Arcade palette and at least 48 px control heights. Browser-specific installation help appears inline. Keep these utilities out of gameplay; an update must not interrupt a room or another active Arcade tab.
+Installation and update controls sit at the bottom of the library sidebar or, on phones, inside the navigation drawer. Use the existing Arcade palette and at least 48 px control heights. Browser-specific installation help appears inline and scrolls with navigation when space is limited. Keep these utilities out of the main content and gameplay; an update must not interrupt a room or another active Arcade tab. The service-worker controller remains mounted independently of sidebar visibility.
+
+Hide installation controls for recognised installations, without hiding available updates. On browsers with native install prompts, wait for the browser's offer; a fresh offer can clear a remembered installation after uninstall. Other browsers retain manual guidance when no installed signal is available.
 
 The offline recovery page states that multiplayer needs a network connection and provides a retry action. It may explain that the app checks the previous seat after reconnecting, but must not promise that the seat or room remains available.
 

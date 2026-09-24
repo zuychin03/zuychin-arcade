@@ -5,7 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 const ts = require('typescript');
 const Jimp = require('jimp-compact');
-const { parseMaster, microMaster, squareSvg, textArtifacts, parseArgs, rasterSpecs, mobileRoot, masterPath } = require('./generate-brand.cjs');
+const { parseMaster, squareSvg, textArtifacts, parseArgs, rasterSpecs, mobileRoot, masterPath } = require('./generate-brand.cjs');
 
 function master() { return parseMaster(fs.readFileSync(masterPath, 'utf8')); }
 function evaluate(source, modules = {}) {
@@ -40,28 +40,30 @@ test('generated navigation constants, raster hashes and SVG derivatives match th
   assert.equal(constants().ARCADE_LOGO_SVG, value.svg);
   assert.equal(constants().ARCADE_LOGO_ASPECT, value.aspect);
   assert(Math.hypot(0.52, 0.52 / value.aspect) <= 66 / 108);
-  assert(squareSvg(microMaster(value), rasterSpecs[3]).includes('viewBox="0 0 64 64"'));
+  assert(squareSvg(value, rasterSpecs[3]).includes('viewBox="0 0 64 64"'));
 });
 
-test('favicon extracts exactly the two tagged Z strokes and uses the tighter micro aspect', () => {
+test('favicon preserves all nine approved paths, including controller grips, D-pad and buttons', () => {
   const value = master();
-  const micro = microMaster(value);
   const sourcePaths = value.svg.match(/<path\b[^>]*\/>/g);
-  const microPaths = micro.svg.match(/<path\b[^>]*\/>/g);
-  assert.equal(microPaths.length, 2);
-  for (const [index, id] of ['z-upper', 'z-lower'].entries()) {
-    const original = sourcePaths.find(tag => tag.includes(`id="${id}"`));
-    assert(original, id);
-    assert.equal(microPaths[index].match(/\bd="([^"]+)"/)[1], original.match(/\bd="([^"]+)"/)[1]);
-  }
-  assert.equal(micro.viewBox, '340 210 570 535');
-  assert.equal(micro.aspect, 570 / 535);
-  assert.notEqual(micro.aspect, value.aspect);
-  const favicon = squareSvg(micro, rasterSpecs[3]);
-  assert(favicon.includes(`height="${64 * 0.86 / micro.aspect}"`));
-  assert.equal((favicon.match(/<path\b/g) || []).length, 2);
-  assert(!/<circle\b/.test(favicon));
-  assert.throws(() => microMaster(parseMaster(value.svg.replace('id="z-upper"', 'id="not-upper"'))), /z-upper/);
+  const favicon = fs.readFileSync(path.join(mobileRoot, 'assets/favicon.svg'), 'utf8');
+  assert.equal(sourcePaths.length, 9);
+  assert.deepEqual(favicon.match(/<path\b[^>]*\/>/g), sourcePaths);
+  assert(favicon.includes(`viewBox="${value.viewBox}"`));
+  assert(favicon.includes(`height="${64 * 0.86 / value.aspect}"`));
+  assert.equal(rasterSpecs.some(spec => spec.micro), false);
+});
+
+test('favicon raster retains the full wide controller silhouette', async () => {
+  const image = await Jimp.read(path.join(mobileRoot, 'assets/favicon.png'));
+  const points = [];
+  image.scan(0, 0, 64, 64, (x, y, offset) => {
+    if (image.bitmap.data[offset] > 80 && image.bitmap.data[offset + 2] > 45) points.push({ x, y });
+  });
+  const width = Math.max(...points.map(p => p.x)) - Math.min(...points.map(p => p.x)) + 1;
+  const height = Math.max(...points.map(p => p.y)) - Math.min(...points.map(p => p.y)) + 1;
+  assert(width / height > 1.7, 'A cropped Z must not replace the approved controller');
+  assert(points.some(p => p.x < 12) && points.some(p => p.x > 51), 'Both controller grips must survive');
 });
 
 for (const spec of rasterSpecs) {

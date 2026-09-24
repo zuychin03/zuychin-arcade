@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { createPortal } from 'react-dom';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ARCADE } from '../../constants/theme';
 import { useGameStore } from '../../store/useGameStore';
+
+const INSTALL_KEY = 'arcade:pwa-installed';
 
 type InstallPrompt = Event & {
   prompt: () => Promise<void>;
@@ -21,29 +24,65 @@ export default function PwaControls() {
   const hasSession = useGameStore(s => Boolean(s.token || s.roomCode || s.room));
   const [installPrompt, setInstallPrompt] = useState<InstallPrompt | null>(null);
   const [installed, setInstalled] = useState(false);
+  const [manualInstall, setManualInstall] = useState(false);
   const [ios, setIos] = useState(false);
   const [instructions, setInstructions] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [message, setMessage] = useState('');
+  const [sidebarTarget, setSidebarTarget] = useState<HTMLElement | null>(null);
   const registration = useRef<ServiceWorkerRegistration | null>(null);
   const lock = useRef<UpdateLock | null>(null);
   const requestUpdate = useRef<() => void>(() => undefined);
 
   useEffect(() => {
+    if (pathname !== '/' || hasSession) { setSidebarTarget(null); return; }
+    const locate = () => setSidebarTarget(document.getElementById('pwa-sidebar-controls'));
+    locate();
+    // Keep registration mounted while the mobile drawer opens and closes.
+    const observer = new MutationObserver(locate);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [pathname, hasSession]);
+
+  useEffect(() => {
     const standalone = window.matchMedia('(display-mode: standalone)');
-    const updateInstalled = () => setInstalled(standalone.matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone));
+    const isStandalone = () => standalone.matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
+    const rememberInstalled = (value: boolean) => {
+      try {
+        if (value) window.localStorage.setItem(INSTALL_KEY, '1');
+        else window.localStorage.removeItem(INSTALL_KEY);
+      } catch { /* Storage can be unavailable in private browsing. */ }
+    };
+    const onInstalled = () => {
+      rememberInstalled(true);
+      setInstalled(true); setInstallPrompt(null); setInstructions(false);
+    };
+    const updateInstalled = () => {
+      if (isStandalone()) { onInstalled(); return; }
+      try { setInstalled(window.localStorage.getItem(INSTALL_KEY) === '1'); } catch { /* Keep the current installation signal. */ }
+    };
     updateInstalled();
+    // Chromium only offers installation after confirming the app is installable.
+    setManualInstall(!('onbeforeinstallprompt' in window));
     setIos(/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     standalone.addEventListener('change', updateInstalled);
-    const onInstallPrompt = (event: Event) => { event.preventDefault(); setInstallPrompt(event as InstallPrompt); };
-    const onInstalled = () => { setInstalled(true); setInstallPrompt(null); setInstructions(false); };
+    const onInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      if (isStandalone()) return;
+      // A fresh browser offer also permits reinstalling after an uninstall.
+      rememberInstalled(false);
+      setInstalled(false); setInstallPrompt(event as InstallPrompt);
+    };
+    const onStorage = (event: StorageEvent) => { if (event.key === INSTALL_KEY || event.key === null) updateInstalled(); };
     window.addEventListener('beforeinstallprompt', onInstallPrompt);
     window.addEventListener('appinstalled', onInstalled);
+    window.addEventListener('storage', onStorage);
     return () => {
       standalone.removeEventListener('change', updateInstalled);
       window.removeEventListener('beforeinstallprompt', onInstallPrompt);
       window.removeEventListener('appinstalled', onInstalled);
+      window.removeEventListener('storage', onStorage);
     };
   }, []);
 
@@ -154,40 +193,42 @@ export default function PwaControls() {
     try {
       await installPrompt.prompt();
       const choice = await installPrompt.userChoice;
-      if (choice.outcome === 'accepted') setInstalled(true);
+      if (choice.outcome === 'accepted') {
+        setInstalled(true); setInstructions(false);
+        try { window.localStorage.setItem(INSTALL_KEY, '1'); } catch { /* Installation does not require storage. */ }
+      }
       setInstallPrompt(null);
     } catch {
       setInstallPrompt(null);
+      setManualInstall(true);
       setInstructions(true);
     }
   };
 
-  if (pathname !== '/' || hasSession || (installed && !waiting && !message)) return null;
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={[styles.content, {
-      paddingBottom: Math.max(12, insets.bottom), paddingLeft: Math.max(16, insets.left), paddingRight: Math.max(16, insets.right),
-    }]} testID="pwa-controls">
+  const showInstall = !installed && (Boolean(installPrompt) || manualInstall);
+  if (pathname !== '/' || hasSession || !sidebarTarget || (!showInstall && !waiting && !message)) return null;
+  return createPortal(
+    <View style={[styles.content, { paddingBottom: Math.max(12, insets.bottom) }]} testID="pwa-controls">
       <View style={styles.row}>
-        {!installed ? <Pressable accessibilityRole="button" onPress={() => void install()} style={styles.button}>
+        {showInstall ? <Pressable accessibilityRole="button" onPress={() => void install()} style={styles.button}>
           <Text style={styles.buttonText}>{installPrompt ? 'Install Arcade' : 'Add Arcade to your device'}</Text>
         </Pressable> : null}
         {waiting ? <Pressable accessibilityRole="button" disabled={updating} onPress={() => requestUpdate.current()} style={styles.button}>
           <Text style={styles.buttonText}>{updating ? 'Updating…' : 'Update Arcade'}</Text>
         </Pressable> : null}
       </View>
-      {instructions ? <Text style={styles.copy}>{ios
+      {showInstall && instructions ? <Text style={styles.copy}>{ios
         ? 'Open your browser’s Share menu, choose Add to Home Screen, then Add. If it is missing, open this page in Safari.'
         : 'Open your browser’s menu and choose Install app or Add to Home screen. If neither appears, this browser may not support installation. You can still play here.'}</Text> : null}
       {message || updating ? <Text style={styles.copy} accessibilityLiveRegion="polite">{updating ? 'Applying the update. Your library will reopen shortly.' : message}</Text> : null}
-    </ScrollView>
+    </View>, sidebarTarget,
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 0, flexShrink: 0, maxHeight: '40%', backgroundColor: ARCADE.surface },
-  content: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12, gap: 8 },
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  button: { minHeight: 48, maxWidth: '100%', justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, backgroundColor: ARCADE.panel },
+  content: { width: '100%', minWidth: 0, paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12, gap: 8 },
+  row: { gap: 8 },
+  button: { minHeight: 48, width: '100%', justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 12, borderRadius: 12, backgroundColor: ARCADE.surface },
   buttonText: { fontFamily: 'Outfit_700Bold', fontSize: 16, lineHeight: 22, color: ARCADE.cyan, flexShrink: 1 },
   copy: { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: ARCADE.text, maxWidth: 680 },
 });

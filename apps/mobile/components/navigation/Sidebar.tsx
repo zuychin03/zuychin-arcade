@@ -63,12 +63,13 @@ export default function Sidebar() {
         </View>
       </View>
 
-      <ScrollView style={styles.navContainer} contentContainerStyle={{ paddingBottom: 16 }}>
+      <ScrollView style={styles.navContainer} contentContainerStyle={{ flexGrow: 1, paddingBottom: 16 }}>
         <NavItem icon="controller-classic" label="Hub" route="/" isActive={pathname === '/'} />
         <NavItem icon="trophy-outline" label="Ranks" route="/leaderboard" isActive={pathname === '/leaderboard'} />
         <NavItem icon="account-circle-outline" label="Profile" route="/profile" isActive={pathname === '/profile'} />
         <NavItem icon="information-outline" label="About" route="/about" isActive={pathname === '/about'} />
         <NavItem icon="shield-lock-outline" label="Privacy" route="/privacy" isActive={pathname === '/privacy'} />
+        <View nativeID="pwa-sidebar-controls" style={{ marginTop: 'auto', width: '100%' }} />
       </ScrollView>
     </BlurView>
   );

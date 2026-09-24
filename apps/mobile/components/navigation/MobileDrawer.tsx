@@ -87,7 +87,7 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
         role="dialog"
         style={styles.drawer}
       >
-        <ScrollView style={styles.scroll}>
+        <ScrollView style={styles.scroll} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.drawerHeader}>
             <View style={styles.headerControls}>
               <View testID="drawer-brand-lockup" style={styles.brandLockup}>
@@ -116,6 +116,7 @@ export default function MobileDrawer({ isOpen, onClose }: Props) {
             <NavItem icon="information-outline" label="About" isActive={pathname === '/about'} onPress={() => { router.push('/about'); onClose(); }} />
             <NavItem icon="shield-lock-outline" label="Privacy" isActive={pathname === '/privacy'} onPress={() => { router.push('/privacy'); onClose(); }} />
           </View>
+          <View nativeID="pwa-sidebar-controls" style={{ marginTop: 'auto', width: '100%' }} />
         </ScrollView>
       </Animated.View>
     </View>

@@ -29,13 +29,25 @@ function buildWorker(directory) {
   const policy = { assets, precache: PRECACHE, maxEntries: 400, maxBytes: 20 * 1024 * 1024 };
   const version = digest(JSON.stringify(policy) + template).slice(0, 24);
   const config = { version, ...policy };
-  return { version, config, source: template.replace('null /* PWA_CONFIG */', JSON.stringify(config)) };
+  const faviconVersion = files.includes('/favicon.ico') ? digest(fs.readFileSync(path.join(root, 'favicon.ico'))).slice(0, 16) : null;
+  return { version, config, source: template.replace('null /* PWA_CONFIG */', JSON.stringify(config)), faviconVersion, htmlFiles: files.filter(file => file.endsWith('.html')) };
+}
+
+function versionFaviconLinks(directory, build) {
+  if (!build.faviconVersion) return;
+  for (const file of build.htmlFiles) {
+    const filename = path.join(directory, file);
+    const html = fs.readFileSync(filename, 'utf8');
+    const updated = html.replace(/href=(["'])\/favicon\.ico(?:\?[^"']*)?\1/g, `href="/favicon.ico?v=${build.faviconVersion}"`);
+    if (updated !== html) fs.writeFileSync(filename, updated);
+  }
 }
 
 if (require.main === module) {
   const directory = path.resolve(process.argv[2] || path.join(__dirname, '../dist'));
+  versionFaviconLinks(directory, buildWorker(directory));
   const result = buildWorker(directory);
   fs.writeFileSync(path.join(directory, 'service-worker.js'), result.source);
   console.log(`PWA worker ${result.version}: ${Object.keys(result.config.assets).length} allowlisted assets, ${PRECACHE.length} precached public files`);
 }
-module.exports = { buildWorker, PRECACHE };
+module.exports = { buildWorker, versionFaviconLinks, PRECACHE };

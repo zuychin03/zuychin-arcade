@@ -128,7 +128,11 @@ test('sidebar links remain scrollable on short screens and native sizing stays u
     const scroll = children(tree).find(node => node.type === 'ScrollView');
     assert.equal(scroll.props.style.flex, 1);
     assert.equal(scroll.props.style.minHeight, 0);
-    assert.equal(children(scroll).length, 5);
+    assert.equal(children(scroll).filter(node => node.props.accessibilityRole === 'link').length, 5);
+    assert.equal(scroll.props.contentContainerStyle.flexGrow, 1);
+    const footer = children(scroll).at(-1);
+    assert.equal(footer.props.nativeID, 'pwa-sidebar-controls');
+    assert.equal(footer.props.style.marginTop, 'auto');
     if (platform !== 'web') {
       assert.equal(tree.props.style.width, 260);
       assert.equal(tree.props.style.minWidth, undefined);
