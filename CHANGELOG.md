@@ -4,6 +4,24 @@
 
 ### Games
 
+- Added local implementations of Feed the Kraken, Telestrations (12-player
+  edition), Cartographers Heroes and Dixit Odyssey (2024 base), with completed
+  local full-game browser checks. This is not a deployment-readiness claim.
+- Added title-specific creation options, private decision windows, forfeit
+  recovery, rulebooks and original cover artwork for the four additions.
+- Completed the 84-image original Dixit deck with consistent full-composition
+  card faces and mobile asset budgets.
+- Added illustrated Kraken course cards and a visual navigation reference.
+  Ritual responses no longer reveal an absent hidden role through phase changes;
+  Look-Out shows the inspected top card even while holding a navigation hand.
+  Navigator forfeiture consistently settles the committed pair.
+- Replaced raw Kraken chart coordinates with readable waypoints and named
+  destinations; the current position now displays a vessel token.
+- Registered the semibold Outfit face used by Cartographers and added a
+  suite-wide font-registration regression.
+- Shuffled Telestrations' original prompt pool per game, exhausting it before
+  reuse instead of repeating the same menus in every new room.
+
 - Added selectable Coup Reformation + Inquisitor rooms for 2–10 players,
   including allegiance setup, conversion, Treasury embezzlement and private
   examination. Base Coup remains the default 2–6-player version.
@@ -47,6 +65,14 @@
   result rosters and shared navigation.
 
 ### Reliability and verification
+
+- Added focused engine, socket and client regressions for the four additions,
+  including rematch revision fencing and restored private drawings.
+- Passed all 1,553 mobile and 917 server regressions, final web/Android/iOS
+  bundle exports and the server production build on 24/09/2026. Full-game browser evidence
+  includes all four additions, with limits documented separately.
+- Extended the optional results setup SQL with per-game limits for 11-, 12-
+  and 100-seat games. This repository change does not apply hosted SQL.
 
 - Hardened authoritative command revisions, private projections, reconnect and
   departure handling while preserving the disclosed digital game adaptations.

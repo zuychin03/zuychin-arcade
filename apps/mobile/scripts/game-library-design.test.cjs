@@ -137,6 +137,7 @@ function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }) {
     'react-native': { ScrollView: 'ScrollView', Text: 'Text', View: 'View', useWindowDimensions: () => ({ ...viewport, fontScale }) },
     'expo-router': { router: { push: route => routes.push(route) } }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../store/useGameStore': { useGameStore: fn => fn(store) }, '../../lib/api': {}, '../../lib/tokenUtils': {}, '../../lib/storage': {},
+    '../../lib/gameRoutes': load('lib/gameRoutes.ts', {}),
     '../../components/ui/GameTile': { GameTile: 'GameTile' }, '../../components/ui/ScalePressable': { ScalePressable: 'ScalePressable' }, '../../components/ui/NeonButton': { NeonButton: 'NeonButton' },
     '../../assets/game-art/saboteur-cover.webp': 17,
     '../../assets/game-art/colt-cover.webp': 18,
@@ -147,8 +148,9 @@ function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }) {
     '../../assets/game-art/not-alone-cover.webp': 23,
     '../../assets/game-art/bang-cover.webp': 24,
     '../../assets/game-art/libertalia-cover.webp': 25,
+    ...Object.fromEntries(['feed-the-kraken', 'telestrations', 'cartographers-heroes', 'dixit-odyssey'].map((game, i) => [`../../assets/game-art/${game}-cover.webp`, 26 + i])),
     '../../components/king-of-tokyo/TokyoArtwork': {}, '../../components/skull-king/SkullKingArtwork': {}, '../../components/citadels/CitadelsArtwork': {}, '../../components/not-alone/NotAloneArtwork': {}, '../../components/remaining/RemainingArtwork': {},
-    '../../constants/theme': Object.fromEntries(['ARCADE', 'BANG', 'CITADELS', 'COLT', 'COUP', 'LIBERTALIA', 'MINE', 'NOT_ALONE', 'SKULL_KING', 'TOKYO'].map(key => [key, palette])),
+    '../../constants/theme': Object.fromEntries(['ARCADE', 'BANG', 'CARTOGRAPHERS', 'CITADELS', 'COLT', 'COUP', 'DIXIT', 'KRAKEN', 'LIBERTALIA', 'MINE', 'NOT_ALONE', 'SKULL_KING', 'TELESTRATIONS', 'TOKYO'].map(key => [key, palette])),
   };
   const Hub = load('app/(arcade)/index.tsx', modules).default;
   return { routes, render: () => { state.reset(); return Hub(); } };
@@ -157,12 +159,14 @@ const expected = [
   ['SABOTEUR', '3–10 players', '/saboteur'], ['COUP', '2–10 players', '/coup'], ['KING OF TOKYO', '2–6 players', '/king-of-tokyo'],
   ['SKULL KING', '3–8 players', '/skull-king'], ['CITADELS', '4–7 players', '/citadels'], ['NOT ALONE', '2–7 players', '/not-alone'],
   ['BANG!', '4–7 players', '/bang'], ['LIBERTALIA', '2–6 players', '/libertalia'], ['COLT EXPRESS', '2–6 players', '/colt-express'],
+  ['FEED THE KRAKEN', '5–11 players', '/feed-the-kraken'], ['TELESTRATIONS', '4–12 players', '/telestrations'],
+  ['CARTOGRAPHERS HEROES', '1–100 players', '/cartographers-heroes'], ['DIXIT ODYSSEY', '3–12 players', '/dixit-odyssey'],
 ];
 
-test('catalogue keeps all nine titles, player counts and actual route callbacks in order', () => {
+test('catalogue keeps all thirteen titles, player counts and actual route callbacks in order', () => {
   const h = hubHarness(); const tree = h.render();
   const tiles = nodes(tree).filter(node => node.type === 'GameTile');
-  assert.equal(tiles.length, 9);
+  assert.equal(tiles.length, expected.length);
   tiles.forEach((tile, i) => {
     assert.equal(tile.props.title, expected[i][0]);
     assert.equal(tile.props.players, expected[i][1]);
@@ -186,8 +190,12 @@ test('catalogue keeps all nine titles, player counts and actual route callbacks 
   assert.equal(tiles[6].props.coverNativeID, 'game-cover-bang');
   assert.equal(tiles[7].props.coverSource, 25);
   assert.equal(tiles[7].props.coverNativeID, 'game-cover-libertalia');
-  assert.equal(tiles.at(-1).props.coverSource, 18);
-  assert.equal(tiles.at(-1).props.coverNativeID, 'game-cover-colt');
+  assert.equal(tiles[8].props.coverSource, 18);
+  assert.equal(tiles[8].props.coverNativeID, 'game-cover-colt');
+  for (let i = 9; i < expected.length; i++) {
+    assert.equal(tiles[i].props.coverSource, 26 + i - 9);
+    assert.equal(tiles[i].props.coverNativeID, `game-cover-${expected[i][2].slice(1)}`);
+  }
   assert(nodes(tree).some(node => node.props.style?.maxWidth === 1280));
   assert.equal(nodes(tree).filter(node => node.props.accessibilityRole === 'header').length, 1);
   assert(!nodes(tree).some(node => node.props.entering));

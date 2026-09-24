@@ -6,6 +6,11 @@ import {
   CITADELS_MIN_PLAYERS,
   COLT_MAX_PLAYERS,
   COLT_MIN_PLAYERS,
+  DIXIT_MAX_PLAYERS,
+  DIXIT_MIN_PLAYERS,
+  CARTOGRAPHERS_HEROES_MAX_PLAYERS,
+  CARTOGRAPHERS_HEROES_MIN_PLAYERS,
+  TELESTRATIONS_LIMITS,
   COUP_LIMITS,
   KING_OF_TOKYO_MAX_PLAYERS,
   KING_OF_TOKYO_MIN_PLAYERS,
@@ -27,6 +32,10 @@ import type { NotAloneServerState } from '../game/not-alone/engine.js';
 import type { BangServerState } from '../game/bang/engine.js';
 import type { LibertaliaServerState } from '../game/libertalia/engine.js';
 import type { ColtServerState } from '../game/colt-express/engine.js';
+import type { DixitServerState } from '../game/dixit-odyssey/engine.js';
+import type { CartographersHeroesServerState } from '../game/cartographers-heroes/engine.js';
+import type { FeedTheKrakenServerState } from '../game/feed-the-kraken/engine.js';
+import type { TelestrationsState } from '@zuychin-arcade/types';
 import { generateUniqueRoomCode } from '../utils/roomCode.js';
 
 export interface ServerPlayer extends Player {
@@ -54,7 +63,11 @@ export type RoomGame =
   | { id: 'not_alone'; state: NotAloneServerState }
   | { id: 'bang'; state: BangServerState }
   | { id: 'libertalia'; state: LibertaliaServerState }
-  | { id: 'colt_express'; state: ColtServerState };
+  | { id: 'colt_express'; state: ColtServerState }
+  | { id: 'dixit_odyssey'; state: DixitServerState }
+  | { id: 'cartographers_heroes'; state: CartographersHeroesServerState }
+  | { id: 'feed_the_kraken'; state: FeedTheKrakenServerState }
+  | { id: 'telestrations'; state: TelestrationsState };
 
 export interface ServerRoom {
   roomCode: string;
@@ -80,6 +93,10 @@ export function roomMaxPlayers(gameId: GameId, config: RoomConfig): number {
   if (gameId === 'bang') return BANG_MAX_PLAYERS;
   if (gameId === 'libertalia') return LIBERTALIA_MAX_PLAYERS;
   if (gameId === 'colt_express') return COLT_MAX_PLAYERS;
+  if (gameId === 'dixit_odyssey') return DIXIT_MAX_PLAYERS;
+  if (gameId === 'cartographers_heroes') return CARTOGRAPHERS_HEROES_MAX_PLAYERS;
+  if (gameId === 'feed_the_kraken') return 11;
+  if (gameId === 'telestrations') return TELESTRATIONS_LIMITS.maxPlayers;
   return MAX_PLAYERS;
 }
 
@@ -93,6 +110,10 @@ export function roomMinPlayers(gameId: GameId, config: RoomConfig): number {
   if (gameId === 'bang') return BANG_MIN_PLAYERS;
   if (gameId === 'libertalia') return LIBERTALIA_MIN_PLAYERS;
   if (gameId === 'colt_express') return COLT_MIN_PLAYERS;
+  if (gameId === 'dixit_odyssey') return DIXIT_MIN_PLAYERS;
+  if (gameId === 'cartographers_heroes') return CARTOGRAPHERS_HEROES_MIN_PLAYERS;
+  if (gameId === 'feed_the_kraken') return 5;
+  if (gameId === 'telestrations') return TELESTRATIONS_LIMITS.minPlayers;
   return SABOTEUR_MIN_PLAYERS;
 }
 

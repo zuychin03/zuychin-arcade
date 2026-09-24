@@ -1,0 +1,74 @@
+[
+  {
+    "cardId": "dream-03",
+    "source": "docs/design/game-art/dixit-dream-03.png",
+    "promptFile": "docs/design/game-art/dixit-dream-03-prompt.md",
+    "description": "An older woman hangs rain clouds on a washing line in a sunlit courtyard while a fox drinks from a puddle below."
+  },
+  {
+    "cardId": "dream-04",
+    "source": "docs/design/game-art/dixit-dream-04.png",
+    "promptFile": "docs/design/game-art/dixit-dream-04-prompt.md",
+    "description": "A sleeping polar bear floats inside a submerged train carriage with a tiny brass diving helmet on its head and golden fish nearby."
+  },
+  {
+    "cardId": "dream-05",
+    "source": "docs/design/game-art/dixit-dream-05.png",
+    "promptFile": "docs/design/game-art/dixit-dream-05-prompt.md",
+    "description": "A gardener kneels on a tiled rooftop beside a giant cracked egg containing a lit spiral staircase, with pigeons along the roof."
+  },
+  {
+    "cardId": "dream-06",
+    "source": "docs/design/game-art/dixit-dream-06.png",
+    "promptFile": "docs/design/game-art/dixit-dream-06-prompt.md",
+    "description": "A woman holding a blue umbrella crosses a harp-shaped rope bridge above snowy mountains under a starry sky."
+  },
+  {
+    "cardId": "dream-07",
+    "source": "docs/design/game-art/dixit-dream-07.png",
+    "promptFile": "docs/design/game-art/dixit-dream-07-prompt.md",
+    "description": "A rabbit pushes a small moon across flour on a kitchen table beside a rolling pin and pear, with a meadow visible through an open metal door."
+  },
+  {
+    "cardId": "dream-08",
+    "source": "docs/design/game-art/dixit-dream-08.png",
+    "promptFile": "docs/design/game-art/dixit-dream-08-prompt.md",
+    "description": "A boy in a red coat stands on a giant leaf floating on a mountain lake, with a carnival wheel visible underwater."
+  },
+  {
+    "cardId": "dream-09",
+    "source": "docs/design/game-art/dixit-dream-09.png",
+    "promptFile": "docs/design/game-art/dixit-dream-09-prompt.md",
+    "description": "A silver-haired woman sews star-filled fabric at a sewing machine while an orange cat reaches toward a glowing star on the floor."
+  },
+  {
+    "cardId": "dream-10",
+    "source": "docs/design/game-art/dixit-dream-10.png",
+    "promptFile": "docs/design/game-art/dixit-dream-10-prompt.md",
+    "description": "A giraffe peers into a snow-covered lighthouse among sunflowers, with golden light illuminating roots beneath the soil."
+  },
+  {
+    "cardId": "dream-11",
+    "source": "docs/design/game-art/dixit-dream-11.png",
+    "promptFile": "docs/design/game-art/dixit-dream-11-prompt.md",
+    "description": "A man holding an orange paper bird sits inside a giant hourglass beneath a floating green island while stone birds fly outside."
+  },
+  {
+    "cardId": "dream-12",
+    "source": "docs/design/game-art/dixit-dream-12.png",
+    "promptFile": "docs/design/game-art/dixit-dream-12-prompt.md",
+    "description": "A red octopus plays an upright piano on a stormy beach as white butterflies rise from the keys, with yellow boots beside it."
+  },
+  {
+    "cardId": "dream-13",
+    "source": "docs/design/game-art/dixit-dream-13.png",
+    "promptFile": "docs/design/game-art/dixit-dream-13-prompt.md",
+    "description": "An older man carries an open doorway showing snowy mountains through a lavender field while a white goat wearing a key follows."
+  },
+  {
+    "cardId": "dream-14",
+    "source": "docs/design/game-art/dixit-dream-14.png",
+    "promptFile": "docs/design/game-art/dixit-dream-14-prompt.md",
+    "description": "Two children lower a wooden ladder into a cracked flowerpot containing a small town, curling green plants and chimney bubbles."
+  }
+]

@@ -82,6 +82,7 @@ function setup(remove = async () => undefined) {
     } },
     'expo-router': { router: { replace: (route) => routes.push(route) } },
     '../store/useGameStore': { useGameStore: store },
+    '../lib/revisionPair': load('../lib/revisionPair.ts', {}),
     '../constants/config': { SERVER_URL: 'https://local.invalid' },
     '../lib/storage': { clearAuthIfMatches: async (token) => { removedTokens.push(token); await remove(token); } },
     '../lib/dialog': {
@@ -1475,6 +1476,77 @@ test('an old cleanup retry cannot affect a newer session or its dialog', async (
   assert.equal(h.routes.length, 0);
   assert.equal(h.dialog().title, 'A newer dialog');
 });
+
+for (const [gameId, prefix] of [['dixit_odyssey', 'dixit'], ['cartographers_heroes', 'cartographers'], ['feed_the_kraken', 'kraken'], ['telestrations', 'telestrations']]) {
+  const shared = (revision, extra = {}) => publicState(revision, { gameId, ...extra });
+  const owned = (revision, extra = {}) => privateState(revision, { gameId, ...extra });
+  test(`${gameId} pairs interleaved frames monotonically in either arrival order`, () => {
+    const h = setup();
+    h.store.getState().setRoom({ gameId, roomCode: 'ABCD-EFGH' });
+    const socket = h.mount();
+    socket.receive('private_state', owned(0));
+    assert.equal(h.store.getState()[`${prefix}Public`], null);
+    socket.receive('game_state', shared(0));
+    assert.equal(h.store.getState()[`${prefix}Syncing`], false);
+    socket.receive('game_state', shared(2));
+    socket.receive('private_state', owned(1));
+    assert.equal(h.store.getState()[`${prefix}Public`].revision, 0);
+    socket.receive('private_state', owned(3));
+    socket.receive('game_state', shared(2));
+    assert.equal(h.store.getState()[`${prefix}Public`].revision, 0);
+    socket.receive('game_state', shared(3));
+    assert.equal(h.store.getState()[`${prefix}Public`].revision, 3);
+    assert.equal(h.store.getState()[`${prefix}Private`].revision, 3);
+    h.unmount();
+  });
+  test(`${gameId} rejects foreign room, player, game and malformed revision frames`, () => {
+    const h = setup();
+    h.store.getState().setRoom({ gameId, roomCode: 'ABCD-EFGH' });
+    const socket = h.mount();
+    for (const extra of [{ roomCode: undefined }, { roomCode: 'WRNG-SEAT' }, { revision: NaN }, { revision: -1 }, { revision: 1.5 }, { gameId: 'coup' }]) {
+      socket.receive('game_state', shared(0, extra));
+      socket.receive('private_state', owned(0, extra));
+    }
+    assert.equal(h.store.getState()[`${prefix}Public`], null);
+    socket.receive('game_state', shared(0));
+    socket.receive('private_state', owned(0, { playerId: 'p1' }));
+    socket.receive('private_state', owned(0, { playerId: undefined }));
+    assert.equal(h.store.getState()[`${prefix}Public`], null);
+    socket.receive('private_state', owned(0));
+    assert.equal(h.store.getState()[`${prefix}Syncing`], false);
+    h.unmount();
+  });
+  test(`${gameId} reconnect needs two fresh frames and rematches reject old results`, () => {
+    const h = setup();
+    h.store.getState().setRoom({ gameId, roomCode: 'ABCD-EFGH' });
+    const socket = h.mount();
+    socket.receive('game_state', shared(12, { status: 'game_over' }));
+    socket.receive('private_state', owned(12));
+    socket.receive('disconnect'); socket.receive('connect');
+    assert.equal(h.store.getState()[`${prefix}Public`].revision, 12);
+    socket.receive('game_state', shared(13));
+    socket.receive('private_state', owned(12));
+    assert.equal(h.store.getState()[`${prefix}Syncing`], true);
+    socket.receive('private_state', owned(13));
+    assert.equal(h.store.getState()[`${prefix}Syncing`], false);
+    socket.receive('game_state', shared(12, { status: 'game_over' }));
+    assert.equal(h.store.getState()[`${prefix}Public`].revision, 13);
+    h.unmount();
+  });
+  test(`${gameId} identity replacement clears secrets and retires old callbacks`, () => {
+    const h = setup();
+    h.store.getState().setRoom({ gameId, roomCode: 'ABCD-EFGH' });
+    const socket = h.mount();
+    socket.receive('game_state', shared(0)); socket.receive('private_state', owned(0));
+    const old = socket.callback('private_state');
+    h.store.getState().setAuth(auth('different', 'p1'));
+    old(owned(1));
+    assert.equal(h.store.getState()[`${prefix}Public`], null);
+    assert.equal(h.store.getState()[`${prefix}Private`], null);
+    assert.equal(h.store.getState()[`${prefix}Syncing`], true);
+    h.unmount();
+  });
+}
 
 test('clearing state restores the synchronisation fence', () => {
   const h = setup();

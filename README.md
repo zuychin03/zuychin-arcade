@@ -1,8 +1,11 @@
-# zuychin-arcade ⛏️
+# Zuychin Arcade
 
 Private online multiplayer board-game hub for friends. The local arcade includes
 **Saboteur, Coup, King of Tokyo, Skull King, Citadels, Not Alone, BANG!,
-Libertalia: Winds of Galecrest, and Colt Express**. No accounts or sign-up are
+Libertalia: Winds of Galecrest, and Colt Express**, plus local expansion
+implementations of **Feed the Kraken, Telestrations, Cartographers Heroes and
+Dixit Odyssey**. All four additions have completed local full-game browser checks.
+No accounts or sign-up are
 required: players join a room with a room code and display name.
 
 The commercial-game implementations are private engineering prototypes. Public
@@ -11,6 +14,44 @@ respective rights holders.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for a detailed tour of the codebase,
 the game engine, the socket protocol, and how to add a new game to the hub.
+
+## Four-game expansion
+
+These local additions retain the existing room-code workflow and require no
+new environment variables or dependencies. Full-game browser checks cover
+creation, lobby, gameplay, results, recovery and rematch, separately from
+engine and socket tests. See [testing evidence and limits](docs/TESTING.md#evidence-and-release-limits)
+for the exact scenarios; these checks do not establish device or production readiness.
+
+| Game | Players | Implemented rules baseline and room options |
+| --- | --- | --- |
+| Feed the Kraken | 5–11 | Base game with all 21 characters; quick voyage, or long voyage for 7–11 players |
+| Telestrations | 4–12 | Dedicated 12-player edition; three rounds, friendly/competitive/no scoring, either passing direction, original prompt offers or a shared category |
+| Cartographers Heroes | 1–100 | Standalone Heroes, maps C/D, all 19 drawing cards and 16 scoring objectives, four seasons and solo scoring |
+| Dixit Odyssey | 3–12 | 2024 base rules, two voting dials, three-player double submissions, 30-point ending and an original 84-image deck |
+
+The complete Dixit deck uses 84 distinct original illustrations, not the
+publisher's artwork, with uniformly sized 512×768 card faces. Telestrations
+uses original prompts from a shuffled pool, exhausted before reuse, and human
+scoring decisions. There is no automatic semantic grading or imported prompt deck.
+
+Explicit leave and expired reconnect grace forfeit a seat. Kraken forfeits do
+not trigger a feeding victory. Telestrations cancels the unfinished round,
+retains settled scores and restarts it with at least four remaining players.
+Dixit cancels the unfinished round and continues with at least three.
+Cartographers retains submitted map changes, reroutes unfinished ambush work,
+and excludes forfeited seats from further scoring and victory. Each game
+explains its departure policy in its own reference.
+
+Kraken uses clockwise character-response priority and private responses from
+every aboard player during rituals. The latter prevents phase transitions from
+revealing whether a hidden role can act. Navigation cards share their illustrated
+faces with the ship's reference; actual routes and effects remain live game state.
+The voyage chart uses named destinations, numbered waypoints and a vessel token,
+with zoom and a Find ship control for small screens.
+
+The existing distribution-rights, HTTPS hosting and native signing/device
+acceptance requirements still apply.
 
 ## Stack
 
@@ -38,7 +79,7 @@ zuychin-arcade/
 │   │   │   ├── game/<game>/          per game: authoritative engine, projection, socket handlers
 │   │   │   ├── lib/                  Supabase client + result persistence
 │   │   │   └── utils/                JWT signing, room-code generator
-│   │   └── scripts/<game>/           per game: simulate.ts (engine) + smoke.ts (socket e2e)
+│   │   └── scripts/<game>/           simulations and standalone socket smoke runners
 │   └── mobile/           Expo app (web browser, Expo Go, or sideloaded APK)
 │       ├── app/                      expo-router routes: arcade hub + per-game route groups
 │       ├── components/               per-game pieces + shared UI, lobby and navigation
@@ -140,8 +181,10 @@ through a LAN address, add that exact origin (including its port) to
 
 ## Testing & verification
 
-Engine simulations and socket smoke scripts live under
-`apps/server/scripts/<game>/`, exposed as `simulate:<game>` / `smoke:<game>`.
+Engine simulations and socket checks are exposed as
+`simulate:<game>` / `smoke:<game>`. Most simulation scripts live under
+`apps/server/scripts/<game>/`; the four expansion socket suites and Dixit
+simulation coverage use their Node test files under `apps/server/src/game/<game>/`.
 Server regression suites use Node's built-in test runner under
 `apps/server/src/` and `apps/server/scripts/`; client component and tooling regressions are
 `apps/mobile/scripts/*.test.cjs`. Reproducible commands, browser isolation and

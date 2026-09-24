@@ -16,6 +16,10 @@ import { recoverDisconnectedNotAlonePlayers } from '../game/not-alone/socketHand
 import { recoverDisconnectedBangPlayers } from '../game/bang/socketHandlers.js';
 import { recoverDisconnectedLibertaliaPlayers } from '../game/libertalia/socketHandlers.js';
 import { recoverDisconnectedColtPlayers } from '../game/colt-express/socketHandlers.js';
+import { recoverDisconnectedDixitPlayers } from '../game/dixit-odyssey/socketHandlers.js';
+import { recoverDisconnectedCartographersPlayers } from '../game/cartographers-heroes/socketHandlers.js';
+import { recoverDisconnectedFeedTheKrakenPlayers } from '../game/feed-the-kraken/socketHandlers.js';
+import { recoverDisconnectedTelestrationsPlayers } from '../game/telestrations/socketHandlers.js';
 
 export const LOBBY_RESERVATION_GRACE_MS = 60_000;
 export const RECONNECT_GRACE_MS = 30_000;
@@ -74,6 +78,14 @@ function handlePresenceExpiry(io: Server, room: ServerRoom, player: ServerPlayer
     recoverDisconnectedLibertaliaPlayers(io, room);
   } else if (room.status === 'in_game' && room.game?.id === 'colt_express') {
     recoverDisconnectedColtPlayers(io, room);
+  } else if (room.status === 'in_game' && room.game?.id === 'dixit_odyssey') {
+    recoverDisconnectedDixitPlayers(io, room);
+  } else if (room.status === 'in_game' && room.game?.id === 'cartographers_heroes') {
+    recoverDisconnectedCartographersPlayers(io, room);
+  } else if (room.status === 'in_game' && room.game?.id === 'feed_the_kraken') {
+    recoverDisconnectedFeedTheKrakenPlayers(io, room);
+  } else if (room.status === 'in_game' && room.game?.id === 'telestrations') {
+    recoverDisconnectedTelestrationsPlayers(io, room);
   }
 
   roomStore.touch(room);

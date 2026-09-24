@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/dixit-dream-14.png",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2923969,
+    "sha256": "ff02c4362368681da452a6e865a8ac6e252cc2ade12100dbee5e51a571c6eaa0"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 72,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "dixit-dream-14.webp",
+      "width": 512,
+      "maxBytes": 102400,
+      "height": 768,
+      "bytes": 76150,
+      "sha256": "79725aee5c927eda6b3e8aaaa2b496f923a0e4cf8cea38f8502ccdf66524ec49"
+    }
+  ],
+  "totalBytes": 76150,
+  "maxTotalBytes": 614400
+}

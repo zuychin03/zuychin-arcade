@@ -44,6 +44,18 @@ test('disabled rankings expose only the public notice rather than setup details 
   assert(!/database|storage|configur|connect|supabase/i.test(JSON.stringify(result.body)));
 });
 
+test('new games retain disabled ranking copy and use their intended ranking metric', async () => {
+  for (const game of ['feed_the_kraken', 'telestrations', 'cartographers_heroes', 'dixit_odyssey']) {
+    const disabled = await request('/leaderboard?game=' + game);
+    assert.equal(disabled.status, 503);
+    assert.deepEqual(disabled.body, { code: 'RANKINGS_DISABLED', message: 'Rankings are currently disabled by the administrator.' });
+    const enabled = await request('/leaderboard?game=' + game, { data: [], error: null });
+    assert.equal(enabled.status, 200);
+    assert.deepEqual(enabled.calls.filter(call => call[0] === 'order').map(call => call[1]),
+      game === 'feed_the_kraken' ? ['wins', 'total_nuggets', 'display_name'] : ['total_nuggets', 'wins', 'display_name']);
+  }
+});
+
 test('invalid or repeated game filters are rejected', async () => {
   for (const url of ['/leaderboard?game=unknown', '/leaderboard?game=', '/leaderboard?game=coup&game=bang']) {
     assert.equal((await request(url)).status, 400);

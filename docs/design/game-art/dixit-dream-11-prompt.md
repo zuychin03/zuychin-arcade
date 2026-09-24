@@ -1,0 +1,15 @@
+# Dixit dream-11
+
+Method: built-in imagegen, one independent generation.
+
+Source: `dixit-dream-11.png`
+
+Inspection: original output viewed; full-bleed portrait scene, no visible text, logo or UI. Selected without cropping, recolouring or compositing.
+
+## Exact generation prompt
+
+Use case: illustration-story
+Asset type: original playable image-association card, portrait 2:3 full-bleed scene (1024 by 1536 composition).
+Primary request: A young adult man with dark skin in a plain cream coat sits on a crescent-shaped stone bench inside an enormous empty glass hourglass. Sand falls upward beside him and forms a small green island in the upper chamber. He holds a folded orange paper bird; distant birds outside the glass are made of dark stone. Centred architectural medium-wide view, dusty rose dawn, moss green and warm sand, calm ambiguous scene.
+Style/medium: premium tactile painterly illustration with crafted miniature depth, layered natural brush textures, convincing material surfaces, readable distinct focal shapes and atmospheric perspective. One coherent ambiguous surreal scene that invites multiple interpretations.
+Constraints: original artwork only, no publisher artwork, no named-artist imitation. Scene reaches all four edges. No border, frame, card mockup, captions, letters, numerals, logos, watermark or UI. No collage, panels, contact sheet or repeated icon layout. Do not add extra symbolic objects. Preserve portrait 2:3 framing.

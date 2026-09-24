@@ -270,7 +270,8 @@ function coverHarness() {
   const jsx = (type, props) => ({ type, props });
   const modules = {
     react: { useState: () => [failed, value => { failed = value; }], useRef: () => sourceRef },
-    'react/jsx-runtime': { jsx },
+    'react/jsx-runtime': { jsx, jsxs: jsx },
+    'expo-linear-gradient': { LinearGradient: 'LinearGradient' },
     'react-native': { Image: 'Image', View: 'View', StyleSheet: { absoluteFill: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 } } },
     '../../constants/theme': { ARCADE: { surface: 'surface' } },
   };
@@ -319,10 +320,11 @@ test('GameCover reserves a decorative noninteractive full-composition ratio with
   assert.equal(tree.props.accessible, false);
   assert.equal(tree.props.accessibilityElementsHidden, true);
   assert.equal(tree.props.importantForAccessibility, 'no-hide-descendants');
-  assert.equal(tree.props.children.props.resizeMode, 'contain');
-  assert.equal(tree.props.children.props.alt, '');
-  assert.equal(tree.props.children.props.source, 1);
-  const imageStyle = Object.assign({}, ...tree.props.children.props.style);
+  const image = nodes(tree).find(node => node.type === 'Image');
+  assert.equal(image.props.resizeMode, 'contain');
+  assert.equal(image.props.alt, '');
+  assert.equal(image.props.source, 1);
+  const imageStyle = Object.assign({}, ...image.props.style);
   assert.equal(imageStyle.width, '100%');
   assert.equal(imageStyle.height, '100%');
   assert.equal(imageStyle.position, 'absolute');
@@ -331,19 +333,22 @@ test('GameCover reserves a decorative noninteractive full-composition ratio with
 
 test('GameCover retains geometry on errors and does not let an old source error hide its replacement', () => {
   const render = coverHarness(); const fallback = { type: 'Fallback', props: {} };
+  const image = tree => nodes(tree).find(node => node.type === 'Image');
+  const hasFallback = tree => nodes(tree).includes(fallback);
   const previous = render({ source: 1, fallback, aspectRatio: 2 });
-  previous.props.children.props.onError();
+  image(previous).props.onError();
   const failed = render({ source: 1, fallback, aspectRatio: 2 });
-  assert.equal(failed.props.children, fallback);
+  assert(hasFallback(failed));
+  assert.equal(image(failed), undefined);
   assert.equal(failed.props.style.aspectRatio, 2);
   const next = render({ source: 2, fallback, aspectRatio: 2 });
-  previous.props.children.props.onError();
-  assert.equal(render({ source: 2, fallback }).props.children.props.source, 2);
-  next.props.children.props.onError();
-  assert.equal(render({ source: 2, fallback }).props.children, fallback);
-  previous.props.children.props.onError();
-  assert.equal(render({ source: 2, fallback }).props.children, fallback);
-  assert.equal(render({ source: 3 }).props.children.props.source, 3);
+  image(previous).props.onError();
+  assert.equal(image(render({ source: 2, fallback })).props.source, 2);
+  image(next).props.onError();
+  assert(hasFallback(render({ source: 2, fallback })));
+  image(previous).props.onError();
+  assert(hasFallback(render({ source: 2, fallback })));
+  assert.equal(image(render({ source: 3 })).props.source, 3);
 });
 
 test('GameCover rejects invalid ratios without losing its loading footprint', () => {

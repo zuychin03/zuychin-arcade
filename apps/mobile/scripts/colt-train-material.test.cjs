@@ -21,7 +21,9 @@ function harness(game) {
       return [states[index], value => { states[index] = value; }];
     } },
     'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { View: 'View', Text: 'Text', ScrollView: 'ScrollView' },
+    'react-native': { View: 'View', Text: 'Text', ScrollView: 'ScrollView', useWindowDimensions: () => ({ width: 1280, height: 900, fontScale: 1 }) },
+    './TrainArtwork': { TrainArtwork: 'TrainArtwork' },
+    '../../hooks/useIntrinsicCardHeight': { useIntrinsicCardHeight: () => ({ forCard: key => ({ minimumHeight: 0, measurementKey: key, onMeasure() {} }) }) },
     '@zuychin-arcade/types': { COLT_CHARACTERS: characters },
     '../ui/NeonButton': { NeonButton: 'Button' },
     '../../constants/theme': { COLT: colours },
@@ -39,7 +41,7 @@ const player = (playerId, character, carIndex, level, more = {}) => ({ playerId,
 const base = (more = {}) => ({ trainCars: 3, marshalCar: 2, players: [], turnOrder: [], lootBySpace: {}, ...more });
 const scrollNode = tree => nodes(tree).find(node => node.type === 'ScrollView');
 const cars = tree => scrollNode(tree).props.children;
-const levelNode = (car, level) => nodes(car).find(node => node.type === 'View' && Array.isArray(node.props.children) && node.props.children.some(child => child?.type === 'Text' && content(child) === level));
+const levelNode = (car, level) => nodes(car).find(node => node.props?.testID?.endsWith(`-${level.toLowerCase()}`));
 
 test('pieces and loot stay in their authoritative car and level', () => {
   const game = base({ players: [player('me', 'ghost', 0, 'roof'), player('Second bandit', 'doc', 1, 'inside')], turnOrder: ['me', 'Second bandit'], lootBySpace: { '0:roof': [{ id: 'p', type: 'purse', value: null }], '1:inside': [{ id: 'j', type: 'jewel', value: 500 }] } });

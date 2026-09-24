@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/kraken-course-red.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2855368,
+    "sha256": "a3b2ac2ad303c92b6af1ca66ec404d64991fb8b1309eee74702b9b5c9c0d88c5"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "kraken-course-red.webp",
+      "width": 480,
+      "maxBytes": 56320,
+      "height": 320,
+      "bytes": 43078,
+      "sha256": "39f0503adee6412e659d6ec473fc1020ca7c56560f1f162351c3abffd0748c77"
+    }
+  ],
+  "totalBytes": 43078,
+  "maxTotalBytes": 614400
+}

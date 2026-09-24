@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/dixit-odyssey-dream-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2641197,
+    "sha256": "f4ca0224c61020ef5d6bf21d07d45a99d9fd0b20f67d4593b69f79bd6215726b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "dixit-odyssey-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 64208,
+      "sha256": "9e7c70308ef6a64143452a386effe0f7abefa43ecd09bfba5350ae471492ab96"
+    },
+    {
+      "file": "dixit-odyssey-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 178834,
+      "sha256": "a62bbde685cedc566e74eab569c8597e66bf6a5ad116cdd2fdc99ae305abbe30"
+    }
+  ],
+  "totalBytes": 243042,
+  "maxTotalBytes": 614400
+}

@@ -57,6 +57,47 @@ Replace `saboteur` with `coup`, `king-of-tokyo`, `skull-king`, `citadels`,
 authoritative engine. Socket smoke scripts use real HTTP and Socket.IO against
 isolated local servers. They do not replace human or browser interaction.
 
+The four expansion slugs are `feed-the-kraken`, `telestrations`,
+`cartographers-heroes` and `dixit-odyssey`. Each has `test:<game>`,
+`simulate:<game>` and `smoke:<game>` aliases. Dixit's simulation alias runs
+its engine regression file, including seeded complete matches. The completed
+local browser scenarios and their boundaries are recorded below.
+
+Focused client checks, from the repository root:
+
+```powershell
+node --test --test-concurrency=1 apps/mobile/scripts/dixit-client.test.cjs apps/mobile/scripts/kraken-client.test.cjs apps/mobile/scripts/telestrations-client.test.cjs apps/mobile/scripts/telestrations-review.test.cjs apps/mobile/scripts/cartographers-client.test.cjs
+node --test --test-concurrency=1 apps/mobile/scripts/dixit-artwork.test.cjs apps/mobile/scripts/game-art-assets.test.cjs apps/mobile/scripts/kraken-material.test.cjs apps/mobile/scripts/voyage-map.test.cjs apps/mobile/scripts/font-registration.test.cjs
+```
+
+The client harnesses exercise real hooks/components with controlled transports.
+They prove neither browser paint nor physical touch behaviour. The expansion's
+loopback browser runner, `apps/mobile/scripts/four-games-ui-smoke.cjs`, uses an
+explicit web export compiled against `https://localhost:3214` and an independently
+running local-only API on port 3213. It owns its temporary static server and TLS
+proxy. Do not run another proxy on port 3214 at the same time. Its JSON receipts
+and screenshots record the exact scope; it is automated UI coverage, not an
+independent human playtest.
+
+`apps/mobile/scripts/dixit-ui-smoke.cjs` uses the same API and exclusive TLS
+proxy ports. It plays a three-seat match through visible controls, validates
+scores independently and observes authorised projections without injecting
+game commands. Run these browser scripts one at a time against the explicit
+export path. The full-game runner and the manual tester must not compete for
+the same proxy.
+
+`apps/mobile/scripts/kraken-ui-smoke.cjs <export-path> --run` also requires
+exclusive ownership of that proxy. It creates five isolated seats through the
+UI, plays a natural voyage, then rematches and tests a departure. It checks
+private-state boundaries, winner eligibility, reloads, ship visibility and
+navigation-card geometry. Randomly unencountered phases are listed separately
+in the report; a successful run does not imply every character or map event
+appeared. Omitting `--run` prevents accidental execution.
+
+The optional `supabase.sql` results function now accepts the additions' maximum
+seat counts. Reviewing that SQL file or testing a mocked result writer does not
+prove a hosted migration. Apply it separately only when authorised.
+
 Coup's simulation command runs both Base (2–6 players) and Reformation +
 Inquisitor (2–10). Its socket suite covers complete games and rematches for
 both variants, plus revision fencing and owner-only examination decisions.
@@ -187,6 +228,85 @@ physical iOS or Android devices.
 
 ## Evidence and release limits
 
+- The final complete server sweep on 24/09/2026 passed all 917 tests across
+  34 files, with no failures, skips or cancellations. This includes the existing
+  games and four additions, complete HTTP/socket matches, rematches, privacy,
+  room lifecycle and security fixtures. Shared-types and server TypeScript
+  passed. Test-owned local services used no hosted persistence credentials.
+- The expansion's shared regression pass on 24/09/2026 passed 88 server
+  security/lifecycle/results checks, 114 mobile session/socket/room-code checks
+  and 13 catalogue checks. Two old nine-game test fixtures were updated to
+  assert the exact thirteen-game routes, metrics and assets. Server/mobile
+  TypeScript and scoped lint also passed.
+- The final complete mobile script sweep passed all 1,553 tests across 102
+  files, with no failures or skips, including the readable voyage-chart checks.
+  Eight stale Colt train/GameCover fixture
+  imports were reproduced and repaired before that successful rerun. Raw failed
+  and successful logs are retained locally.
+- The expanded Android and iOS Hermes exports succeeded with 483 and 479
+  assets respectively; both embedded API URLs passed the export validator.
+  These used a local QA endpoint and include the final prompt-shuffle wording
+  and readable voyage-chart changes. They are bundle-compatibility evidence,
+  not signed builds or device tests.
+- The final server production build and all ten dependency-compatibility checks
+  passed. Scoped lint was clean across all 86 changed or new mobile source
+  files. Sandbox child-process restrictions initially prevented some runners
+  from starting; the permitted reruns executed the checks normally.
+- The Telestrations shuffled-prompt follow-up passed 40 engine tests, nine
+  socket tests and server TypeScript. It covers seeded reproducibility,
+  exhaustion before reuse, partial-round refills, cancelled offers and
+  projection privacy. Earlier browser evidence predates this server-only
+  prompt-order change.
+- A manual Cartographers Map C solo game completed all four seasons with
+  independently chosen placements, 16/15/28/41 seasonal points and 100 total.
+  The displayed 80-point solo adjustment correctly produced 20, Master
+  Mapsmith. Creation, lobby, Summer reload, results/map inspection, rematch
+  reset and normal leave passed at phone/desktop sizes. This run did not cover
+  multiplayer, Map D or 200% text. An earlier detached-browser attempt remains
+  an interrupted attempt of unknown cause, not a completed game or a confirmed
+  product defect.
+- Kraken's final compiled-web run completed two natural voyages through 493 accepted
+  visible-control actions: five isolated seats, then four after an explicit
+  rematch departure. All nine expected phases appeared, including rituals and
+  telescope inspection. Reload, privacy, faction winner eligibility, 48 px
+  targets, card-row geometry and ship visibility passed, with 39 captures and
+  no browser errors, blocked requests or rejected actions. Character powers
+  were passed in this run; live telescope coverage is not live Look-Out
+  character activation. The latter remains covered by engine/client tests.
+  The final chart uses readable waypoints, named destinations and a vessel
+  token; rendered zoom and Find ship checks passed at 320/375/1280 px.
+- The final Telestrations browser rerun completed the three-round category
+  fixture, then a separate offered-prompt smoke checked 12 distinct private
+  offers, visible selection/submission, authorised handoff, reload and normal
+  exits. The offered-prompt smoke is not an additional full game. All four
+  entrances/references passed five-width capture checks, including the revised
+  prompt-pool wording. Eleven PWA browser checks then passed on the same export,
+  including its versioned favicon, installation guidance, update gates and
+  offline recovery. Installation events and busy tabs remain labelled fixtures.
+- After the final chart change, web, Android and iOS exports were repeated.
+  Eleven PWA browser checks passed again on web bundle SHA-256
+  `94296f7086235438c2ed7160c3312365b6d30c5cca5f01c18eaef0cfe1ce768e`,
+  worker `2714a402d44ae032537b7aef`. The corrected favicon loaded with its
+  content-versioned URL. The final Kraken run used this same frozen export.
+- The four-game work on 24/09/2026 passed 115 focused client/artwork/material
+  regressions, including all 84 Dixit identities and font registration across
+  the app. The integrated engine/socket sweep passed 189 tests before the
+  subsequent Kraken privacy follow-up; do not treat that earlier count as
+  validation of later engine changes.
+- The Telestrations compiled-web run completed three rounds at four seats:
+  60 submissions, 36 handoffs, 48 page reveals and 12 scored books. It checked
+  exact saved drawing recovery, an independently expected shared score,
+  rematch and an undersized forfeit ending. The same run captured all four
+  entrances/rulebooks at five widths. These are automated browser fixtures,
+  not independent manual play or native acceptance.
+- A separate Dixit compiled-web run completed a three-seat match through seven
+  rounds to 30 points, checking mixed/all/none correct-vote outcomes against an
+  independent scoring calculation, dual votes, two decoys, reloads, rematch and
+  an undersized ending. The post-fix Kraken engine/socket suite passed all 46
+  tests, including complete seeded voyages and five HTTP/socket matches.
+- Chrome decoded the exported controller favicon at 16, 32 and 48 px. Its
+  complete silhouette is preserved; the fine central Z loses detail at 16 px.
+  Exported routes use a content-versioned favicon URL to avoid the old icon.
 - The 24/09/2026 sidebar/favicon follow-up passed 57 focused regressions,
   mobile TypeScript, scoped lint, a production web export and 11 headless
   Chrome checks at phone/desktop widths, including 200% text. The export was

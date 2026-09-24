@@ -17,6 +17,14 @@ import type {
   LibertaliaPublicState,
   ColtPrivateState,
   ColtPublicState,
+  DixitPublicState,
+  DixitPrivateState,
+  CartographersHeroesPublicState,
+  CartographersHeroesPrivateState,
+  FeedTheKrakenPublicState,
+  FeedTheKrakenPrivateState,
+  TelestrationsPublicState,
+  TelestrationsPrivateState,
   RoomPublicState,
 } from '@zuychin-arcade/types';
 
@@ -74,6 +82,18 @@ interface GameStore {
   coltPublic: ColtPublicState | null;
   coltPrivate: ColtPrivateState | null;
   coltSyncing: boolean;
+  dixitPublic: DixitPublicState | null;
+  dixitPrivate: DixitPrivateState | null;
+  dixitSyncing: boolean;
+  cartographersPublic: CartographersHeroesPublicState | null;
+  cartographersPrivate: CartographersHeroesPrivateState | null;
+  cartographersSyncing: boolean;
+  krakenPublic: FeedTheKrakenPublicState | null;
+  krakenPrivate: FeedTheKrakenPrivateState | null;
+  krakenSyncing: boolean;
+  telestrationsPublic: TelestrationsPublicState | null;
+  telestrationsPrivate: TelestrationsPrivateState | null;
+  telestrationsSyncing: boolean;
 
   // Selected card (for plays)
   selectedCardId: string | null;
@@ -116,6 +136,14 @@ interface GameStore {
   setColtPrivate: (state: ColtPrivateState) => void;
   setColtState: (publicState: ColtPublicState, privateState: ColtPrivateState) => void;
   setColtSyncing: (syncing: boolean) => void;
+  setDixitState: (publicState: DixitPublicState, privateState: DixitPrivateState) => void;
+  setDixitSyncing: (syncing: boolean) => void;
+  setCartographersState: (publicState: CartographersHeroesPublicState, privateState: CartographersHeroesPrivateState) => void;
+  setCartographersSyncing: (syncing: boolean) => void;
+  setKrakenState: (publicState: FeedTheKrakenPublicState, privateState: FeedTheKrakenPrivateState) => void;
+  setKrakenSyncing: (syncing: boolean) => void;
+  setTelestrationsState: (publicState: TelestrationsPublicState, privateState: TelestrationsPrivateState) => void;
+  setTelestrationsSyncing: (syncing: boolean) => void;
   setSelectedCard: (cardId: string | null) => void;
   toggleRotated: () => void;
   clearAll: () => void;
@@ -153,6 +181,18 @@ const emptyState = () => ({
   coltPublic: null,
   coltPrivate: null,
   coltSyncing: true,
+  dixitPublic: null,
+  dixitPrivate: null,
+  dixitSyncing: true,
+  cartographersPublic: null,
+  cartographersPrivate: null,
+  cartographersSyncing: true,
+  krakenPublic: null,
+  krakenPrivate: null,
+  krakenSyncing: true,
+  telestrationsPublic: null,
+  telestrationsPrivate: null,
+  telestrationsSyncing: true,
   selectedCardId: null,
   rotated: false,
 });
@@ -197,6 +237,14 @@ export const useGameStore = create<GameStore>((set) => ({
   setColtPrivate: (coltPrivate) => set({ coltPrivate }),
   setColtState: (coltPublic, coltPrivate) => set({ coltPublic, coltPrivate, coltSyncing: false }),
   setColtSyncing: (coltSyncing) => set({ coltSyncing }),
+  setDixitState: (dixitPublic, dixitPrivate) => set({ dixitPublic, dixitPrivate, dixitSyncing: false }),
+  setDixitSyncing: (dixitSyncing) => set({ dixitSyncing }),
+  setCartographersState: (cartographersPublic, cartographersPrivate) => set({ cartographersPublic, cartographersPrivate, cartographersSyncing: false }),
+  setCartographersSyncing: (cartographersSyncing) => set({ cartographersSyncing }),
+  setKrakenState: (krakenPublic, krakenPrivate) => set({ krakenPublic, krakenPrivate, krakenSyncing: false }),
+  setKrakenSyncing: (krakenSyncing) => set({ krakenSyncing }),
+  setTelestrationsState: (telestrationsPublic, telestrationsPrivate) => set({ telestrationsPublic, telestrationsPrivate, telestrationsSyncing: false }),
+  setTelestrationsSyncing: (telestrationsSyncing) => set({ telestrationsSyncing }),
   setSelectedCard: (selectedCardId) => set({ selectedCardId, rotated: false }),
   toggleRotated: () => set((s) => ({ rotated: !s.rotated })),
   clearAll: () => set(emptyState()),

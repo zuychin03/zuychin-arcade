@@ -10,7 +10,7 @@ import { clearAuth, loadAuth } from '../lib/storage';
 import { isTokenExpired } from '../lib/tokenUtils';
 import { ArcadeDialogHost } from '../components/ui/ArcadeDialog';
 import { ARCADE } from '../constants/theme';
-import { useFonts as useOutfit, Outfit_400Regular, Outfit_700Bold, Outfit_800ExtraBold } from '@expo-google-fonts/outfit';
+import { useFonts as useOutfit, Outfit_400Regular, Outfit_600SemiBold, Outfit_700Bold, Outfit_800ExtraBold } from '@expo-google-fonts/outfit';
 import { useFonts as useSpaceMono, SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';
 import { useReducedMotionPreference } from '../hooks/useReducedMotionPreference';
 import PwaControls from '../components/pwa/PwaControls';
@@ -108,6 +108,7 @@ export default function RootLayout() {
 
   const [outfitLoaded, outfitError] = useOutfit({
     Outfit_400Regular,
+    Outfit_600SemiBold,
     Outfit_700Bold,
     Outfit_800ExtraBold,
   });
@@ -154,6 +155,10 @@ export default function RootLayout() {
         <Stack.Screen name="bang" />
         <Stack.Screen name="libertalia" />
         <Stack.Screen name="colt-express" />
+        <Stack.Screen name="dixit-odyssey" />
+        <Stack.Screen name="feed-the-kraken" />
+        <Stack.Screen name="telestrations" />
+        <Stack.Screen name="cartographers-heroes" />
       </Stack>
       <PwaControls />
       <ArcadeDialogHost />

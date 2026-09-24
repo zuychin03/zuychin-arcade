@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import type { Server } from 'socket.io';
 import type { GameId, JoinRoomResponse, JwtPayload, LeaderboardRow, RoomConfig } from '@zuychin-arcade/types';
+import { TELESTRATIONS_CATEGORIES } from '@zuychin-arcade/types';
 import { getRoomPublicState, roomMaxPlayers, roomStore, type ServerRoom } from '../store/RoomStore.js';
 import { signToken, verifyToken } from '../utils/jwt.js';
 import { isRoomCode } from '../utils/roomCode.js';
@@ -17,7 +18,7 @@ import {
   scheduleLobbyReservationExpiry,
 } from '../socket/roomLifecycle.js';
 
-const SUPPORTED_GAME_IDS: readonly GameId[] = ['saboteur', 'coup', 'king_of_tokyo', 'skull_king', 'citadels', 'not_alone', 'bang', 'libertalia', 'colt_express'];
+const SUPPORTED_GAME_IDS: readonly GameId[] = ['saboteur', 'coup', 'king_of_tokyo', 'skull_king', 'citadels', 'not_alone', 'bang', 'libertalia', 'colt_express', 'dixit_odyssey', 'cartographers_heroes', 'feed_the_kraken', 'telestrations'];
 const RATE_LIMIT_MAX_KEYS = 4_096;
 export const MAX_CONCURRENT_PASSWORD_OPERATIONS = 4;
 export const REST_RATE_LIMITS = {
@@ -25,6 +26,8 @@ export const REST_RATE_LIMITS = {
   generalPerIp: { limit: 300, windowMs: 60_000 },
   joinPerIp: { limit: 60, windowMs: 60_000 },
   joinPerRoom: { limit: 30, windowMs: 60_000 },
+  largeJoinPerIp: { limit: 120, windowMs: 60_000 },
+  largeJoinPerRoom: { limit: 120, windowMs: 60_000 },
 } as const;
 
 function isGameId(value: string): value is GameId {
@@ -136,6 +139,12 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
     RATE_LIMIT_MAX_KEYS,
   );
   let activePasswordOperations = 0;
+  const largeJoinIpLimiter = new FixedWindowRateLimiter(
+    REST_RATE_LIMITS.largeJoinPerIp.limit, REST_RATE_LIMITS.largeJoinPerIp.windowMs, RATE_LIMIT_MAX_KEYS,
+  );
+  const largeJoinRoomLimiter = new FixedWindowRateLimiter(
+    REST_RATE_LIMITS.largeJoinPerRoom.limit, REST_RATE_LIMITS.largeJoinPerRoom.windowMs, RATE_LIMIT_MAX_KEYS,
+  );
   const runPasswordOperation = async <T>(
     reply: FastifyReply,
     operation: () => Promise<T>,
@@ -201,6 +210,47 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
       }
       config.coupVariant = (nestedVariant ?? legacyVariant ?? 'base') as RoomConfig['coupVariant'];
     }
+    if (gameId === 'cartographers_heroes') {
+      const supplied = body.config;
+      if (supplied !== undefined && (supplied === null || typeof supplied !== 'object' || Array.isArray(supplied)
+        || Object.keys(supplied).some(key => key !== 'cartographersMapSide'))) {
+        return reply.code(400).send({ message: 'Invalid Cartographers Heroes configuration' });
+      }
+      const selected = (supplied as { cartographersMapSide?: unknown } | undefined)?.cartographersMapSide;
+      const side = selected === undefined ? 'C' : selected;
+      if (side !== 'C' && side !== 'D') return reply.code(400).send({ message: 'Choose map C or D' });
+      config.cartographersMapSide = side;
+    }
+    if (gameId === 'feed_the_kraken') {
+      const supplied = body.config;
+      if (supplied !== undefined && (supplied === null || typeof supplied !== 'object' || Array.isArray(supplied)
+        || Object.keys(supplied).some(key => key !== 'krakenJourney'))) {
+        return reply.code(400).send({ message: 'Invalid Feed the Kraken configuration' });
+      }
+      const selected = (supplied as { krakenJourney?: unknown } | undefined)?.krakenJourney;
+      const journey = selected === undefined ? 'quick' : selected;
+      if (journey !== 'quick' && journey !== 'long') return reply.code(400).send({ message: 'Choose a quick or long voyage' });
+      config.krakenJourney = journey;
+    }
+    if (gameId === 'telestrations') {
+      const supplied = body.config;
+      if (supplied !== undefined && (supplied === null || typeof supplied !== 'object' || Array.isArray(supplied)
+        || Object.keys(supplied).some(key => !['telestrationsScoringMode', 'telestrationsCategory', 'telestrationsDirection'].includes(key)))) {
+        return reply.code(400).send({ message: 'Invalid Telestrations configuration' });
+      }
+      const fields = (supplied ?? {}) as Record<string, unknown>;
+      const mode = fields.telestrationsScoringMode === undefined ? 'friendly' : fields.telestrationsScoringMode;
+      const direction = fields.telestrationsDirection === undefined ? 1 : fields.telestrationsDirection;
+      const category = fields.telestrationsCategory;
+      if (mode !== 'none' && mode !== 'friendly' && mode !== 'competitive') return reply.code(400).send({ message: 'Choose casual, friendly or competitive scoring' });
+      if (direction !== 1 && direction !== -1) return reply.code(400).send({ message: 'Choose a clockwise or anticlockwise passing direction' });
+      if (category !== undefined && (typeof category !== 'string' || !(TELESTRATIONS_CATEGORIES as readonly string[]).includes(category))) {
+        return reply.code(400).send({ message: 'Choose an available prompt category' });
+      }
+      config.telestrationsScoringMode = mode;
+      config.telestrationsDirection = direction;
+      if (category !== undefined) config.telestrationsCategory = category as string;
+    }
 
     let passwordHash: string | null = null;
     if (password !== null) {
@@ -230,8 +280,11 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
 
   app.post('/rooms/join', async (req, reply) => {
     setNoStore(reply);
-    if (!enforceRateLimit(reply, joinIpLimiter.consume(req.ip))) return;
     const body = (req.body ?? {}) as { roomCode?: string; password?: string; displayName?: string };
+    const candidateRoom = typeof body.roomCode === 'string' && isRoomCode(body.roomCode)
+      ? roomStore.get(body.roomCode) : undefined;
+    const largeRoom = candidateRoom?.gameId === 'cartographers_heroes';
+    if (!enforceRateLimit(reply, (largeRoom ? largeJoinIpLimiter : joinIpLimiter).consume(req.ip))) return;
     const displayName = validateDisplayName(body.displayName);
     if (!displayName) {
       return reply.code(400).send({ message: 'Display name must be 1–20 visible characters' });
@@ -249,7 +302,7 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
 
     let room = roomStore.get(body.roomCode);
     if (!room) return reply.code(404).send({ message: 'Room not found' });
-    if (!enforceRateLimit(reply, joinRoomLimiter.consume(room.roomCode))) return;
+    if (!enforceRateLimit(reply, (largeRoom ? largeJoinRoomLimiter : joinRoomLimiter).consume(room.roomCode))) return;
     pruneDisconnectedRoomPlayers(io, room);
     if (!roomStore.get(room.roomCode)) return reply.code(404).send({ message: 'Room not found' });
     const passwordHash = room.passwordHash;
@@ -370,7 +423,7 @@ export function registerRoomRoutes(app: FastifyInstance, io: Server, resultsClie
       return reply.code(503).send({ code: 'RANKINGS_DISABLED', message: 'Rankings are currently disabled by the administrator.' });
     }
     try {
-      const rankByWins = game === 'coup' || game === 'king_of_tokyo' || game === 'not_alone' || game === 'bang';
+      const rankByWins = game === 'coup' || game === 'king_of_tokyo' || game === 'not_alone' || game === 'bang' || game === 'feed_the_kraken';
       const query = game
         ? resultsClient.from('leaderboard_by_game')
           .select('display_name,games_played,total_nuggets,wins')

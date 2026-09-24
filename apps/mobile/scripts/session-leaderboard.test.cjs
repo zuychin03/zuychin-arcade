@@ -77,6 +77,7 @@ function harness(relative, overrides = {}) {
     'expo-router': { router: { push: () => {} } },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../store/useGameStore': { useGameStore },
+    '../../lib/gameRoutes': load('lib/gameRoutes.ts', {}),
     '../../lib/api': {
       ApiError,
       getRoom: async (...args) => { calls.push('getRoom'); return overrides.getRoom ? overrides.getRoom(...args) : liveRoom; },
@@ -88,7 +89,7 @@ function harness(relative, overrides = {}) {
       clearAuthIfMatches: async (token) => { assert.equal(token, auth.token); calls.push('clearAuth'); await overrides.clearAuth?.(); },
     },
     '../../components/ui/GameTile': { GameTile: 'GameTile' },
-    ...Object.fromEntries(['saboteur', 'coup', 'tokyo', 'skull', 'citadels', 'not-alone', 'bang', 'libertalia', 'colt'].map((game, index) => [`../../assets/game-art/${game}-cover.webp`, index + 1])),
+    ...Object.fromEntries(['saboteur', 'coup', 'tokyo', 'skull', 'citadels', 'not-alone', 'bang', 'libertalia', 'colt', 'feed-the-kraken', 'telestrations', 'cartographers-heroes', 'dixit-odyssey'].map((game, index) => [`../../assets/game-art/${game}-cover.webp`, index + 1])),
     '../../components/ui/ScalePressable': { ScalePressable: 'ScalePressable' },
     '../../components/ui/NeonButton': { NeonButton: 'NeonButton' },
     '../../components/king-of-tokyo/TokyoArtwork': {},
@@ -96,7 +97,7 @@ function harness(relative, overrides = {}) {
     '../../components/citadels/CitadelsArtwork': {},
     '../../components/not-alone/NotAloneArtwork': {},
     '../../components/remaining/RemainingArtwork': {},
-    '../../constants/theme': Object.fromEntries(['ARCADE', 'BANG', 'CITADELS', 'COLT', 'COUP', 'LIBERTALIA', 'MINE', 'NOT_ALONE', 'SKULL_KING', 'TOKYO'].map((key) => [key, {}]).concat([['neonText', () => ({})]])),
+    '../../constants/theme': Object.fromEntries(['ARCADE', 'BANG', 'CARTOGRAPHERS', 'CITADELS', 'COLT', 'COUP', 'DIXIT', 'KRAKEN', 'LIBERTALIA', 'MINE', 'NOT_ALONE', 'SKULL_KING', 'TELESTRATIONS', 'TOKYO'].map((key) => [key, {}]).concat([['neonText', () => ({})]])),
   };
   const Component = load(relative, modules).default;
   const render = () => {
@@ -194,7 +195,7 @@ test('hub library uses its available width for one, two or three unclamped colum
   await ui.flush();
   assert(ui.library());
   const titles = ui.gameTiles().map(tile => tile.props.title);
-  assert.equal(titles.length, 9);
+  assert.deepEqual(titles, ['SABOTEUR', 'COUP', 'KING OF TOKYO', 'SKULL KING', 'CITADELS', 'NOT ALONE', 'BANG!', 'LIBERTALIA', 'COLT EXPRESS', 'FEED THE KRAKEN', 'TELESTRATIONS', 'CARTOGRAPHERS HEROES', 'DIXIT ODYSSEY']);
   for (const [width, columns] of [[280, 1], [728, 2], [980, 3], [280, 1]]) {
     ui.library().props.onLayout({ nativeEvent: { layout: { width } } });
     await ui.flush();
@@ -338,10 +339,12 @@ test('leaderboard refresh cannot duplicate requests or leave updates after unmou
   assert.equal(ui.lateWrites(), 0);
 });
 
-test('all nine leaderboard games expose selected state and the correct metric', async () => {
-  const ui = harness(leaderboard);
-  const expectedMetrics = ['nuggets', 'wins', 'wins', 'points', 'points', 'wins', 'wins', 'points', 'loot'];
-  assert.equal(ui.tabs().length, 9);
+test('all thirteen leaderboard games request their exact IDs and expose the correct selected metric', async () => {
+  const requested = [];
+  const ui = harness(leaderboard, { getLeaderboard: async game => { requested.push(game); return []; } });
+  const expectedIds = ['saboteur', 'coup', 'king_of_tokyo', 'skull_king', 'citadels', 'not_alone', 'bang', 'libertalia', 'colt_express', 'feed_the_kraken', 'telestrations', 'cartographers_heroes', 'dixit_odyssey'];
+  const expectedMetrics = ['nuggets', 'wins', 'wins', 'points', 'points', 'wins', 'wins', 'points', 'loot', 'wins', 'points', 'points', 'points'];
+  assert.equal(ui.tabs().length, expectedIds.length);
   for (let index = 0; index < expectedMetrics.length; index++) {
     await ui.flush();
     ui.chooseTab(index);
@@ -352,7 +355,9 @@ test('all nine leaderboard games expose selected state and the correct metric', 
     assert.equal(ui.tabs().filter((button) => button.props['aria-pressed']).length, 1);
     assert(ui.text().includes(`all-time  ${tab.props.accessibilityLabel}   ${expectedMetrics[index]}`));
     assert.equal(tab.props.style.minHeight, 44);
+    assert.equal(requested.at(-1), expectedIds[index]);
   }
+  assert.deepEqual(requested, expectedIds);
   ui.unmount();
 });
 

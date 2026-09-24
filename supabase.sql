@@ -83,7 +83,14 @@ BEGIN
   IF jsonb_typeof(p_players) IS DISTINCT FROM 'array' THEN
     RAISE EXCEPTION 'Players must be an array' USING ERRCODE = '22023';
   END IF;
-  IF jsonb_array_length(p_players) NOT BETWEEN 1 AND 10 THEN
+  IF jsonb_array_length(p_players) NOT BETWEEN 1 AND
+    CASE p_game_name
+      WHEN 'cartographers_heroes' THEN 100
+      WHEN 'dixit_odyssey' THEN 12
+      WHEN 'telestrations' THEN 12
+      WHEN 'feed_the_kraken' THEN 11
+      ELSE 10
+    END THEN
     RAISE EXCEPTION 'Invalid result player count' USING ERRCODE = '22023';
   END IF;
   IF EXISTS (

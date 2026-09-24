@@ -1,7 +1,7 @@
 # Architecture
 
 This document explains how zuychin-arcade is put together: the monorepo, the
-shared types package, the nine authoritative game engines, the socket protocol,
+shared types package, the thirteen authoritative game engines, the socket protocol,
 the mobile app, and the patterns to follow when adding a game. Saboteur supplies
 the detailed engine and protocol examples below.
 
@@ -297,6 +297,52 @@ commands require `expectedRevision` and receive sender-only acknowledgements.
 Revisions stay monotonic across rematches. The client buffers partial pairs,
 adopts matching snapshots atomically and blocks actions while synchronising.
 
+### Four-game expansion engines
+
+The four new engines follow the same server-authoritative pattern under
+`src/game/`: pure state transitions, viewer-specific projections and separate
+socket handlers. Shared contracts and component inventories live in
+`packages/types/src`. They reuse the existing authenticated room lifecycle,
+reconnect grace, monotonic revisions and results writer.
+
+| Game | Room options and main state boundary |
+| --- | --- |
+| Feed the Kraken | 5–11 seats; `krakenJourney` selects quick or long. Hidden factions, private navigation hands and character choices stay out of public state. Sealed bids and ritual responses use explicit action windows. |
+| Telestrations | 4–12 seats; `telestrationsScoringMode`, `telestrationsCategory` and `telestrationsDirection`. Each seat receives only its current assignment and authorised predecessor page; the public reveal advances one page at a time. |
+| Cartographers Heroes | 1–100 seats; `cartographersMapSide` selects C or D. A common explore deck drives simultaneous private maps. Only the map owner or currently authorised ambush placer receives editable terrain. |
+| Dixit Odyssey | 3–12 seats; 2024 base rules. Private hands and submissions become an anonymous voting gallery, then an attributed scoring reveal. Three-player rounds use two decoys per non-storyteller. |
+
+**Kraken privacy.** Every uprising opens the same public ritual phase even if
+the Cult Leader is no longer aboard or has no available choice. Every aboard seat owes a
+private response; public state exposes neither responder identity nor a
+readiness count. Effects settle after all responses. The Leader's gun allocation
+uses the supply snapshot at that window's opening. Bid and ritual submissions
+may cross revisions only within their original action window; other actions
+require the current revision. A forfeited navigation officer's committed cards
+resolve automatically without granting a voluntary-refusal redraw.
+
+**Drawing bounds.** Telestrations stores normalised vector strokes, not image
+uploads: at most 96 strokes, 1,024 total points, 256 points per stroke and 16 KiB
+per drawing. The renderer uses eight colours and three stroke widths. Drafts
+are fenced by assignment window, seat token and draft revision, preserving
+reload recovery without allowing a stale draft to overwrite a later handoff.
+Socket broadcasts coalesce within one event-loop turn. Original prompt offers
+come from a per-game shuffled pool, exhausted before refill. Its pool and seed
+are server-only; category mode accepts player-written prompts instead.
+
+**Large maps.** Cartographers coalesces room emissions with a room-keyed pending
+callback rather than broadcasting a full room for every simultaneous placement.
+Public frames do not contain all 100 maps. At game over, an authenticated
+`cartographers:inspect_map` request retrieves one selected result map. The large
+room's join limits permit 120 requests per minute per IP and per room; general
+REST limits and the four-operation password concurrency bound still apply.
+
+**Image identity.** Dixit's engine stores 84 stable card identifiers. The client
+maps each identifier to a distinct original illustration and accessible
+description in `components/dixit/artwork.ts`. No generated text or artwork
+determines rules or scoring. Asset checks enforce deck completeness, distinct
+content hashes, dimensions, budgets and provenance sidecars.
+
 ### Persistence (`lib/supabase.ts`, `lib/saveGameResult.ts`, `supabase.sql`)
 
 The Supabase client is `null` when env vars are unset; result writes are disabled
@@ -377,9 +423,12 @@ profile) stays in `(arcade)/`.
 One Zustand store (`store/useGameStore.ts`) holds auth (`token`, `playerId`,
 `displayName`, `roomCode`), the room snapshot, each game's public/private
 projections and transient UI selection (`selectedCardId`, `rotated`).
-Saboteur, Coup, BANG!, Skull King, Citadels, Not Alone, Libertalia and Colt Express
+Saboteur, Coup, BANG!, Skull King, Citadels, Not Alone, Libertalia, Colt Express,
+Feed the Kraken, Telestrations, Cartographers Heroes and Dixit Odyssey
 adopt matching public/private revisions atomically and block actions while a
-pair is incomplete or reconnecting. King of Tokyo uses one viewer-specific frame,
+pair is incomplete or reconnecting. The four expansion games share
+`lib/revisionPair.ts` for room/player identity checks and monotonic pair adoption.
+King of Tokyo uses one viewer-specific frame,
 including private Lab offers and preferences; it requires matching room/viewer
 identity and a non-decreasing revision, and fences actions until reconnect refreshes it.
 There is no client-side

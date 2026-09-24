@@ -1,0 +1,20 @@
+[
+  {
+    "id": "kraken-course-blue",
+    "source": "docs/design/game-art/kraken-course-blue.png",
+    "promptFile": "docs/design/game-art/kraken-course-blue-prompt.md",
+    "generationTool": "builtin image_gen"
+  },
+  {
+    "id": "kraken-course-red",
+    "source": "docs/design/game-art/kraken-course-red.png",
+    "promptFile": "docs/design/game-art/kraken-course-red-prompt.md",
+    "generationTool": "builtin image_gen"
+  },
+  {
+    "id": "kraken-course-yellow",
+    "source": "docs/design/game-art/kraken-course-yellow.png",
+    "promptFile": "docs/design/game-art/kraken-course-yellow-prompt.md",
+    "generationTool": "builtin image_gen"
+  }
+]

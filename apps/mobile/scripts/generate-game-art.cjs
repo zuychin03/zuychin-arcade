@@ -40,6 +40,17 @@ const queuedGames = Object.fromEntries(catalogue.families.flatMap(family => fami
   square: (asset.aspect ?? family.aspect ?? 'square') === 'square',
 }])));
 const games = Object.freeze({
+  ...Object.fromEntries(['blue', 'red', 'yellow'].map(colour => [`kraken-course-${colour}`, {
+    sourceFile: `docs/design/game-art/kraken-course-${colour}.png`,
+    specs: [{ file: `kraken-course-${colour}.webp`, width: 480, maxBytes: 55 * 1024 }],
+    manifestFile: `kraken-course-${colour}-manifest.json`,
+  }])),
+  ...Object.fromEntries(Array.from({ length: 84 }, (_, index) => String(index + 1).padStart(2, '0')).map(number => [`dixit-dream-${number}`, {
+    sourceFile: `docs/design/game-art/dixit-dream-${number}.png`,
+    specs: [{ file: `dixit-dream-${number}.webp`, width: 512, maxBytes: 100 * 1024 }],
+    manifestFile: `dixit-dream-${number}-manifest.json`,
+    encoding: { quality: ['47', '64'].includes(number) ? 66 : 72 },
+  }])),
   saboteur: { sourceFile, specs, manifestFile: 'manifest.json' },
   colt: {
     sourceFile: 'docs/design/game-art/colt-train-concept.png',
@@ -119,6 +130,38 @@ const games = Object.freeze({
       { file: 'libertalia-hero.webp', width: 1280, maxBytes: 440 * 1024 },
     ],
     manifestFile: 'libertalia-manifest.json',
+  },
+  'feed-the-kraken': {
+    sourceFile: 'docs/design/game-art/feed-the-kraken-voyage-concept.png',
+    specs: [
+      { file: 'feed-the-kraken-cover.webp', width: 640, maxBytes: 160 * 1024 },
+      { file: 'feed-the-kraken-hero.webp', width: 1280, maxBytes: 440 * 1024 },
+    ],
+    manifestFile: 'feed-the-kraken-manifest.json',
+  },
+  telestrations: {
+    sourceFile: 'docs/design/game-art/telestrations-sketchbooks-concept.png',
+    specs: [
+      { file: 'telestrations-cover.webp', width: 640, maxBytes: 160 * 1024 },
+      { file: 'telestrations-hero.webp', width: 1280, maxBytes: 440 * 1024 },
+    ],
+    manifestFile: 'telestrations-manifest.json',
+  },
+  'cartographers-heroes': {
+    sourceFile: 'docs/design/game-art/cartographers-heroes-frontier-concept.png',
+    specs: [
+      { file: 'cartographers-heroes-cover.webp', width: 640, maxBytes: 160 * 1024 },
+      { file: 'cartographers-heroes-hero.webp', width: 1280, maxBytes: 440 * 1024 },
+    ],
+    manifestFile: 'cartographers-heroes-manifest.json',
+  },
+  'dixit-odyssey': {
+    sourceFile: 'docs/design/game-art/dixit-odyssey-dream-concept.png',
+    specs: [
+      { file: 'dixit-odyssey-cover.webp', width: 640, maxBytes: 160 * 1024 },
+      { file: 'dixit-odyssey-hero.webp', width: 1280, maxBytes: 440 * 1024 },
+    ],
+    manifestFile: 'dixit-odyssey-manifest.json',
   },
   ...Object.fromEntries(skullSpecialNames.map(kind => [`skull-special-${kind}`, {
     sourceFile: `docs/design/game-art/skull-special-${kind}.png`,
@@ -213,6 +256,7 @@ function parseArguments(args) {
 async function renderArtifacts(sharp, source, game = 'saboteur') {
   assert(Object.hasOwn(games, game), 'Unknown game artwork');
   const config = games[game];
+  const gameEncoding = { ...encoding, ...config.encoding };
   const metadata = await sharp(source).metadata();
   assert(metadata.format === 'png' && (metadata.pages ?? 1) === 1, 'Source must be a static PNG');
   assert(!metadata.orientation || metadata.orientation === 1, 'Source must have normal orientation');
@@ -222,7 +266,7 @@ async function renderArtifacts(sharp, source, game = 'saboteur') {
   for (const spec of config.specs) {
     const expected = dimensions(spec.width, metadata.width, metadata.height);
     // Width-only resizing retains the complete composition without padding or cropping.
-    const bytes = await sharp(source).resize({ width: spec.width, withoutEnlargement: true }).webp(encoding).toBuffer();
+    const bytes = await sharp(source).resize({ width: spec.width, withoutEnlargement: true }).webp(gameEncoding).toBuffer();
     const actual = await sharp(bytes).metadata();
     assert.equal(actual.format, 'webp');
     assert.equal(actual.width, expected.width);
@@ -237,7 +281,7 @@ async function renderArtifacts(sharp, source, game = 'saboteur') {
     schemaVersion: 1,
     source: { file: config.sourceFile, width: metadata.width, height: metadata.height, bytes: source.length, sha256: hash(source) },
     transform: 'width-only resize; full composition; no crop or padding',
-    encoding: { format: 'webp', ...encoding, sharp: sharp.versions.sharp, vips: sharp.versions.vips, webp: sharp.versions.webp },
+    encoding: { format: 'webp', ...gameEncoding, sharp: sharp.versions.sharp, vips: sharp.versions.vips, webp: sharp.versions.webp },
     outputs,
     totalBytes,
     maxTotalBytes,

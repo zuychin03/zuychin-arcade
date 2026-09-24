@@ -1,0 +1,18 @@
+export const OBJECTIVE_GUIDES: Record<string, { rule: string; pattern: string[] }> = {
+  faunlost_thicket: { rule: 'Score 2 per forest square in your longest uninterrupted vertical forest line.', pattern: ['.F...', '.F...', '.F...', '.F...', '.....'] },
+  deepwood: { rule: 'Score 6 for each forest region of at least 5 squares with no adjacent village.', pattern: ['FF...', '.FF..', '..F..', '.....', '....V'] },
+  heart_of_the_forest: { rule: 'Score 2 per forest square whose four sides touch forest or the map edge.', pattern: ['FFF..', 'FFF..', '.F...', '.....', '.....'] },
+  sleepy_valley: { rule: 'Score 4 for each row containing at least 3 forest squares. They need not touch.', pattern: ['F.F.F', '.....', '.FFF.', '.....', 'F....'] },
+  craylund: { rule: 'Score 7 for each farm region touching at least 3 distinct water squares.', pattern: ['.W...', 'WAAW.', '.....', '.....', '.....'] },
+  ulems_wallow: { rule: 'Score 4 per water square adjacent to at least 2 farm squares.', pattern: ['.A...', 'AWA..', '.....', '.....', '.....'] },
+  clawsgrave_peaks: { rule: 'Score 5 per mountain adjacent to a water region that also touches a farm.', pattern: ['MWWA.', '.....', '.....', '.....', '.....'] },
+  jorekburg: { rule: 'Score 4 for each column with equal, non-zero numbers of farm and water squares.', pattern: ['A.W..', 'W.A..', '..W..', '..A..', '.....'] },
+  traylo_monastery: { rule: 'Score 7 per village region containing an uninterrupted horizontal or vertical line of 4 villages.', pattern: ['VVVV.', '.V...', '.....', '.....', '.....'] },
+  outer_enclave: { rule: 'Choose one village region. Score 1 for each distinct empty square adjacent to that region.', pattern: ['.....', '.VV..', '..V..', '.....', '.....'] },
+  gnomish_colony: { rule: 'Score 6 per village region containing a filled 2 × 2 village square. Each region scores only once.', pattern: ['.....', '.VV..', '.VVV.', '.....', '.....'] },
+  caravansary: { rule: 'Choose one village region. Score the number of distinct rows plus columns it occupies.', pattern: ['V....', 'VV...', '.VV..', '..VV.', '...V.'] },
+  dwarvenholds: { rule: 'Score 7 for each completely filled row or column containing a mountain.', pattern: ['FAMWV', '..M..', '..F..', '..A..', '..W..'] },
+  silos: { rule: 'Score 10 for each completely filled odd-numbered column: 1, 3, 5, 7, 9 or 11.', pattern: ['F.A.W', 'A.W.V', 'W.V.F', 'V.F.A', 'F.A.W'] },
+  banded_hills: { rule: 'Score 4 for each row containing at least 5 distinct terrain types. Mountains count; wasteland and destroyed squares do not.', pattern: ['FAVWM', '.....', '.....', '.....', '.....'] },
+  starlit_sigil: { rule: 'Score 4 for each connected empty region of exactly 3 squares, enclosed by filled squares or the map edge.', pattern: ['FFFFF', 'F..FF', 'FF.FF', 'FFFFF', 'FFFFF'] },
+};

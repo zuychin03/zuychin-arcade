@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/cartographers-heroes-frontier-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 3285536,
+    "sha256": "f175ba9c5e3c129e143b4016cbec4566a963ce3236064472ea03b3e6592b430b"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "cartographers-heroes-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 91464,
+      "sha256": "f8cc9778763649e2ed21951c05020aea093cdf94e3bdeef834d8ffdff08880c2"
+    },
+    {
+      "file": "cartographers-heroes-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 284456,
+      "sha256": "fe3c6b0a9f838a65e4b63a04d6e679f84320d02f03c46bbbb8540ac875c484f8"
+    }
+  ],
+  "totalBytes": 375920,
+  "maxTotalBytes": 614400
+}

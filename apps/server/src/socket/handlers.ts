@@ -22,6 +22,10 @@ import { isNotAloneStartPayload, registerNotAloneHandlers } from '../game/not-al
 import { isBangStartPayload, registerBangHandlers } from '../game/bang/socketHandlers.js';
 import { isLibertaliaStartPayload, registerLibertaliaHandlers } from '../game/libertalia/socketHandlers.js';
 import { isColtStartPayload, registerColtExpressHandlers } from '../game/colt-express/socketHandlers.js';
+import { isDixitStartPayload, registerDixitHandlers } from '../game/dixit-odyssey/socketHandlers.js';
+import { isCartographersHeroesStartPayload, registerCartographersHeroesHandlers } from '../game/cartographers-heroes/socketHandlers.js';
+import { isFeedTheKrakenStartPayload, registerFeedTheKrakenHandlers } from '../game/feed-the-kraken/socketHandlers.js';
+import { isTelestrationsStartPayload, registerTelestrationsHandlers } from '../game/telestrations/socketHandlers.js';
 import {
   connectPlayerSocket,
   getCurrentSocketSession,
@@ -162,6 +166,22 @@ export function registerSocketHandlers(
           next();
           return;
         }
+        if (current.room.gameId === 'dixit_odyssey' && !isDixitStartPayload(payload)) {
+          next();
+          return;
+        }
+        if (current.room.gameId === 'cartographers_heroes' && !isCartographersHeroesStartPayload(payload)) {
+          next();
+          return;
+        }
+        if (current.room.gameId === 'feed_the_kraken' && !isFeedTheKrakenStartPayload(payload)) {
+          next();
+          return;
+        }
+        if (current.room.gameId === 'telestrations' && !isTelestrationsStartPayload(payload)) {
+          next();
+          return;
+        }
         if (!prepareRoomForStart(io, socket, current.room)) return;
       }
       next();
@@ -176,6 +196,10 @@ export function registerSocketHandlers(
     else if (room.gameId === 'bang') registerBangHandlers(io, socket);
     else if (room.gameId === 'libertalia') registerLibertaliaHandlers(io, socket);
     else if (room.gameId === 'colt_express') registerColtExpressHandlers(io, socket);
+    else if (room.gameId === 'dixit_odyssey') registerDixitHandlers(io, socket);
+    else if (room.gameId === 'cartographers_heroes') registerCartographersHeroesHandlers(io, socket);
+    else if (room.gameId === 'feed_the_kraken') registerFeedTheKrakenHandlers(io, socket);
+    else if (room.gameId === 'telestrations') registerTelestrationsHandlers(io, socket);
     else registerSaboteurHandlers(io, socket);
 
     socket.on('player_reaction', (payload: { reaction?: unknown } | null) => {

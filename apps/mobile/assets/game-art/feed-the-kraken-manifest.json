@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/feed-the-kraken-voyage-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2869017,
+    "sha256": "e591d86876cde8b4824857aca26c999ffb4d981c374a8b6651c30b0e5fe9a80c"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "feed-the-kraken-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 68582,
+      "sha256": "d364b29c6e19612cf0778fbe6b01037ba18fdf34df8c76cc4b96bacf8e11ecfe"
+    },
+    {
+      "file": "feed-the-kraken-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 212212,
+      "sha256": "0f242ac9b1696da83593df4bb4c192dc592dff919b6ef0d109930fbd605b8664"
+    }
+  ],
+  "totalBytes": 280794,
+  "maxTotalBytes": 614400
+}

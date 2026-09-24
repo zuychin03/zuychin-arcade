@@ -19,6 +19,10 @@ const TABS: { id: GameId; label: string; metric: 'wins' | 'nuggets' | 'points' |
   { id: 'bang', label: 'BANG!', metric: 'wins', icon: 'pistol' },
   { id: 'libertalia', label: 'Libertalia', metric: 'points', icon: 'ship-wheel' },
   { id: 'colt_express', label: 'Colt Express', metric: 'loot', icon: 'train' },
+  { id: 'feed_the_kraken', label: 'Feed the Kraken', metric: 'wins', icon: 'ferry' },
+  { id: 'telestrations', label: 'Telestrations', metric: 'points', icon: 'draw' },
+  { id: 'cartographers_heroes', label: 'Cartographers Heroes', metric: 'points', icon: 'map-outline' },
+  { id: 'dixit_odyssey', label: 'Dixit Odyssey', metric: 'points', icon: 'image-multiple-outline' },
 ];
 
 export default function LeaderboardScreen() {

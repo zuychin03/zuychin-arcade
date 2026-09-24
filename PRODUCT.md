@@ -10,7 +10,7 @@ The shared Expo/React Native application also targets iOS and Android. Web is th
 
 ## Product purpose
 
-Multiplayer board and card games, from creating or joining a room through the lobby, gameplay, results and reconnect recovery. Nine implemented titles: Saboteur, Coup, King of Tokyo, Skull King, Citadels, Not Alone, BANG!, Libertalia and Colt Express.
+Multiplayer board and card games, from creating or joining a room through the lobby, gameplay, results and reconnect recovery. The thirteen-game suite includes Saboteur, Coup, King of Tokyo, Skull King, Citadels, Not Alone, BANG!, Libertalia, Colt Express, Feed the Kraken, Telestrations, Cartographers Heroes and Dixit Odyssey. The four latest additions have completed local full-game browser checks; device and deployment acceptance remain separate.
 
 ## Users and operating context
 

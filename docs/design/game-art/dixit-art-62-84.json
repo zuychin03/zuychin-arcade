@@ -1,0 +1,140 @@
+[
+  {
+    "cardId": "dream-62",
+    "source": "docs/design/game-art/dixit-dream-62.png",
+    "promptFile": "docs/design/game-art/dixit-dream-62-prompt.md",
+    "description": "Three people swim above a face formed in a rooftop swimming pool at sunset, beside a fish-shaped shadow."
+  },
+  {
+    "cardId": "dream-63",
+    "source": "docs/design/game-art/dixit-dream-63.png",
+    "promptFile": "docs/design/game-art/dixit-dream-63-prompt.md",
+    "description": "An older lift operator stands in a brass lift suspended between pear-covered vines in a vast cave, with a white dog on a ledge nearby."
+  },
+  {
+    "cardId": "dream-64",
+    "source": "docs/design/game-art/dixit-dream-64.png",
+    "promptFile": "docs/design/game-art/dixit-dream-64-prompt.md",
+    "description": "Two beachcombers stand on an enormous red knitted glove whose fingertips pour golden sand into waves on a rocky shore."
+  },
+  {
+    "cardId": "dream-65",
+    "source": "docs/design/game-art/dixit-dream-65.png",
+    "promptFile": "docs/design/game-art/dixit-dream-65-prompt.md",
+    "description": "A woman in a yellow tracksuit runs past washing machines containing planets as leaves spill from one and a blue sock floats above a stool."
+  },
+  {
+    "cardId": "dream-66",
+    "source": "docs/design/game-art/dixit-dream-66.png",
+    "promptFile": "docs/design/game-art/dixit-dream-66-prompt.md",
+    "description": "Two climbers grasp a giant blue zipper joining pink cliffs, with stars and a cactus visible through its open section."
+  },
+  {
+    "cardId": "dream-67",
+    "source": "docs/design/game-art/dixit-dream-67.png",
+    "promptFile": "docs/design/game-art/dixit-dream-67-prompt.md",
+    "description": "People with flower-filled shadows queue at an ice cream cart on a lunar plain, where a vendor offers a cone containing a rain cloud."
+  },
+  {
+    "cardId": "dream-68",
+    "source": "docs/design/game-art/dixit-dream-68.png",
+    "promptFile": "docs/design/game-art/dixit-dream-68-prompt.md",
+    "description": "A runner ties a shoe on a red running track carried by a giant tortoise through a misty marsh, with a white ribbon trailing into the water."
+  },
+  {
+    "cardId": "dream-69",
+    "source": "docs/design/game-art/dixit-dream-69.png",
+    "promptFile": "docs/design/game-art/dixit-dream-69-prompt.md",
+    "description": "A woman with a silver prosthetic forearm folds a snowy mountain range on a worktable as a river flows from it into a teacup."
+  },
+  {
+    "cardId": "dream-70",
+    "source": "docs/design/game-art/dixit-dream-70.png",
+    "promptFile": "docs/design/game-art/dixit-dream-70-prompt.md",
+    "description": "Two older people share popcorn in a balcony overlooking an underwater cinema where fish circle before the screen and a diver accompanies a seahorse."
+  },
+  {
+    "cardId": "dream-71",
+    "source": "docs/design/game-art/dixit-dream-71.png",
+    "promptFile": "docs/design/game-art/dixit-dream-71-prompt.md",
+    "description": "A cyclist rides along the curling peel of a giant orange above a white seaside town as orange-segment sailboats float through the sky."
+  },
+  {
+    "cardId": "dream-72",
+    "source": "docs/design/game-art/dixit-dream-72.png",
+    "promptFile": "docs/design/game-art/dixit-dream-72-prompt.md",
+    "description": "A boy waters transparent chairs containing flowers and roots in a moonlit greenhouse, with a red bird inside the nearest chair."
+  },
+  {
+    "cardId": "dream-73",
+    "source": "docs/design/game-art/dixit-dream-73.png",
+    "promptFile": "docs/design/game-art/dixit-dream-73-prompt.md",
+    "description": "A lighthouse made from stacked teacups shines over a stormy sea as a boat with a spoon mast approaches its rocky base."
+  },
+  {
+    "cardId": "dream-74",
+    "source": "docs/design/game-art/dixit-dream-74.png",
+    "promptFile": "docs/design/game-art/dixit-dream-74-prompt.md",
+    "description": "A child holds a giraffe-shaped shadow at a market stall beneath an enormous suspended jade chess knight."
+  },
+  {
+    "cardId": "dream-75",
+    "source": "docs/design/game-art/dixit-dream-75.png",
+    "promptFile": "docs/design/game-art/dixit-dream-75-prompt.md",
+    "description": "An orange-suited traveller carries a mirror showing a tropical forest across snow, with a parrot on its frame and red petals in the footprints."
+  },
+  {
+    "cardId": "dream-76",
+    "source": "docs/design/game-art/dixit-dream-76.png",
+    "promptFile": "docs/design/game-art/dixit-dream-76-prompt.md",
+    "description": "An animal marching band passes a giant open sardine tin containing tiny beds and sleeping figures in a yellow meadow."
+  },
+  {
+    "cardId": "dream-77",
+    "source": "docs/design/game-art/dixit-dream-77.png",
+    "promptFile": "docs/design/game-art/dixit-dream-77-prompt.md",
+    "description": "An older woman plays a cello whose strings stretch towards waterfalls in a dry terracotta reservoir, beside a crab carrying a white flower."
+  },
+  {
+    "cardId": "dream-78",
+    "source": "docs/design/game-art/dixit-dream-78.png",
+    "promptFile": "docs/design/game-art/dixit-dream-78-prompt.md",
+    "description": "Two people face each other across a giant sewing needle bridging rooftops, with coral thread wrapped around a sleeping crescent moon below."
+  },
+  {
+    "cardId": "dream-79",
+    "source": "docs/design/game-art/dixit-dream-79.png",
+    "promptFile": "docs/design/game-art/dixit-dream-79-prompt.md",
+    "description": "A giant cut apple contains furnished rooms in a misty harbour while a tugboat tows a red leaf past a woman holding a bitten apple."
+  },
+  {
+    "cardId": "dream-80",
+    "source": "docs/design/game-art/dixit-dream-80.png",
+    "promptFile": "docs/design/game-art/dixit-dream-80-prompt.md",
+    "description": "Three masked dancers stand on a floating drum encircled by cloud rings above rice terraces, while a farmer holds a ladder below."
+  },
+  {
+    "cardId": "dream-81",
+    "source": "docs/design/game-art/dixit-dream-81.png",
+    "promptFile": "docs/design/game-art/dixit-dream-81-prompt.md",
+    "description": "A giant yellow moth rests across an airport luggage belt carrying suitcases with small bare trees, while a cleaner examines a glowing fallen scale."
+  },
+  {
+    "cardId": "dream-82",
+    "source": "docs/design/game-art/dixit-dream-82.png",
+    "promptFile": "docs/design/game-art/dixit-dream-82-prompt.md",
+    "description": "A woman climbs a ladder to lift a vast red curtain in a desert, revealing a vertical sea and sailboat whose shadow falls on the sand."
+  },
+  {
+    "cardId": "dream-83",
+    "source": "docs/design/game-art/dixit-dream-83.png",
+    "promptFile": "docs/design/game-art/dixit-dream-83-prompt.md",
+    "description": "A child and an older man play with dominoes containing doorways on a giant lily pad, while a heron peers into one above square ripples."
+  },
+  {
+    "cardId": "dream-84",
+    "source": "docs/design/game-art/dixit-dream-84.png",
+    "promptFile": "docs/design/game-art/dixit-dream-84-prompt.md",
+    "description": "Workers drink tea beneath a giant glass trumpet containing red trees, with a brass pipe curling into a sleeping cat shape."
+  }
+]

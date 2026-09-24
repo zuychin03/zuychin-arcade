@@ -119,6 +119,29 @@ export const COUP_CHARACTER_COLOR: Record<string, string> = {
   inquisitor: '#F4C04E',
 };
 
+export const CARTOGRAPHERS = {
+  bg: '#101B1B', surface: '#192A28', panel: '#253B35', border: '#456156',
+  accent: '#E8CC8E', secondary: '#9FE1C0', muted: '#B4C6BC', text: '#F5F1E6',
+  danger: '#FFB2A1', ink: '#17251E', parchment: '#DDCFAD',
+} as const;
+
+export const TELESTRATIONS = {
+  bg: '#101528', surface: '#19233B', panel: '#25324C', border: '#65778C',
+  accent: '#8AE5DD', secondary: '#FFC394', muted: '#BECDDC', text: '#F2F7FB',
+  paper: '#FFFFFF', ink: '#171923',
+} as const;
+
+export const KRAKEN = {
+  bg: '#081D27', surface: '#12313D', panel: '#1E4351', border: '#65778C',
+  accent: '#8AE5DD', secondary: '#F6C778', muted: '#BECDDC', text: '#F2F7FB',
+  paper: '#FFFFFF', ink: '#171923',
+} as const;
+
+export const DIXIT = {
+  bg: '#100D21', surface: '#1B1630', panel: '#2B2243', border: '#66547E',
+  accent: '#D2AEFF', secondary: '#FFCD93', muted: '#BBAECF', text: '#FAF5FF',
+} as const;
+
 /**
  * Full-screen centered overlay backdrop. Explicit style (not className)
  * because NativeWind classNames are unreliable on reanimated Animated views.

@@ -1,0 +1,7 @@
+# Dixit Odyssey entrance illustration
+
+Generated with the built-in ImageGen tool on 24/09/2026. Original illustration, not publisher artwork. Source: `dixit-odyssey-dream-concept.png`. Runtime derivatives preserve the full composition through the existing game-art encoder.
+
+## Prompt
+
+Use case: stylized-concept. Asset type: landscape library cover for Zuychin Arcade's original-art Dixit Odyssey private prototype. Create one original premium tactile surreal tabletop diorama, 3:2 landscape, with no typography: an open ivory-and-indigo storybook floating above a midnight velvet table; an impossible stairway rises from its pages into a small luminous moon-door; a glass whale carrying a tiny lit garden swims through the arch; two small rabbit-shaped ceramic player pieces and a short fanned deck of richly painted text-free dream cards sit in the foreground. Physical miniature craft, ceramic, paper fibres, brushed metal, carved translucent glass, directional soft studio light, real contact shadows and depth. Palette: midnight plum/navy, luminous lilac, peach and old gold. Strong readable central silhouette at small mobile tile size, all key subjects comfortably inside frame. The atmosphere should feel imaginative and hand-crafted, not plastic stock art. Original composition and motifs, do not reproduce publisher art, logos, card images or trade dress. No words, no letters, no watermarks, no UI controls, no outer card frame.

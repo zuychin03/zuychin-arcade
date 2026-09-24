@@ -9,7 +9,8 @@ import { clearAuthIfMatches } from '../../lib/storage';
 import { GameTile } from '../../components/ui/GameTile';
 import { ScalePressable } from '../../components/ui/ScalePressable';
 import { NeonButton } from '../../components/ui/NeonButton';
-import { ARCADE, BANG, CITADELS, COLT, COUP, LIBERTALIA, MINE, NOT_ALONE, SKULL_KING, TOKYO } from '../../constants/theme';
+import { ARCADE, BANG, CARTOGRAPHERS, CITADELS, COLT, COUP, DIXIT, KRAKEN, LIBERTALIA, MINE, NOT_ALONE, SKULL_KING, TELESTRATIONS, TOKYO } from '../../constants/theme';
+import { gameBaseRoute } from '../../lib/gameRoutes';
 
 export default function ArcadeHub() {
   const [restoring, setRestoring] = useState(true);
@@ -125,10 +126,7 @@ export default function ArcadeHub() {
         <View>
           <ScalePressable
             onPress={() => {
-              const base =
-                room.gameId === 'coup'
-                  ? '/coup'
-                  : room.gameId === 'king_of_tokyo' ? '/king-of-tokyo' : room.gameId === 'skull_king' ? '/skull-king' : room.gameId === 'citadels' ? '/citadels' : room.gameId === 'not_alone' ? '/not-alone' : room.gameId === 'bang' ? '/bang' : room.gameId === 'libertalia' ? '/libertalia' : room.gameId === 'colt_express' ? '/colt-express' : '/saboteur';
+              const base = gameBaseRoute(room.gameId);
               router.push(`${base}/${room.status === 'lobby' ? 'lobby' : 'game'}`);
             }}
             style={{
@@ -245,6 +243,22 @@ export default function ArcadeHub() {
       <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth} nativeID="game-tile-bang" coverNativeID="game-cover-bang" coverSource={require('../../assets/game-art/bang-cover.webp')} title="BANG!" icon="pistol" players="4–7 players" subtitle="hidden roles · shootouts, range and survival" accent={BANG.gold} onPress={() => router.push('/bang')}/>
       <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth} nativeID="game-tile-libertalia" coverNativeID="game-cover-libertalia" coverSource={require('../../assets/game-art/libertalia-cover.webp')} title="LIBERTALIA" icon="ship-wheel" players="2–6 players" subtitle="secret crew · loot three sky-pirate voyages" accent={LIBERTALIA.sky} onPress={() => router.push('/libertalia')}/>
       <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth} nativeID="game-tile-colt-express" coverNativeID="game-cover-colt" coverSource={require('../../assets/game-art/colt-cover.webp')} title="COLT EXPRESS" icon="train" players="2–6 players" subtitle="programmed actions · rob the moving train" accent={COLT.ember} onPress={() => router.push('/colt-express')}/>
+      <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
+        nativeID="game-tile-feed-the-kraken" coverNativeID="game-cover-feed-the-kraken" coverSource={require('../../assets/game-art/feed-the-kraken-cover.webp')}
+        title="FEED THE KRAKEN" icon="ferry" players="5–11 players" subtitle="hidden allegiances · steer a treacherous voyage" accent={KRAKEN.accent}
+        onPress={() => router.push('/feed-the-kraken')} />
+      <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
+        nativeID="game-tile-telestrations" coverNativeID="game-cover-telestrations" coverSource={require('../../assets/game-art/telestrations-cover.webp')}
+        title="TELESTRATIONS" icon="draw" players="4–12 players" subtitle="draw, guess & reveal · watch your idea transform" accent={TELESTRATIONS.accent}
+        onPress={() => router.push('/telestrations')} />
+      <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
+        nativeID="game-tile-cartographers-heroes" coverNativeID="game-cover-cartographers-heroes" coverSource={require('../../assets/game-art/cartographers-heroes-cover.webp')}
+        title="CARTOGRAPHERS HEROES" icon="map-outline" players="1–100 players" subtitle="draw together · chart a realm across four seasons" accent={CARTOGRAPHERS.accent}
+        onPress={() => router.push('/cartographers-heroes')} />
+      <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
+        nativeID="game-tile-dixit-odyssey" coverNativeID="game-cover-dixit-odyssey" coverSource={require('../../assets/game-art/dixit-odyssey-cover.webp')}
+        title="DIXIT ODYSSEY" icon="image-multiple-outline" players="3–12 players" subtitle="a clue, two votes · step into a gallery of dreams" accent={DIXIT.accent}
+        onPress={() => router.push('/dixit-odyssey')} />
       </View>
       </View>
     </ScrollView>

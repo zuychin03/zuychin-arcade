@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "docs/design/game-art/telestrations-sketchbooks-concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2498543,
+    "sha256": "3eb047170b64e01eb363400ca9cee2ddfe6794e1842b92994b83bbade9e20d99"
+  },
+  "transform": "width-only resize; full composition; no crop or padding",
+  "encoding": {
+    "format": "webp",
+    "quality": 82,
+    "effort": 5,
+    "preset": "picture",
+    "sharp": "0.35.4",
+    "vips": "8.18.6",
+    "webp": "1.6.0"
+  },
+  "outputs": [
+    {
+      "file": "telestrations-cover.webp",
+      "width": 640,
+      "maxBytes": 163840,
+      "height": 427,
+      "bytes": 41134,
+      "sha256": "cb41991b2ac3580ab7622375aad1dd30df552f0875b0b3e56e214997120737a4"
+    },
+    {
+      "file": "telestrations-hero.webp",
+      "width": 1280,
+      "maxBytes": 450560,
+      "height": 853,
+      "bytes": 120184,
+      "sha256": "ac390266b2b165173e9e3302b2895440127ff77ff492c749d692ee0f3360e569"
+    }
+  ],
+  "totalBytes": 161318,
+  "maxTotalBytes": 614400
+}

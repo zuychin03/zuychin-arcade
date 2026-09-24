@@ -1,8 +1,16 @@
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { router } from 'expo-router';
-import type { BangPrivateState, BangPublicState, CitadelsPrivateState, CitadelsPublicState, ColtPrivateState, ColtPublicState, CoupPrivateState, CoupPublicState, LibertaliaPrivateState, LibertaliaPublicState, NotAlonePrivateState, NotAlonePublicState, SaboteurPrivateState, SaboteurPublicState, SkullKingPrivateState, SkullKingPublicState } from '@zuychin-arcade/types';
+import type {
+  BangPrivateState, BangPublicState, CitadelsPrivateState, CitadelsPublicState,
+  ColtPrivateState, ColtPublicState, CoupPrivateState, CoupPublicState,
+  LibertaliaPrivateState, LibertaliaPublicState, NotAlonePrivateState, NotAlonePublicState,
+  SaboteurPrivateState, SaboteurPublicState, SkullKingPrivateState, SkullKingPublicState,
+  DixitPublicState, DixitPrivateState, CartographersHeroesPublicState, CartographersHeroesPrivateState,
+  FeedTheKrakenPublicState, FeedTheKrakenPrivateState, TelestrationsPublicState, TelestrationsPrivateState,
+} from '@zuychin-arcade/types';
 import { useGameStore } from '../store/useGameStore';
+import { revisionPair } from '../lib/revisionPair';
 import { SERVER_URL } from '../constants/config';
 import { clearAuthIfMatches } from '../lib/storage';
 import { showDialog, useDialogStore, type DialogConfig } from '../lib/dialog';
@@ -30,6 +38,30 @@ export function useSocket(): void {
     socketInstance = socket;
 
     const store = useGameStore.getState;
+    const dixitPair = revisionPair<DixitPublicState, DixitPrivateState>({
+      roomCode: () => store().roomCode, playerId: () => store().playerId,
+      current: () => store().dixitPublic,
+      syncing: value => store().setDixitSyncing(value),
+      adopt: (shared, owned) => store().setDixitState(shared, owned),
+    });
+    const cartographersPair = revisionPair<CartographersHeroesPublicState, CartographersHeroesPrivateState>({
+      roomCode: () => store().roomCode, playerId: () => store().playerId,
+      current: () => store().cartographersPublic,
+      syncing: value => store().setCartographersSyncing(value),
+      adopt: (shared, owned) => store().setCartographersState(shared, owned),
+    });
+    const krakenPair = revisionPair<FeedTheKrakenPublicState, FeedTheKrakenPrivateState>({
+      roomCode: () => store().roomCode, playerId: () => store().playerId,
+      current: () => store().krakenPublic,
+      syncing: value => store().setKrakenSyncing(value),
+      adopt: (shared, owned) => store().setKrakenState(shared, owned),
+    });
+    const telestrationsPair = revisionPair<TelestrationsPublicState, TelestrationsPrivateState>({
+      roomCode: () => store().roomCode, playerId: () => store().playerId,
+      current: () => store().telestrationsPublic,
+      syncing: value => store().setTelestrationsSyncing(value),
+      adopt: (shared, owned) => store().setTelestrationsState(shared, owned),
+    });
     let active = true;
     let ending = false;
     let cleanupDialog: DialogConfig | null = null;
@@ -52,6 +84,10 @@ export function useSocket(): void {
     const ownsSession = () => active && socketInstance === socket && store().token === token;
     const acceptsState = () => ownsSession() && !ending && socket.connected;
     const resetPairs = () => {
+      dixitPair.reset();
+      cartographersPair.reset();
+      krakenPair.reset();
+      telestrationsPair.reset();
       pendingPublic = null;
       pendingPrivate = null;
       pendingCoupPublic = null;
@@ -201,6 +237,10 @@ export function useSocket(): void {
     });
     socket.on('game_state', (state) => {
       const gameId = gameIdFor(state);
+      if (gameId === 'dixit_odyssey') dixitPair.public(state);
+      else if (gameId === 'cartographers_heroes') cartographersPair.public(state);
+      else if (gameId === 'feed_the_kraken') krakenPair.public(state);
+      else if (gameId === 'telestrations') telestrationsPair.public(state);
       if (gameId === 'king_of_tokyo' && state.roomCode === store().roomCode
         && state.viewerPlayerId === store().playerId && acceptsTokyoRevision(state.revision)) {
         store().setKingOfTokyoPublic(state);
@@ -250,6 +290,10 @@ export function useSocket(): void {
     socket.on('private_state', (state) => {
       const gameId = gameIdFor(state);
       if (!state || state.playerId !== store().playerId) return;
+      if (gameId === 'dixit_odyssey') dixitPair.private(state);
+      else if (gameId === 'cartographers_heroes') cartographersPair.private(state);
+      else if (gameId === 'feed_the_kraken') krakenPair.private(state);
+      else if (gameId === 'telestrations') telestrationsPair.private(state);
       if (gameId === 'coup' && state.roomCode === store().roomCode && acceptsCoupRevision(state.revision)) {
         store().setCoupSyncing(true);
         pendingCoupPrivate = state;
