@@ -5,7 +5,8 @@ import type { FeedTheKrakenJourney } from '@zuychin-arcade/types';
 import { RemainingLanding } from '../../components/remaining/RemainingLanding';
 import { KrakenReferenceSheet } from '../../components/kraken/ReferenceSheet';
 import { GameCover } from '../../components/ui/GameCover';
-import { HelmButton, typography as T } from '../../components/kraken/Controls';
+import { HelmButton } from '../../components/kraken/Controls';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { KRAKEN as C } from '../../components/kraken/palette';
 export default function Landing() {
   const [journey, setJourney] = useState<FeedTheKrakenJourney>('quick');
@@ -16,7 +17,7 @@ export default function Landing() {
     hero={<GameCover source={require('../../assets/game-art/feed-the-kraken-hero.webp')} rimColor={C.accent} backgroundColor={C.bg} />}
     createConfig={{ krakenJourney: journey }}
     renderCreateOptions={busy => <View style={{ gap: 12 }}>
-      <Text style={T.heading}>Choose the voyage</Text>
+      <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: C.text }}>Choose the voyage</Text>
       <HelmButton label="Quick · 5–11 players" selected={journey === 'quick'} disabled={busy} onPress={() => setJourney('quick')} />
       <HelmButton label="Long · 7–11 players" selected={journey === 'long'} disabled={busy} onPress={() => setJourney('long')} />
     </View>}

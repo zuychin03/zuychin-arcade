@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "source": {
-    "file": "docs/design/game-art/telestrations-sketchbooks-concept.png",
+    "file": "docs/design/game-art/telestrations-sketchbooks-warm.png",
     "width": 1536,
     "height": 1024,
-    "bytes": 2498543,
-    "sha256": "3eb047170b64e01eb363400ca9cee2ddfe6794e1842b92994b83bbade9e20d99"
+    "bytes": 2553640,
+    "sha256": "fada4879db0eaf9940e297d4b91b75ab246939b63ed82782638cee456890e8b2"
   },
   "transform": "width-only resize; full composition; no crop or padding",
   "encoding": {
@@ -23,18 +23,18 @@
       "width": 640,
       "maxBytes": 163840,
       "height": 427,
-      "bytes": 41134,
-      "sha256": "cb41991b2ac3580ab7622375aad1dd30df552f0875b0b3e56e214997120737a4"
+      "bytes": 40710,
+      "sha256": "1d3f4d474a0fc74ef57aca4aa4984017219d228c8dd9f6fc68220e92b782afc3"
     },
     {
       "file": "telestrations-hero.webp",
       "width": 1280,
       "maxBytes": 450560,
       "height": 853,
-      "bytes": 120184,
-      "sha256": "ac390266b2b165173e9e3302b2895440127ff77ff492c749d692ee0f3360e569"
+      "bytes": 119606,
+      "sha256": "e76ef1ea7029e3be617bf83bb1ce70646a0bbbedfa6b5b1f4a5621f59e9cccdb"
     }
   ],
-  "totalBytes": 161318,
+  "totalBytes": 160316,
   "maxTotalBytes": 614400
 }

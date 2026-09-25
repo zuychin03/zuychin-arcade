@@ -78,6 +78,7 @@ function harness(relative, overrides = {}) {
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../store/useGameStore': { useGameStore },
     '../../lib/gameRoutes': load('lib/gameRoutes.ts', {}),
+    '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: () => ({ textRef: { current: null }, onTextLayout() {}, textScale: 1 }) },
     '../../lib/api': {
       ApiError,
       getRoom: async (...args) => { calls.push('getRoom'); return overrides.getRoom ? overrides.getRoom(...args) : liveRoom; },

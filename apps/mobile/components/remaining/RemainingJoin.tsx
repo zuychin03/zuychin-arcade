@@ -8,11 +8,12 @@ import { formatRoomCodeInput, ROOM_CODE_EXAMPLE, ROOM_CODE_PATTERN } from '../..
 import { clearAuthIfMatches, loadDisplayName, saveAuthIfCurrent, saveDisplayName } from '../../lib/storage';
 import { useGameStore } from '../../store/useGameStore';
 import { NeonButton } from '../ui/NeonButton';
+import { TYPOGRAPHY } from '../../constants/typography';
 
 interface Props {
   title: string;
   mark: ReactNode;
-  palette: { bg: string; surface: string; border: string; accent: string; secondary: string; muted: string; text: string };
+  palette: { bg: string; surface: string; border: string; accent: string; secondary: string; muted: string; text: string; onAccent?: string };
 }
 
 export function RemainingJoin({ title, mark, palette }: Props) {
@@ -90,25 +91,25 @@ export function RemainingJoin({ title, mark, palette }: Props) {
 
   const input = {
     minHeight: 48, backgroundColor: palette.surface, borderColor: palette.border, borderWidth: 1,
-    borderRadius: 16, color: palette.text, fontFamily: 'Outfit_700Bold', fontSize: 16, padding: 16,
+    ...TYPOGRAPHY.body, borderRadius: 16, color: palette.text, padding: 16,
   } as const;
-  const label = { fontFamily: 'Outfit_700Bold', color: palette.muted, fontSize: 12, letterSpacing: 1 } as const;
+  const label = { ...TYPOGRAPHY.label, color: palette.muted } as const;
 
   return (
     <ScrollView {...keyboardInsets} keyboardShouldPersistTaps="handled" style={{ flex: 1, backgroundColor: palette.bg }} contentContainerStyle={{ width: '100%', maxWidth: 620, alignSelf: 'center', padding: compact ? 18 : 28, paddingBottom: 44, gap: 12 }}>
       <View style={{ alignItems: 'center', marginBottom: 4 }}>
         {mark}
-        <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.accent, fontSize: 24, letterSpacing: 2, marginTop: 8, textAlign: 'center' }}>{title}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 20, textAlign: 'center', marginTop: 8 }}>Ask the host for the room code. You can join any game with its code.</Text>
+        <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.display, color: palette.accent, fontSize: 24, lineHeight: 32, marginTop: 8, textAlign: 'center' }}>{title}</Text>
+        <Text style={{ ...TYPOGRAPHY.body, color: palette.muted, textAlign: 'center', marginTop: 8 }}>Ask the host for the room code. You can join any game with its code.</Text>
       </View>
-      {error ? <Text accessibilityRole="alert" style={{ color: palette.text, fontSize: 14, lineHeight: 20 }}>{error}</Text> : null}
+      {error ? <Text accessibilityRole="alert" style={{ ...TYPOGRAPHY.body, color: palette.text }}>{error}</Text> : null}
       <Text style={label}>YOUR NAME</Text>
       <TextInput ref={nameInput} accessibilityLabel="Your name" autoComplete="nickname" value={name} editable={!busy} onChangeText={(value) => { nameEdited.current = true; setName(value); setError(null); }} maxLength={20} placeholder="Player name" placeholderTextColor={palette.muted} style={input} returnKeyType="next" blurOnSubmit={false} onSubmitEditing={() => codeInput.current?.focus()} />
       <Text style={label}>ROOM CODE</Text>
-      <TextInput ref={codeInput} accessibilityLabel="Room code" accessibilityHint={'Use eight letters or numbers, for example ' + ROOM_CODE_EXAMPLE} value={code} editable={!busy} onChangeText={(value) => { setCode(formatRoomCodeInput(value)); setError(null); }} placeholder={ROOM_CODE_EXAMPLE} placeholderTextColor={palette.muted} autoCapitalize="characters" autoCorrect={false} maxLength={9} style={{ ...input, borderColor: palette.accent, borderWidth: 2, color: palette.secondary, fontSize: compact ? 24 : 27, letterSpacing: 3, textAlign: 'center' }} returnKeyType="next" blurOnSubmit={false} onSubmitEditing={() => passwordInput.current?.focus()} />
+      <TextInput ref={codeInput} accessibilityLabel="Room code" accessibilityHint={'Use eight letters or numbers, for example ' + ROOM_CODE_EXAMPLE} value={code} editable={!busy} onChangeText={(value) => { setCode(formatRoomCodeInput(value)); setError(null); }} placeholder={ROOM_CODE_EXAMPLE} placeholderTextColor={palette.muted} autoCapitalize="characters" autoCorrect={false} maxLength={9} style={{ ...input, ...TYPOGRAPHY.data, borderColor: palette.accent, borderWidth: 2, color: palette.secondary, fontSize: compact ? 24 : 27, lineHeight: 36, letterSpacing: 3, textAlign: 'center' }} returnKeyType="next" blurOnSubmit={false} onSubmitEditing={() => passwordInput.current?.focus()} />
       <Text style={label}>ROOM PASSWORD · OPTIONAL</Text>
       <TextInput ref={passwordInput} accessibilityLabel="Room password, optional" autoComplete="current-password" value={password} editable={!busy} onChangeText={(value) => { setPassword(value); setError(null); }} secureTextEntry maxLength={64} placeholder="Leave blank for an open room" placeholderTextColor={palette.muted} style={input} returnKeyType="go" onSubmitEditing={() => void join()} />
-      <NeonButton label={busy ? 'JOINING…' : 'JOIN GAME'} color={palette.accent} disabled={busy} onPress={() => void join()} />
+      <NeonButton label={busy ? 'JOINING…' : 'JOIN GAME'} color={palette.accent} solidTextColor={palette.onAccent} disabled={busy} onPress={() => void join()} />
     </ScrollView>
   );
 }

@@ -10,10 +10,10 @@ import { COUP, COUP_CHARACTER_COLOR } from '../../constants/theme';
 
 type Size = 'xs' | 'sm' | 'md' | 'lg';
 const DIMS = {
-  xs: { width: 32, art: 32, back: 44, radius: 6 },
-  sm: { width: 88, art: 88, back: 120, radius: 10 },
-  md: { width: 128, art: 144, back: 192, radius: 12 },
-  lg: { width: 160, art: 176, back: 228, radius: 14 },
+  xs: { width: 32, back: 44, radius: 6 },
+  sm: { width: 88, back: 120, radius: 10 },
+  md: { width: 128, back: 192, radius: 12 },
+  lg: { width: 160, back: 228, radius: 14 },
 } as const;
 const abilities: Record<CoupCharacter, string> = {
   duke: 'Tax +3\nBlocks aid', assassin: 'Pay 3 to assassinate', captain: 'Steal 2\nBlocks stealing',
@@ -50,9 +50,9 @@ export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = 
   if (faceDown) {
     return wrap(
       <CardSurface fill={!compact} radius={d.radius} faceColor={COUP.panel} edgeColor={COUP.bg} highlightColor={selected ? COUP.gold : COUP.border} selected={selected} depth={compact ? 1 : 3}>
-        <View style={{ minHeight: d.back, padding: compact ? 3 : 12, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <View {...decoration} style={{ width: compact ? 24 : size === 'sm' ? 50 : 72, maxWidth: '100%', borderRadius: compact ? 3 : 8, overflow: 'hidden' }}><CoupTableArtwork kind="back" /></View>
-          {!compact ? <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Hidden influence</Text> : null}
+        <View style={{ minHeight: d.back, width: '100%' }}>
+          <CoupTableArtwork kind="back" aspectRatio={compact ? d.width / d.back : 2 / 3} />
+          {!compact ? <Text style={{ padding: 8, fontFamily: 'Outfit_700Bold', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Hidden influence</Text> : null}
         </View>
       </CardSurface>, onPress, cardLabel, accessibilityHint, selected, disabled, frame,
     );
@@ -62,16 +62,18 @@ export function CharacterCard({ character, faceDown, lost, size = 'sm', fluid = 
   const title = character ? character[0].toUpperCase() + character.slice(1) : 'Unknown';
   return wrap(
     <CardSurface fill={!compact} radius={d.radius} faceColor={COUP.panel} edgeColor={COUP.bg} highlightColor={selected ? COUP.gold : accent} selected={selected} depth={compact ? 1 : 3}>
-      <View style={{ padding: compact ? 0 : 8, gap: compact ? 0 : 8, ...(compact ? { minHeight: d.back, justifyContent: 'center' } as const : {}) }}>
-        <View {...decoration} style={{ width: '100%', maxWidth: d.art, alignSelf: 'center', overflow: 'hidden', borderRadius: compact ? 4 : 8 }}>
+      <View style={{ width: '100%', ...(compact ? { minHeight: d.back, justifyContent: 'center' } as const : {}) }}>
+        <View {...decoration} style={{ width: '100%' }}>
           {character ? <CoupCharacterArtwork character={character} /> : <View style={{ minHeight: compact ? 32 : 88, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="help" size={compact ? 20 : 32} color={COUP.muted} /></View>}
         </View>
-        {!compact ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.text, fontSize: detailed ? 16 : 12, lineHeight: detailed ? 22 : 18, textAlign: 'center' }}>{title}</Text> : null}
-        {detailed && character && !lost ? referenceContent ?? <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>{abilities[character]}</Text> : null}
-        {lost ? compact
-          ? <View {...decoration} style={{ alignItems: 'center', backgroundColor: COUP.bg }}><MaterialCommunityIcons name="close" size={12} color={COUP.text} /></View>
-          : <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Revealed · lost</Text>
-          : selected && !compact ? <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.gold, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Selected</Text> : null}
+        <View style={{ padding: compact ? 0 : 8, gap: compact ? 0 : 8 }}>
+          {!compact ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: COUP.text, fontSize: detailed ? 16 : 12, lineHeight: detailed ? 22 : 18, textAlign: 'center' }}>{title}</Text> : null}
+          {detailed && character && !lost ? referenceContent ?? <Text style={{ fontFamily: 'Outfit_400Regular', color: COUP.text, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>{abilities[character]}</Text> : null}
+          {lost ? compact
+            ? <View {...decoration} style={{ alignItems: 'center', backgroundColor: COUP.bg }}><MaterialCommunityIcons name="close" size={12} color={COUP.text} /></View>
+            : <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.muted, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Revealed · lost</Text>
+            : selected && !compact ? <Text style={{ fontFamily: 'Outfit_700Bold', color: COUP.gold, fontSize: 14, lineHeight: 20, textAlign: 'center' }}>Selected</Text> : null}
+        </View>
       </View>
     </CardSurface>, onPress, cardLabel, accessibilityHint, selected, disabled, frame,
   );

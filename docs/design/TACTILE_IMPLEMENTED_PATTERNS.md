@@ -2,6 +2,10 @@
 
 This guide describes the implemented Expo/React Native components, not a separate HTML design system. [DESIGN.md](../../DESIGN.md) sets the visual direction; [the testing guide](../TESTING.md) separates source, rendered, full-game and native verification.
 
+Follow the [game theme contract](GAME_THEME_CONTRACT.md) when implementing a new
+game. `constants/typography.ts` owns same-role font weights; per-game colour and
+mechanics do not justify a second room-form, button or navigation type system.
+
 ## Visual authority
 
 - [theme.ts](../../apps/mobile/constants/theme.ts) owns the Arcade and game palettes. Preserve each game's identity, including purple Not Alone and spectral-white Skull King. NativeWind configuration mirrors the relevant tokens.
@@ -60,9 +64,9 @@ The caller owns interaction, semantics and legal-action state. Decorative edges 
 
 ### CardIllustration
 
-[CardIllustration](../../apps/mobile/components/ui/CardIllustration.tsx) prints decorative artwork across the card face without its own border, rounding, shadow or width cap. King of Tokyo, Skull King, Citadels, Not Alone, BANG!, Libertalia and Colt Express use it inside a single outer `CardSurface`. Keep padding on live header and rules sections, not around the illustration.
+[CardIllustration](../../apps/mobile/components/ui/CardIllustration.tsx) prints decorative artwork across the card face without its own border, rounding, shadow or width cap. The illustrated card families use it inside a single outer `CardSurface`. Keep padding on live header and rules sections, not around the illustration. Compact public markers and paired Saboteur tools are distinct layouts, not inset versions of a full card.
 
-Match the field to the source proportions, currently square for these card illustrations. Do not squeeze a square portrait into a landscape well or frame a miniature image inside another card. The source-specific failure fallback preserves the same footprint. Live ranks, costs, names, rules and action state remain readable when artwork fails.
+Match the field to the source proportions: square for most original-game illustrations, 2:3 for Kraken portraits and Dixit images, and landscape for navigation and Cartographers. Bound the whole card when a standalone desktop face needs a maximum width. Do not squeeze a square portrait into a landscape well or frame a miniature image inside another card. The source-specific failure fallback preserves the same footprint. Live ranks, costs, names, rules and action state remain readable when artwork fails.
 
 ### GameCover and GameTile
 

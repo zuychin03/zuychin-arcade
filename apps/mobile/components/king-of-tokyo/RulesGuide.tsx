@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { TOKYO } from '../../constants/theme';
@@ -53,16 +54,16 @@ export function TokyoRulesGuide() {
 
 const s = StyleSheet.create({
   guide: { gap: 28 }, section: { gap: 12 },
-  title: { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: TOKYO.lime },
-  body: { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: TOKYO.text },
-  caption: { fontFamily: 'Outfit_700Bold', fontSize: 16, lineHeight: 24, color: TOKYO.text },
+  title: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22, lineHeight: 28, color: TOKYO.lime },
+  body: { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24, color: TOKYO.text },
+  caption: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 16, lineHeight: 24, color: TOKYO.text },
   tray: { gap: 12, paddingVertical: 16, borderRadius: 12, backgroundColor: TOKYO.bg },
   dice: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' },
   zone: { padding: 16, gap: 12, backgroundColor: TOKYO.panel, borderRadius: 12 },
   outside: { gap: 12, paddingVertical: 8 },
   zoneHeading: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12 },
-  zoneTitle: { fontFamily: 'Outfit_700Bold', fontSize: 20, lineHeight: 26, color: TOKYO.text, flexShrink: 1 },
-  rewards: { gap: 4 }, reward: { fontFamily: 'Outfit_700Bold', fontSize: 16, lineHeight: 24, color: TOKYO.lime },
+  zoneTitle: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 20, lineHeight: 26, color: TOKYO.text, flexShrink: 1 },
+  rewards: { gap: 4 }, reward: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 16, lineHeight: 24, color: TOKYO.lime },
   crossfire: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16 },
   finish: { flexDirection: 'row', alignItems: 'center', gap: 12 }, flex: { flex: 1, minWidth: 0 },
 });

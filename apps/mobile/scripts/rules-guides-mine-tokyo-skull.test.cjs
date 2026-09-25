@@ -11,6 +11,7 @@ function render(game, name, textScale = 1) {
   const jsx = (type, props) => ({ type, props });
   const palette = new Proxy({}, { get: () => '#ffffff' });
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { Text: 'Text', View: 'View', StyleSheet: { create: value => value }, useWindowDimensions: () => ({ width: 320, fontScale: textScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },

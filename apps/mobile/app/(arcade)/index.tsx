@@ -11,13 +11,14 @@ import { ScalePressable } from '../../components/ui/ScalePressable';
 import { NeonButton } from '../../components/ui/NeonButton';
 import { ARCADE, BANG, CARTOGRAPHERS, CITADELS, COLT, COUP, DIXIT, KRAKEN, LIBERTALIA, MINE, NOT_ALONE, SKULL_KING, TELESTRATIONS, TOKYO } from '../../constants/theme';
 import { gameBaseRoute } from '../../lib/gameRoutes';
+import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
 export default function ArcadeHub() {
   const [restoring, setRestoring] = useState(true);
   const [restoreError, setRestoreError] = useState<string | null>(null);
   const [libraryWidth, setLibraryWidth] = useState(0);
   const { width, height, fontScale = 1 } = useWindowDimensions();
-  const textScale = Math.max(1, fontScale);
+  const { textRef, onTextLayout, textScale } = useMeasuredTextScale(32, fontScale);
   const shortLandscape = height < 500 && width > height;
   const libraryColumns = shortLandscape ? 1 : libraryWidth >= 960 * textScale ? 3 : libraryWidth >= 600 * textScale ? 2 : 1;
   const tileWidth = libraryWidth > 0 ? Math.floor((libraryWidth - 14 * (libraryColumns - 1)) / libraryColumns) : undefined;
@@ -96,7 +97,7 @@ export default function ArcadeHub() {
     >
       <View style={{ width: '100%', maxWidth: 1280, alignSelf: 'center', gap: 24 }}>
       <View style={{ gap: 8 }}>
-        <Text accessibilityRole="header" style={{
+        <Text ref={textRef} onLayout={onTextLayout} accessibilityRole="header" style={{
           fontSize: 32,
           fontFamily: 'Outfit_800ExtraBold',
           color: ARCADE.text
@@ -249,7 +250,7 @@ export default function ArcadeHub() {
         onPress={() => router.push('/feed-the-kraken')} />
       <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
         nativeID="game-tile-telestrations" coverNativeID="game-cover-telestrations" coverSource={require('../../assets/game-art/telestrations-cover.webp')}
-        title="TELESTRATIONS" icon="draw" players="4–12 players" subtitle="draw, guess & reveal · watch your idea transform" accent={TELESTRATIONS.accent}
+        title="TELESTRATIONS" icon="draw" players="4–12 players" subtitle="draw, guess & reveal · watch your idea transform" accent={TELESTRATIONS.catalogueAccent}
         onPress={() => router.push('/telestrations')} />
       <GameTile compact={compactTiles} horizontalCover={shortLandscape} width={tileWidth}
         nativeID="game-tile-cartographers-heroes" coverNativeID="game-cover-cartographers-heroes" coverSource={require('../../assets/game-art/cartographers-heroes-cover.webp')}

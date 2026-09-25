@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { View } from 'react-native';
 import { TOKYO } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
@@ -12,7 +13,7 @@ export default function KingOfTokyoLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: TOKYO.surface },
         headerTintColor: TOKYO.lime,
-        headerTitleStyle: { fontWeight: '800' },
+        headerTitleStyle: TYPOGRAPHY.navigation,
         contentStyle: { backgroundColor: TOKYO.bg },
         animation: reduceMotion ? 'none' : 'slide_from_right',
       }}

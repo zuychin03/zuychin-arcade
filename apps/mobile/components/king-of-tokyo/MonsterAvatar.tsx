@@ -1,3 +1,4 @@
+import { decorativeSvgProps } from '../ui/decorativeSvgProps';
 import { useState } from 'react';
 import { Image, View } from 'react-native';
 import Svg, { Circle, Defs, Ellipse, G, LinearGradient, Line, Path, Polygon, Rect, Stop } from 'react-native-svg';
@@ -63,7 +64,7 @@ export function MonsterAvatar({ seed, size = 54, active = false, eliminated = fa
         active ? neonBox(`${profile.accent}88`, Math.max(8, size * 0.2)) : null,
       ]}
     >
-      <Svg accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" width={size} height={size} viewBox="0 0 100 100">
+      <Svg {...decorativeSvgProps} pointerEvents="none" width={size} height={size} viewBox="0 0 100 100">
         <Defs>
           <LinearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
             <Stop offset="0" stopColor={profile.accent} stopOpacity="0.34" />
@@ -152,7 +153,7 @@ export function MonsterAvatar({ seed, size = 54, active = false, eliminated = fa
         onError={() => setFailedPortraits(previous => new Set(previous).add(variant))}
         style={{ position: 'absolute', top: size * 0.06, left: size * 0.06, width: size * 0.88, height: size * 0.88, borderRadius: size / 2 }}
       />}
-      <Svg accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" width={size} height={size} viewBox="0 0 100 100" style={{ position: 'absolute' }}>
+      <Svg {...decorativeSvgProps} pointerEvents="none" width={size} height={size} viewBox="0 0 100 100" style={{ position: 'absolute' }}>
         <Circle cx="50" cy="50" r="47" fill="none" stroke={glow} strokeWidth={active ? 4 : 2.5} />
         {eliminated && (
           <G>

@@ -15,6 +15,7 @@ function harness({ width = 375, failCopy = false, failShare = false } = {}) {
   let feedback = null, timer = 0, cleanup;
   const timers = new Map(), writes = [], shares = [], ref = { current: null };
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     react: { useState: () => [feedback, value => { feedback = value; }], useRef: () => ref, useEffect: fn => { cleanup = fn(); } },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { Text: 'Text', View: 'View', useWindowDimensions: () => ({ width, fontScale: 2 }), Share: { sharedAction: 'shared', share: async value => { shares.push(value); if (failShare) throw new Error('unavailable'); return { action: 'shared' }; } } },
@@ -51,6 +52,17 @@ test('copy and share keep48px controls and can wrap on narrow enlarged-text layo
   const buttons = nodes(row).filter(node => node.type === 'Button');
   assert.equal(buttons.length, 2);
   assert(buttons.every(button => button.props.style.minHeight >= 48));
+  const { TYPOGRAPHY } = require('./lib/typography-fixture.cjs');
+  for (const button of buttons) {
+    assert.equal(button.props.style.maxWidth, '100%');
+    const label = nodes(button).find(node => node.type === 'Text');
+    for (const [property, value] of Object.entries(TYPOGRAPHY.control)) assert.equal(label.props.style[property], value);
+    assert.equal(label.props.style.flexShrink, 1);
+    assert.equal(label.props.numberOfLines, undefined);
+  }
+  for (const node of nodes(tree).filter(node => node.props.children === 'password protected' || node.props.accessibilityLiveRegion === 'polite')) {
+    for (const [property, value] of Object.entries(TYPOGRAPHY.body)) assert.equal(node.props.style[property], value);
+  }
 });
 
 test('copy retains the unmodified code and clears its owned feedback timer', async () => {

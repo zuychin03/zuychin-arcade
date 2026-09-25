@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { MINE } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
@@ -10,7 +11,7 @@ export default function SaboteurLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: MINE.surface },
         headerTintColor: MINE.gold,
-        headerTitleStyle: { fontWeight: '800' },
+        headerTitleStyle: TYPOGRAPHY.navigation,
         contentStyle: { backgroundColor: MINE.bg },
         animation: reduceMotion ? 'none' : 'slide_from_right',
       }}

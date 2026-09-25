@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { SkullKingCard } from '@zuychin-arcade/types';
 import { SKULL_KING } from '../../constants/theme';
@@ -67,15 +68,15 @@ export function SkullKingRulesGuide() {
 
 const s = StyleSheet.create({
   guide: { gap: 28 }, section: { gap: 12 },
-  title: { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: SKULL_KING.teal },
-  body: { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: SKULL_KING.text },
-  caption: { fontFamily: 'Outfit_700Bold', fontSize: 16, lineHeight: 24, color: SKULL_KING.cyan },
+  title: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22, lineHeight: 28, color: SKULL_KING.teal },
+  body: { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24, color: SKULL_KING.text },
+  caption: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 16, lineHeight: 24, color: SKULL_KING.cyan },
   cards: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, justifyContent: 'center', alignItems: 'flex-start' },
   example: { gap: 8, alignItems: 'center', maxWidth: '100%' },
   characters: { gap: 20 }, characterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, alignItems: 'center' },
   explanation: { flexGrow: 1, flexShrink: 1, flexBasis: 140, minWidth: 0 },
   scorecard: { gap: 8, padding: 16, backgroundColor: SKULL_KING.bg, borderRadius: 12 },
-  scoreLabel: { fontFamily: 'Outfit_700Bold', fontSize: 18, lineHeight: 26, color: SKULL_KING.text },
+  scoreLabel: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 18, lineHeight: 26, color: SKULL_KING.text },
   score: { fontFamily: 'SpaceMono_700Bold', fontSize: 22, lineHeight: 32, color: SKULL_KING.gold },
   miss: { fontFamily: 'SpaceMono_700Bold', fontSize: 20, lineHeight: 30, color: SKULL_KING.coral },
   rule: { height: 1, backgroundColor: SKULL_KING.border, marginVertical: 8 },

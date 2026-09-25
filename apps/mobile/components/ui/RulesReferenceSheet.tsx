@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { useState, type ReactNode } from 'react';
 import { Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -119,13 +120,13 @@ export function RulesReferenceSheet({
                 borderColor: `${palette.accent}66`,
               }}
             >
-              <MaterialCommunityIcons name={icon} size={21} color={palette.accent} />
+              <MaterialCommunityIcons name={icon} size={21} color={palette.accent} accessible={false} />
             </View>
             <View style={{ flexGrow: 1, flexShrink: 1, maxWidth: '100%', minWidth: Platform.OS === 'web' ? 'min-content' as ViewStyle['minWidth'] : 90 * fontScale }}>
               <Text
                 accessibilityRole="header"
                 style={{
-                  fontFamily: 'Outfit_800ExtraBold',
+                  fontFamily: TYPOGRAPHY.heading.fontFamily,
                   fontSize: 17,
                   color: palette.accent,
                 }}
@@ -139,7 +140,7 @@ export function RulesReferenceSheet({
               onPress={onClose}
               style={{ width: 48, height: 48, flexShrink: 0, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center' }}
             >
-              <MaterialCommunityIcons name="close" size={22} color={palette.muted} />
+              <MaterialCommunityIcons name="close" size={22} color={palette.muted} accessible={false} />
             </Pressable>
           </View>
 
@@ -151,13 +152,13 @@ export function RulesReferenceSheet({
             showsVerticalScrollIndicator={Platform.OS === 'web'}
           >
             <View style={{ gap: 6 }}>
-              <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.accent, fontSize: 24, lineHeight: 32 }}>{gameTitle}</Text>
-              <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.muted, fontSize: 16, lineHeight: 24 }}>{subtitle}</Text>
+              <Text accessibilityRole="header" style={{ fontFamily: TYPOGRAPHY.display.fontFamily, color: palette.accent, fontSize: 24, lineHeight: 32 }}>{gameTitle}</Text>
+              <Text style={{ fontFamily: TYPOGRAPHY.body.fontFamily, color: palette.muted, fontSize: 16, lineHeight: 24 }}>{subtitle}</Text>
             </View>
             {children}
             <View style={{ gap: 8 }}>
-              <Text accessibilityRole="header" style={{ color: palette.text, fontFamily: 'Outfit_800ExtraBold', fontSize: 22 }}>Rules in detail</Text>
-              <Text style={{ color: palette.muted, fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24 }}>Open a chapter for exact rules, scoring and digital-table differences.</Text>
+              <Text accessibilityRole="header" style={{ color: palette.text, fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22 }}>Rules in detail</Text>
+              <Text style={{ color: palette.muted, fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24 }}>Open a chapter for exact rules, scoring and digital-table differences.</Text>
               {sections.map((section) => <RuleChapter key={section.title} section={section} palette={palette} />)}
             </View>
           </ScrollView>
@@ -172,16 +173,16 @@ function RuleChapter({ section, palette }: { section: RuleSection; palette: Rule
   const [expanded, setExpanded] = useState(false);
   return <View style={{ borderBottomWidth: 1, borderBottomColor: palette.border, paddingVertical: 8 }}>
     <Pressable accessibilityRole="button" accessibilityLabel={section.title} accessibilityState={{ expanded }} aria-expanded={Platform.OS === 'web' ? expanded : undefined}
-      onPress={() => setExpanded(value => !value)} style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 }}>
-      <MaterialCommunityIcons name={section.icon} size={20} color={palette.secondary} />
-      <Text style={{ flex: 1, fontFamily: 'Outfit_700Bold', color: palette.text, fontSize: 18, lineHeight: 26 }}>{section.title}</Text>
-      <MaterialCommunityIcons name={expanded ? 'chevron-up' : 'chevron-down'} size={22} color={palette.muted} />
+      onPress={() => setExpanded(value => !value)} style={{ minHeight: 48, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 }}>
+      <MaterialCommunityIcons name={section.icon} size={20} color={palette.secondary} accessible={false} />
+      <Text style={{ flex: 1, minWidth: 0, fontFamily: TYPOGRAPHY.heading.fontFamily, color: palette.text, fontSize: 18, lineHeight: 26 }}>{section.title}</Text>
+      <MaterialCommunityIcons name={expanded ? 'chevron-up' : 'chevron-down'} size={22} color={palette.muted} accessible={false} />
     </Pressable>
     {expanded && <View style={{ gap: 20, paddingTop: 8, paddingBottom: 16 }}>
       {section.entries.map(entry => <View key={entry.title} style={{ gap: 6 }}>
-        <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: palette.secondary, fontSize: 17, lineHeight: 25 }}>{entry.title}</Text>
-        {entry.tag ? <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.muted, fontSize: 14 }}>{entry.tag}</Text> : null}
-        <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.text, fontSize: 16, lineHeight: 25 }}>{entry.body}</Text>
+        <Text accessibilityRole="header" style={{ fontFamily: TYPOGRAPHY.heading.fontFamily, color: palette.secondary, fontSize: 17, lineHeight: 25 }}>{entry.title}</Text>
+        {entry.tag ? <Text style={{ fontFamily: TYPOGRAPHY.heading.fontFamily, color: palette.muted, fontSize: 14 }}>{entry.tag}</Text> : null}
+        <Text style={{ fontFamily: TYPOGRAPHY.body.fontFamily, color: palette.text, fontSize: 16, lineHeight: 25 }}>{entry.body}</Text>
       </View>)}
     </View>}
   </View>;

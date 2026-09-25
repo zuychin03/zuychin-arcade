@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { DIXIT } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
@@ -6,6 +7,7 @@ import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreferen
 export default function Layout() {
   const reduced = useReducedMotionPreference();
   return <Stack screenOptions={{ headerStyle: { backgroundColor: DIXIT.surface }, headerTintColor: DIXIT.accent,
+    headerTitleStyle: TYPOGRAPHY.navigation,
     contentStyle: { backgroundColor: DIXIT.bg }, animation: reduced ? 'none' : 'slide_from_right' }}>
     <Stack.Screen name="index" options={{ title: 'Dixit Odyssey', headerLeft: () => <ArcadeBackButton color={DIXIT.accent} /> }} />
     <Stack.Screen name="join" options={{ title: 'Join a Story' }} />

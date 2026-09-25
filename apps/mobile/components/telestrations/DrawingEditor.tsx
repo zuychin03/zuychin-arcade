@@ -34,7 +34,7 @@ export function DrawingEditor({ value, onChange, disabled }: { value: Telestrati
     setCursor(next); if (penDown) point(next, false);
   };
   return <View style={{ gap: 16 }}>
-    <CardSurface radius={12} faceColor={C.paper} edgeColor="#65778C" highlightColor="#E5F5FF" depth={4}>
+    <CardSurface radius={12} faceColor={C.paper} edgeColor={C.border} highlightColor={C.surface} depth={4}>
       <DrawingInput disabled={disabled} onPoint={point} onEnd={() => {}} onCursor={setCursor}>
         <Drawing drawing={value} cursor={cursor} />
       </DrawingInput>

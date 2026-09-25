@@ -24,6 +24,7 @@ function harness({ platform = 'web', fontScale = 1, width = 375, actualSurface =
   let measuredScale = 1, measuredFont = 18;
   const textRef = { current: null };
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     react: { useRef: () => textRef, useState: () => [measuredScale, value => { measuredScale = value; }] },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', StyleSheet: { absoluteFill: {} }, Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },

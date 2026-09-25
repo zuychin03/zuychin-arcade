@@ -11,6 +11,7 @@ function harness() {
   let failed = new Set();
   const jsx = (type, props) => ({ type, props });
   const modules = {
+    '../ui/decorativeSvgProps': require('./lib/decorative-svg-fixture.cjs')(),
     react: { useState: () => [failed, update => { failed = update(failed); }] },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Image: 'Image' },

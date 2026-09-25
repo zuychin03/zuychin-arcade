@@ -33,6 +33,19 @@
 
 ### Interface
 
+- Standardised typography roles across game navigation, setup, room flows,
+  controls and rulebooks, with a documented theme contract for future games.
+- Made library columns respond to browser text enlargement and placed Kraken's
+  outcome and rematch before the inspectable voyage map.
+- Extended single-frame card composition to Saboteur, Coup, Feed the Kraken,
+  Cartographers Heroes and Dixit Odyssey, removing inset artwork corners and
+  retaining compact markers, live paths, rules and complete image composition.
+- Aligned the four newest rulebooks with shared dismissal, focus and expandable
+  chapters while preserving mechanics-specific illustrations and detailed rules.
+  Telestrations' relay steps now adapt to enlarged text and use a visible ink example.
+- Gave Telestrations a warm-paper and raspberry theme with matching generated
+  sketchbook artwork, light-theme controls and a readable dark-shell catalogue
+  accent. Kraken keeps its nautical blue; gameplay colour meanings are unchanged.
 - Reworked cards across King of Tokyo, Skull King, Citadels, Not Alone, BANG!,
   Libertalia and Colt Express to use one physical frame and full-width artwork.
   Removed nested illustration panels while preserving live rules, hidden-card

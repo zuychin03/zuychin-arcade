@@ -163,7 +163,7 @@ const games = Object.freeze({
     manifestFile: 'feed-the-kraken-manifest.json',
   },
   telestrations: {
-    sourceFile: 'docs/design/game-art/telestrations-sketchbooks-concept.png',
+    sourceFile: 'docs/design/game-art/telestrations-sketchbooks-warm.png',
     specs: [
       { file: 'telestrations-cover.webp', width: 640, maxBytes: 160 * 1024 },
       { file: 'telestrations-hero.webp', width: 1280, maxBytes: 440 * 1024 },

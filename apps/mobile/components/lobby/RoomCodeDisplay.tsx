@@ -4,6 +4,7 @@ import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScalePressable } from '../ui/ScalePressable';
 import { ARCADE, neonText } from '../../constants/theme';
+import { TYPOGRAPHY } from '../../constants/typography';
 
 export interface RoomCodePalette {
   background: string;
@@ -13,6 +14,7 @@ export interface RoomCodePalette {
   secondary: string;
   muted: string;
   text: string;
+  errorColor?: string;
 }
 
 interface Props {
@@ -87,7 +89,7 @@ export function RoomCodeDisplay({
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <MaterialCommunityIcons name="access-point" size={13} color={palette.accent} />
-        <Text style={{ fontFamily: 'Outfit_700Bold', fontSize: 11, letterSpacing: 2, color: palette.muted }}>
+        <Text style={{ ...TYPOGRAPHY.label, color: palette.muted }}>
           ROOM CODE
         </Text>
       </View>
@@ -96,7 +98,7 @@ export function RoomCodeDisplay({
         accessibilityLabel={`Room code ${roomCode}`}
         style={{
           fontSize: codeFontSize,
-          fontFamily: 'Outfit_800ExtraBold',
+          ...TYPOGRAPHY.display,
           letterSpacing: codeLetterSpacing,
           marginVertical: 4,
           maxWidth: '100%',
@@ -107,14 +109,14 @@ export function RoomCodeDisplay({
         {roomCode}
       </Text>
       {hasPassword ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
           <MaterialCommunityIcons name="lock-outline" size={13} color={palette.muted} />
-          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 11 }}>
+          <Text style={{ ...TYPOGRAPHY.body, color: palette.muted, flexShrink: 1, textAlign: 'center' }}>
             password protected
           </Text>
         </View>
       ) : (
-        <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 11 }}>
+        <Text style={{ ...TYPOGRAPHY.body, color: palette.muted, textAlign: 'center' }}>
           Share this code with your players
         </Text>
       )}
@@ -125,6 +127,7 @@ export function RoomCodeDisplay({
           onPress={() => void copyCode()}
           style={{
             minHeight: 48,
+            maxWidth: '100%',
             flexDirection: 'row',
             alignItems: 'center',
             gap: 6,
@@ -136,13 +139,14 @@ export function RoomCodeDisplay({
           }}
         >
           <MaterialCommunityIcons name="content-copy" size={14} color={palette.secondary} />
-          <Text style={{ color: palette.secondary, fontFamily: 'Outfit_700Bold', fontSize: 12 }}>COPY</Text>
+          <Text style={{ ...TYPOGRAPHY.control, color: palette.secondary, flexShrink: 1, minWidth: 0 }}>COPY</Text>
         </ScalePressable>
         <ScalePressable
           accessibilityLabel="Share room code"
           onPress={() => void shareCode()}
           style={{
             minHeight: 48,
+            maxWidth: '100%',
             flexDirection: 'row',
             alignItems: 'center',
             gap: 6,
@@ -154,10 +158,10 @@ export function RoomCodeDisplay({
           }}
         >
           <MaterialCommunityIcons name="share-variant-outline" size={14} color={palette.background} />
-          <Text style={{ color: palette.background, fontFamily: 'Outfit_700Bold', fontSize: 12 }}>SHARE</Text>
+          <Text style={{ ...TYPOGRAPHY.control, color: palette.background, flexShrink: 1, minWidth: 0 }}>SHARE</Text>
         </ScalePressable>
       </View>
-      <Text accessibilityLiveRegion="polite" style={{ minHeight: 18, marginTop: 7, fontFamily: 'SpaceMono_700Bold', color: feedback?.startsWith('Could') || feedback?.startsWith('Sharing') ? '#FF6B7D' : palette.secondary, fontSize: 10, textAlign: 'center' }}>
+      <Text accessibilityLiveRegion="polite" style={{ ...TYPOGRAPHY.body, minHeight: 24, marginTop: 7, color: feedback?.startsWith('Could') || feedback?.startsWith('Sharing') ? palette.errorColor ?? '#FF6B7D' : palette.secondary, textAlign: 'center' }}>
         {feedback ?? ''}
       </Text>
     </View>

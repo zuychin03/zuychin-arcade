@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { COUP } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
@@ -10,7 +11,7 @@ export default function CoupLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: COUP.surface },
         headerTintColor: COUP.crimson,
-        headerTitleStyle: { fontWeight: '800' },
+        headerTitleStyle: TYPOGRAPHY.navigation,
         contentStyle: { backgroundColor: COUP.bg },
         animation: reduceMotion ? 'none' : 'slide_from_right',
       }}

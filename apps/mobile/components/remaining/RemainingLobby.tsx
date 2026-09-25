@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { RoomPublicState } from '@zuychin-arcade/types';
 import { RoomCodeDisplay } from '../lobby/RoomCodeDisplay';
 import { NeonButton } from '../ui/NeonButton';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { ScalePressable } from '../ui/ScalePressable';
 import { GameRecovery } from '../ui/GameRecovery';
 import { getSocket } from '../../hooks/useSocket';
@@ -24,6 +25,9 @@ interface Palette {
   secondary: string;
   muted: string;
   text: string;
+  onAccent?: string;
+  controlSurface?: string;
+  danger?: string;
 }
 
 interface Props {
@@ -313,7 +317,7 @@ export function RemainingLobby({ base, gameName, minPlayers, mark, briefing, gam
     ownedPrompt.current = useDialogStore.getState().dialog;
   };
 
-  if (!room) return <GameRecovery message={'Finding your ' + gameName + ' room…'} background={palette.bg} surface={palette.surface} border={palette.border} accent={palette.accent} muted={palette.muted} />;
+  if (!room) return <GameRecovery message={'Finding your ' + gameName + ' room…'} background={palette.bg} surface={palette.surface} border={palette.border} accent={palette.accent} muted={palette.muted} solidTextColor={palette.onAccent} outlineBackgroundColor={palette.controlSurface} />;
 
   const seats = room.players.filter((player) => !player.hasLeft);
   const connectedCount = seats.filter((player) => player.isConnected).length;
@@ -325,22 +329,22 @@ export function RemainingLobby({ base, gameName, minPlayers, mark, briefing, gam
   return (
     <View style={{ flex: 1, backgroundColor: palette.bg }}>
       <ScrollView contentContainerStyle={{ width: '100%', maxWidth: 720, alignSelf: 'center', padding: compact ? 14 : 20, gap: 14, paddingBottom: 36 }}>
-        <RoomCodeDisplay roomCode={room.roomCode} hasPassword={room.hasPassword} gameName={gameName} palette={{ background: palette.bg, surface: palette.surface, border: palette.border, accent: palette.accent, secondary: palette.secondary, muted: palette.muted, text: palette.text }} />
+        <RoomCodeDisplay roomCode={room.roomCode} hasPassword={room.hasPassword} gameName={gameName} palette={{ background: palette.bg, surface: palette.surface, border: palette.border, accent: palette.accent, secondary: palette.secondary, muted: palette.muted, text: palette.text, errorColor: palette.danger }} />
         {connectionMessage && !cleanupPending ? <View style={{ borderWidth: 1, borderColor: palette.border, borderRadius: 14, padding: 14, gap: 10 }}>
-          <Text accessibilityLiveRegion="polite" style={{ color: palette.text, fontSize: 14, lineHeight: 20 }}>{connectionMessage}</Text>
-          <NeonButton label="RETRY CONNECTION" color={palette.secondary} variant="outline" disabled={leaving} onPress={refresh} />
+          <Text accessibilityLiveRegion="polite" style={{ ...TYPOGRAPHY.body, color: palette.text }}>{connectionMessage}</Text>
+          <NeonButton label="RETRY CONNECTION" color={palette.secondary} outlineBackgroundColor={palette.controlSurface} variant="outline" disabled={leaving} onPress={refresh} />
         </View> : null}
-        {message ? <Text accessibilityRole="alert" style={{ color: palette.text, fontSize: 14, lineHeight: 20 }}>{message}</Text> : null}
-        <View style={{ alignItems: 'center' }}>{mark}<Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.accent, fontSize: 16, letterSpacing: 2, marginTop: 5, textAlign: 'center' }}>{gameName.toUpperCase()} TABLE</Text></View>
+        {message ? <Text accessibilityRole="alert" style={{ ...TYPOGRAPHY.body, color: palette.text }}>{message}</Text> : null}
+        <View style={{ alignItems: 'center' }}>{mark}<Text accessibilityRole="header" style={{ ...TYPOGRAPHY.display, color: palette.accent, fontSize: 20, lineHeight: 28, marginTop: 5, textAlign: 'center' }}>{gameName.toUpperCase()} TABLE</Text></View>
         <View style={{ borderRadius: 18, borderWidth: 1, borderColor: palette.border, backgroundColor: palette.surface, padding: 14 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: palette.secondary, letterSpacing: 2 }}>PLAYERS</Text>
-            <Text accessibilityLabel={seats.length + ' of ' + room.maxPlayers + ' seats filled'} style={{ fontFamily: 'SpaceMono_700Bold', color: palette.accent }}>{seats.length}/{room.maxPlayers}</Text>
+            <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: palette.secondary }}>PLAYERS</Text>
+            <Text accessibilityLabel={seats.length + ' of ' + room.maxPlayers + ' seats filled'} style={{ ...TYPOGRAPHY.data, color: palette.accent }}>{seats.length}/{room.maxPlayers}</Text>
           </View>
           {seats.map((player) => <View key={player.playerId} style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: palette.border + '66' }}>
             <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
-              <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.text, fontSize: 16 }}>{player.displayName}{player.playerId === playerId ? ' · YOU' : ''}</Text>
-              <Text style={{ fontFamily: 'SpaceMono_400Regular', color: player.isConnected ? palette.accent : palette.muted, fontSize: 12, lineHeight: 18 }}>{[seatRoleLabel?.(player), player.isHost ? 'HOST' : null, player.isConnected ? 'CONNECTED' : 'RECONNECTING · SEAT RESERVED'].filter(Boolean).join(' · ')}</Text>
+              <Text style={{ ...TYPOGRAPHY.heading, color: palette.text }}>{player.displayName}{player.playerId === playerId ? ' · YOU' : ''}</Text>
+              <Text style={{ ...TYPOGRAPHY.label, color: player.isConnected ? palette.accent : palette.muted }}>{[seatRoleLabel?.(player), player.isHost ? 'HOST' : null, player.isConnected ? 'CONNECTED' : 'RECONNECTING · SEAT RESERVED'].filter(Boolean).join(' · ')}</Text>
             </View>
             {isHost && !player.isHost ? <ScalePressable accessibilityLabel={'Remove ' + player.displayName} disabled={locked || !synced || connection !== 'connected'} onPress={() => removePlayer(player.playerId)} style={{ width: 48, height: 48, borderRadius: 12, borderWidth: 1, borderColor: palette.border, alignItems: 'center', justifyContent: 'center', opacity: locked || !synced ? 0.4 : 1 }}>
               <MaterialCommunityIcons name="account-remove-outline" size={22} color={palette.secondary} />
@@ -348,15 +352,15 @@ export function RemainingLobby({ base, gameName, minPlayers, mark, briefing, gam
           </View>)}
         </View>
         <View style={{ borderRadius: 14, borderWidth: 1, borderColor: palette.border, backgroundColor: palette.panel, padding: 14 }}>
-          <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_700Bold', color: palette.secondary, fontSize: 13 }}>TABLE BRIEFING</Text>
-          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: palette.muted, fontSize: 13, lineHeight: 20, marginTop: 7 }}>{briefing}</Text>
+          <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: palette.secondary }}>TABLE BRIEFING</Text>
+          <Text style={{ ...TYPOGRAPHY.body, color: palette.muted, marginTop: 7 }}>{briefing}</Text>
         </View>
         {isHost ? <>
           {renderStartOptions?.(locked || !synced || connection !== 'connected' || room.status !== 'lobby')}
-          <NeonButton label={starting ? 'STARTING…' : reconnectingCount ? 'WAITING FOR RECONNECTION' : canStart ? 'START GAME' : 'NEED ' + Math.max(0, minPlayers - connectedCount) + ' MORE CONNECTED'} color={palette.accent} disabled={!canStart || locked || !synced || connection !== 'connected'} onPress={start} />
-          {reconnectingCount > 0 ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 20 }}>Wait for disconnected players, or remove their reserved seats before starting.</Text> : null}
-        </> : <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 20, textAlign: 'center', padding: 15 }}>Waiting for the host to start…</Text>}
-        <NeonButton label="HOW TO PLAY" color={palette.secondary} variant="outline" disabled={leaving} onPress={() => setRules(true)} />
+          <NeonButton label={starting ? 'STARTING…' : reconnectingCount ? 'WAITING FOR RECONNECTION' : canStart ? 'START GAME' : 'NEED ' + Math.max(0, minPlayers - connectedCount) + ' MORE CONNECTED'} color={palette.accent} solidTextColor={palette.onAccent} disabled={!canStart || locked || !synced || connection !== 'connected'} onPress={start} />
+          {reconnectingCount > 0 ? <Text style={{ ...TYPOGRAPHY.body, color: palette.muted }}>Wait for disconnected players, or remove their reserved seats before starting.</Text> : null}
+        </> : <Text style={{ ...TYPOGRAPHY.body, color: palette.muted, textAlign: 'center', padding: 15 }}>Waiting for the host to start…</Text>}
+        <NeonButton label="HOW TO PLAY" color={palette.secondary} outlineBackgroundColor={palette.controlSurface} variant="outline" disabled={leaving} onPress={() => setRules(true)} />
         <NeonButton label={leaving ? 'LEAVING…' : cleanupPending ? 'RETRY LEAVING' : 'LEAVE ROOM'} color={palette.muted} variant="ghost" disabled={leaving || starting} onPress={requestLeave} />
       </ScrollView>
       {renderRules(rules, () => setRules(false))}

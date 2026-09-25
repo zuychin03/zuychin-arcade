@@ -9,6 +9,7 @@ import { CartographersReferenceSheet } from '../../components/cartographers/Refe
 import { MapBoard } from '../../components/cartographers/MapBoard';
 import { emptyChart } from '../../components/cartographers/geometry';
 import { CARTOGRAPHERS as C } from '../../components/cartographers/palette';
+import { TYPOGRAPHY } from '../../constants/typography';
 
 export default function CartographersLanding() {
   const [side, setSide] = useState<CartographersMapSide>('C');
@@ -18,10 +19,10 @@ export default function CartographersLanding() {
     mark={<MaterialCommunityIcons name="map-outline" size={64} color={C.accent} />}
     hero={<GameCover source={require('../../assets/game-art/cartographers-heroes-hero.webp')} rimColor={C.accent} backgroundColor={C.bg} />}
     createConfig={{ cartographersMapSide: side }} renderCreateOptions={busy => <View style={{ gap: 8 }}>
-      <Text style={{ color: C.text, fontFamily: 'Outfit_600SemiBold', fontSize: 16 }}>Choose the shared map</Text>
+      <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: C.text }}>Choose the shared map</Text>
       {(['C', 'D'] as const).map(value => <ScalePressable key={value} disabled={busy} onPress={() => setSide(value)} accessibilityLabel={`Map ${value}`} accessibilityState={{ selected: side === value }}
         style={{ minHeight: 48, padding: 12, borderRadius: 12, backgroundColor: side === value ? C.accent : C.panel }}>
-        <Text style={{ color: side === value ? C.ink : C.text, fontFamily: 'Outfit_600SemiBold', fontSize: 16 }}>Map {value} · {value === 'C' ? 'Open frontier' : 'Wasteland obstacles'}</Text>
+        <Text style={{ ...TYPOGRAPHY.control, color: side === value ? C.ink : C.text }}>Map {value} · {value === 'C' ? 'Open frontier' : 'Wasteland obstacles'}</Text>
       </ScalePressable>)}
       <MapBoard map={emptyChart(side)} side={side} label={`Map ${side} starting chart`} />
     </View>} renderRules={(visible, onClose) => <CartographersReferenceSheet visible={visible} onClose={onClose} />} />;

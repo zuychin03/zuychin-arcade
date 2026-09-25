@@ -129,7 +129,7 @@ test('locked state stays disabled and cannot advertise an enabled hover/focus or
   assert(nodes(tree).some(node => node.type === 'Icon' && node.props.name === 'lock-outline'));
 });
 
-function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }) {
+function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }, measuredScale = fontScale) {
   const state = hooks(); const routes = [];
   const store = { token: null, playerId: null, roomCode: null, room: null };
   const modules = {
@@ -138,6 +138,10 @@ function hubHarness(fontScale = 1, viewport = { width: 1280, height: 900 }) {
     'expo-router': { router: { push: route => routes.push(route) } }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../store/useGameStore': { useGameStore: fn => fn(store) }, '../../lib/api': {}, '../../lib/tokenUtils': {}, '../../lib/storage': {},
     '../../lib/gameRoutes': load('lib/gameRoutes.ts', {}),
+    '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: (size, scale) => {
+      assert.equal(size, 32); assert.equal(scale, fontScale);
+      return { textRef: { current: null }, onTextLayout() {}, textScale: Math.max(1, measuredScale, scale) };
+    } },
     '../../components/ui/GameTile': { GameTile: 'GameTile' }, '../../components/ui/ScalePressable': { ScalePressable: 'ScalePressable' }, '../../components/ui/NeonButton': { NeonButton: 'NeonButton' },
     '../../assets/game-art/saboteur-cover.webp': 17,
     '../../assets/game-art/colt-cover.webp': 18,
@@ -210,6 +214,18 @@ test('measured columns adapt to sidebar-constrained widths and 150/200 percent n
     assert(tiles.every(tile => tile.props.width === Math.floor((width - 14 * (columns - 1)) / columns)));
     assert(tiles[0].props.width * columns + 14 * (columns - 1) <= width);
     assert(tiles.every(tile => tile.props.compact === (columns === 1)));
+  }
+});
+
+test('browser text enlargement reduces library columns without relying on native fontScale', () => {
+  for (const [measuredScale, columns] of [[1, 3], [1.5, 2], [2, 1]]) {
+    const h = hubHarness(1, { width: 1280, height: 900 }, measuredScale);
+    let tree = h.render();
+    const heading = nodes(tree).find(node => node.props.accessibilityRole === 'header');
+    assert(heading.props.ref); assert.equal(typeof heading.props.onLayout, 'function');
+    nodes(tree).find(node => node.props.nativeID === 'arcade-game-library').props.onLayout({ nativeEvent: { layout: { width: 980 } } });
+    tree = h.render();
+    assert(nodes(tree).filter(node => node.type === 'GameTile').every(tile => tile.props.width === Math.floor((980 - 14 * (columns - 1)) / columns)));
   }
 });
 

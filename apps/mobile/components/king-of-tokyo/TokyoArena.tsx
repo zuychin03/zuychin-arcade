@@ -1,3 +1,4 @@
+import { decorativeSvgProps } from '../ui/decorativeSvgProps';
 import { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -61,7 +62,7 @@ export function TokyoArena({ players, currentPlayerId, capacity, compact = false
         },
       ]}
     >
-      <Svg accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" width="100%" height="100%" viewBox="0 0 420 222" preserveAspectRatio="none" style={{ position: 'absolute' }}>
+      <Svg {...decorativeSvgProps} pointerEvents="none" width="100%" height="100%" viewBox="0 0 420 222" preserveAspectRatio="none" style={{ position: 'absolute' }}>
         <Defs>
           <LinearGradient id="arena-sky" x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0" stopColor="#143B32" />

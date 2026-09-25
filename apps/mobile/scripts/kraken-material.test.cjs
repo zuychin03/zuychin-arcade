@@ -4,23 +4,30 @@ const path = require('node:path');
 const vm = require('node:vm');
 const test = require('node:test');
 const ts = require('typescript');
-const jsx = (type, props) => ({ type, props });
+const jsx = (type, props) => typeof type === 'function' ? type(props) : ({ type, props });
 const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(nodes)];
 
 function cardHarness() {
   let failed = null;
+  const currentSource = { current: null };
   const exports = {};
   const filename = path.join(__dirname, '../components/kraken/NavigationCard.tsx');
   const modules = {
-    react: { useState: () => [failed, value => { failed = value; }] },
+    react: { useState: () => [failed, value => { failed = value; }], useRef: () => currentSource },
     'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { Image: 'Image', Text: 'Text', View: 'View' },
+    'react-native': { Image: 'Image', Text: 'Text', View: 'View', StyleSheet: { absoluteFill: {} } },
+    '../../constants/theme': { ARCADE: {} },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../ui/CardSurface': { CardSurface: 'Surface' },
     '../ui/ScalePressable': { ScalePressable: 'Button' },
     './palette': { KRAKEN: { panel: '#123', bg: '#012', surface: '#234', text: '#fff', border: '#678' } },
     './Controls': { typography: { body: { fontSize: 16 }, heading: { fontSize: 21 } } },
   };
+  const illustration = {};
+  vm.runInNewContext(ts.transpileModule(fs.readFileSync(path.join(__dirname, '../components/ui/CardIllustration.tsx'), 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
+  }).outputText, { exports: illustration, require: name => { assert(name in modules, name); return modules[name]; } });
+  modules['../ui/CardIllustration'] = illustration;
   vm.runInNewContext(ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
   }).outputText, { exports, require: name => {
@@ -40,6 +47,10 @@ test('all three courses share a growing tactile face and an uncropped illustrati
     const list = nodes(tree), image = list.find(n => n.type === 'Image');
     assert.equal(image.props.resizeMode, 'contain');
     assert(list.some(n => n.props?.style?.aspectRatio === 1.5));
+    const field = list.find(n => n.props?.testID === 'card-illustration');
+    assert.equal(field.props.style.width, '100%');
+    assert.equal(field.props.style.borderRadius, undefined);
+    assert.equal(tree.props.children.props.style.padding, undefined);
     assert.equal(list.some(n => n.type === 'Button'), false, 'Reference faces are not fake controls');
     for (const text of list.filter(n => n.type === 'Text')) {
       assert.equal(text.props.numberOfLines, undefined); assert.equal(text.props.allowFontScaling, undefined);
@@ -67,4 +78,13 @@ test('a failed image keeps the readable course and effect, without poisoning ano
   assert(nodes(tree).some(n => n.type === 'Text' && n.props.children === 'Blue course'));
   assert(nodes(tree).some(n => n.type === 'Text' && n.props.children === 'Drunk'));
   assert(nodes(NavigationCard({ card: { colour: 'red', effect: 'telescope' } })).some(n => n.type === 'Image'));
+});
+
+test('late course errors cannot replace a newer loaded illustration', () => {
+  const { NavigationCard } = cardHarness();
+  const render = colour => NavigationCard({ card: { colour, effect: 'drunk' } });
+  const oldError = nodes(render('blue')).find(n => n.type === 'Image').props.onError;
+  render('red'); oldError();
+  assert(nodes(render('red')).some(n => n.type === 'Image'));
+  assert(nodes(render('blue')).some(n => n.type === 'Image'));
 });

@@ -666,7 +666,10 @@ The Saboteur implementation defines the pattern:
    public + per-socket private).
 5. **Mobile route group** - `app/<game>/` with its own `_layout.tsx`,
    landing/lobby/game screens; a `GameTile` on the Arcade tab linking in.
-   Use `arcade.*` chrome tokens plus a game-specific palette like `mine.*`.
+   Follow the [game theme contract](docs/design/GAME_THEME_CONTRACT.md): use the
+   shared entrance/join/lobby components, typography roles, game palette,
+   single-frame artwork and mechanics-specific reference. Include its responsive
+   and accessibility acceptance checks, not only a gameplay screenshot.
 6. **Reuse** the lobby/room layer as-is - rooms, JWTs, kick, and
    `room_updated` are already game-agnostic.
 

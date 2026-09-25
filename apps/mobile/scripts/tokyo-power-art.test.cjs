@@ -10,6 +10,7 @@ const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.p
 function load(component, extra = {}) {
   const jsx = (type, props) => ({ type, props });
   const modules = {
+    '../ui/decorativeSvgProps': require('./lib/decorative-svg-fixture.cjs')(),
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image' },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },

@@ -13,6 +13,7 @@ for (const platform of ['web', 'ios', 'android']) {
     const focusCalls = [];
     let expanded = false;
     const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
       react: { useState: () => [expanded, update => { expanded = typeof update === 'function' ? update(expanded) : update; }] },
       'react/jsx-runtime': { jsx, jsxs: jsx },
       'react-native': { Modal: 'Modal', Pressable: 'Pressable', ScrollView: 'ScrollView', Text: 'Text', View: 'View', Platform: { OS: platform }, useWindowDimensions: () => ({ width: 320, fontScale: 2 }) },
@@ -35,6 +36,7 @@ for (const platform of ['web', 'ios', 'android']) {
     assert.equal(close.props.style.flexShrink, 0);
     assert.equal(close.props.style.width, 48);
     assert.equal(heading.props.style.textShadowRadius, undefined);
+    assert.equal(heading.props.style.fontFamily, modules['../../constants/typography'].TYPOGRAPHY.heading.fontFamily);
     assert(nodes(tree).some(node => node.props.style?.flexWrap === 'wrap'));
     assert(nodes(tree).some(node => node.props.style?.minWidth === (platform === 'web' ? 'min-content' : 180)));
     assert.equal(scroll.tabIndex, platform === 'web' ? 0 : undefined);
@@ -50,6 +52,9 @@ for (const platform of ['web', 'ios', 'android']) {
     assert.equal(toggle.props.accessibilityState.expanded, false);
     assert.equal(toggle.props['aria-expanded'], platform === 'web' ? false : undefined);
     assert.equal(toggle.props.style.minHeight, 48);
+    assert.equal(toggle.props.style.minWidth, 0);
+    assert(nodes(rendered).filter(node => node.type === 'Icon').every(node => node.props.accessible === false));
+    assert.equal(nodes(rendered).find(node => node.props.children === 'Exact rules').props.style.minWidth, 0);
     toggle.props.onPress();
     rendered = chapter.type(chapter.props);
     toggle = nodes(rendered).find(node => node.type === 'Pressable');

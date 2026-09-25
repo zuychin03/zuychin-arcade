@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { SKULL_KING } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
 import { RouteBackButton } from '../../components/ui/RouteBackButton';
@@ -11,7 +12,7 @@ export default function SkullKingLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: SKULL_KING.surface },
         headerTintColor: SKULL_KING.teal,
-        headerTitleStyle: { fontWeight: '800' },
+        headerTitleStyle: TYPOGRAPHY.navigation,
         contentStyle: { backgroundColor: SKULL_KING.bg },
         animation: reduceMotion ? 'none' : 'slide_from_right',
       }}

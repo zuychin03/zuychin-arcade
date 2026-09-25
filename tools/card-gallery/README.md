@@ -1,5 +1,11 @@
 # Local component gallery
 
+## Expansion component fixtures
+
+Use `?scene=expansion&family=kraken&surface=cards`, choosing `kraken`, `telestrations`, `cartographers` or `dixit`. `surface=rules` opens that game's actual reference sheet. These bounded examples use production components and fonts with synthetic data and local callbacks only. Existing nine-family routes and the screenshot campaign remain separate.
+
+Cards include Kraken navigation and full/compact characters; Cartographers explore, hero, ambush and objectives; selected Dixit artwork with local inspect callbacks; and the Telestrations relay and drawing surfaces. Inspect phone and desktop separately. Use `expansion-ready`, `expansion-fixture-*`, `expansion-actions` and `expansion-rules-closed` markers. Expansion fixtures do not accept page, panel or role parameters. Run their focused check with `node --test --test-isolation=none tools/card-gallery/expansion.test.cjs`.
+
 ## Artwork fixtures
 
 The optional `scene=artwork` query selects a separate, bounded visual inspection scene. Existing `?family=...` comparison routes and their 216-image campaign are unchanged. These fixtures use actual production components, fonts and artwork; they do not connect to a room or service. They are additional visual evidence, outside the existing campaign runner.

@@ -2,6 +2,10 @@
 
 This records the implemented tactile direction of the Expo/React Native application. [Reusable patterns](docs/design/TACTILE_IMPLEMENTED_PATTERNS.md) describe the shared components, and [the testing guide](docs/TESTING.md) documents verification and release limits.
 
+The [game theme contract](docs/design/GAME_THEME_CONTRACT.md) is the implementation
+rule for all existing and future games. It defines shared typography roles,
+palette contrast, card framing, rulebook ownership and acceptance checks.
+
 ## Direction and page families
 
 Genre: playful, material-rich tabletop worlds. Phone screens are the primary composition, with mobile web the main delivery channel. Desktop expands this experience instead of setting its proportions, and remains an explicit target for every game and complete lifecycle. The library is an illustrated catalogue; game entrances pair a meaningful scene with clear create/join controls. Gameplay is a readable tabletop with code-native stateful pieces, not a marketing page.
@@ -16,9 +20,15 @@ The existing navigation shell and route ownership remain. No new global footer o
 
 ## Colour and typography
 
-`apps/mobile/constants/theme.ts` remains authoritative for cross-platform colour tokens. The Arcade dark-violet shell supports the existing per-game palettes. Cards have luminous, per-game edge accents and recessed illustrations, with stronger lighting for selection. Keep rules text free of glows and preserve purple Not Alone and spectral-white Skull King.
+`apps/mobile/constants/theme.ts` remains authoritative for cross-platform colour tokens. The Arcade dark-violet shell supports the existing per-game palettes. Cards have luminous, per-game edge accents and full-width illustrations inside one physical frame, with stronger lighting for selection. Keep rules text free of glows and preserve purple Not Alone and spectral-white Skull King.
 
-Use the installed Outfit family for display and readable body copy. Reserve Space Mono for codes, scores and short data labels. Headings are upright; rules and descriptions must not become tiny tracked uppercase text.
+Telestrations uses warm paper, dark raspberry and ochre, including its sketchbook artwork. Its buttons opt into light-theme foreground and surface tokens; its catalogue accent remains readable against the dark Arcade shell. Feed the Kraken retains deep-sea blue. Navigation course colours and the drawing-ink palette carry game meaning and do not change with decorative themes.
+
+Use the installed Outfit family through `constants/typography.ts`: 800 for display
+and navigation, 700 for headings and controls, and 400 for body copy. Reserve
+Space Mono for codes, scores and short data labels. Headings are upright; rules
+and descriptions must not become tiny tracked uppercase text. Apply explicit
+font faces consistently rather than relying on platform-default bolding.
 
 React Native style values and the existing NativeWind configuration remain the implementation authority. Do not introduce a parallel CSS-only OKLCH theme or replace working native typography for a web-only skill recipe.
 
@@ -26,7 +36,7 @@ React Native style values and the existing NativeWind configuration remain the i
 
 - Original generated miniature scenes introduce games in the library and entrance. Keep prompt/source/hash provenance with optimised assets.
 - Actual paths, cards, dice, counters and selectable targets stay code-native and reflect current state.
-- Cards use bounded edge thickness, contact shadows, bevels and directional highlights. Their illustration well shares the card's lighting rather than reading as a flat pasted image. Board slots read as recessed spaces.
+- Cards use bounded edge thickness, contact shadows, bevels and directional highlights. A single outer face clips the illustration to the card's corners; do not add a smaller rounded artwork frame inside it. Board slots read as recessed spaces.
 - Decoration is noninteractive and excluded from the accessibility tree. Essential text remains live text.
 - Preserve full scene composition where practical. Provide a bounded image footprint and a useful fallback on load failure.
 - No new WebGL dependency, constant floating decoration or generic glow replacing material depth.

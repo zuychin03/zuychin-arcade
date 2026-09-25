@@ -51,12 +51,8 @@ export function ActionCardView({ card, width = 56, height = 84, fill = false }: 
         minHeight: height,
         ...(fill ? { flexGrow: 1 } : {}),
         gap: 4,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: data.color,
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 4,
       }}
     >
       <Text
@@ -70,6 +66,7 @@ export function ActionCardView({ card, width = 56, height = 84, fill = false }: 
           letterSpacing: 0.5,
           textAlign: 'center',
           marginTop: 2,
+          paddingHorizontal: 4,
         }}
       >
         {data.title}
@@ -77,19 +74,19 @@ export function ActionCardView({ card, width = 56, height = 84, fill = false }: 
 
       <View
         style={{
-          width: minDim * 0.55,
-          height: minDim * 0.55,
+          width,
+          height: width,
           flexShrink: 0,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <ActionArtwork subtype={card.subtype} size={minDim * 0.55} icons={data.icons} color={data.color} />
+        <ActionArtwork subtype={card.subtype} size={width} icons={data.icons} color={data.color} />
         {isSabotage && (
-          <MaterialCommunityIcons name={isSabotage ? 'alert-circle' : 'wrench'} size={minDim * 0.2} color={isSabotage ? ARCADE.red : '#16A34A'} style={{ position: 'absolute', right: -2, bottom: -2 }} />
+          <MaterialCommunityIcons name="alert-circle" size={minDim * 0.2} color={ARCADE.red} style={{ position: 'absolute', right: 4, bottom: 4 }} />
         )}
         {card.subtype.startsWith('repair_') && (
-          <MaterialCommunityIcons name={isSabotage ? 'alert-circle' : 'wrench'} size={minDim * 0.2} color={isSabotage ? ARCADE.red : '#16A34A'} style={{ position: 'absolute', right: -2, bottom: -2 }} />
+          <MaterialCommunityIcons name="wrench" size={minDim * 0.2} color="#16A34A" style={{ position: 'absolute', right: 4, bottom: 4 }} />
         )}
       </View>
 
@@ -103,6 +100,7 @@ export function ActionCardView({ card, width = 56, height = 84, fill = false }: 
           fontFamily: 'Outfit_800ExtraBold',
           textAlign: 'center',
           marginBottom: 4,
+          paddingHorizontal: 4,
         }}
       >
         {data.label}

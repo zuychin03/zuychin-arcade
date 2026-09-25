@@ -34,6 +34,7 @@ function harness({ presentation, width = 320, height = 900, fontScale = 1, reduc
   };
   const animation = { duration: () => animation, delay: () => animation, springify: () => animation, damping: () => animation };
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     react, 'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', TextInput: 'TextInput', ScrollView: 'ScrollView', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width, height, fontScale }) },
     'react-native-reanimated': { default: { View: 'Animated.View' }, FadeInDown: animation, FadeInUp: animation },

@@ -6,7 +6,7 @@ const test = require('node:test');
 const { createHash } = require('node:crypto');
 const ts = require('typescript');
 const root = path.resolve(__dirname, '../../..');
-const jsx = (type, props) => ({ type, props });
+const jsx = (type, props) => typeof type === 'function' ? type(props) : ({ type, props });
 const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(nodes)];
 function load(relative, modules) {
   const filename = path.join(root, relative), exports = {};
@@ -21,10 +21,12 @@ function load(relative, modules) {
 const types = load('packages/types/src/feed-the-kraken-constants.ts', {});
 function harness(component) {
   let failed = null;
-  return load(`apps/mobile/components/kraken/${component}.tsx`, {
-    react: { useState: initial => [component === 'CharacterCard' ? failed : initial, value => { failed = value; }] },
+  const currentSource = { current: null };
+  const modules = {
+    react: { useState: initial => [component === 'CharacterCard' ? failed : initial, value => { failed = value; }], useRef: () => currentSource },
     'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'Fragment' },
-    'react-native': { Image: 'Image', Text: 'Text', View: 'View', useWindowDimensions: () => ({ fontScale: 2 }) },
+    'react-native': { Image: 'Image', Text: 'Text', View: 'View', StyleSheet: { absoluteFill: {} }, useWindowDimensions: () => ({ fontScale: 2 }) },
+    '../../constants/theme': { ARCADE: {} },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '@zuychin-arcade/types': types,
     '../ui/CardSurface': { CardSurface: 'Surface' },
@@ -33,7 +35,9 @@ function harness(component) {
     './decisions': { targetSlots: () => [], characterTargets: () => [] },
     './palette': { KRAKEN: { panel: '#123', bg: '#012', surface: '#234', accent: '#abc', border: '#678' } },
     './Controls': { HelmButton: 'Button', typography: { body: {}, heading: {}, muted: {} } },
-  });
+  };
+  modules['../ui/CardIllustration'] = load('apps/mobile/components/ui/CardIllustration.tsx', modules);
+  return load(`apps/mobile/components/kraken/${component}.tsx`, modules);
 }
 
 test('all 21 original portraits have distinct sources, bounded derivatives and verified manifests', () => {
@@ -61,6 +65,8 @@ test('every character renders its full portrait and scalable live rules; compact
     const list = nodes(tree), image = list.find(n => n.type === 'Image');
     assert.equal(image.props.resizeMode, 'contain'); assert.equal(image.props.accessible, false);
     assert(list.some(n => n.props?.style?.aspectRatio === 2 / 3));
+    assert.equal(tree.props.children.props.style.padding, undefined);
+    assert.equal(list.find(n => n.props?.testID === 'card-illustration').props.style.borderRadius, undefined);
     for (const expected of [types.FEED_THE_KRAKEN_CHARACTER_NAMES[character], types.FEED_THE_KRAKEN_CHARACTER_SUMMARIES[character]]) {
       const text = list.find(n => n.type === 'Text' && n.props.children === expected);
       assert(text); assert.equal(text.props.numberOfLines, undefined); assert.equal(text.props.allowFontScaling, undefined);

@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { CITADELS } from '../../constants/theme';
 import { ArcadeBackButton } from '../../components/ui/ArcadeBackButton';
 import { RouteBackButton } from '../../components/ui/RouteBackButton';
@@ -12,7 +13,7 @@ export default function CitadelsLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: CITADELS.surface },
         headerTintColor: CITADELS.royal,
-        headerTitleStyle: { fontWeight: '800' },
+        headerTitleStyle: TYPOGRAPHY.navigation,
         contentStyle: { backgroundColor: CITADELS.bg },
         animation: reduceMotion ? 'none' : 'slide_from_right',
       }}

@@ -70,27 +70,47 @@ test('artwork is separate from untruncated live card rules and shape guides', ()
   }
   for (const card of constants.CARTOGRAPHERS_CARDS) assert(walk(ExploreCard({ card })).some(n => n.type === 'ShapeDiagram'));
 });
-test('art frame bounds tablet height and isolates a failed image from the next source', () => {
+test('art reaches the card corners and isolates failed or stale sources', () => {
   let failed = null;
-  const jsx = (type, props) => ({ type, props });
-  const { CardArtwork } = load('apps/mobile/components/cartographers/CardArtwork.tsx', {
-    react: { useState: () => [failed, value => { failed = value; }] },
+  const currentSource = { current: null };
+  const jsx = (type, props) => typeof type === 'function' ? type(props) : ({ type, props });
+  const modules = {
+    react: { useState: () => [failed, value => { failed = value; }], useRef: () => currentSource },
     'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { Image: 'Image', View: 'View' },
+    'react-native': { Image: 'Image', View: 'View', StyleSheet: { absoluteFill: {} } },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     './palette': { CARTOGRAPHERS: {} },
-  });
+    '../../constants/theme': { ARCADE: {} },
+  };
+  modules['../ui/CardIllustration'] = load('apps/mobile/components/ui/CardIllustration.tsx', modules);
+  const { CardArtwork } = load('apps/mobile/components/cartographers/CardArtwork.tsx', modules);
   const first = CardArtwork({ source: 'first' });
   assert.equal(first.props.style.width, '100%');
-  assert.equal(first.props.style.maxWidth, 480);
-  assert.equal(first.props.style.aspectRatio, 1.5);
+  for (const key of ['maxWidth', 'borderTopWidth', 'borderBottomWidth', 'borderRadius', 'padding']) assert.equal(first.props.style[key], undefined, key);
+  assert.equal(first.props.style.aspectRatio, 640 / 427);
   assert.equal(first.props.accessible, false);
   assert.equal(first.props.children.props.resizeMode, 'contain');
   first.props.children.props.onError();
-  assert.equal(CardArtwork({ source: 'first' }).props.children.type, 'Icon');
+  assert.equal(CardArtwork({ source: 'first' }).props.children.props.children.type, 'Icon');
   const next = CardArtwork({ source: 'second' });
   assert.equal(next.props.children.type, 'Image');
   assert.equal(next.props.children.props.source, 'second');
   first.props.children.props.onError();
   assert.equal(CardArtwork({ source: 'second' }).props.children.type, 'Image');
+});
+
+test('drawing cards bound the whole face on desktop rather than narrowing only the image', () => {
+  const jsx = (type, props) => ({ type, props });
+  const { ExploreCard } = load('apps/mobile/components/cartographers/ExploreCard.tsx', {
+    'react/jsx-runtime': { jsx, jsxs: jsx },
+    'react-native': { View: 'View', Text: 'Text' },
+    '../ui/CardSurface': { CardSurface: 'Surface' },
+    './palette': { CARTOGRAPHERS: {} }, './artwork': artwork,
+    './CardArtwork': { CardArtwork: 'Artwork' },
+    './MapBoard': { ShapeDiagram: 'Shape', TERRAIN: { water: { label: 'Water' }, farm: { label: 'Farm' } } },
+  });
+  const tree = ExploreCard({ card: constants.CARTOGRAPHERS_CARDS.find(card => card.id === 'lagoon') });
+  assert.equal(tree.props.style.width, '100%'); assert.equal(tree.props.style.maxWidth, 480);
+  assert.equal(tree.props.style.flexGrow, 1); assert.equal(tree.props.children.type, 'Surface');
+  assert.equal(tree.props.children.props.fill, true);
 });

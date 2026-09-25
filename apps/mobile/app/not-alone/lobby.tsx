@@ -7,6 +7,7 @@ import { NotAloneMark } from '../../components/not-alone/NotAloneArtwork';
 import { NotAloneReferenceSheet } from '../../components/not-alone/ReferenceSheet';
 import { NOT_ALONE_PALETTE } from '../../components/not-alone/palette';
 import { NOT_ALONE } from '../../constants/theme';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { useGameStore } from '../../store/useGameStore';
 
 export default function NotAloneLobby() {
@@ -18,14 +19,14 @@ export default function NotAloneLobby() {
     seatRoleLabel={seat => seat.isHost ? 'CREATURE' : 'HUNTED'}
     startPayload={{ boardFace }}
     renderStartOptions={disabled => <View style={{ gap: 9 }}>
-      <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: NOT_ALONE.amber, fontSize: 14 }}>BOARD FACE · CREATURE CHOOSES</Text>
-      <Text style={{ fontFamily: 'SpaceMono_400Regular', color: NOT_ALONE.muted, fontSize: 13, lineHeight: 20 }}>Both printed faces use the same rules. Their marked Artemia spaces differ.</Text>
+      <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: NOT_ALONE.amber }}>BOARD FACE · CREATURE CHOOSES</Text>
+      <Text style={{ ...TYPOGRAPHY.body, color: NOT_ALONE.muted }}>Both printed faces use the same rules. Their marked Artemia spaces differ.</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {(['continuous', 'alternating'] as const).map(face => <ScalePressable key={face} accessibilityLabel={face === 'continuous' ? 'Continuous board face' : 'Alternating board face'}
           accessibilityState={{ selected: boardFace === face, disabled }} disabled={disabled} onPress={() => setBoardFace(face)}
           style={{ flexBasis: 140, flexGrow: 1, minHeight: 64, padding: 12, borderRadius: 13, borderWidth: boardFace === face ? 2 : 1, borderColor: boardFace === face ? NOT_ALONE.signal : NOT_ALONE.border, backgroundColor: NOT_ALONE.surface }}>
-          <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: boardFace === face ? NOT_ALONE.signal : NOT_ALONE.text, fontSize: 14 }}>{face.toUpperCase()}</Text>
-          <Text style={{ fontFamily: 'SpaceMono_400Regular', color: NOT_ALONE.muted, fontSize: 13, lineHeight: 19 }}>{face === 'continuous' ? 'Final marked Rescue spaces' : 'Alternating marked Rescue spaces'}</Text>
+          <Text style={{ ...TYPOGRAPHY.control, color: boardFace === face ? NOT_ALONE.signal : NOT_ALONE.text }}>{face.toUpperCase()}</Text>
+          <Text style={{ ...TYPOGRAPHY.body, color: NOT_ALONE.muted }}>{face === 'continuous' ? 'Final marked Rescue spaces' : 'Alternating marked Rescue spaces'}</Text>
         </ScalePressable>)}
       </View>
     </View>}

@@ -85,6 +85,7 @@ function harness(component, overrides = {}) {
   const animation = { duration: () => animation, delay: () => animation, springify: () => animation, damping: () => animation };
   const navigation = { addListener: (event, fn) => { back = fn; return () => {}; } };
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     react,
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { ...Object.fromEntries(['ScrollView', 'Text', 'TextInput', 'View'].map((name) => [name, name])), Platform: { OS: overrides.platform ?? 'web' }, useWindowDimensions: () => ({ width: 320 }), BackHandler: { addEventListener: () => ({ remove() {} }) } },
@@ -140,6 +141,46 @@ function harness(component, overrides = {}) {
     activeDialog: () => dialog,
   };
 }
+
+test('shared entrance inputs and readable prose use the same registered roles across creation, joining and lobby', () => {
+  const { TYPOGRAPHY } = require('./lib/typography-fixture.cjs');
+  for (const component of ['RemainingLanding', 'RemainingJoin', 'RemainingLobby']) {
+    const h = harness(component);
+    const expectedCopy = component === 'RemainingLanding' ? 'Create a table or join by room code' : component === 'RemainingJoin' ? 'Ask the host for the room code. You can join any game with its code.' : 'Test briefing';
+    const prose = h.nodes().find(node => node.props.children === expectedCopy);
+    for (const [property, value] of Object.entries(TYPOGRAPHY.body)) assert.equal(prose.props.style[property], value);
+    if (component !== 'RemainingLobby') {
+      for (const [property, value] of Object.entries(TYPOGRAPHY.body)) assert.equal(h.find('Your name').style[property], value);
+      const label = h.nodes().find(node => node.props.children === 'YOUR NAME');
+      assert.equal(label.props.style.fontFamily, TYPOGRAPHY.label.fontFamily);
+    }
+  }
+});
+
+test('optional palette foreground and surfaces reach create, join and lobby controls', () => {
+  for (const [component, label] of [['RemainingLanding', 'CREATE ROOM'], ['RemainingJoin', 'JOIN GAME'], ['RemainingLobby', 'START GAME']]) {
+    const h = harness(component);
+    Object.assign(h.props.palette, { onAccent: '#FFF8EE', controlSurface: '#F3E9DE', danger: '#A32035' });
+    h.render();
+    assert.equal(h.find(label).solidTextColor, '#FFF8EE');
+    if (component === 'RemainingLanding') {
+      assert.equal(h.find('JOIN WITH CODE').outlineBackgroundColor, '#F3E9DE');
+      h.props.presentation = 'illustrated'; h.render();
+      const button = h.nodes().find(node => node.props.label === label);
+      const rendered = button.type(button.props);
+      const text = h.nodes(rendered).find(node => node.type === 'Text');
+      assert.equal(text.props.style.color, '#FFF8EE');
+    }
+    if (component === 'RemainingLobby') {
+      assert.equal(h.find('HOW TO PLAY').outlineBackgroundColor, '#F3E9DE');
+      assert.equal(h.nodes().find(node => node.props.palette?.errorColor).props.palette.errorColor, '#A32035');
+      h.store.room = null; h.render();
+      const recovery = h.nodes().find(node => node.props.message?.startsWith('Finding your'));
+      assert.equal(recovery.props.solidTextColor, '#FFF8EE');
+      assert.equal(recovery.props.outlineBackgroundColor, '#F3E9DE');
+    }
+  }
+});
 
 for (const component of ['RemainingLanding', 'RemainingJoin']) {
   const action = component === 'RemainingLanding' ? 'CREATE ROOM' : 'JOIN GAME';

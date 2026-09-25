@@ -15,6 +15,7 @@ const colours = { bg: '#111', panel: '#222', surface: '#333', text: '#fff', bord
 function render(game, name, fontScale, measuredScale = fontScale) {
   const filename = path.join(__dirname, `../components/${game}/RulesGuide.tsx`);
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { Text: 'Text', View: 'View', useWindowDimensions: () => ({ width: 320, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },

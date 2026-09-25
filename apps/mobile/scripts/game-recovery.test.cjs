@@ -10,7 +10,7 @@ const compiled = ts.transpileModule(source, {
   compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
 }).outputText;
 
-function harness(clearAuth) {
+function harness(clearAuth, appearance = {}) {
   const calls = [];
   const hooks = [];
   const effects = [];
@@ -41,7 +41,8 @@ function harness(clearAuth) {
       },
     },
     'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
-    'react-native': { Text: 'Text', View: 'View' },
+    'react-native': { Text: 'Text', View: 'View', ScrollView: 'ScrollView' },
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     'expo-router': { router: { replace: (route) => calls.push(`replace:${route}`), dismissAll: () => calls.push('dismissAll') } },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../../hooks/useSocket': { getSocket: () => socket },
@@ -59,7 +60,7 @@ function harness(clearAuth) {
   } });
   const render = () => {
     hookIndex = 0;
-    const tree = exports.GameRecovery({ message: 'Restoring the saved seat.', background: '#000', surface: '#111', border: '#333', accent: '#fff', muted: '#ccc', onSessionCleared });
+    const tree = exports.GameRecovery({ message: 'Restoring the saved seat.', background: '#000', surface: '#111', border: '#333', accent: '#fff', muted: '#ccc', onSessionCleared, ...appearance });
     while (effects.length) effects.shift()();
     return tree;
   };
@@ -76,6 +77,30 @@ function harness(clearAuth) {
 }
 
 const settle = () => new Promise((resolve) => setImmediate(resolve));
+
+test('recovery forwards optional light-theme control colours without changing legacy defaults', () => {
+  const ordinary = harness(async () => {});
+  assert.equal(ordinary.button('RETRY CONNECTION').props.solidTextColor, undefined);
+  assert.equal(ordinary.button('BACK TO ARCADE').props.outlineBackgroundColor, undefined);
+  const paper = harness(async () => {}, { solidTextColor: '#FFF8EE', outlineBackgroundColor: '#F3E9DE' });
+  assert.equal(paper.button('RETRY CONNECTION').props.solidTextColor, '#FFF8EE');
+  assert.equal(paper.button('BACK TO ARCADE').props.outlineBackgroundColor, '#F3E9DE');
+  paper.button('RETRY CONNECTION').props.onPress();
+  assert.deepEqual(paper.calls, ['connect']);
+});
+
+test('recovery content scrolls at enlarged text sizes and uses readable prose without fixed heights', () => {
+  const ui = harness(async () => {});
+  const tree = ui.render();
+  assert.equal(tree.type, 'ScrollView');
+  assert.equal(tree.props.contentContainerStyle.flexGrow, 1);
+  assert.equal(tree.props.contentContainerStyle.height, undefined);
+  const message = tree.props.children.props.children[1].props.children[1];
+  for (const [property, value] of Object.entries(require('./lib/typography-fixture.cjs').TYPOGRAPHY.body)) assert.equal(message.props.style[property], value);
+  assert.equal(message.props.numberOfLines, undefined);
+  assert.equal(message.props.allowFontScaling, undefined);
+  assert.equal(ui.button('BACK TO ARCADE').props.disabled, false);
+});
 
 test('awaits asynchronous native-style deletion and blocks repeated exits before replacing the route', async () => {
   let resolveClear;

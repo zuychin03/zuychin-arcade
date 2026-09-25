@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { PathCard } from '@zuychin-arcade/types';
@@ -56,9 +57,9 @@ export function SaboteurRulesGuide() {
 
 const s = StyleSheet.create({
   guide: { gap: 28 }, section: { gap: 12 },
-  title: { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: MINE.gold },
-  body: { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: ARCADE.text },
-  caption: { fontFamily: 'Outfit_700Bold', fontSize: 16, lineHeight: 22, color: ARCADE.text, textAlign: 'center' },
+  title: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22, lineHeight: 28, color: MINE.gold },
+  body: { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24, color: ARCADE.text },
+  caption: { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 16, lineHeight: 22, color: ARCADE.text, textAlign: 'center' },
   tunnel: { gap: 12, alignItems: 'center', paddingVertical: 16, backgroundColor: MINE.bg, borderRadius: 12 },
   joined: { flexDirection: 'row', gap: 2 }, boundary: { flexDirection: 'row', gap: 12, alignItems: 'center' }, flex: { flex: 1, minWidth: 0 },
   rotation: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center', alignItems: 'center', paddingVertical: 8 },

@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { Text, View, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { ColtAction } from '@zuychin-arcade/types';
@@ -9,8 +10,8 @@ import { CardGrid } from '../ui/CardGrid';
 import { CardSurface } from '../ui/CardSurface';
 import { useMeasuredTextScale } from '../../hooks/useMeasuredTextScale';
 
-const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text } as const;
-const heading = { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: C.ember } as const;
+const body = { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24, color: C.text } as const;
+const heading = { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22, lineHeight: 28, color: C.ember } as const;
 const program: { action: ColtAction; label: string }[] = [{ action: 'move', label: 'First: move' }, { action: 'rob', label: 'Next: rob' }, { action: 'shoot', label: 'Then: shoot' }];
 
 export function ColtRulesGuide() {
@@ -20,9 +21,9 @@ export function ColtRulesGuide() {
     <View style={{ gap: 12 }}>
       <Text accessibilityRole="header" style={heading}>Plan now. Find out later.</Text>
       <Text ref={textRef} onLayout={onTextLayout} style={body}>Take turns adding actions to one shared program. Nobody moves yet. Once programming ends, reveal and execute the cards in that same order.</Text>
-      <Text style={{ ...body, fontFamily: 'Outfit_700Bold' }}>Illustrative shared sequence, not a live program</Text>
+      <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>Illustrative shared sequence, not a live program</Text>
       <CardGrid items={program} keyExtractor={item => item.action} minCardWidth={200} maxCardWidth={300} textScale={textScale} gap={12} renderItem={item => <CardSurface fill radius={12} faceColor={C.panel} edgeColor={C.bg} highlightColor={C.border} depth={3}>
-        <View style={{ padding: 16 }}><Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{item.label}</Text></View>
+        <View style={{ padding: 16 }}><Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>{item.label}</Text></View>
         <ActionArtwork action={item.action} />
         <View style={{ padding: 16 }}><Text style={body}>{COLT_ACTION_HELP[item.action]}</Text></View>
       </CardSurface>} />
@@ -33,7 +34,7 @@ export function ColtRulesGuide() {
       <Text style={body}>Example: two adjacent carriages. Each roof and interior is a separate space. The Marshal stays inside; bandits meeting him escape to the roof.</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
         {[0, 1].map(car => <View key={car} style={{ flexBasis: 220, flexGrow: 1, minWidth: 0, borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomWidth: 5, borderBottomColor: C.bg, backgroundColor: C.panel, padding: 16, gap: 12 }}>
-          <Text style={{ ...body, fontFamily: 'Outfit_700Bold' }}>Carriage {car + 1}</Text>
+          <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>Carriage {car + 1}</Text>
           <View style={{ gap: 8, borderBottomWidth: 1, borderBottomColor: C.border, paddingBottom: 12 }}><Text style={body}>Roof</Text>{car === 0 ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}><BanditPiece character="doc" /><Text style={body}>Bandit after escape</Text></View> : <Text style={{ ...body, color: C.muted }}>Empty in this example</Text>}</View>
           <View style={{ gap: 8 }}><Text style={body}>Inside</Text>{car === 0 ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}><BanditPiece marshal /><Text style={body}>Marshal</Text></View> : <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}><MaterialCommunityIcons accessible={false} name="treasure-chest" size={36} color={C.gold} /><Text style={{ ...body, flex: 1 }}>Loot to rob</Text></View>}</View>
         </View>)}

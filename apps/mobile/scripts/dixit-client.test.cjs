@@ -125,8 +125,18 @@ test('clues use single-line input and cannot send server-rejected control charac
 });
 test('a failed illustration cannot poison the next card or a late image error', () => {
   const h = hooks(); const art = { 'dream-01': { source: 1 }, 'dream-02': { source: 2 } };
-  const { DreamCard } = load('components/dixit/DreamCard.tsx', { react: h.react, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { Image: 'Image', Text: 'Text', View: 'View' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { DIXIT: {} }, '../ui/CardSurface': { CardSurface: 'CardSurface' }, '../ui/ScalePressable': { ScalePressable: 'ScalePressable' }, './artwork': { DIXIT_ARTWORK: art } });
+  const renderJSX = (type, props) => typeof type === 'function' ? type(props) : jsx(type, props);
+  const modules = { react: h.react, 'react/jsx-runtime': { jsx: renderJSX, jsxs: renderJSX }, 'react-native': { Image: 'Image', Text: 'Text', View: 'View', StyleSheet: { absoluteFill: {} } }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { DIXIT: {}, ARCADE: {} }, '../ui/CardSurface': { CardSurface: 'CardSurface' }, '../ui/ScalePressable': { ScalePressable: 'ScalePressable' }, './artwork': { DIXIT_ARTWORK: art } };
+  modules['../ui/CardIllustration'] = load('components/ui/CardIllustration.tsx', modules);
+  const { DreamCard } = load('components/dixit/DreamCard.tsx', modules);
   const render = cardId => h.render(() => DreamCard({ cardId, width: 160 })); const image = cardId => nodes(render(cardId)).find(n => n.type === 'Image');
+  const face = render('dream-01');
+  assert.equal(face.props.width, 160); assert.equal(face.props.height, 240);
+  assert.equal(face.props.children.props.testID, 'card-illustration');
+  assert.equal(face.props.children.props.style.aspectRatio, 2 / 3);
+  assert.equal(face.props.children.props.style.padding, undefined);
+  assert.equal(face.props.children.props.style.borderRadius, undefined);
+  assert.equal(image('dream-01').props.resizeMode, 'contain');
   const oldError = image('dream-01').props.onError; oldError(); assert.equal(image('dream-01'), undefined);
   assert.equal(image('dream-02').props.source, 2); oldError(); assert.equal(image('dream-02').props.source, 2); h.cleanup();
 });

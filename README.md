@@ -14,6 +14,8 @@ respective rights holders.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for a detailed tour of the codebase,
 the game engine, the socket protocol, and how to add a new game to the hub.
+All new games also follow the [theme design contract](docs/design/GAME_THEME_CONTRACT.md)
+for shared typography, room flows, artwork framing and responsive verification.
 
 ## Four-game expansion
 
@@ -361,10 +363,10 @@ shared scenes and category artwork. Named cards and characters, uniform hidden
 card backs, faction seals and board scenery use original generated artwork.
 Rules, costs, ranks, paths and interaction states remain live interface elements.
 Card faces combine directional bevels and game-specific neon accents without
-requiring a 3D rendering engine. King of Tokyo, Skull King, Citadels, Not Alone,
-BANG!, Libertalia and Colt Express use full-width, uncropped illustrations
-inside a single card surface, with separate live headers and rules. Comparable
-cards retain consistent row heights as text grows.
+requiring a 3D rendering engine. Illustrated card faces use full-width, uncropped
+artwork inside a single card surface, with separate live headers and rules where
+needed. Comparable cards retain consistent row heights as text grows. Paired
+Saboteur tools and compact public character markers retain their distinct roles.
 
 The four additions use their own original cover scenes and game-specific assets:
 
@@ -375,7 +377,8 @@ The four additions use their own original cover scenes and game-specific assets:
   live graphics, not claims about the geometry shown in the illustrations.
 - Dixit Odyssey: 84 distinct playable dream illustrations.
 - Telestrations: original entrance artwork and player-created drawings, with
-  a clear drawing surface instead of decorative images inside the sketchbook.
+  warm-paper and raspberry sketchbooks matching its light theme, and a clear
+  drawing surface instead of decorative images inside the player's sketchbook.
 
 Runtime WebP images are stored in `apps/mobile/assets/game-art`; source PNGs,
 prompts and the identity catalogue are in `docs/design/game-art`. The encoding
@@ -391,6 +394,10 @@ mechanics, followed by the detailed rules. Examples cover connected tunnels,
 dice, trick hierarchy, secret drafting, pursuit, shooting distance, ranked crew
 and shared programming. Coup reuses its character reference with the selected
 version's cards, actions and blocks before players enter a room.
+
+The four newest games share the same rulebook controls and expandable chapters,
+with their own illustrated guides: Kraken navigation and characters, sketchbook
+relays, Cartographers terrain and shapes, and Dixit clues and two-vote examples.
 
 Coup room creation offers **Base Coup (2–6 players)** and **Reformation +
 Inquisitor (2–10 players)**. Base remains the default. The selected version is

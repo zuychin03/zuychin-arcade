@@ -9,10 +9,11 @@ import { clearAuthIfMatches, loadDisplayName, saveAuthIfCurrent, saveDisplayName
 import { useGameStore } from '../../store/useGameStore';
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference';
 import { NeonButton } from '../ui/NeonButton';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { ScalePressable } from '../ui/ScalePressable';
 import { ARCADE, neonText } from '../../constants/theme';
 
-type Palette = { bg: string; surface: string; panel: string; border: string; accent: string; secondary: string; muted: string; text: string };
+type Palette = { bg: string; surface: string; panel: string; border: string; accent: string; secondary: string; muted: string; text: string; onAccent?: string; controlSurface?: string };
 interface Props {
   gameId: GameId;
   base: string;
@@ -29,13 +30,13 @@ interface Props {
   renderCreateOptions?: (busy: boolean) => ReactNode;
 }
 
-function IllustratedButton({ label, onPress, color = ARCADE.pink, variant = 'solid', disabled, icon }: ComponentProps<typeof NeonButton>) {
+function IllustratedButton({ label, onPress, color = ARCADE.pink, solidTextColor = ARCADE.bg, variant = 'solid', disabled, icon }: ComponentProps<typeof NeonButton>) {
   const solid = variant === 'solid';
   return (
     <ScalePressable onPress={onPress} disabled={disabled} accessibilityLabel={label} style={{ minHeight: 48, minWidth: 0, paddingHorizontal: 16, paddingVertical: 14, borderRadius: 12, borderWidth: variant === 'outline' ? 1 : 0, borderColor: color, backgroundColor: solid ? color : 'transparent', opacity: disabled ? 0.4 : 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         {icon}
-        <Text style={{ flexShrink: 1, minWidth: 0, fontFamily: 'Outfit_700Bold', fontSize: 16, color: solid ? ARCADE.bg : color, textAlign: 'center' }}>{label}</Text>
+        <Text style={{ ...TYPOGRAPHY.control, flexShrink: 1, minWidth: 0, color: solid ? solidTextColor : color, textAlign: 'center' }}>{label}</Text>
       </View>
     </ScalePressable>
   );
@@ -121,7 +122,7 @@ export function RemainingLanding({ gameId, base, title, tagline, tags, createLab
 
   const input = {
     minHeight: 48, borderRadius: illustrated ? 12 : 15, borderWidth: 1, borderColor: palette.border,
-    backgroundColor: palette.bg, color: palette.text, fontFamily: illustrated ? 'Outfit_400Regular' : 'Outfit_700Bold', fontSize: 16, padding: 15,
+    ...TYPOGRAPHY.body, backgroundColor: palette.bg, color: palette.text, padding: 15,
   } as const;
 
   return (
@@ -135,8 +136,8 @@ export function RemainingLanding({ gameId, base, title, tagline, tags, createLab
                 if (Platform.OS !== 'web' || typeof window === 'undefined' || !titleRef.current) return;
                 const scale = Number.parseFloat(window.getComputedStyle(titleRef.current as unknown as Element).fontSize) / titleSize;
                 if (Number.isFinite(scale)) setWebTextScale(Math.max(1, scale));
-              }} accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: titleSize, color: palette.text, flexShrink: 1 }}>{title}</Text>
-              <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.muted, fontSize: 16, lineHeight: 24 }}>{tagline}</Text>
+              }} accessibilityRole="header" style={{ ...TYPOGRAPHY.display, fontSize: titleSize, color: palette.text, flexShrink: 1 }}>{title}</Text>
+              <Text style={{ ...TYPOGRAPHY.body, color: palette.muted }}>{tagline}</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
                 {tags.map((tag) => <Text key={tag} style={{ fontFamily: 'Outfit_400Regular', color: palette.accent, fontSize: 14 }}>{tag}</Text>)}
               </View>
@@ -158,19 +159,19 @@ export function RemainingLanding({ gameId, base, title, tagline, tags, createLab
             <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
               {illustrated ? null : mark}
               <View style={{ flex: 1, minWidth: 0 }}>
-                <Text accessibilityRole="header" style={{ fontFamily: 'Outfit_800ExtraBold', color: palette.text, fontSize: illustrated ? 20 : 15 }}>{createLabel}</Text>
-                <Text style={{ fontFamily: illustrated ? 'Outfit_400Regular' : 'SpaceMono_400Regular', color: palette.muted, fontSize: illustrated ? 16 : 12, lineHeight: illustrated ? 24 : 18 }}>Create a table or join by room code</Text>
+                <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: palette.text, fontSize: 20, lineHeight: 28 }}>{createLabel}</Text>
+                <Text style={{ ...TYPOGRAPHY.body, color: palette.muted }}>Create a table or join by room code</Text>
               </View>
             </View>
-            {error ? <Text accessibilityRole="alert" style={{ color: palette.text, fontSize: 14, lineHeight: 20 }}>{error}</Text> : null}
+            {error ? <Text accessibilityRole="alert" style={{ ...TYPOGRAPHY.body, color: palette.text }}>{error}</Text> : null}
             {renderCreateOptions?.(busy)}
-            <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.accent, fontSize: 12, letterSpacing: 1 }}>YOUR NAME</Text>
+            <Text style={{ ...TYPOGRAPHY.label, color: palette.accent }}>YOUR NAME</Text>
             <TextInput ref={nameInput} accessibilityLabel="Your name" autoComplete="nickname" value={name} editable={!busy} onChangeText={(value) => { nameEdited.current = true; setName(value); setError(null); }} maxLength={20} placeholder="Player name" placeholderTextColor={palette.muted} style={input} returnKeyType="next" blurOnSubmit={false} onSubmitEditing={() => passwordInput.current?.focus()} />
-            <Text style={{ fontFamily: 'Outfit_700Bold', color: palette.accent, fontSize: 12, letterSpacing: 1 }}>ROOM PASSWORD · OPTIONAL</Text>
+            <Text style={{ ...TYPOGRAPHY.label, color: palette.accent }}>ROOM PASSWORD · OPTIONAL</Text>
             <TextInput ref={passwordInput} accessibilityLabel="Room password, optional" autoComplete="new-password" value={password} editable={!busy} onChangeText={(value) => { setPassword(value); setError(null); }} secureTextEntry maxLength={64} placeholder="Password" placeholderTextColor={palette.muted} style={input} returnKeyType="go" onSubmitEditing={() => void create()} />
-            <Text style={{ fontFamily: 'Outfit_400Regular', color: palette.muted, fontSize: 16, lineHeight: 24 }}>Leave blank for an open room</Text>
-            <ActionButton label={busy ? 'CREATING…' : 'CREATE ROOM'} color={palette.accent} disabled={busy} icon={<MaterialCommunityIcons name="plus" size={17} color={palette.bg} />} onPress={() => void create()} />
-            <ActionButton label="JOIN WITH CODE" color={palette.secondary} variant="outline" disabled={busy} onPress={() => {
+            <Text style={{ ...TYPOGRAPHY.body, color: palette.muted }}>Leave blank for an open room</Text>
+            <ActionButton label={busy ? 'CREATING…' : 'CREATE ROOM'} color={palette.accent} solidTextColor={palette.onAccent} disabled={busy} icon={<MaterialCommunityIcons name="plus" size={17} color={palette.bg} />} onPress={() => void create()} />
+            <ActionButton label="JOIN WITH CODE" color={palette.secondary} outlineBackgroundColor={palette.controlSurface} variant="outline" disabled={busy} onPress={() => {
               if (name.trim()) void saveDisplayName(name.trim()).catch(() => undefined);
               router.push((base + '/join') as never);
             }} />

@@ -229,6 +229,39 @@ physical iOS or Android devices.
 
 ## Evidence and release limits
 
+- The 25/09/2026 theme-contract follow-up passed all 1,607 client tests,
+  mobile/gallery TypeScript and scoped ESLint. Regressions cover all 13 game
+  navigation headers, shared entrance/setup typography, readable palette pairs,
+  recovery scrolling, room-code controls, decorative SVG accessibility props,
+  browser-text-aware library columns and Kraken's outcome-first results.
+- The same follow-up's fresh component export passed 40 browser cases covering
+  Saboteur/Coup cards and the four newest games' cards and rulebooks at 375 px
+  normal text, 320 px with 200% CSS text, and 1280 px at both text sizes.
+  Images/fonts, frameless artwork fields, glyph containment, rulebook scrolling,
+  chapter expansion/dismissal and selected/disabled callbacks passed. Its entry
+  bundle SHA-256 was
+  `75a34bf17d53683b005f8e249156b9af269d44629ac83ec2f6b295dac2ed216b`.
+  These are production components with synthetic local data, not full games.
+- The final local development-app campaign checked all 13 actual landing/join
+  routes and rulebooks, with 56 captures and unchanged source hashes. Loaded
+  Outfit navigation faces, images, overflow, 12 chapter toggles, Coup's retained
+  character reference and focus restoration passed. It included 375/1280 px
+  captures, 320 px rulebooks with 200% CSS text, intermediate/short-landscape
+  measurements and desktop text enlargement. The hub's desktop columns reflowed
+  with enlarged browser text. No runtime exceptions were recorded; the existing
+  React Native Web `pointerEvents` deprecation warning remains. These checks do
+  not replay complete matches or establish native/cross-browser acceptance.
+- An initial unauthenticated recovery-route attempt redirected to the hub and
+  was excluded from recovery evidence. A separate authenticated check created a
+  normal local room, blocked only its socket transport and reloaded the actual
+  Telestrations game route. Recovery passed at 320 px with 200% CSS text and
+  844×390 landscape: readable regular body text, no horizontal overflow and both
+  controls reachable. The synthetic room was left and the browser closed.
+- A local Telestrations smoke checked the warm-paper artwork through entrance,
+  rules, a four-seat lobby, host start, initial prompt and normal leave. It
+  predates the final shared typography/SVG changes and is not another completed
+  three-round match. Player-created drawings and semantic ink colours were not
+  recoloured by the theme change.
 - The seven-game card revision on 25/09/2026 passed all 1,573 client tests,
   mobile/gallery TypeScript, scoped ESLint and six gallery-server safety tests.
   A fresh component-gallery web export passed 40 browser cases: seven game

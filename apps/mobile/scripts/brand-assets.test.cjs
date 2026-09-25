@@ -117,6 +117,7 @@ test('app configuration points to the generated icon variants', () => {
 test('navigation component derives its bounds and themeable SVG from generated constants', () => {
   const jsx = (type, props) => ({ type, props });
   const exported = evaluate(fs.readFileSync(path.join(mobileRoot, 'components/navigation/ZuychinLogo.tsx'), 'utf8'), {
+    '../ui/decorativeSvgProps': require('./lib/decorative-svg-fixture.cjs')(),
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native-svg': { SvgXml: 'SvgXml' },
     '../../constants/arcadeLogo': constants(),

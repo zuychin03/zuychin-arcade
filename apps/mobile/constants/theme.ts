@@ -126,8 +126,11 @@ export const CARTOGRAPHERS = {
 } as const;
 
 export const TELESTRATIONS = {
-  bg: '#101528', surface: '#19233B', panel: '#25324C', border: '#65778C',
-  accent: '#8AE5DD', secondary: '#FFC394', muted: '#BECDDC', text: '#F2F7FB',
+  bg: '#FFF8EE', surface: '#FFFFFF', panel: '#F3E9DE', border: '#9B7A85',
+  accent: '#9B2855', secondary: '#79521D', muted: '#69535D', text: '#32252B',
+  catalogueAccent: '#F49CBD',
+  onAccent: '#FFF8EE', controlSurface: '#F3E9DE',
+  danger: '#A32035',
   paper: '#FFFFFF', ink: '#171923',
 } as const;
 

@@ -1,7 +1,7 @@
 import '../../apps/mobile/global.css';
 import { registerRootComponent } from 'expo';
 import { useFonts } from 'expo-font';
-import { Outfit_400Regular, Outfit_700Bold, Outfit_800ExtraBold } from '@expo-google-fonts/outfit';
+import { Outfit_400Regular, Outfit_600SemiBold, Outfit_700Bold, Outfit_800ExtraBold } from '@expo-google-fonts/outfit';
 import { SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';
 import { useState, type ReactNode } from 'react';
 import { ScrollView, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
@@ -48,17 +48,20 @@ import { CharacterChoice } from '../../apps/mobile/components/colt/CharacterChoi
 import { TrainBoard } from '../../apps/mobile/components/colt/TrainBoard';
 import { CoupTableArtwork } from '../../apps/mobile/components/coup/CoupTableArtwork';
 import { SkullKingDeckArtwork } from '../../apps/mobile/components/skull-king/SkullKingCardArtwork';
+import { ExpansionScene, expansionSelection } from './ExpansionScene';
 
 const FAMILIES = ['saboteur', 'coup', 'tokyo', 'skull', 'citadels', 'not-alone', 'bang', 'libertalia', 'colt'] as const;
 type Family = typeof FAMILIES[number];
 const params = new URLSearchParams(location.search);
 const requested = params.get('family');
-if (!FAMILIES.includes(requested as Family)) throw new Error('Explicit gallery family required');
+const expansionScene = params.get('scene') === 'expansion';
+if (expansionScene) expansionSelection(params);
+if (!expansionScene && !FAMILIES.includes(requested as Family)) throw new Error('Explicit gallery family required');
 const family = requested as Family;
 const artworkScene = params.get('scene') === 'artwork';
 const rulesScene = params.get('scene') === 'rules';
 const navigationScene = params.get('scene') === 'navigation';
-if (params.has('scene') && !artworkScene && !rulesScene && !navigationScene) throw new Error('Unknown gallery scene');
+if (params.has('scene') && !artworkScene && !rulesScene && !navigationScene && !expansionScene) throw new Error('Unknown gallery scene');
 const artworkPage = Number(params.get('page') ?? '1');
 const artworkPanel = params.get('panel') ?? 'cards';
 const artworkRole = params.get('role') ?? 'miner';
@@ -166,7 +169,7 @@ function NavigationScene() {
 }
 
 function Gallery() {
-  const [fonts, error] = useFonts({ Outfit_400Regular, Outfit_700Bold, Outfit_800ExtraBold, SpaceMono_400Regular, SpaceMono_700Bold });
+  const [fonts, error] = useFonts({ Outfit_400Regular, Outfit_600SemiBold, Outfit_700Bold, Outfit_800ExtraBold, SpaceMono_400Regular, SpaceMono_700Bold });
   const [actions, setActions] = useState<number[]>([]);
   const [textScale, setTextScale] = useState(1);
   const { width, fontScale = 1 } = useWindowDimensions();
@@ -175,6 +178,7 @@ function Gallery() {
   const press = (index: number) => () => setActions(previous => [...previous, index]);
   if (error) throw error;
   if (!fonts) return <Text>Loading real production fonts</Text>;
+  if (expansionScene) return <ExpansionScene params={params} />;
   if (artworkScene) return <ArtworkScene />;
   if (rulesScene) return <RulesScene />;
   if (navigationScene) return <NavigationScene />;

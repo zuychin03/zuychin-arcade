@@ -5,7 +5,8 @@ import { TELESTRATIONS_CATEGORIES, type TelestrationsScoringMode } from '@zuychi
 import { RemainingLanding } from '../../components/remaining/RemainingLanding';
 import { TelestrationsReferenceSheet } from '../../components/telestrations/ReferenceSheet';
 import { GameCover } from '../../components/ui/GameCover';
-import { BookButton, typography as T } from '../../components/telestrations/Controls';
+import { BookButton } from '../../components/telestrations/Controls';
+import { TYPOGRAPHY } from '../../constants/typography';
 import { TELESTRATIONS as C } from '../../components/telestrations/palette';
 export default function TelestrationsLanding() {
   const [mode, setMode] = useState<TelestrationsScoringMode>('friendly');
@@ -18,23 +19,23 @@ export default function TelestrationsLanding() {
     hero={<GameCover source={require('../../assets/game-art/telestrations-hero.webp')} rimColor={C.accent} backgroundColor={C.bg} />}
     createConfig={{ telestrationsScoringMode: mode, telestrationsDirection: direction, ...(category ? { telestrationsCategory: category } : {}) }}
     renderCreateOptions={busy => <View style={{ gap: 16 }}>
-      <Text style={T.heading}>Your table</Text>
-      <Text style={T.body}>Scoring</Text>
+      <Text accessibilityRole="header" style={{ ...TYPOGRAPHY.heading, color: C.text }}>Your table</Text>
+      <Text style={{ ...TYPOGRAPHY.label, color: C.text }}>Scoring</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {([['friendly', 'Friendly'], ['competitive', 'Competitive'], ['none', 'Just for laughs']] as const).map(([value, label]) => <BookButton key={value} label={label} selected={mode === value} disabled={busy} onPress={() => setMode(value)} />)}
       </View>
-      <Text style={T.body}>Passing direction</Text>
+      <Text style={{ ...TYPOGRAPHY.label, color: C.text }}>Passing direction</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <BookButton label="Clockwise" selected={direction === 1} disabled={busy} onPress={() => setDirection(1)} />
         <BookButton label="Anticlockwise" selected={direction === -1} disabled={busy} onPress={() => setDirection(-1)} />
       </View>
-      <Text style={T.body}>Secrets</Text>
+      <Text style={{ ...TYPOGRAPHY.label, color: C.text }}>Secrets</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <BookButton label="Original prompt offers" selected={!category} disabled={busy} onPress={() => setCategory(undefined)} />
         <BookButton label="Invent within a category" selected={Boolean(category)} disabled={busy} onPress={() => setCategory(TELESTRATIONS_CATEGORIES[0])} />
       </View>
       {category ? <View style={{ gap: 8 }}>
-        <Text style={T.muted}>Everyone invents a secret in the selected category.</Text>
+        <Text style={{ ...TYPOGRAPHY.body, color: C.muted }}>Everyone invents a secret in the selected category.</Text>
         {TELESTRATIONS_CATEGORIES.map(value => <BookButton key={value} label={value} selected={category === value} disabled={busy} onPress={() => setCategory(value)} />)}
       </View> : null}
     </View>}

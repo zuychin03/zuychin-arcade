@@ -11,6 +11,7 @@ function harness(width = 320, reduced = false) {
   const jsx = (type, props) => ({ type, props });
   const surface = 'CardSurface';
   const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'),
     'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'Fragment' },
     react: { useEffect: fn => effects.push(fn), useMemo: fn => fn(), useRef: () => ({ current: null }) },
     'react-native': { View: 'View', Text: 'Text', Pressable: 'Pressable', ScrollView: 'ScrollView', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width }) },
@@ -28,6 +29,7 @@ function harness(width = 320, reduced = false) {
       if (id in modules) return modules[id];
       if (id.endsWith('/CardSurface')) return { CardSurface: surface };
       if (id.endsWith('/GameCover')) return { GameCover: 'GameCover' };
+      if (id.endsWith('/CardIllustration')) return { CardIllustration: 'Illustration' };
       if (id.endsWith('/OverlayFrame')) return { OverlayFrame: 'OverlayFrame' };
       if (id.endsWith('.webp')) {
         const asset = path.resolve(path.dirname(filename), id);
@@ -235,7 +237,7 @@ test('all action faces keep their labels and distinct tool affordances on the ma
       assert.equal(labelNode.props.numberOfLines, undefined);
     }
     assert(nodes(tree).some(n => n.type === 'Text' && n.props.children === label));
-    const art = nodes(tree, true).filter(n => n.type === 'GameCover');
+    const art = nodes(tree, true).filter(n => n.type === 'Illustration');
     assert(art.length > 0);
     assert(art.every(n => nodes(n.props.fallback).some(fallback => fallback.type === 'Icon')));
   }
@@ -246,14 +248,14 @@ test('mine back preserves its concealed icon without tiny decorative branding', 
   const tree = CardBack({ width: 54, height: 79, depth: 1, icon: 'help' });
   assert.equal(tree.type, 'CardSurface');
   assert.equal(tree.props.depth, 1);
-  const art = nodes(tree).find(n => n.type === 'GameCover');
+  const art = nodes(tree).find(n => n.type === 'Illustration');
   assert.equal(path.basename(art.props.source), 'saboteur-deck-back.webp');
   assert(nodes(art.props.fallback).some(n => n.type === 'Icon' && n.props.name === 'help'));
   assert(!nodes(tree).some(n => n.type === 'Text'));
   for (const n of nodes(tree).filter(n => n.props.accessibilityElementsHidden)) assert.equal(n.props.pointerEvents, 'none');
 });
 
-test('eleven action subtypes select exact tool states and compose dual repairs inside the original footprint', () => {
+test('eleven action subtypes fill the card width and keep exact tool states and dual repairs', () => {
   const { ActionCardView } = harness().load('cards/ActionCardView');
   const expected = {
     sabotage_lantern: ['tool-lantern-broken'], sabotage_cart: ['tool-cart-broken'], sabotage_pickaxe: ['tool-pickaxe-broken'],
@@ -266,13 +268,13 @@ test('eleven action subtypes select exact tool states and compose dual repairs i
   for (const width of [56, 76, 96, 152]) for (const [subtype, files] of Object.entries(expected)) {
     const tree = ActionCardView({ card: { subtype }, width, height: width * 1.5 });
     const artNode = nodes(tree).find(n => n.type?.name === 'ActionArtwork');
-    assert.equal(artNode.props.size, width * 0.55);
+    assert.equal(artNode.props.size, width);
     const art = artNode.type(artNode.props);
-    assert.equal(art.props.style.width, width * 0.55);
-    assert.equal(art.props.style.height, width * 0.55);
+    assert.equal(art.props.style.width, width);
+    assert.equal(art.props.style.height, width);
     assert.equal(art.props.accessibilityElementsHidden, true);
     assert.equal(art.props.pointerEvents, 'none');
-    const covers = nodes(art).filter(n => n.type === 'GameCover');
+    const covers = nodes(art).filter(n => n.type === 'Illustration');
     assert.deepEqual(covers.map(n => path.basename(n.props.source)), files.map(file => `saboteur-${file}.webp`));
     assert(covers.every(n => n.props.aspectRatio === 1));
     const badge = nodes(tree).find(n => n.type === 'Icon');
@@ -281,11 +283,34 @@ test('eleven action subtypes select exact tool states and compose dual repairs i
   }
 });
 
+test('action illustrations and backs use one card shell without padded or bordered inner frames', () => {
+  const h = harness();
+  const { ActionCardView } = h.load('cards/ActionCardView');
+  const { CardBack } = h.load('cards/CardBack');
+  for (const subtype of ['map', 'repair_lantern_cart', 'sabotage_pickaxe']) {
+    const tree = ActionCardView({ card: { subtype }, width: 76, height: 114, fill: true });
+    const face = tree.props.children;
+    for (const field of ['padding', 'borderWidth', 'borderRadius']) assert.equal(face.props.style[field], undefined);
+    assert.equal(nodes(tree, true).filter(node => node.type === 'CardSurface').length, 1);
+    const illustrations = nodes(tree, true).filter(node => node.type === 'Illustration');
+    assert(illustrations.length > 0);
+    assert(illustrations.every(node => node.props.aspectRatio === 1 && node.props.rimColor === undefined));
+  }
+  for (const [width, height] of [[44, 66], [54, 79]]) {
+    const tree = CardBack({ width, height, icon: 'help' });
+    assert.equal(tree.props.width, width);
+    assert.equal(tree.props.height, height);
+    assert.equal(tree.props.children.type, 'Illustration');
+    assert.equal(tree.props.children.props.aspectRatio, width / height);
+    assert.equal(tree.props.children.props.rimColor, undefined);
+  }
+});
+
 test('all concealed backs share one image and private role portraits retain the private reveal and dismiss action', () => {
   const h = harness();
   const { CardBack } = h.load('cards/CardBack');
   for (const icon of ['pickaxe', 'help']) {
-    const cover = nodes(CardBack({ icon })).find(n => n.type === 'GameCover');
+    const cover = nodes(CardBack({ icon })).find(n => n.type === 'Illustration');
     assert.equal(path.basename(cover.props.source), 'saboteur-deck-back.webp');
   }
   const { RoleRevealOverlay } = h.load('overlays/RoleRevealOverlay');

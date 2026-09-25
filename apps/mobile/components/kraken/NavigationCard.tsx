@@ -1,8 +1,9 @@
-import { useState, type ComponentProps } from 'react';
-import { Image, Text, View } from 'react-native';
+import type { ComponentProps } from 'react';
+import { Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { FeedTheKrakenCardEffect, FeedTheKrakenColour, FeedTheKrakenNavigationCard } from '@zuychin-arcade/types';
 import { CardSurface } from '../ui/CardSurface';
+import { CardIllustration } from '../ui/CardIllustration';
 import { ScalePressable } from '../ui/ScalePressable';
 import { KRAKEN as C } from './palette';
 import { typography as T } from './Controls';
@@ -34,16 +35,12 @@ export function NavigationCard({ card, selected = false, disabled = false, onSel
   disabled?: boolean;
   onSelect?: () => void;
 }) {
-  const [failedColour, setFailedColour] = useState<FeedTheKrakenColour | null>(null);
   const course = COURSES[card.colour], effect = NAVIGATION_EFFECTS[card.effect], accent = COURSE_COLOURS[card.colour];
   const face = <CardSurface fill radius={12} faceColor={C.surface} edgeColor={C.bg} highlightColor={accent} selected={selected} disabled={disabled}>
-    <View style={{ padding: 5, flexGrow: 1 }}>
-      <View style={{ width: '100%', aspectRatio: 1.5, borderRadius: 8, overflow: 'hidden', backgroundColor: C.panel }}>
-        {failedColour !== card.colour ? <Image key={card.colour} source={images[card.colour]} accessible={false} resizeMode="contain"
-          onError={() => setFailedColour(card.colour)} style={{ width: '100%', height: '100%' }} />
-          : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><MaterialCommunityIcons name={course.icon} size={48} color={accent} /></View>}
-      </View>
-      <View style={{ padding: 11, gap: 12, flexGrow: 1 }}>
+    <View style={{ flexGrow: 1 }}>
+      <CardIllustration source={images[card.colour]} aspectRatio={1.5} backgroundColor={C.panel}
+        fallback={<MaterialCommunityIcons name={course.icon} size={48} color={accent} />} />
+      <View style={{ padding: 16, gap: 12, flexGrow: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <MaterialCommunityIcons name={course.icon} size={24} color={accent} accessible={false} />
           <Text style={[T.heading, { fontSize: 20, color: accent, flexShrink: 1 }]}>{course.name}</Text>

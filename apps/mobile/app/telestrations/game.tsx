@@ -30,7 +30,7 @@ export default function TelestrationsGame() {
   useEffect(() => { cache.current.clear(); }, [token]);
   useEffect(() => { if (identity) for (const key of cache.current.keys()) if (key !== identity) cache.current.delete(key); }, [identity]);
   if (!game || !mine || !room || mine.playerId !== playerId || mine.roomCode !== room.roomCode || game.roomCode !== room.roomCode) {
-    return <GameRecovery message="Restoring your sketchbook and private page." background={C.bg} surface={C.surface} border={C.border} accent={C.accent} muted={C.muted} />;
+    return <GameRecovery message="Restoring your sketchbook and private page." background={C.bg} surface={C.surface} border={C.border} accent={C.accent} muted={C.muted} solidTextColor={C.onAccent} outlineBackgroundColor={C.controlSurface} />;
   }
   const isOver = game.phase === 'game_over';
   const active = ['prompt', 'draw', 'guess'].includes(game.phase);

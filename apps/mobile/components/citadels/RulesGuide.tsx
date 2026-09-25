@@ -1,10 +1,11 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { Text, View } from 'react-native';
 import { CITADELS_COLOR_LABELS, CITADELS_DISTRICT_MANIFEST, CITADELS_ROLES } from '@zuychin-arcade/types';
 import { CitadelsDistrictView, CitadelsRoleCard, DISTRICT_COLOR } from './CitadelsCard';
 import { CITADELS as C } from '../../constants/theme';
 
-const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 25, color: C.text } as const;
-const heading = { fontFamily: 'Outfit_800ExtraBold', fontSize: 23, lineHeight: 30, color: C.gold } as const;
+const body = { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 25, color: C.text } as const;
+const heading = { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 23, lineHeight: 30, color: C.gold } as const;
 const examples = ['manor', 'temple', 'tavern', 'watchtower', 'keep'];
 
 export function CitadelsRulesGuide() {
@@ -20,7 +21,7 @@ export function CitadelsRulesGuide() {
         ['2 · Call ranks 1 to 8', 'Reveal when your character is called, not when your seat comes around. A murdered character loses its turn.'],
         ['3 · Gather, then build', 'Take two gold or draw district cards and keep one. Pay a district’s cost to build it. Normally you may build one district; the Architect may build three.'],
       ].map(([title, text]) => <View key={title} style={{ gap: 5, paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: C.border }}>
-        <Text style={{ ...body, fontFamily: 'Outfit_700Bold', color: C.royal }}>{title}</Text><Text style={body}>{text}</Text>
+        <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily, color: C.royal }}>{title}</Text><Text style={body}>{text}</Text>
       </View>)}
       <Text style={body}>Example: a player seated after you chooses the Assassin, while you choose the Architect. Their rank 1 acts before your rank 7. Seat order does not decide character turns.</Text>
     </View>
@@ -35,7 +36,7 @@ export function CitadelsRulesGuide() {
       <Text accessibilityRole="header" style={heading}>Read a district</Text>
       <Text style={body}>The gold number is its build cost and usually its final points. The labelled colour identifies its type. You cannot build the same district name twice.</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {Object.entries(CITADELS_COLOR_LABELS).map(([key, label]) => <Text key={key} style={{ ...body, color: DISTRICT_COLOR[key as keyof typeof DISTRICT_COLOR], fontFamily: 'Outfit_700Bold' }}>{label}</Text>)}
+        {Object.entries(CITADELS_COLOR_LABELS).map(([key, label]) => <Text key={key} style={{ ...body, color: DISTRICT_COLOR[key as keyof typeof DISTRICT_COLOR], fontFamily: TYPOGRAPHY.heading.fontFamily }}>{label}</Text>)}
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16, justifyContent: 'center' }}>
         {examples.map(id => {

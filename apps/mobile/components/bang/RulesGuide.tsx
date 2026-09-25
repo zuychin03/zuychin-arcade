@@ -1,3 +1,4 @@
+import { TYPOGRAPHY } from '../../constants/typography';
 import { Text, View, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BANG_CHARACTERS, type BangCard, type BangCharacterId } from '@zuychin-arcade/types';
@@ -7,8 +8,8 @@ import { CardGrid } from '../ui/CardGrid';
 import { CardSurface } from '../ui/CardSurface';
 import { BangCharacterArtwork } from './CharacterArtwork';
 
-const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text } as const;
-const heading = { fontFamily: 'Outfit_800ExtraBold', fontSize: 22, lineHeight: 28, color: C.gold } as const;
+const body = { fontFamily: TYPOGRAPHY.body.fontFamily, fontSize: 16, lineHeight: 24, color: C.text } as const;
+const heading = { fontFamily: TYPOGRAPHY.heading.fontFamily, fontSize: 22, lineHeight: 28, color: C.gold } as const;
 const examples: BangCard[] = [
   { id: 'rules-bang', name: 'bang', suit: 'hearts', rank: 'A' },
   { id: 'rules-mustang', name: 'mustang', suit: 'hearts', rank: '8' },
@@ -24,10 +25,10 @@ export function BangRulesGuide() {
       <View style={{ gap: 16 }}>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, alignItems: 'center', padding: 16, backgroundColor: C.panel, borderRadius: 12 }}>
           <MaterialCommunityIcons accessible={false} name="star-circle-outline" size={44} color={C.gold} />
-          <View style={{ flex: 1, minWidth: 120, gap: 4 }}><Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>Sheriff + Deputies</Text><Text style={body}>Keep the Sheriff alive. Eliminate every Outlaw and the Renegade.</Text></View>
+          <View style={{ flex: 1, minWidth: 120, gap: 4 }}><Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>Sheriff + Deputies</Text><Text style={body}>Keep the Sheriff alive. Eliminate every Outlaw and the Renegade.</Text></View>
         </View>
         {(['outlaw', 'renegade'] as const).map(role => <View key={role} style={{ gap: 4 }}>
-          <Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold', color: role === 'outlaw' ? C.red : C.gold }}>{BANG_ROLE_GUIDE[role].name}</Text>
+          <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily, color: role === 'outlaw' ? C.red : C.gold }}>{BANG_ROLE_GUIDE[role].name}</Text>
           <Text style={body}>{BANG_ROLE_GUIDE[role].goal}</Text>
         </View>)}
       </View>
@@ -39,7 +40,7 @@ export function BangRulesGuide() {
         renderItem={([id, character]) => <CardSurface fill radius={14} depth={3} faceColor={C.panel} edgeColor={C.bg} highlightColor={C.gold}>
           <BangCharacterArtwork character={id} fluid />
           <View style={{ padding: 12, gap: 8, minWidth: 0 }}>
-          <Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{character.name}</Text>
+          <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>{character.name}</Text>
           <Text style={body}>{character.summary}</Text>
           </View>
         </CardSurface>} />
@@ -58,7 +59,7 @@ export function BangRulesGuide() {
       <CardGrid items={examples} keyExtractor={card => card.id} minCardWidth={208} maxCardWidth={300} textScale={fontScale} gap={12}
         renderItem={card => <BangCardView card={card} fluid idPrefix="rules" />} />
       <View nativeID="bang-rules-distance" style={{ gap: 8, paddingVertical: 12, borderTopWidth: 1, borderTopColor: C.border }}>
-        <Text style={{ ...body, fontFamily: 'Outfit_700Bold' }}>Example without distance modifiers</Text>
+        <Text style={{ ...body, fontFamily: TYPOGRAPHY.heading.fontFamily }}>Example without distance modifiers</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
           {['You', 'Neighbour: distance 1', 'Two seats away: distance 2'].map((label, index) => <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0, maxWidth: '100%' }}>
             {index > 0 ? <MaterialCommunityIcons accessible={false} name="arrow-right" size={20} color={C.gold} /> : null}<Text style={{ ...body, flexShrink: 1 }}>{label}</Text>

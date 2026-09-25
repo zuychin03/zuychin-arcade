@@ -7,7 +7,7 @@ These assets extend the original thirteen-game interface. Illustrations were gen
 - Feed the Kraken: one distinct portrait for each of its 21 characters, used in the rulebook and authorised private/revealed views. The three course illustrations remain intentionally reusable.
 - Cartographers Heroes: 19 distinct drawing-card scenes and four shared objective-category scenes. Objective illustrations represent their category, not individual scoring patterns. Live diagrams remain the scoring reference.
 - Dixit Odyssey: the existing 84 distinct dream-card illustrations are unchanged.
-- Telestrations: the original cover scene is unchanged. The playable drawings are created by players, so the drawing surface contains no generated decoration.
+- Telestrations: the hub and entrance use a [warm-paper edit](telestrations-sketchbooks-warm.png) of the preserved original cover, with raspberry and ochre accents. The [exact built-in edit prompt](telestrations-sketchbooks-warm-prompt.md) records its provenance. The playable drawings are created by players, so the drawing surface contains no generated decoration.
 
 ## Encoding and integration
 

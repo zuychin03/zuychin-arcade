@@ -20,6 +20,7 @@ function load(file, modules) {
 function harness() {
   const definitions = load('../../packages/types/src/king-of-tokyo-cards.ts', {});
   const modules = {
+    '../ui/decorativeSvgProps': require('./lib/decorative-svg-fixture.cjs')(),
     react: { useRef: value => ({ current: value }), useState: value => [value, () => {}] },
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', Platform: { OS: 'web' }, useWindowDimensions: () => ({ width: 375, fontScale: 1 }), StyleSheet: { absoluteFill: {} } },

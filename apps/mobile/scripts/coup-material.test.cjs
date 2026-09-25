@@ -15,17 +15,18 @@ function load(file, modules) {
   const exports = {};
   const compiled = ts.transpileModule(read(file), { fileName: file, reportDiagnostics: true, compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } });
   assert.deepEqual(compiled.diagnostics, []);
-  vm.runInNewContext(compiled.outputText, { exports, require: name => { assert(name in modules, name); return modules[name]; } });
+  vm.runInNewContext(compiled.outputText, { exports, require: name => { if (name === '../../constants/typography') return require('./lib/typography-fixture.cjs'); assert(name in modules, name); return modules[name]; } });
   return exports;
 }
 function harness({ platform = 'web', width = 375, fontScale = 1 } = {}) {
   const native = { View: 'View', Text: 'Text', Image: 'Image', Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }), StyleSheet: { absoluteFill: {} } };
-  const modules = { 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, 'expo-linear-gradient': { LinearGradient: 'Gradient' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { COUP: colours, ARCADE: colours, COUP_CHARACTER_COLOR: Object.fromEntries(roles.map(role => [role, colours.gold])) }, '../ui/ScalePressable': { ScalePressable: 'Button' } };
+  const modules = {
+    '../../constants/typography': require('./lib/typography-fixture.cjs'), 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': native, 'expo-linear-gradient': { LinearGradient: 'Gradient' }, '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '../../constants/theme': { COUP: colours, ARCADE: colours, COUP_CHARACTER_COLOR: Object.fromEntries(roles.map(role => [role, colours.gold])) }, '../ui/ScalePressable': { ScalePressable: 'Button' } };
   const surface = load('components/ui/CardSurface.tsx', modules);
   const assets = Object.fromEntries(roles.map(role => [`../../assets/game-art/coup-character-${role}.webp`, role + '.webp']));
-  const artwork = load('components/coup/CoupCharacterArtwork.tsx', { ...modules, ...assets, '../ui/GameCover': { GameCover: 'GameCover' } });
+  const artwork = load('components/coup/CoupCharacterArtwork.tsx', { ...modules, ...assets, '../ui/CardIllustration': { CardIllustration: 'GameCover' } });
   const tableAssets = Object.fromEntries(['influence-back', 'faction-loyalist', 'faction-reformist', 'treasury'].map(id => [`../../assets/game-art/coup-${id}.webp`, id + '.webp']));
-  const tableArtwork = load('components/coup/CoupTableArtwork.tsx', { ...modules, ...tableAssets, '../ui/GameCover': { GameCover: 'GameCover' } });
+  const tableArtwork = load('components/coup/CoupTableArtwork.tsx', { ...modules, ...tableAssets, '../ui/GameCover': { GameCover: 'GameCover' }, '../ui/CardIllustration': { CardIllustration: 'GameCover' } });
   const card = load('components/coup/CharacterCard.tsx', { ...modules, '../ui/CardSurface': surface, './CoupCharacterArtwork': artwork, './CoupTableArtwork': tableArtwork });
   const seat = load('components/coup/PlayerSeat.tsx', { ...modules, './CharacterCard': card, './Coin': { Coin: 'Coin' } });
   return { ...card, ...seat, ...artwork, modules };
@@ -41,6 +42,32 @@ test('all six revealed faces mount the correct original art with titlecase and l
     assert(text(tree).includes(role[0].toUpperCase() + role.slice(1)));
     assert.equal(tree.props.accessibilityLabel, role + ', active influence');
     assert(nodes(tree).some(node => node.type === 'Text' && node.props.style.fontSize === 14));
+  }
+});
+
+test('portraits and concealed backs share one face without inset frames, including compact seats', () => {
+  const { CharacterCard } = harness();
+  assert.doesNotMatch(read('components/coup/CoupCharacterArtwork.tsx'), /GameCover/);
+  for (const size of ['xs', 'sm', 'md', 'lg']) for (const faceDown of [false, true]) {
+    const tree = CharacterCard({ character: 'inquisitor', size, faceDown, fluid: true });
+    const face = nodes(tree).find(node => node.props.testID === 'card-surface-face');
+    assert.equal(nodes(tree).filter(node => node.props.testID === 'card-surface-face').length, 1);
+    const illustration = nodes(face).find(node => node.type === 'GameCover');
+    assert.equal(illustration.props.rimColor, undefined);
+    const inspect = node => {
+      if (!node || typeof node !== 'object') return false;
+      if (node === illustration) return true;
+      const contains = [node.props.children].flat(Infinity).some(inspect);
+      if (contains && node !== face) {
+        for (const field of ['padding', 'paddingHorizontal', 'maxWidth', 'borderWidth', 'borderRadius']) assert.equal(node.props.style?.[field], undefined);
+      }
+      return contains;
+    };
+    inspect(face);
+    if (size === 'xs') {
+      assert.equal(tree.props.style.width, 32);
+      if (faceDown) assert.equal(illustration.props.aspectRatio, 32 / 44);
+    }
   }
 });
 
@@ -109,7 +136,7 @@ test('image failure uses the established source fence and recovers for a replace
   const { modules, CoupCharacterArtwork } = harness();
   let failed = null;
   const sourceRef = { current: null };
-  const { GameCover } = load('components/ui/GameCover.tsx', { ...modules, react: { useRef: () => sourceRef, useState: () => [failed, value => { failed = value; }] } });
+  const { CardIllustration: GameCover } = load('components/ui/CardIllustration.tsx', { ...modules, react: { useRef: () => sourceRef, useState: () => [failed, value => { failed = value; }] } });
   const firstProps = CoupCharacterArtwork({ character: 'duke' }).props;
   const first = GameCover(firstProps), staleError = nodes(first).find(node => node.type === 'Image').props.onError;
   const nextProps = CoupCharacterArtwork({ character: 'ambassador' }).props;
@@ -352,7 +379,7 @@ test('action cards use intrinsic web width and bounded native font-scaled width 
     assert.equal(button.props.accessibilityLabel, action === 'assassinate' ? 'Assassinate' : 'Income');
     assert.equal(button.props.style[0].minHeight, 48);
     const label = nodes(button).find(node => node.type === 'Text' && text(node) === button.props.accessibilityLabel);
-    assert.equal(label.props.style.fontSize, 14);
+    assert.equal(label.props.style.fontSize, require('./lib/typography-fixture.cjs').TYPOGRAPHY.control.fontSize);
     assert.equal(label.props.numberOfLines, undefined);
     assert.equal(label.props.adjustsFontSizeToFit, undefined);
     assert.match(button.props.accessibilityHint, action === 'assassinate' ? /Choose an eligible player/ : /cannot be challenged/);

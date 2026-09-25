@@ -8,7 +8,7 @@ const ts = require('typescript');
 const jsx = (type, props) => ({ type, props });
 const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(nodes)];
 
-function render(route) {
+function render(route, recovery = false) {
   const filename = path.join(__dirname, '../app', route, 'game.tsx');
   const players = [{ playerId: 'p1', id: 'p1', displayName: 'Player', score: 0, totalScore: 0, coins: 0, scores: [] }];
   const room = { roomCode: 'TEST-ROOM', players: [{ playerId: 'p1', isHost: true, isConnected: true, hasLeft: false }] };
@@ -17,7 +17,7 @@ function render(route) {
     cartographersPublic: { ...pair, status: 'game_over', phase: 'game_over', players, season: 0, winnerIds: ['p1'], objectiveIds: [], revealedCardIds: [] },
     cartographersPrivate: { ...pair, assignments: [], resultMaps: [], map: { coins: 0 } },
     telestrationsPublic: { ...pair, phase: 'game_over', players, seats: ['p1'], completedRounds: 3, winnerIds: ['p1'], scoringMode: 'friendly', direction: 1, pendingScores: {}, cancelledRounds: [] },
-    telestrationsPrivate: { ...pair, windowId: 'finished' },
+    telestrationsPrivate: recovery ? null : { ...pair, windowId: 'finished' },
   };
   const modules = {
     react: { useState: value => [value, () => {}], useRef: value => ({ current: value }), useEffect() {} },
@@ -28,7 +28,7 @@ function render(route) {
     '@zuychin-arcade/types': { CARTOGRAPHERS_SEASONS: [{ name: 'Spring', edicts: [0, 1] }], CARTOGRAPHERS_CARD_BY_ID: {}, CARTOGRAPHERS_OBJECTIVE_BY_ID: {} },
     '../../store/useGameStore': { useGameStore: selector => selector(state) },
     '../../components/cartographers/palette': { CARTOGRAPHERS: {} },
-    '../../components/telestrations/palette': { TELESTRATIONS: {} },
+    '../../components/telestrations/palette': { TELESTRATIONS: { onAccent: '#FFF8EE', controlSurface: '#F3E9DE' } },
     '../../components/telestrations/Controls': { BookButton: 'Button', typography: {} },
   };
   for (const [folder, names] of [['ui', ['ScalePressable', 'GameRecovery', 'CardSurface', 'NeonButton', 'CardGrid']], ['cartographers', ['PlacementEditor', 'MapBoard', 'ObjectiveCard', 'ExploreCard']], ['telestrations', ['BookDraft', 'Drawing', 'Scoring']]]) {
@@ -45,6 +45,13 @@ function render(route) {
   vm.runInNewContext(output, { exports, require: name => { assert(name in modules, name); return modules[name]; } });
   return nodes(exports.default());
 }
+
+test('Telestrations private-state recovery receives its light-theme control colours', () => {
+  const recovery = render('telestrations', true).find(node => node.type === 'GameRecovery');
+  assert(recovery);
+  assert.equal(recovery.props.solidTextColor, '#FFF8EE');
+  assert.equal(recovery.props.outlineBackgroundColor, '#F3E9DE');
+});
 
 for (const route of ['telestrations', 'cartographers-heroes']) {
   test(`${route} toolbar wraps actions as one group without compressing its title into a zero-basis column`, () => {
