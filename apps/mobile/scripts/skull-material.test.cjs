@@ -28,6 +28,7 @@ function harness({ platform = 'web', fontScale = 1, width = 375, measuredScale =
     '../../constants/theme': { SKULL_KING, ARCADE: SKULL_KING },
     '../ui/ScalePressable': { ScalePressable: 'Button' },
     '../ui/GameCover': { GameCover: 'Cover' },
+    '../ui/CardIllustration': { CardIllustration: 'Cover' },
     '../../hooks/useMeasuredTextScale': { useMeasuredTextScale: (base, nativeScale) => {
       measuredCalls.push({ base, nativeScale });
       return { textScale: measuredScale, textRef, onTextLayout };
@@ -64,8 +65,25 @@ test('numbered cards retain every live rank and map all four suit illustrations 
     assert(text(tree).includes(String(rank))); assert(text(tree).includes(suit.toUpperCase()));
     assert.equal(nodes(tree).find(n => n.type === 'Cover').props.source, `suit-${suit}`);
     assert.equal(nodes(tree).find(n => n.type === 'Cover').props.aspectRatio, 1);
+    assert.equal(nodes(tree).filter(n => n.type === 'Text' && n.props.children === rank).length, 1);
     assert(nodes(tree).some(n => n.type === 'Icon' && n.props.name === (suit === 'black' ? 'cards-spade' : 'water')));
   }
+});
+
+test('face illustrations span the single card perimeter without an inset frame', () => {
+  const { SkullKingCardView } = harness();
+  for (const card of [{ id: 'n', kind: 'number', suit: 'green', rank: 4 }, { id: 'p', kind: 'pirate' }]) {
+    const tree = SkullKingCardView({ card });
+    const art = nodes(tree).find(n => n.props.testID === `skull-art-${card.id}`);
+    assert.deepEqual(JSON.parse(JSON.stringify(art.props.style)), { width: '100%' });
+    assert.equal(nodes(art).find(n => n.type === 'Cover').props.rimColor, undefined);
+    const parent = nodes(tree).find(n => n.props.style?.minHeight === 198 && nodes(n).includes(art));
+    assert.equal(parent.props.style.padding, undefined);
+    assert.equal(parent.props.style.paddingHorizontal, undefined);
+  }
+  const source = fs.readFileSync(path.join(__dirname, '../components/skull-king/SkullKingCardArtwork.tsx'), 'utf8');
+  assert.equal((source.match(/<CardIllustration /g) || []).length, 2);
+  assert.equal((source.match(/<GameCover /g) || []).length, 1);
 });
 
 test('selected, disabled and Tigress mode retain exact action and accessible semantics', () => {

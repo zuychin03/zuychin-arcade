@@ -15,13 +15,13 @@ export function ActionCard({ id, action, owner, disabled, mode = 'program', conf
     style={{ flexGrow: 1, minWidth: 0, minHeight: 48, borderRadius: 12, opacity: 1 }}>
     <CardSurface fill radius={12} faceColor={C.panel} edgeColor="#10131B" highlightColor={disabled ? C.border : C.ember} depth={3}>
       <View style={{ padding: 16, gap: 12 }}>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
-          <ActionArtwork action={action} />
-          <View style={{ flexBasis: 180, flexGrow: 1, minWidth: 0, gap: 4 }}>
+          <View style={{ minWidth: 0, gap: 4 }}>
             <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: C.text, fontSize: 20, lineHeight: 26 }}>{action.toUpperCase()}</Text>
             <Text style={{ fontFamily: 'Outfit_700Bold', color: C.gold, fontSize: 15, lineHeight: 22 }}>{owner}</Text>
           </View>
-        </View>
+      </View>
+      <ActionArtwork action={action} />
+      <View style={{ padding: 16, gap: 12 }}>
         <Text style={{ fontFamily: 'Outfit_400Regular', color: C.text, fontSize: 16, lineHeight: 24 }}>{COLT_ACTION_HELP[action]}</Text>
         <View style={{ paddingTop: 10, borderTopWidth: 1, borderTopColor: C.border }}><Text style={{ fontFamily: 'Outfit_700Bold', color: disabled ? C.muted : accent, fontSize: 14, lineHeight: 21 }}>{disabled ? action === 'bullet' ? 'CANNOT BE PROGRAMMED' : 'NOT YOUR DECISION' : mode === 'reserve' ? 'RESERVE THIS CARD' : configure ? 'CHOOSE COVER OPTIONS' : 'PROGRAM THIS ACTION'}</Text></View>
       </View>

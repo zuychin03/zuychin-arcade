@@ -229,6 +229,23 @@ physical iOS or Android devices.
 
 ## Evidence and release limits
 
+- The seven-game card revision on 25/09/2026 passed all 1,573 client tests,
+  mobile/gallery TypeScript, scoped ESLint and six gallery-server safety tests.
+  A fresh component-gallery web export passed 40 browser cases: seven game
+  families plus Citadels roles, Not Alone powers and Colt characters at 375 px
+  normal text, 320 px with 200% CSS text, and 1280 px with both text sizes.
+  All 132 illustration fields retained square, full-width geometry; images
+  and fonts loaded without browser runtime errors. Normal-text family cases
+  also checked glyph containment, painted same-row dimensions, 48 px controls
+  and 28 local selection actions. Screenshots received independent visual review.
+  These are production components with synthetic data, not complete matches.
+- A separate local development-app preview showed the revised cards in actual
+  King of Tokyo, Skull King, Citadels, Not Alone and BANG! matches. Libertalia
+  reached its lobby and Colt Express its entrance before testing was stopped.
+  This was an initial-game visual review, not a completed lifecycle campaign.
+  Existing SVG accessibility-prop and pointer-events deprecation warnings were
+  observed in development. No new physical iOS/Android or production deployment
+  acceptance is implied by this revision's component export and browser checks.
 - The 24/09/2026 artwork and follow-up fixes passed all 1,565 client tests
   across 106 files, mobile/server TypeScript and scoped lint. All 44 new images
   have verified source/output hashes, dimensions and byte budgets. The Kraken

@@ -35,9 +35,15 @@ test('all 16 public character portraits are decorative, bounded and have a vecto
   const ids = Object.keys(constants.BANG_CHARACTERS);
   const assets = Object.fromEntries(ids.map(id => [`../../assets/game-art/bang-character-${id}.webp`, id]));
   const { BangCharacterArtwork } = load('components/bang/CharacterArtwork.tsx', {
-    ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'GameCover' },
+    ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'GameCover' }, '../ui/CardIllustration': { CardIllustration: 'Illustration' },
   });
   assert.equal(ids.length, 16);
+  for (const character of ids) {
+    const fluid = BangCharacterArtwork({ character, fluid: true });
+    assert.equal(fluid.type, 'Illustration');
+    assert.equal(fluid.props.source, character);
+    assert.equal(fluid.props.rimColor, undefined);
+  }
   for (const character of ids) for (const size of [72, 96]) {
     const tree = BangCharacterArtwork({ character, size });
     assert.equal(tree.props.pointerEvents, 'none');
@@ -126,10 +132,10 @@ test('every card text face is actually loaded by the app', () => {
   }
 });
 
-test('exact card art keeps the family and vector fallback without changing geometry', () => {
+test('exact card art fills its card without an inset rim and keeps both fallbacks', () => {
   const assets = Object.fromEntries([...new Set([...Object.values(CARD_ART_FAMILY), ...Object.keys(CARD_ART_FAMILY)])].map(family => [`../../assets/game-art/bang-card-${family}.webp`, family]));
   const { BangCardArtwork, BANG_CARD_ART_FAMILY, BANG_CARD_EMBLEM } = load('components/bang/CardArtwork.tsx', {
-    ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'GameCover' },
+    ...common, ...assets, 'react-native': { View: 'View' }, '../ui/CardIllustration': { CardIllustration: 'Illustration' },
   });
   assert.deepEqual(JSON.parse(JSON.stringify(BANG_CARD_ART_FAMILY)), CARD_ART_FAMILY);
   for (const [name, family] of Object.entries(CARD_ART_FAMILY)) {
@@ -138,10 +144,12 @@ test('exact card art keeps the family and vector fallback without changing geome
     assert.equal(tree.props.pointerEvents, 'none');
     assert.equal(tree.props.accessibilityElementsHidden, true);
     assert.equal(tree.props.importantForAccessibility, 'no-hide-descendants');
-    const cover = nodes(tree).find(node => node.type === 'GameCover');
+    const cover = nodes(tree).find(node => node.type === 'Illustration');
     assert.equal(cover.props.source, name);
-    assert.equal(cover.props.rimColor, palette.gold);
-    assert.equal(cover.props.aspectRatio, 1.6);
+    assert.equal(cover.props.rimColor, undefined);
+    assert.equal(cover.props.aspectRatio, undefined);
+    assert.equal(tree.props.style.width, '100%');
+    assert.equal(tree.props.style.maxWidth, undefined);
     assert.equal(cover.props.backgroundColor, palette.panel);
     assert.equal(cover.props.fallback.props.source, family);
     assert.equal(nodes(cover.props.fallback.props.fallback).find(node => node.type === 'Icon').props.name, BANG_CARD_EMBLEM[name]);

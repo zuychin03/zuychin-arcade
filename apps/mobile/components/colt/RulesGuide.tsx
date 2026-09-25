@@ -22,7 +22,9 @@ export function ColtRulesGuide() {
       <Text ref={textRef} onLayout={onTextLayout} style={body}>Take turns adding actions to one shared program. Nobody moves yet. Once programming ends, reveal and execute the cards in that same order.</Text>
       <Text style={{ ...body, fontFamily: 'Outfit_700Bold' }}>Illustrative shared sequence, not a live program</Text>
       <CardGrid items={program} keyExtractor={item => item.action} minCardWidth={200} maxCardWidth={300} textScale={textScale} gap={12} renderItem={item => <CardSurface fill radius={12} faceColor={C.panel} edgeColor={C.bg} highlightColor={C.border} depth={3}>
-        <View style={{ padding: 16, gap: 12 }}><Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{item.label}</Text><ActionArtwork action={item.action} size={96} /><Text style={body}>{COLT_ACTION_HELP[item.action]}</Text></View>
+        <View style={{ padding: 16 }}><Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{item.label}</Text></View>
+        <ActionArtwork action={item.action} />
+        <View style={{ padding: 16 }}><Text style={body}>{COLT_ACTION_HELP[item.action]}</Text></View>
       </CardSurface>} />
       <Text style={body}>Earlier actions may move your target or take the loot you wanted. Choose from the legal options when your action actually executes. A tunnel hides programmed cards until then.</Text>
     </View>

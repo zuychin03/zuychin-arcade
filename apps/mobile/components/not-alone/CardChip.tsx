@@ -27,8 +27,8 @@ export function CardChip({ cardId, width = 220, title, body, color, disabled, ne
           <View style={{ padding: 12, minWidth: 0, backgroundColor: NOT_ALONE.panel }}>
             <Text style={{ fontFamily: 'Outfit_800ExtraBold', color, fontSize: 16, lineHeight: 22 }}>{title}</Text>
           </View>
+          <PowerArtwork cardId={cardId} color={color} />
           <View style={{ padding: 12, minWidth: 0, gap: 16 }}>
-            <PowerArtwork cardId={cardId} color={color} />
             <Text style={{ fontFamily: 'Outfit_400Regular', color: NOT_ALONE.text, fontSize: 14, lineHeight: 20 }}>{body}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 6, minWidth: 0 }}>
               <MaterialCommunityIcons name={disabled ? 'clock-outline' : needsOptions ? 'tune-variant' : 'gesture-tap'} size={20} color={disabled ? NOT_ALONE.muted : color} accessible={false} />

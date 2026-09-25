@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { SkullKingCard, SkullKingSuit } from '@zuychin-arcade/types';
 import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 
 type SpecialKind = Exclude<SkullKingCard['kind'], 'number'>;
 const artwork = {
@@ -21,7 +22,7 @@ const suits = {
 const suitIcons = { green: 'anchor', purple: 'compass-outline', yellow: 'key-variant', black: 'cards-spade' } as const;
 
 export function SkullKingCardArtwork({ kind, color }: { kind: SpecialKind; color: string }) {
-  return <GameCover source={artwork[kind]} rimColor={color} aspectRatio={1} fallback={
+  return <CardIllustration source={artwork[kind]} aspectRatio={1} fallback={
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <MaterialCommunityIcons name={icon[kind]} size={42} color={color} />
     </View>
@@ -29,7 +30,7 @@ export function SkullKingCardArtwork({ kind, color }: { kind: SpecialKind; color
 }
 
 export function SkullKingSuitArtwork({ suit, color }: { suit: SkullKingSuit; color: string }) {
-  return <GameCover source={suits[suit]} aspectRatio={1} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name={suitIcons[suit]} size={36} color={color} /></View>} />;
+  return <CardIllustration source={suits[suit]} aspectRatio={1} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name={suitIcons[suit]} size={36} color={color} /></View>} />;
 }
 
 export function SkullKingDeckArtwork() {

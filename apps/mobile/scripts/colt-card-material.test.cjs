@@ -23,10 +23,11 @@ const material = load('ui/CardSurface.tsx');
 let failedArtwork = null;
 const currentSource = { current: null };
 const cover = load('ui/GameCover.tsx', { react: { useState: () => [failedArtwork, value => { failedArtwork = value; }], useRef: () => currentSource }, '../../constants/theme': { ARCADE: theme } });
+const illustration = load('ui/CardIllustration.tsx', { react: { useState: () => [failedArtwork, value => { failedArtwork = value; }], useRef: () => currentSource }, '../../constants/theme': { ARCADE: theme } });
 const assetMocks = Object.fromEntries(['move', 'floor', 'rob', 'shoot', 'punch', 'marshal', 'bullet'].map(action => [`../../assets/game-art/colt-action-${action}.webp`, action]));
-const artwork = load('colt/ActionArtwork.tsx', { '../ui/GameCover': cover, ...assetMocks });
+const artwork = load('colt/ActionArtwork.tsx', { '../ui/CardIllustration': illustration, ...assetMocks });
 const portraitAssets = Object.fromEntries(['ghost', 'doc', 'tuco', 'django', 'cheyenne', 'belle'].map(id => [`../../assets/game-art/colt-character-${id}.webp`, `portrait-${id}`]));
-const portraits = load('colt/ColtCharacterArtwork.tsx', { '../ui/GameCover': cover, ...portraitAssets });
+const portraits = load('colt/ColtCharacterArtwork.tsx', { '../ui/CardIllustration': illustration, ...portraitAssets });
 const trainAssets = Object.fromEntries(['locomotive', 'carriage', 'caboose'].map(id => [`../../assets/game-art/colt-train-${id}.webp`, `train-${id}`]));
 const trains = load('colt/TrainArtwork.tsx', { '../ui/GameCover': cover, ...trainAssets });
 const { ActionCard, coltActionIcons } = load('colt/ActionCard.tsx', { '../ui/CardSurface': material, './decision': help, './ActionArtwork': artwork });
@@ -34,6 +35,30 @@ const { CharacterChoice, TeamChoice } = load('colt/CharacterChoice.tsx', { '../u
 const nodes = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(nodes)];
 const content = node => Array.isArray(node) ? node.map(content).join('') : node && typeof node === 'object' ? content(node.props?.children) : node == null || node === false ? '' : String(node);
 const button = tree => nodes(tree).find(n => n.type === 'Button');
+
+test('action and character cards have one full-width illustration without a nested frame', () => {
+  for (const tree of [ActionCard({ action: 'move', owner: 'Doc', disabled: false, onPress() {} }), CharacterChoice({ character: { name: 'Doc', summary: 'Live power.' }, disabled: false, onPress() {} })]) {
+    const illustrations = nodes(tree).filter(node => node.props.testID === 'card-illustration');
+    assert.equal(illustrations.length, 1);
+    assert.equal(illustrations[0].props.style.width, '100%');
+    assert.equal(illustrations[0].props.style.aspectRatio, 1);
+    const walk = (node, withinFace = false) => {
+      if (!node || typeof node !== 'object') return false;
+      if (node === illustrations[0]) return true;
+      const inside = withinFace || node.props.testID === 'card-surface-face';
+      const contains = [node.props.children].flat(Infinity).some(child => walk(child, inside));
+      if (contains && inside) {
+        for (const style of [node.props.style].flat().filter(Boolean)) {
+          assert.equal(style.padding, undefined);
+          assert(style.maxWidth === undefined || style.maxWidth === '100%');
+          if (node.props.testID !== 'card-surface-face') assert.equal(style.borderRadius, undefined);
+        }
+      }
+      return contains;
+    };
+    walk(tree);
+  }
+});
 
 test('every action retains complete help, owner, stable anchor and immediate submission semantics', () => {
   for (const action of Object.keys(coltActionIcons)) {

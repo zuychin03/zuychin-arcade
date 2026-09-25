@@ -28,7 +28,7 @@ function harness({ platform = 'web', fontScale = 1, width = 375, actualSurface =
     'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', StyleSheet: { absoluteFill: {} }, Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '@zuychin-arcade/types': definitions,
-    '../../constants/theme': { NOT_ALONE, ARCADE: NOT_ALONE }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/GameCover': { GameCover: 'Cover' },
+    '../../constants/theme': { NOT_ALONE, ARCADE: NOT_ALONE }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/CardIllustration': { CardIllustration: 'Cover' },
   };
   modules['../../hooks/useMeasuredTextScale'] = load('hooks/useMeasuredTextScale.ts', modules, {
     window: { getComputedStyle: node => { assert.equal(node, textRef.current); return { fontSize: `${measuredFont}px` }; } },
@@ -132,8 +132,9 @@ test('Place width grows for native text without content-derived width, while flu
     assert.equal(harness({ fontScale: NaN }).NotAlonePlaceCard({ placeId: 10, compact }).props.style.width, compact ? 176 : 208);
     const art = nodes(fluid).find(node => node.props.testID === 'not-alone-place-art-10');
     const cover = nodes(art).find(node => node.type === 'Cover');
-    assert.equal(cover.props.aspectRatio, compact ? 1.2 : 1.5);
-    if (!compact) assert(art.props.style.maxWidth / cover.props.aspectRatio <= 176);
+    assert.equal(cover.props.aspectRatio, 1);
+    assert.equal(art.props.style.width, '100%');
+    assert.equal(art.props.style.maxWidth, undefined);
     for (const tree of [web, native, fluid]) {
       assert.equal(tree.props.style.height, undefined); assert.equal(tree.props.style.paddingBottom, 3);
       assert(nodes(tree).filter(node => node.type === 'Text').every(node => node.props.numberOfLines === undefined && node.props.allowFontScaling !== false && node.props.style.height === undefined && node.props.style.width === undefined));
@@ -232,13 +233,14 @@ test('all 35 power identities preserve complete copy, bounded decorative artwork
     for (const card of cards) {
       const tree = CardChip({ cardId: card.id, title: card.name, body: card.summary, color: NOT_ALONE.signal, disabled: false, needsOptions: true, onPress() {} });
       const art = nodes(tree).find(node => node.props.testID === `not-alone-power-art-${card.id}`);
-      assert.equal(art.props.style.maxWidth, 144);
+      assert.equal(art.props.style.width, '100%');
+      assert.equal(art.props.style.maxWidth, undefined);
       assert.equal(art.props.pointerEvents, 'none');
       assert.equal(art.props.accessibilityElementsHidden, true);
       const cover = nodes(art).find(node => node.type === 'Cover');
       assert.equal(cover.props.source, `${family}-${card.id}`);
       assert.equal(cover.props.aspectRatio, 1);
-      assert.equal(cover.props.rimColor, NOT_ALONE.signal);
+      assert.equal(cover.props.rimColor, undefined);
       assert(text(tree).includes(card.summary));
       assert.equal(nodes(tree).filter(node => node.type === 'Button').length, 1);
       assert(nodes(tree).filter(node => node.type === 'Text').every(node => node.props.numberOfLines === undefined));
@@ -273,21 +275,36 @@ test('public rules examples reuse exact power identities and measure the ten-Pla
   }
   assert(text(tree).includes('Public examples only, not anyone’s hand.'));
   assert(!nodes(tree).some(node => node.type === 'Button'));
+  for (const surface of nodes(tree).filter(node => node.type === 'Surface')) {
+    const power = nodes(surface).find(node => node.props.testID?.startsWith('not-alone-power-art-'));
+    if (power) assert([surface.props.children].flat(Infinity).includes(power));
+  }
 });
 
-test('shared GameCover fences retired Place errors and exposes only decorative fallback for the current source', () => {
+test('private power cards place full-width art directly on their single outer face', () => {
+  const { CardChip } = harness();
+  const tree = CardChip({ cardId: 'dodge', title: 'Dodge', body: 'Complete rules', color: NOT_ALONE.signal, disabled: false, needsOptions: false, onPress() {} });
+  const surfaces = nodes(tree).filter(node => node.type === 'Surface');
+  assert.equal(surfaces.length, 1);
+  const art = nodes(tree).find(node => node.props.testID === 'not-alone-power-art-dodge');
+  assert([surfaces[0].props.children].flat(Infinity).includes(art));
+  assert.equal(art.props.style.width, '100%');
+  for (const field of ['padding', 'maxWidth', 'borderRadius', 'borderWidth']) assert.equal(art.props.style[field], undefined);
+});
+
+test('card illustration fences retired Place errors and exposes only decorative fallback for the current source', () => {
   let failed = null; const sourceRef = { current: null }, { modules } = harness();
   modules.react = { useState: () => [failed, value => { failed = value; }], useRef: () => sourceRef };
-  const { GameCover } = load('components/ui/GameCover.tsx', modules);
+  const { CardIllustration } = load('components/ui/CardIllustration.tsx', modules);
   const { PlaceArtwork } = modules['./PlaceArtwork'];
   const lair = nodes(PlaceArtwork({ placeId: 1, color: NOT_ALONE.signal })).find(node => node.type === 'Cover');
   const rover = nodes(PlaceArtwork({ placeId: 5, color: NOT_ALONE.signal })).find(node => node.type === 'Cover');
-  const old = GameCover(lair.props), current = GameCover(rover.props);
+  const old = CardIllustration(lair.props), current = CardIllustration(rover.props);
   nodes(old).find(node => node.type === 'Image').props.onError(); assert.equal(failed, null);
   nodes(current).find(node => node.type === 'Image').props.onError(); assert.equal(failed, 'rover');
-  const fallback = GameCover(rover.props);
+  const fallback = CardIllustration(rover.props);
   assert(!nodes(fallback).some(node => node.type === 'Image')); assert(nodes(fallback).some(node => node.props.name === 'robot-outline'));
   assert.equal(fallback.props.accessibilityElementsHidden, true); assert.equal(fallback.props.pointerEvents, 'none');
-  const recovered = GameCover(lair.props);
+  const recovered = CardIllustration(lair.props);
   assert.equal(nodes(recovered).find(node => node.type === 'Image').props.source, 'lair');
 });

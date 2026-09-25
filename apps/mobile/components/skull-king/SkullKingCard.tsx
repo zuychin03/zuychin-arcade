@@ -62,23 +62,22 @@ export function SkullKingCardView({
       style={{ ...sizing, ...(onPress ? { flexGrow: 1 } : {}), ...(faceSizing ? { minHeight: faceSizing.minimumHeight } : {}), transform: [{ translateY: selected ? -4 : 0 }] }}
     >
       <CardSurface fill width="100%" radius={14} faceColor={SKULL_KING.panel} edgeColor={SKULL_KING.bg} highlightColor={selected ? SKULL_KING.teal : `${color}88`} selected={selected} disabled={disabled} depth={3}>
-        <View key={faceSizing?.measurementKey} onLayout={faceSizing ? event => faceSizing.onMeasure(event.nativeEvent.layout.height) : undefined} style={{ padding: 10, gap: 8, minHeight: compact ? 170 : 198, flexShrink: 0 }}>
+        <View key={faceSizing?.measurementKey} onLayout={faceSizing ? event => faceSizing.onMeasure(event.nativeEvent.layout.height) : undefined} style={{ minHeight: compact ? 170 : 198, flexShrink: 0 }}>
           {card.kind === 'number' ? <>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
+            <View style={{ paddingHorizontal: 10, paddingVertical: 6, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
               <Text ref={textRef} onLayout={onTextLayout} style={{ fontFamily: 'SpaceMono_700Bold', color, fontSize: 18, lineHeight: 24 }}>{card.rank}</Text>
               <MaterialCommunityIcons name={card.suit === 'black' ? 'cards-spade' : 'water'} size={20} color={color} accessible={false} />
             </View>
-            <View style={{ flexGrow: 1, minHeight: compact ? 76 : 100, paddingVertical: 8, alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 10, backgroundColor: SKULL_KING.surface }}>
-              <View style={{ width: compact ? 56 : 64, maxWidth: '100%' }}><SkullKingSuitArtwork suit={card.suit!} color={color} /></View>
-              <Text style={{ fontFamily: 'SpaceMono_700Bold', color: SKULL_KING.text, fontSize: 32, lineHeight: 40 }}>{card.rank}</Text>
+            <View testID={`skull-art-${card.id}`} style={{ width: '100%' }}>
+              <SkullKingSuitArtwork suit={card.suit!} color={color} />
             </View>
-            <Text style={{ fontFamily: 'Outfit_700Bold', color, fontSize: 14, lineHeight: 19, textAlign: 'center' }}>{card.suit!.toUpperCase()}</Text>
+            <Text style={{ paddingHorizontal: 10, paddingVertical: 8, fontFamily: 'Outfit_700Bold', color, fontSize: 14, lineHeight: 19, textAlign: 'center' }}>{card.suit!.toUpperCase()}</Text>
           </> : <>
-            <View testID={`skull-art-${card.id}`} style={{ width: '100%', borderRadius: 9, overflow: 'hidden' }}><SkullKingCardArtwork kind={card.kind} color={color} /></View>
-            <Text ref={textRef} onLayout={onTextLayout} style={{ fontFamily: 'Outfit_800ExtraBold', color: SKULL_KING.text, fontSize: 16, lineHeight: 21, textAlign: 'center' }}>{skullKingCardLabel({ id: card.id, kind: card.kind })}</Text>
-            {resolvedMode ? <Text style={{ fontFamily: 'Outfit_700Bold', color, fontSize: 14, lineHeight: 19, textAlign: 'center' }}>AS {resolvedMode.toUpperCase()}</Text> : null}
+            <View testID={`skull-art-${card.id}`} style={{ width: '100%' }}><SkullKingCardArtwork kind={card.kind} color={color} /></View>
+            <Text ref={textRef} onLayout={onTextLayout} style={{ paddingHorizontal: 10, paddingVertical: 8, fontFamily: 'Outfit_800ExtraBold', color: SKULL_KING.text, fontSize: 16, lineHeight: 21, textAlign: 'center' }}>{skullKingCardLabel({ id: card.id, kind: card.kind })}</Text>
+            {resolvedMode ? <Text style={{ paddingHorizontal: 10, paddingBottom: 8, fontFamily: 'Outfit_700Bold', color, fontSize: 14, lineHeight: 19, textAlign: 'center' }}>AS {resolvedMode.toUpperCase()}</Text> : null}
           </>}
-          {selected ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+          {selected ? <View style={{ paddingHorizontal: 10, paddingBottom: 8, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <MaterialCommunityIcons name="check-circle" size={16} color={SKULL_KING.teal} accessible={false} />
             <Text style={{ fontFamily: 'Outfit_700Bold', color: SKULL_KING.teal, fontSize: 14, lineHeight: 19 }}>SELECTED</Text>
           </View> : null}

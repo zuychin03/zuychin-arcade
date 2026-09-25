@@ -34,7 +34,7 @@ function harness() {
   };
   modules['../ui/CardSurface'] = load('components/ui/CardSurface.tsx', modules);
   modules['./TokyoPowerArtwork'] = load('components/king-of-tokyo/TokyoPowerArtwork.tsx', {
-    ...modules, '../ui/GameCover': { GameCover: 'GameCover' },
+    ...modules, '../ui/CardIllustration': { CardIllustration: 'CardIllustration' },
     ...Object.fromEntries(categories.map(category => [`../../assets/game-art/tokyo-power-${category}.webp`, category + '.webp'])),
     ...Object.fromEntries(definitions.KING_OF_TOKYO_POWER_CARDS.map(card => [`../../assets/game-art/tokyo-power-${card.id}.webp`, card.id + '.webp'])),
   });
@@ -50,7 +50,7 @@ test('every power definition retains exact live text and selects its named artwo
   const { PowerCard, definitions } = harness();
   for (const definition of definitions.KING_OF_TOKYO_POWER_CARDS) {
     const tree = PowerCard({ card: { cardId: definition.id, instanceId: 'owned-instance', counters: 2 }, compact: true });
-    assert.equal(nodes(tree).find(node => node.type === 'GameCover').props.source, definition.id + '.webp');
+    assert.equal(nodes(tree).find(node => node.type === 'CardIllustration').props.source, definition.id + '.webp');
     for (const copy of [definition.name, definition.effect, definition.kind.toUpperCase(), definition.category.toUpperCase(), '2 COUNTERS']) assert(text(tree).includes(copy), copy);
     const prose = nodes(tree).find(node => node.type === 'Text' && node.props.children === definition.effect);
     assert.equal(prose.props.style.fontFamily, 'Outfit_400Regular');
@@ -153,15 +153,15 @@ test('category-art failure uses the existing source fence and recovers on catego
   const { modules, TokyoPowerArtwork } = harness();
   let failed = null;
   const ref = { current: null };
-  const { GameCover } = load('components/ui/GameCover.tsx', { ...modules, react: { useRef: () => ref, useState: () => [failed, value => { failed = value; }] } });
+  const { CardIllustration } = load('components/ui/CardIllustration.tsx', { ...modules, react: { useRef: () => ref, useState: () => [failed, value => { failed = value; }] } });
   const first = TokyoPowerArtwork({ category: 'attack', icon: 'fire', color: TOKYO.danger }).props;
   const next = TokyoPowerArtwork({ category: 'defense', icon: 'shield-star-outline', color: TOKYO.cyan }).props;
-  const staleError = nodes(GameCover(first)).find(node => node.type === 'Image').props.onError;
-  GameCover(next); staleError(); assert.equal(failed, null);
-  nodes(GameCover(next)).find(node => node.type === 'Image').props.onError();
-  assert(!nodes(GameCover(next)).some(node => node.type === 'Image'));
-  assert(nodes(GameCover(next)).some(node => node.type === 'Icon' && node.props.name === 'shield-star-outline'));
-  assert(nodes(GameCover(first)).some(node => node.type === 'Image'));
+  const staleError = nodes(CardIllustration(first)).find(node => node.type === 'Image').props.onError;
+  CardIllustration(next); staleError(); assert.equal(failed, null);
+  nodes(CardIllustration(next)).find(node => node.type === 'Image').props.onError();
+  assert(!nodes(CardIllustration(next)).some(node => node.type === 'Image'));
+  assert(nodes(CardIllustration(next)).some(node => node.type === 'Icon' && node.props.name === 'shield-star-outline'));
+  assert(nodes(CardIllustration(first)).some(node => node.type === 'Image'));
 });
 
 test('dice preserve exact faces, indices and four distinct states without fixed-height text or disabled scaling', () => {

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NotAloneHuntCardId, NotAloneSurvivalCardId } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 
 const artwork = {
   adrenaline: require('../../assets/game-art/not-alone-survival-adrenaline.webp'),
@@ -43,7 +43,7 @@ const artwork = {
 
 export function PowerArtwork({ cardId, color }: { cardId: string; color: string }) {
   const source = Object.prototype.hasOwnProperty.call(artwork, cardId) ? artwork[cardId as keyof typeof artwork] : undefined;
-  return <View testID={`not-alone-power-art-${cardId}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 144, alignSelf: 'center' }}>
-    {source === undefined ? <View style={{ aspectRatio: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={color} accessible={false} /></View> : <GameCover source={source} aspectRatio={1} rimColor={color} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={color} accessible={false} /></View>} />}
+  return <View testID={`not-alone-power-art-${cardId}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%' }}>
+    {source === undefined ? <View style={{ aspectRatio: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={color} accessible={false} /></View> : <CardIllustration source={source} aspectRatio={1} fallback={<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={color} accessible={false} /></View>} />}
   </View>;
 }

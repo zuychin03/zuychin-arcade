@@ -122,10 +122,11 @@ export function PowerCard({
         </View>
       </View>
       {compact && heading}
-      <View testID={`tokyo-power-art-${card.instanceId}`} style={{ width: '100%', maxWidth: compact ? 144 : 176, alignSelf: 'center', marginTop: 10, borderRadius: 10, overflow: 'hidden' }}>
+      </View>
+      <View testID={`tokyo-power-art-${card.instanceId}`} style={{ width: '100%' }}>
         <TokyoPowerArtwork cardId={card.cardId} category={definition.category} icon={visual.icon} color={visual.color} />
       </View>
-
+      <View style={{ padding: compact ? 10 : 13 }}>
       <Text
         style={{
           maxWidth: '100%',
@@ -134,7 +135,6 @@ export function PowerCard({
           color: TOKYO.text,
           fontSize: 14,
           lineHeight: 21,
-          marginTop: 9,
         }}
       >
         {definition.effect}

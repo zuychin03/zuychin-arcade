@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CitadelsRole } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 import { CITADELS } from '../../constants/theme';
 
 const portraits = {
@@ -21,13 +21,11 @@ const icons = {
 } as const;
 
 export function CitadelsRoleArtwork({ role, color }: { role: CitadelsRole; color: string }) {
-  return <View testID={`citadels-role-insignia-${role}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ minHeight: 112, alignItems: 'center', justifyContent: 'center' }}>
-    <View style={{ width: '100%', maxWidth: 168, borderRadius: 8, overflow: 'hidden' }}>
-      <GameCover source={portraits[role]} aspectRatio={1} rimColor={color} backgroundColor={CITADELS.bg} fallback={
+  return <View testID={`citadels-role-insignia-${role}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%' }}>
+      <CardIllustration source={portraits[role]} aspectRatio={1} backgroundColor={CITADELS.bg} fallback={
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <MaterialCommunityIcons name={icons[role]} size={46} color={color} accessible={false} />
         </View>
       } />
-    </View>
   </View>;
 }

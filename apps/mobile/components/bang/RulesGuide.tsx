@@ -4,6 +4,7 @@ import { BANG_CHARACTERS, type BangCard, type BangCharacterId } from '@zuychin-a
 import { BANG as C } from '../../constants/theme';
 import { BangCardView, BANG_ROLE_GUIDE } from './Card';
 import { CardGrid } from '../ui/CardGrid';
+import { CardSurface } from '../ui/CardSurface';
 import { BangCharacterArtwork } from './CharacterArtwork';
 
 const body = { fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text } as const;
@@ -35,11 +36,13 @@ export function BangRulesGuide() {
       <Text accessibilityRole="header" style={heading}>Meet the frontier characters</Text>
       <Text style={body}>Characters and their abilities are public. They do not reveal anyone's secret role.</Text>
       <CardGrid items={characters} keyExtractor={item => item[0]} minCardWidth={240} maxCardWidth={360} textScale={fontScale} gap={16}
-        renderItem={([id, character]) => <View style={{ width: '100%', minWidth: 0, gap: 8 }}>
-          <BangCharacterArtwork character={id} size={96} />
+        renderItem={([id, character]) => <CardSurface fill radius={14} depth={3} faceColor={C.panel} edgeColor={C.bg} highlightColor={C.gold}>
+          <BangCharacterArtwork character={id} fluid />
+          <View style={{ padding: 12, gap: 8, minWidth: 0 }}>
           <Text style={{ ...body, fontFamily: 'Outfit_800ExtraBold' }}>{character.name}</Text>
           <Text style={body}>{character.summary}</Text>
-        </View>} />
+          </View>
+        </CardSurface>} />
     </View>
     <View style={{ gap: 12 }}>
       <Text accessibilityRole="header" style={heading}>Life also limits your hand</Text>

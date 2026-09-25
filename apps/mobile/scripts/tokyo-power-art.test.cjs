@@ -14,6 +14,7 @@ function load(component, extra = {}) {
     'react-native': { View: 'View', Text: 'Text', Image: 'Image' },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' },
     '../ui/GameCover': { GameCover: 'GameCover' },
+    '../ui/CardIllustration': { CardIllustration: 'CardIllustration' },
     '../../constants/theme': { TOKYO: { panel: '#07130F', cyan: '#2EE6FF', lime: '#8BFF52' } },
     './MonsterAvatar': { MonsterAvatar: 'MonsterAvatar' },
     'react-native-svg': { __esModule: true, ...Object.fromEntries(['default', 'Circle', 'Defs', 'LinearGradient', 'Line', 'Path', 'Rect', 'Stop'].map(key => [key, key === 'default' ? 'Svg' : key])) },
@@ -33,14 +34,15 @@ function load(component, extra = {}) {
   return exports;
 }
 
-test('all 64 identities select their own complete artwork with palette rim and native fallback', () => {
+test('all 64 identities select their own complete frameless artwork and native fallback', () => {
   const { TokyoPowerArtwork } = load('TokyoPowerArtwork');
   const sources = new Set();
   for (const card of KING_OF_TOKYO_POWER_CARDS) {
     const tree = TokyoPowerArtwork({ cardId: card.id, category: card.category, icon: 'creation', color: '#2EE6FF' });
     assert.equal(tree.props.source, `../../assets/game-art/tokyo-power-${card.id}.webp`);
     assert.equal(tree.props.aspectRatio, 1);
-    assert.equal(tree.props.rimColor, '#2EE6FF');
+    assert.equal(tree.type, 'CardIllustration');
+    assert.equal(tree.props.rimColor, undefined);
     assert(nodes(tree.props.fallback).some(node => node.type === 'Icon'));
     sources.add(tree.props.source);
     const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, `../assets/game-art/tokyo-power-${card.id}-manifest.json`), 'utf8'));

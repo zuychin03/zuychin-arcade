@@ -360,8 +360,11 @@ The original nine games include 252 individual illustrations in addition to the 
 shared scenes and category artwork. Named cards and characters, uniform hidden
 card backs, faction seals and board scenery use original generated artwork.
 Rules, costs, ranks, paths and interaction states remain live interface elements.
-Card faces combine directional bevels, recessed illustrations and game-specific
-neon accents without requiring a 3D rendering engine.
+Card faces combine directional bevels and game-specific neon accents without
+requiring a 3D rendering engine. King of Tokyo, Skull King, Citadels, Not Alone,
+BANG!, Libertalia and Colt Express use full-width, uncropped illustrations
+inside a single card surface, with separate live headers and rules. Comparable
+cards retain consistent row heights as text grows.
 
 The four additions use their own original cover scenes and game-specific assets:
 

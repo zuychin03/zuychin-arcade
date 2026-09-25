@@ -56,10 +56,12 @@ function ProgramCards({ game, headingRef }: { game: ColtPublicState; headingRef?
       return <View nativeID={'colt-program-card-' + index} onLayout={event => { if (index === 0) setColumnWidth(event.nativeEvent.layout.width); }} style={{ width: '100%', minWidth: 0, paddingBottom: 4, gap: 6 }}>
         <View style={{ minHeight: status.minimumHeight }}><Text key={status.measurementKey} onLayout={event => status.onMeasure(event.nativeEvent.layout.height)} style={{ ...body, fontFamily: 'Outfit_700Bold', color: active ? C.ember : C.text }}>{index + 1}.{active ? ' RESOLVING NOW' : index < game.executionIndex ? ' RESOLVED' : ' QUEUED'}</Text></View>
         <View style={{ minHeight: face.minimumHeight }}><CardSurface fill radius={12} faceColor={C.panel} edgeColor="#10131B" highlightColor={active ? C.ember : C.border} depth={3} selected={active}>
-          <View key={face.measurementKey} onLayout={event => face.onMeasure(event.nativeEvent.layout.height)} style={{ padding: 12, gap: 8, alignItems: 'center' }}>
-            {revealed && card.action ? <ActionArtwork action={card.action} size={144} /> : <View accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ minHeight: 144, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={C.gold} /></View>}
+          <View key={face.measurementKey} onLayout={event => face.onMeasure(event.nativeEvent.layout.height)} style={{ width: '100%' }}>
+            {revealed && card.action ? <ActionArtwork action={card.action} /> : <View accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', aspectRatio: 1, alignItems: 'center', justifyContent: 'center' }}><MaterialCommunityIcons name="cards-outline" size={48} color={C.gold} /></View>}
+            <View style={{ padding: 12, gap: 8 }}>
             <Text style={{ ...body, fontFamily: 'Outfit_700Bold', textAlign: 'center' }}>{revealed ? card.action!.toUpperCase() : 'FACE DOWN'}</Text>
             {character ? <Text style={{ ...secondary, textAlign: 'center' }}>{character.name}</Text> : null}
+            </View>
           </View>
         </CardSurface></View>
         <Text style={secondary}>{player?.displayName}{card.cover ? ' · COVER' : ''}</Text>

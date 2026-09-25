@@ -65,6 +65,19 @@ test('power illustration identity does not replace full live rules or printed co
   assert(findPath(tree, node => node.props?.accessibilityLabel === 'Printed cost 3 energy'));
 });
 
+test('power artwork reaches the card perimeter between independently padded text sections', () => {
+  for (const compact of [true, false]) {
+    const tree = render({ compact });
+    const artPath = findPath(tree, node => node.type === 'Artwork');
+    const artRegion = artPath.at(-2);
+    assert.deepEqual(JSON.parse(JSON.stringify(artRegion.props.style)), { width: '100%' });
+    assert.equal(artPath.at(-3).type, 'CardSurface');
+    assert.equal(artPath.filter(node => node.type === 'CardSurface').length, 1);
+    const rulesPath = findPath(tree, node => node.props?.children === 'A final roll with all six faces gains 9 victory points.');
+    assert.equal(rulesPath.at(-2).props.style.padding, compact ? 10 : 13);
+  }
+});
+
 test('compact header layout preserves action semantics and touch size', () => {
   let presses = 0;
   const tree = render({ compact: true, actionLabel: 'BUY · 3 ENERGY', onAction: () => presses++ });

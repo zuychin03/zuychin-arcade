@@ -73,7 +73,9 @@ export function NotAloneRulesGuide() {
           <CardSurface fill radius={14} depth={3} faceColor={C.surface} edgeColor={C.bg} highlightColor={color}>
             <View style={{ padding: 12, gap: 12 }}>
               <Text style={{ ...body, color, fontFamily: 'Outfit_700Bold' }}>{card.name} · {kind} · P{card.phase}</Text>
-              <PowerArtwork cardId={card.id} color={color} />
+            </View>
+            <PowerArtwork cardId={card.id} color={color} />
+            <View style={{ padding: 12 }}>
               <Text style={body}>{card.summary}</Text>
             </View>
           </CardSurface>

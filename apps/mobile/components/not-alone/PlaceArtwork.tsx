@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NotAlonePlaceId } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 
 const artwork = {
   1: require('../../assets/game-art/not-alone-place-lair.webp'),
@@ -16,10 +16,10 @@ const artwork = {
   10: require('../../assets/game-art/not-alone-place-artefact.webp'),
 };
 
-export function PlaceArtwork({ placeId, color, compact = false }: { placeId: NotAlonePlaceId; color: string; compact?: boolean }) {
+export function PlaceArtwork({ placeId, color }: { placeId: NotAlonePlaceId; color: string; compact?: boolean }) {
   return (
-    <View testID={`not-alone-place-art-${placeId}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 264, alignSelf: 'center' }}>
-      <GameCover source={artwork[placeId]} aspectRatio={compact ? 1.2 : 1.5} rimColor={color} fallback={
+    <View testID={`not-alone-place-art-${placeId}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%' }}>
+      <CardIllustration source={artwork[placeId]} aspectRatio={1} fallback={
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <MaterialCommunityIcons name={placeId === 5 ? 'robot-outline' : placeId === 8 ? 'rocket-launch-outline' : placeId === 10 ? 'diamond-stone' : 'image-filter-hdr'} size={48} color={color} accessible={false} />
         </View>

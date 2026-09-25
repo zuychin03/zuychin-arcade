@@ -68,9 +68,11 @@ export function CitadelsDistrictView({ card, compact = false, disabled = false, 
             </View>
           </View>
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: CITADELS.text, fontSize: compact ? 16 : 18, lineHeight: compact ? 22 : 24 }}>{card.name}</Text>
-          <View testID={`citadels-district-art-${card.id}`} style={{ width: '100%', borderRadius: 10, overflow: 'hidden' }}>
+        </View>
+          <View testID={`citadels-district-art-${card.id}`} style={{ width: '100%' }}>
             <CitadelsDistrictArtwork templateId={card.templateId} category={card.color} color={color} compact={compact} />
           </View>
+        <View style={{ padding: 12, gap: 10 }}>
           {card.effectText ? <Text style={{ fontFamily: 'Outfit_400Regular', color: CITADELS.text, fontSize: compact ? 14 : 15, lineHeight: compact ? 20 : 22 }}>{card.effectText}</Text> : null}
           {selected ? <SelectionCue color={color} /> : null}
           {actionLabel && !(selected && actionLabel === 'SELECTED') ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color, fontSize: 14, lineHeight: 20, textAlign: 'center', marginTop: 2 }}>{actionLabel}</Text> : null}
@@ -102,8 +104,10 @@ export function CitadelsRoleCard({ role, fill = false, compact = false, disabled
       <CardSurface fill width="100%" radius={14} faceColor={CITADELS.surface} edgeColor={CITADELS.bg} highlightColor={selected ? color : `${color}88`} depth={3} selected={selected} disabled={disabled}>
         <View style={{ padding: 12, gap: 10 }}>
           <Text style={{ fontFamily: 'SpaceMono_700Bold', color, fontSize: 18, lineHeight: 24 }}>Rank {info.rank}</Text>
-          <CitadelsRoleArtwork role={role} color={color} />
           <Text style={{ fontFamily: 'Outfit_800ExtraBold', color: CITADELS.text, fontSize: 18, lineHeight: 24, textAlign: 'center' }}>{info.name}</Text>
+        </View>
+        <CitadelsRoleArtwork role={role} color={color} />
+        <View style={{ padding: 12, gap: 10 }}>
           <Text style={{ fontFamily: 'Outfit_400Regular', color: CITADELS.text, fontSize: compact ? 14 : 15, lineHeight: compact ? 20 : 22 }}>{info.summary}</Text>
           {selected ? <SelectionCue color={color} /> : null}
           {actionLabel && !(selected && actionLabel === 'SELECTED') ? <Text style={{ fontFamily: 'Outfit_800ExtraBold', color, fontSize: 14, lineHeight: 20, textAlign: 'center', marginTop: 2 }}>{actionLabel}</Text> : null}

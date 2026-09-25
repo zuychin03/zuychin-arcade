@@ -58,6 +58,12 @@ The surface accepts optional width/height, `fill`, radius, face/edge/highlight c
 
 The caller owns interaction, semantics and legal-action state. Decorative edges and highlights do not intercept input or appear as separate accessibility elements. Use lower depth inside narrow board gutters.
 
+### CardIllustration
+
+[CardIllustration](../../apps/mobile/components/ui/CardIllustration.tsx) prints decorative artwork across the card face without its own border, rounding, shadow or width cap. King of Tokyo, Skull King, Citadels, Not Alone, BANG!, Libertalia and Colt Express use it inside a single outer `CardSurface`. Keep padding on live header and rules sections, not around the illustration.
+
+Match the field to the source proportions, currently square for these card illustrations. Do not squeeze a square portrait into a landscape well or frame a miniature image inside another card. The source-specific failure fallback preserves the same footprint. Live ranks, costs, names, rules and action state remain readable when artwork fails.
+
 ### GameCover and GameTile
 
 [GameCover](../../apps/mobile/components/ui/GameCover.tsx) reserves a bounded aspect-ratio footprint and explicitly sizes its contained image. It retains full composition, handles source-specific loading failures and accepts a fallback. Do not assume every caller supplies one.

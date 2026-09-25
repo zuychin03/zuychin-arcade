@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { BangCardName } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 import { BANG } from '../../constants/theme';
 
 const artwork = {
@@ -58,8 +58,8 @@ export const BANG_CARD_EMBLEM: Record<BangCardName, keyof typeof MaterialCommuni
 };
 
 export function BangCardArtwork({ name }: { name: BangCardName }) {
-  return <View testID={`bang-card-art-${name}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 260, alignSelf: 'center' }}>
-    <GameCover source={identities[name]} aspectRatio={1.6} backgroundColor={BANG.panel} rimColor={BANG.gold} fallback={<GameCover source={artwork[BANG_CARD_ART_FAMILY[name]]} aspectRatio={1.6} backgroundColor={BANG.panel} rimColor={BANG.gold} fallback={
+  return <View testID={`bang-card-art-${name}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%' }}>
+    <CardIllustration source={identities[name]} backgroundColor={BANG.panel} fallback={<CardIllustration source={artwork[BANG_CARD_ART_FAMILY[name]]} backgroundColor={BANG.panel} fallback={
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BANG.panel }}>
         <MaterialCommunityIcons name={BANG_CARD_EMBLEM[name]} size={48} color={BANG.sand} accessible={false} />
       </View>

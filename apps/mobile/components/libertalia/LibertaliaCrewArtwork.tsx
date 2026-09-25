@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 import { LIBERTALIA as C } from '../../constants/theme';
 
 const portraits: Record<number, number> = {
@@ -49,8 +49,8 @@ const portraits: Record<number, number> = {
 export function LibertaliaCrewArtwork({ rank }: { rank: number }) {
   const source = portraits[rank];
   if (!source) return null;
-  return <View testID={`libertalia-crew-art-${rank}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 280, alignSelf: 'center' }}>
-    <GameCover source={source} rimColor={C.sky} aspectRatio={1.6} backgroundColor={C.panel} fallback={
+  return <View testID={`libertalia-crew-art-${rank}`} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%' }}>
+    <CardIllustration source={source} backgroundColor={C.panel} fallback={
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <MaterialCommunityIcons name="account-outline" size={48} color={C.sky} accessible={false} />
       </View>

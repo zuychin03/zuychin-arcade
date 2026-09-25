@@ -33,6 +33,10 @@
 
 ### Interface
 
+- Reworked cards across King of Tokyo, Skull King, Citadels, Not Alone, BANG!,
+  Libertalia and Colt Express to use one physical frame and full-width artwork.
+  Removed nested illustration panels while preserving live rules, hidden-card
+  boundaries, accessible actions and consistent same-row card heights.
 - Added 21 original Kraken character portraits and 23 Cartographers illustrations
   covering every drawing card and the four scoring categories. Preserved live
   rules, placement diagrams, private-character boundaries and uncropped artwork.
@@ -73,6 +77,10 @@
 
 ### Reliability and verification
 
+- Passed all 1,573 client regressions, mobile/gallery TypeScript and scoped lint
+  for the seven-game card revision on 25/09/2026. A fresh component-gallery web
+  export passed 40 rendered phone/desktop cases, including 200% CSS text.
+  This is not a new full-game campaign or physical-device acceptance.
 - Excluded generated web/native exports from mobile typechecking, preventing
   retained minified bundles from exhausting the typecheck heap.
 - Added focused engine, socket and client regressions for the four additions,

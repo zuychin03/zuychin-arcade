@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { CitadelsDistrictColor } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 
 const artwork = {
   noble: require('../../assets/game-art/citadels-district-noble.webp'),
@@ -50,13 +50,13 @@ export const citadelsDistrictIcons = {
   military: 'shield-sword-outline', unique: 'star-four-points-outline',
 } as const;
 
-export function CitadelsDistrictArtwork({ templateId, category, color, compact }: { templateId: string; category: CitadelsDistrictColor; color: string; compact: boolean }) {
-  const categoryArt = <GameCover source={artwork[category]} rimColor={color} aspectRatio={compact ? 1.1 : 1} fallback={
+export function CitadelsDistrictArtwork({ templateId, category, color }: { templateId: string; category: CitadelsDistrictColor; color: string; compact: boolean }) {
+  const categoryArt = <CardIllustration source={artwork[category]} aspectRatio={1} fallback={
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <MaterialCommunityIcons name={citadelsDistrictIcons[category]} size={48} color={color} accessible={false} />
     </View>
   } />;
   return Object.hasOwn(districts, templateId)
-    ? <GameCover source={districts[templateId as keyof typeof districts]} rimColor={color} aspectRatio={compact ? 1.1 : 1} fallback={categoryArt} />
+    ? <CardIllustration source={districts[templateId as keyof typeof districts]} aspectRatio={1} fallback={categoryArt} />
     : categoryArt;
 }

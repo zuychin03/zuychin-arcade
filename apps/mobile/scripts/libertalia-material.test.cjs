@@ -299,9 +299,9 @@ test('original loot and phase artworks have exact static mappings and noninterac
   }
 });
 
-test('forty original crew portraits use exact identities within the unchanged artwork footprint', () => {
+test('forty original crew portraits fill the card without an inset frame', () => {
   const assets = Object.fromEntries(definitions.LIBERTALIA_CREW.map(crew => [`../../assets/game-art/libertalia-crew-${String(crew.rank).padStart(2, '0')}.webp`, crew.rank]));
-  const { LibertaliaCrewArtwork } = load('components/libertalia/LibertaliaCrewArtwork.tsx', { ...common, ...assets, 'react-native': { View: 'View' }, '../ui/GameCover': { GameCover: 'Cover' } });
+  const { LibertaliaCrewArtwork } = load('components/libertalia/LibertaliaCrewArtwork.tsx', { ...common, ...assets, 'react-native': { View: 'View' }, '../ui/CardIllustration': { CardIllustration: 'Cover' } });
   for (const crew of definitions.LIBERTALIA_CREW) {
     const tree = LibertaliaCrewArtwork({ rank: crew.rank });
     const cover = nodes(tree).find(node => node.type === 'Cover');
@@ -311,9 +311,10 @@ test('forty original crew portraits use exact identities within the unchanged ar
     assert.equal(tree.props.accessibilityElementsHidden, true);
     assert.equal(tree.props.importantForAccessibility, 'no-hide-descendants');
     assert.equal(tree.props.style.width, '100%');
-    assert.equal(tree.props.style.maxWidth, 280);
+    assert.equal(tree.props.style.maxWidth, undefined);
     assert.equal(cover.props.source, crew.rank);
-    assert.equal(cover.props.aspectRatio, 1.6);
+    assert.equal(cover.props.aspectRatio, undefined);
+    assert.equal(cover.props.rimColor, undefined);
     assert.equal(cover.props.backgroundColor, palette.panel);
     assert.equal(nodes(cover.props.fallback).find(node => node.type === 'Icon').props.name, 'account-outline');
     const file = path.resolve(__dirname, `../assets/game-art/libertalia-crew-${String(crew.rank).padStart(2, '0')}.webp`);

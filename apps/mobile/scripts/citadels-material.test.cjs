@@ -25,7 +25,7 @@ function harness({ platform = 'web', fontScale = 1, width = 375 } = {}) {
     'expo-linear-gradient': { LinearGradient: 'Gradient' },
     'react-native': { View: 'View', Text: 'Text', Image: 'Image', StyleSheet: { absoluteFill: {} }, Platform: { OS: platform }, useWindowDimensions: () => ({ width, fontScale }) },
     '@expo/vector-icons': { MaterialCommunityIcons: 'Icon' }, '@zuychin-arcade/types': definitions,
-    '../../constants/theme': { CITADELS, ARCADE: CITADELS }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/GameCover': { GameCover: 'Cover' },
+    '../../constants/theme': { CITADELS, ARCADE: CITADELS }, '../ui/ScalePressable': { ScalePressable: 'Button' }, '../ui/CardIllustration': { CardIllustration: 'Cover' },
   };
   for (const color of ['noble', 'religious', 'trade', 'military', 'unique']) modules[`../../assets/game-art/citadels-district-${color}.webp`] = color;
   for (const { templateId } of definitions.CITADELS_DISTRICT_MANIFEST) modules[`../../assets/game-art/citadels-district-${templateId}.webp`] = templateId;
@@ -46,9 +46,9 @@ test('every canonical district preserves printed identity, gold and complete Out
     assert.equal(tree.props.accessibilityLabel, `${card.name}, ${card.cost} gold, ${card.color} district.${card.effectText ? ' ' + card.effectText : ''}`);
     assert(text(tree).includes(card.name)); assert(text(tree).includes(String(card.cost)));
     const cover = nodes(tree).find(node => node.type === 'Cover');
-    assert.equal(cover.props.source, card.templateId); assert.equal(cover.props.aspectRatio, 1.1);
+    assert.equal(cover.props.source, card.templateId); assert.equal(cover.props.aspectRatio, 1);
     assert.equal(cover.props.fallback.props.source, card.color);
-    assert.equal(cover.props.fallback.props.aspectRatio, 1.1);
+    assert.equal(cover.props.fallback.props.aspectRatio, 1);
     assert(nodes(tree).some(node => node.props.testID === 'citadels-district-art-' + card.id));
     if (card.effectText) {
       const effect = nodes(tree).find(node => node.type === 'Text' && node.props.children === card.effectText);
@@ -115,12 +115,28 @@ test('all eight portraits retain real rank, name, summary, bounded footprint and
     assert(icon.props.size >= 46);
     const insignia = nodes(tree).find(node => node.props.testID === 'citadels-role-insignia-' + info.role);
     assert.equal(insignia.props.accessibilityElementsHidden, true); assert.equal(insignia.props.pointerEvents, 'none');
-    assert.equal(insignia.props.style.minHeight, 112);
-    assert.equal(insignia.props.children.props.style.width, '100%');
-    assert.equal(insignia.props.children.props.style.maxWidth, 168);
-    assert.equal(cover.props.rimColor, icon.props.color);
+    assert.equal(insignia.props.style.width, '100%');
+    assert.equal(insignia.props.style.maxWidth, undefined);
+    assert.equal(insignia.props.children, cover);
+    assert.equal(cover.props.rimColor, undefined);
     const rank = nodes(tree).find(node => node.type === 'Text' && text(node).startsWith('Rank '));
     assert.equal(rank.props.style.position, undefined);
+  }
+});
+
+test('district and role illustrations meet the single card face without padded nested frames', () => {
+  const { CitadelsDistrictView, CitadelsRoleCard } = harness();
+  for (const tree of [CitadelsDistrictView({ card: { ...definitions.CITADELS_DISTRICT_MANIFEST[0], id: 'sample' } }), CitadelsRoleCard({ role: 'king' })]) {
+    const face = nodes(tree).find(node => node.props.testID === 'card-surface-face');
+    const children = [face.props.children].flat(Infinity);
+    const art = children.find(node => node?.props?.testID?.startsWith('citadels-district-art-') || node?.props?.testID?.startsWith('citadels-role-insignia-'));
+    assert(art);
+    assert.equal(art.props.style.width, '100%');
+    for (const field of ['padding', 'maxWidth', 'borderRadius', 'borderWidth']) assert.equal(art.props.style[field], undefined);
+    const cover = nodes(art).find(node => node.type === 'Cover');
+    assert.equal(cover.props.aspectRatio, 1);
+    assert.equal(cover.props.rimColor, undefined);
+    assert.equal(nodes(tree).filter(node => node.props.testID === 'card-surface-face').length, 1);
   }
 });
 

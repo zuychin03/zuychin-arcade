@@ -1,7 +1,7 @@
 import { View, type ImageSourcePropType } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { KingOfTokyoCardCategory, KingOfTokyoPowerCardId } from '@zuychin-arcade/types';
-import { GameCover } from '../ui/GameCover';
+import { CardIllustration } from '../ui/CardIllustration';
 
 const artwork = {
   attack: require('../../assets/game-art/tokyo-power-attack.webp'),
@@ -87,7 +87,7 @@ export function TokyoPowerArtwork({ cardId, category, icon, color }: {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   color: string;
 }) {
-  return <GameCover source={cardId ? powerArtwork[cardId] : artwork[category]} aspectRatio={1} rimColor={color} fallback={
+  return <CardIllustration source={cardId ? powerArtwork[cardId] : artwork[category]} aspectRatio={1} fallback={
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <MaterialCommunityIcons name={icon} size={52} color={color} />
     </View>

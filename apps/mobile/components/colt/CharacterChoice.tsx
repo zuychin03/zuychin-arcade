@@ -18,10 +18,8 @@ const characterEmblems: Record<string, { icon: keyof typeof MaterialCommunityIco
 function CharacterFace({ character, footer }: { character: { name: string; summary: string }; footer?: ReactNode }) {
   const emblem: (typeof characterEmblems)[string] = characterEmblems[character.name] ?? { icon: 'account-outline', colour: C.gold };
   return <CardSurface fill radius={12} faceColor={C.panel} edgeColor="#10131B" highlightColor={emblem.colour} depth={3}>
+    <ColtCharacterArtwork name={character.name} color={emblem.colour} />
     <View style={{ padding: 16, gap: 12 }}>
-      <View accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none" style={{ width: '100%', maxWidth: 176, alignSelf: 'center', borderRadius: 8, overflow: 'hidden' }}>
-        <ColtCharacterArtwork name={character.name} color={emblem.colour} />
-      </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><MaterialCommunityIcons name={emblem.icon} size={24} color={emblem.colour} accessible={false} /><Text style={{ flex: 1, minWidth: 0, fontFamily: 'Outfit_800ExtraBold', fontSize: 20, lineHeight: 26, color: C.text }}>{character.name.toUpperCase()}</Text></View>
       <Text style={{ fontFamily: 'Outfit_400Regular', fontSize: 16, lineHeight: 24, color: C.text }}>{character.summary}</Text>
     </View>
